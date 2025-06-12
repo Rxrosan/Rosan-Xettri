@@ -1,91 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/gh/Rosan2061/Rosan@main/devtools_protection_full.js"></script>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="asset/img/logo/RX2061.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rosan Khattri Chettri</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>RX | Home </title>
+    <link rel="icon" type="image/png" href="asset/img/logo/RX2061.png">
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="asset/css/smartbtn.css">
-     <link rel="stylesheet" href="asset/css/style.css">
-      <link rel="stylesheet" href="asset/css/popupwindow.css">
+    <link rel="stylesheet" href="Body.css">
+     <link rel="stylesheet" href="asset/css/popupwindow.css">
      <link rel="stylesheet" href="asset/css/reviews style.css">
-     <link rel="stylesheet" href="asset/css/pop up navbar more.css">
-     <link rel="stylesheet" href="asset/css/Team slider function.css">
+    <link rel="stylesheet" href="asset/css/Team slider function.css">
      <link rel="stylesheet" href="asset/css/autowriting animation.css">
+     <link rel="stylesheet" href="asset/css/pop up navbar more.css">
     
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar"style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
-        <div class="container">
-            <a href="#" class="logo">Rosan Xettri</a>
-            <div class="menu-toggle">☰</div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="Contact.html">Contact</a></li>
+    <!-- Header - Cyber Style -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="asset/img/logo/RX2061.png" alt="RX Logo">
+                Rosan Xettri
+            </a>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="Service.html">Services</a></li>
-                <li><a href="#team">Team</a></li>
-                <li><a href="#reviews">Reviews</a></li>
-                <li class="dropdown"><a href="#" onclick="toggleDropdown(event)">More</a></li>
+                 <li><a href="About.html">About</a></li>
+                <li><a href="Contact.html" >Contact</a></li>
                 <li><a id="toggleSmartButton">◉</a></li>
             </ul>
         </div>
-    </nav>
+    </header>
 
-<section 
-    class="banner" 
-    id="home"
-    style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner.gif');"
->
-    <div class="banner-content">
-        <h1>Rosan Khattri Chettri</h1>
-        <p id="auto-writer" class="auto-writer"></p>
-        <a href="Contact.html" class="btn">Contact Us !</a>
-    </div>
-</section>
-
-    <!-- Services Section -->
-    <section class="services" id="services"  style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Services</h2>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon"><img src="asset/img/icon/logo design icon.png" alt=""></div>
-                    <h3>Logo Creation</h3>
-                    <p>Our logo creation service is designed to give your brand a unique and professional identity. A well-designed logo is crucial for making a strong first impression and establishing brand recognition.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon"><img src="asset/img/icon/Web designing  icon.png" alt=""></div>
-                    <h3>Website Designing</h3>
-                    <p>Our website designing service is focused on creating beautiful, user-friendly, and responsive websites that elevate your online presence. Whether you need a personal portfolio, business website, or e-commerce platform, we’ve got you covered.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon"><img src="asset/img/icon/Photo editing icon.png" alt=""></div>
-                    <h3>Photo Editing</h3>
-                    <p>Our photo editing service provides high-quality, professional image enhancement to make your photos stand out. From basic touch-ups to advanced retouching, we ensure your photos look polished and perfect for any purpose.</p>
-                </div>
-            </div>
-            <div class="banner-content">
-        <a href="Service.html" class="btn">See More Services</a>
-    </div>
+    <!-- Hero Section - Futuristic -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Rosan Khattri Chettri</h1>
+            <p id="auto-writer" class="auto-writer"></p>
+            <a href="Service.html" class="btn">Our Services</a>
         </div>
     </section>
 
-<!-- Team Section -->
-<section class="team" id="team" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
-    <div class="container">
+    <!-- Contact Section - Holographic UI -->
+    <section class="contact-section" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2> Our Services </h2>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3><i><img src="asset/img/icon/logo design icon.png" alt=""></i> Logo Creation </h3>
+                    <p>Our logo creation service is designed to give your brand a unique and professional identity. A well-designed logo is crucial for making a strong first impression and establishing brand recognition.</p>
+             </div>
+
+             <div class="contact-card">
+                    <h3><i><img src="asset/img/icon/Web designing  icon.png" alt=""></i> Website Designing </h3>
+                   <p>Our website designing service is focused on creating beautiful, user-friendly, and responsive websites that elevate your online presence. Whether you need a personal portfolio, business website, or e-commerce platform, we’ve got you covered.</p>
+             </div>
+
+             <div class="contact-card">
+                    <h3><i><img src="asset/img/icon/Photo editing icon.png" alt=""></i> Photo Editing </h3>
+                    <p>Our photo editing service provides high-quality, professional image enhancement to make your photos stand out. From basic touch-ups to advanced retouching, we ensure your photos look polished and perfect for any purpose.</p>
+             </div>
+             <a href="Service.html" class="btn" style="margin-top: auto; display: align-self">See More Services</a>
+             </div>
+    </section>
+
+<section class="contact-section" class="team" id="team" >
+     <div class="container">
         <div class="section-title">
-            <h2>Our Team</h2>
-        </div>
-        <div class="team-slider-container">
+                <h2> Our Team </h2>
+            </div>
+            <div class="team-slider-container">
             <div class="team-slider">
                 <div class="team-slide">
                     <div class="team-member">
-                        <img src="asset/img/R&T/T2.png" alt="Sarah Johnson">
+                        <img src="asset/img/R&T/T2.png" alt="Puja Acharya Shrestha">
                         <h3>Puja Acharya Shrestha</h3>
                         <p class="position">Palpa, Nepal</p>
                         <p>Designer</p>
@@ -129,20 +124,18 @@
                             <a href="https://www.facebook.com/profile.php?id=100080956815490" aria-label="Prasamsha Khanal's Facebook"><i class="fab fa-facebook-f"></i></a>
                             <a href="#" aria-label="Prasamsha Khanal's Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
-                    </div>
                 </div>
             </div>
-        </div>
+         </div>     
     </div>
 </section>
 
-   <!-- Reviews Section -->
-<section class="reviews" id="reviews"style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
-    <div class="container">
-        <div class="section-title">
-            <h2>Client Reviews</h2>
-        </div>
-        <div class="reviews-container">
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2> Client Reviews </h2>
+            </div>
+             <div class="reviews-container">
              <div class="review-card" onclick="toggleReviewImage(this)" 
                  data-image="asset/img/R&T/Mahesh.jpg">
                 <div class="quote-icon">"</div>
@@ -203,76 +196,83 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Knowledge Section -->
-    <section class="knowledge"style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
-        <div class="section-title">
-            <h2>Some Awesome Line !</h2>
-        </div>
-        <div class="container">
-            <p>"The only way to do great work is to love what you do. If you haven't found it yet, keep looking. Don't settle." - Steve Jobs</p>
-        <a href="https://www.facebook.com/RosanXettri.2004" class="btn"> JOIN US ! </a>
-        </div>
+             </div>
+             </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer" id="contact"style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
+     <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2> Some Awesome Line ! </h2>
+            </div>
+            <div class="contact-grid">
+                           <div class="container">
+                   <p>"Extraordinary work is born from a place of genuine passion. If you haven’t discovered that calling yet, don’t give up — keep searching with courage and curiosity. Never settle for less than what truly inspires you."</p>
+                  <a href="https://www.facebook.com/RosanXettri.2004" 
+   class="btn" 
+   style="display: inline-block; margin: 0 auto; padding: 8px 16px; text-align: center;">
+   JOIN US!
+</a>
+             </div>
+             </div>
+    </section>
+
+    <!-- Footer - Cyber Lines -->
+    <footer>
         <div class="container">
             <div class="footer-grid">
-                    <div class="footer-col">
-                    <h3>About Us</h3>
-                    <p>Rosan Xettri is a passionate graphic designer and gamer who loves blending creativity with technical skills. With a keen eye for detail and an innovative mindset, he always strives to create something unique and high-quality.</p>
-                      <a href="Rosan.html" class="btn"> ABOUT ROSAN </a>
+                <div class="footer-col">
+                    <h3>Digital Entity</h3>
+                    <p>Rosan Xettri is a multidimensional creator merging design, technology, and gaming into unique digital experiences.</p>
+                    <a href="Rosan.html" class="btn" style="margin-top: 1rem; display: inline-block;">Explore Profile</a>
                 </div>
+                
                 <div class="footer-col">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="Contact.html">Contact Us</a></li>
+                        <li><a href="index.html">Home</a></li>
                         <li><a href="Service.html">Services</a></li>
+                        <li><a href="Contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="RX ALL.html">Korean Course</a></li>
+                        <li><a href="SQRC.html">QR Scanner</a></li>
                         <li class="dropdown"><a href="#" onclick="toggleDropdown(event)">More</a></li>
                     </ul>
                 </div>
+                
                 <div class="footer-col">
-                    <h3>Services</h3>
+                    <h3>Contact Node</h3>
                     <ul>
-                        <li><a href="SQRC.html">RX |Secure QR Tool </a></li>
-                        <!--<li><a href="#">Mobile Apps</a></li>
-                        <li><a href="#">SEO Optimization</a></li>
-                        <li><a href="#">Digital Marketing</a></li>
-                        <li><a href="#">UI/UX Design</a></li>-->
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Contact Info</h3>
-                    <ul>
-                        <li>Address : Banganga-10,Pakadiachapa Kapilvastu( NEPAL )</li>
-                        <li>Contact : 9826482279</li>
-                        <li>Email : rkc242855@gmail.com</li> 
-                        <li>Current Time : <span id="current-time"></span></li>
-
-<script>
-  function updateTime() {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    document.getElementById('current-time').textContent = timeString;
-  }
-  
-  // Update time immediately and then every minute
-  updateTime();
-  setInterval(updateTime, 60000);
-</script>
+                        <li><a href="tel:9826482279">+977 9826482279</a></li>
+                        <li><a href="mailto:rkc242855@gmail.com">rkc242855@gmail.com</a></li>
+                        <li>Kapilvastu, Nepal</li>
+                        <li><p id="current-time">Syncing...</p></li>
                     </ul>
                 </div>
             </div>
-           <div class="footer-bottom">
-    <p>&copy; <script>document.write(new Date().getFullYear())</script> Rosan Xettri. All Rights Reserved.</p>
-</div>
+            
+            <div class="footer-bottom">
+                <p>&copy; <script>document.write(new Date().getFullYear())</script> Rosan Xettri. All systems operational.</p>
+            </div>
         </div>
+    </footer>
 
-         <!-- Popup Window -->
+    <!-- The popup/modal -->
+<div class="modal-overlay" id="moreModal">
+  <div class="modal-content">
+    <a href="RX ALL.html">Korean Course</a>
+    <a href="Rosan.html">About Rosan</a>
+    <button class="close-btn" onclick="closeModal()">×</button>
+  </div>
+</div>
+<!-- The popup/modal End -->
+ 
+          <!-- Popup Window -->
 <div id="popup">
     <div class="popup-content">
         <button class="btn-close" id="close-popup" aria-label="Close popup">&times;</button>
@@ -310,18 +310,7 @@
     </div>
 </div>
 <!-- Popup Window End -->
-
-<!-- The popup/modal -->
-<div class="modal-overlay" id="moreModal">
-  <div class="modal-content">
-    <a href="RXG.html" class="logo">Rosan Xettri</a>
-    <a href="RX ALL.html">Korean Course</a>
-    <a href="Rosan.html">About Rosan</a>
-    <button class="close-btn" onclick="closeModal()">×</button>
-  </div>
-</div>
-<!-- The popup/modalend  -->
- <!-- smart button start  -->
+  <!-- smart button start  -->
 <div class="circle-container">
   <div class="circle">
     <div class="center-point"></div>
@@ -341,15 +330,13 @@
 </div>
 <!-- smart button end  end  -->
 
-    </footer>
+</body>
         <script src="asset/js/smartbtn.js"></script>
-        <script src="asset/js/ad.js"></script>
-        <script src="asset/js/script.js"></script>
+        <script src="Body.js"></script>
         <script src="asset/js/popupwindow.js"></script>
-        <script src="asset/js/reviews style.js"></script>
-        <script src="asset/js/Navbar function.js"></script>
-        <script src="asset/js/pop up navbar more.js"></script>
-        <script src="asset/js/Team slider function.js"></script>
+         <script src="asset/js/reviews style.js"></script>
+         <script src="asset/js/Team slider function.js"></script>
         <script src="asset/js/autowriting animation.js"></script>
+        <script src="asset/js/pop up navbar more.js"></script>
 </body>
 </html>

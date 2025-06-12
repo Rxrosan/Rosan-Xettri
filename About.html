@@ -1,130 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/gh/Rosan2061/Rosan@main/devtools_protection_full.js"></script>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="asset/img/logo/rx.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RX | ABOUT ROSAN </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>RX | About</title>
+    <link rel="icon" type="image/png" href="asset/img/logo/RX2061.png">
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="asset/css/smartbtn.css">
-     <link rel="stylesheet" href="asset/css/style.css">
-     <link rel="stylesheet" href="asset/css/pop up navbar more.css">
+    <link rel="stylesheet" href="Body.css">
      <link rel="stylesheet" href="asset/css/autowriting animation.css">
+     <link rel="stylesheet" href="asset/css/pop up navbar more.css">
+    
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar"style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
-        <div class="container">
-            <a href="#home" class="logo">Rosan Xettri</a>
-            <div class="menu-toggle">☰</div>
-            <ul class="nav-links">
+    <!-- Header - Cyber Style -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="asset/img/logo/RX2061.png" alt="RX Logo">
+                Rosan Xettri
+            </a>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="Contact.html">Contact</a></li>
                 <li><a href="Service.html">Services</a></li>
-                <li class="dropdown"><a href="#" onclick="toggleDropdown(event)">More</a></li>
+                <li><a href="Contact.html">Contact</a></li>
+                <li><a href="About.html" class="active">About</a></li>
                 <li><a id="toggleSmartButton">◉</a></li>
             </ul>
         </div>
-    </nav>
+    </header>
 
-<section 
-    class="banner" 
-    id="home"
-    style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner.gif');"
->
-    <div class="banner-content">
-        <h1>Rosan Khattri Chettri</h1>
-        <p id="auto-writer" class="auto-writer"></p>
-        <a href="Service.html" class="btn">Our Services</a>
-    </div>
-</section>
+    <!-- Hero Section - Futuristic -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Rosan Khattri Chettri</h1>
+            <p id="auto-writer" class="auto-writer"></p>
+            <a href="Contact.html" class="btn"> Contact Us </a>
+        </div>
+    </section>
 
-    <!-- Services Section -->
-    <section class="services" id="services"  style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
+    <!-- Contact Section - Holographic UI -->
+    <section class="contact-section" id="contact">
         <div class="container">
             <div class="section-title">
-                <h2>ABOUT ROSAN </h2>
+                <h2> ABOUT ROSAN KHATTRI CHETTRI </h2>
             </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon"><img src="asset/img/R&T/R M.jpg" alt="Rosan" style="max-width: 150px; height: auto;"></div>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3><i class="fas fa-info-circle"></i> ABOUT </h3>
+                    <img src="asset/img/R&T/R M.jpg" alt="Rosan" style="max-width: 150px; height: auto;">
                     <h3> ROSAN KHATTRI CHETTRI </h3>
                     <p>I am Rosan Khattri Chettri, a 20-year-old passionate and driven individual from Banganga-10, Kapilvastu. Currently pursuing my BBS 3rd year, I have always been deeply fascinated by the world of creativity and technology. With a strong skill set in designing, web development, and e-sports gaming, I continuously push myself to learn, evolve, and stay ahead in the digital realm.
 
                                 Designing allows me to bring my imagination to life, creating visually compelling and meaningful graphics that leave an impact. Web development fuels my technical curiosity, enabling me to craft functional, user-friendly, and aesthetically pleasing websites. On the other hand, my passion for e-sports gaming challenges my strategic thinking, reflexes, and competitive spirit, making me thrive in high-intensity environments.
                                 
                                 I believe in continuous growth and innovation, always seeking new ways to enhance my skills and contribute meaningfully to the digital space. Whether it's crafting designs, coding dynamic websites, or competing in the gaming world, I am dedicated to pushing boundaries, learning from experiences, and making a mark with my work.</p>
-                </div>
+                </div>     
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer" id="contact"style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
+    <!-- Footer - Cyber Lines -->
+    <footer>
         <div class="container">
             <div class="footer-grid">
-                    <div class="footer-col">
-                    <h3>About Us</h3>
-                    <p>Rosan Xettri is a passionate graphic designer and gamer who loves blending creativity with technical skills. With a keen eye for detail and an innovative mindset, he always strives to create something unique and high-quality.</p>
-                      <a href="Rosan.html" class="btn"> ABOUT ROSAN </a>
+                <div class="footer-col">
+                    <h3>Digital Entity</h3>
+                    <p>Rosan Xettri is a multidimensional creator merging design, technology, and gaming into unique digital experiences.</p>
+                    <a href="Rosan.html" class="btn" style="margin-top: 1rem; display: inline-block;">Explore Profile</a>
                 </div>
+                
                 <div class="footer-col">
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="Service.html">Services</a></li>
-                        <li class="dropdown"><a href="#" onclick="toggleDropdown(event)">More</a></li>
+                        <li><a href="Contact.html">Contact</a></li>
                     </ul>
                 </div>
+                
                 <div class="footer-col">
-                    <h3>Services</h3>
+                    <h3>Resources</h3>
                     <ul>
-                        <!--<li><a href="#">Web Development</a></li>
-                        <li><a href="#">Mobile Apps</a></li>
-                        <li><a href="#">SEO Optimization</a></li>
-                        <li><a href="#">Digital Marketing</a></li>
-                        <li><a href="#">UI/UX Design</a></li>-->
+                        <li><a href="RX ALL.html">Korean Course</a></li>
+                        <li><a href="SQRC.html">QR Scanner</a></li>
+                        <li class="dropdown"><a  onclick="toggleDropdown(event)">More</a></li>
                     </ul>
                 </div>
+                
                 <div class="footer-col">
-                    <h3>Contact Info</h3>
+                    <h3>Contact Node</h3>
                     <ul>
-                        <li>Address : Banganga-10,Pakadiachapa Kapilvastu( NEPAL )</li>
-                        <li>Contact : 9826482279</li>
-                        <li>Email : rkc242855@gmail.com</li> 
-                        <li>Current Time : <span id="current-time"></span></li>
-
-<script>
-  function updateTime() {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    document.getElementById('current-time').textContent = timeString;
-  }
-  
-  // Update time immediately and then every minute
-  updateTime();
-  setInterval(updateTime, 60000);
-</script>
+                        <li><a href="tel:9826482279">+977 9826482279</a></li>
+                        <li><a href="mailto:rkc242855@gmail.com">rkc242855@gmail.com</a></li>
+                        <li>Kapilvastu, Nepal</li>
+                        <li><p id="current-time">Syncing...</p></li>
                     </ul>
                 </div>
             </div>
-           <div class="footer-bottom">
-    <p>&copy; <script>document.write(new Date().getFullYear())</script> Rosan Xettri. All Rights Reserved.</p>
-</div>
+            
+            <div class="footer-bottom">
+                <p>&copy; <script>document.write(new Date().getFullYear())</script> Rosan Xettri. All systems operational.</p>
+            </div>
         </div>
+    </footer>
 
-        
-<!-- The popup/modal -->
+    <!-- The popup/modal -->
 <div class="modal-overlay" id="moreModal">
   <div class="modal-content">
     <a href="RX ALL.html">Korean Course</a>
+    <a href="Rosan.html">About Rosan</a>
     <button class="close-btn" onclick="closeModal()">×</button>
   </div>
 </div>
 <!-- The popup/modal End -->
-
-<!-- smart button start  -->
+  <!-- smart button start  -->
 <div class="circle-container">
   <div class="circle">
     <div class="center-point"></div>
@@ -144,11 +138,10 @@
 </div>
 <!-- smart button end  end  -->
 
-    </footer>
+</body>
         <script src="asset/js/smartbtn.js"></script>
-        <script src="asset/js/script.js"></script>
-        <script src="asset/js/Navbar function.js"></script>
-        <script src="asset/js/pop up navbar more.js"></script>
+        <script src="Body.js"></script>
         <script src="asset/js/autowriting animation.js"></script>
+        <script src="asset/js/pop up navbar more.js"></script>
 </body>
 </html>

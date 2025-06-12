@@ -5,7 +5,7 @@
             title: "Mirai International Language Centre",
             content: "Admissions open for Japanese and Korean language courses — for work & study!",
             image: "asset/img/ad/mirai1.jpg",
-            duration: 1,
+            duration: 3,
             contact: {
                 phone: "07655217,9867134971, 9749909414,9761691883",
                 email: "mirailanguage280@gmail.com",
