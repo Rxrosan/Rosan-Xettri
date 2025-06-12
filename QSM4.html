@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <script src="https://cdn.jsdelivr.net/gh/Rosan2061/Rosan@main/devtools_protection_full.js"></script>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="asset/img/logo/RX2061.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RX | KOREAN LANGUAGE EXAM PRACTICE</title>
+  <link rel="stylesheet" href="rxasset/css/style.css"/>
+  <link rel="stylesheet" href="rxasset/css/timefloating.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Left Section -->
+    <div class="left-panel">
+      <div class="number-grid top">
+        <img src="rxasset/NUM-1-40/1.png" alt="1" onclick="showContent(1)">
+        <img src="rxasset/NUM-1-40/2.png" alt="2" onclick="showContent(2)">
+        <img src="rxasset/NUM-1-40/3.png" alt="3" onclick="showContent(3)">
+        <img src="rxasset/NUM-1-40/4.png" alt="4" onclick="showContent(4)">
+        <img src="rxasset/NUM-1-40/5.png" alt="5" onclick="showContent(5)">
+        <img src="rxasset/NUM-1-40/6.png" alt="6" onclick="showContent(6)">
+        <img src="rxasset/NUM-1-40/7.png" alt="7" onclick="showContent(7)">
+        <img src="rxasset/NUM-1-40/8.png" alt="8" onclick="showContent(8)">
+        <img src="rxasset/NUM-1-40/9.png" alt="9" onclick="showContent(9)">
+        <img src="rxasset/NUM-1-40/10.png" alt="10" onclick="showContent(10)">
+        <img src="rxasset/NUM-1-40/11.png" alt="11" onclick="showContent(11)">
+        <img src="rxasset/NUM-1-40/12.png" alt="12" onclick="showContent(12)">
+        <img src="rxasset/NUM-1-40/13.png" alt="13" onclick="showContent(13)">
+        <img src="rxasset/NUM-1-40/14.png" alt="14" onclick="showContent(14)">
+        <img src="rxasset/NUM-1-40/15.png" alt="15" onclick="showContent(15)">
+        <img src="rxasset/NUM-1-40/16.png" alt="16" onclick="showContent(16)">
+        <img src="rxasset/NUM-1-40/17.png" alt="17" onclick="showContent(17)">
+        <img src="rxasset/NUM-1-40/18.png" alt="18" onclick="showContent(18)">
+        <img src="rxasset/NUM-1-40/19.png" alt="19" onclick="showContent(19)">
+        <img src="rxasset/NUM-1-40/20.png" alt="20" onclick="showContent(20)">
+        <p><b><h3>READING</h3></b></p>
+        <!-- ... up to 20 -->
+      </div>
+      <div class="number-grid bottom">
+        <img src="rxasset/NUM-1-40/21.png" alt="21" onclick="showContent(21)">
+        <img src="rxasset/NUM-1-40/22.png" alt="22" onclick="showContent(22)">
+        <img src="rxasset/NUM-1-40/23.png" alt="23" onclick="showContent(23)">
+        <img src="rxasset/NUM-1-40/24.png" alt="24" onclick="showContent(24)">
+        <img src="rxasset/NUM-1-40/25.png" alt="25" onclick="showContent(25)">
+        <img src="rxasset/NUM-1-40/26.png" alt="26" onclick="showContent(26)">
+        <img src="rxasset/NUM-1-40/27.png" alt="27" onclick="showContent(27)">
+        <img src="rxasset/NUM-1-40/28.png" alt="28" onclick="showContent(28)">
+        <img src="rxasset/NUM-1-40/29.png" alt="29" onclick="showContent(29)">
+        <img src="rxasset/NUM-1-40/30.png" alt="30" onclick="showContent(30)">
+        <img src="rxasset/NUM-1-40/31.png" alt="31" onclick="showContent(31)">
+        <img src="rxasset/NUM-1-40/32.png" alt="32" onclick="showContent(32)">
+        <img src="rxasset/NUM-1-40/33.png" alt="33" onclick="showContent(33)">
+        <img src="rxasset/NUM-1-40/34.png" alt="34" onclick="showContent(34)">
+        <img src="rxasset/NUM-1-40/35.png" alt="35" onclick="showContent(35)">
+        <img src="rxasset/NUM-1-40/36.png" alt="36" onclick="showContent(36)">
+        <img src="rxasset/NUM-1-40/37.png" alt="37" onclick="showContent(37)">
+        <img src="rxasset/NUM-1-40/38.png" alt="38" onclick="showContent(38)">
+        <img src="rxasset/NUM-1-40/39.png" alt="39" onclick="showContent(39)">
+        <img src="rxasset/NUM-1-40/40.png" alt="40" onclick="showContent(40)">
+        <p><b><h3>LISTENING</h3></b></p>
+        <!-- ... up to 40 -->
+      </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="right-panel">
+      <div id="content-display">
+        <h2>Please Choose a Number For Question .</h2>
+      </div>
+    
+      <div class="navigation-buttons" style="margin-top: 20px; display: flex; gap: 10px;">
+        <button onclick="goToPrevious()">◀ Preview</button>
+        <button onclick="markForReview()">⭕ Mark Review</button>
+        <button onclick="goToNext()">Next ▶</button>
+        <button onclick="submitQuiz()"> Submit</button>
+        <div id="lock-overlay" style="display: none;">
+          <div class="lock-bg"></div>
+          <div class="lock-message">
+            <p>⏳ Time's up! Please submit your quiz.</p>
+            <button id="submit-btn" onclick="submitQuiz()">Submit</button>
+          </div>
+        </div>
+        
+      </div>
+
+    </div>
+    <div id="floating-timer">
+      <div class="header">
+        Timer
+        <button id="minimize-btn">−</button>
+      </div>
+      <div id="countdown">00:00:00</div>
+    </div>
+     <div id="minimized-circle" class="hidden"></div>
+    
+  </div>
+  <script src="rxasset/js/script.js"></script>
+  <script src="rxasset/js/questions4.js"></script>
+  <script src="rxasset/js/timefloating.js"></script>
+</body>
+</html>

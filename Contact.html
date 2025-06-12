@@ -1,155 +1,983 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.jsdelivr.net/gh/Rosan2061/Rosan@main/devtools_protection_full.js"></script>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="asset/img/logo/RX2061.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RX | CONTACT </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>RX | Contact</title>
+    <link rel="icon" type="image/png" href="asset/img/logo/RX2061.png">
+
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="asset/css/smartbtn.css">
-     <link rel="stylesheet" href="asset/css/style.css">
-     <link rel="stylesheet" href="asset/css/pop up navbar more.css">
      <link rel="stylesheet" href="asset/css/autowriting animation.css">
+     <link rel="stylesheet" href="asset/css/pop up navbar more.css">
+    <style>
+        :root {
+            --primary: #7b2cbf;
+            --secondary: #9d4edd;
+            --accent: #ff9e00;
+            --dark: #10002b;
+            --darker: #0a0122;
+            --light: #e0aaff;
+            --text: #f8f9fa;
+            --text-secondary: #adb5bd;
+            --card-bg: rgba(30, 6, 66, 0.6);
+            --glow: 0 0 15px rgba(123, 44, 191, 0.7);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        /* Header - Cyberpunk Style */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(16, 0, 43, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(123, 44, 191, 0.3);
+            padding: 1rem 0;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 12px;
+            filter: drop-shadow(0 0 5px var(--primary));
+        }
+
+        .logo:hover {
+            color: var(--accent);
+            text-shadow: 0 0 10px rgba(255, 158, 0, 0.5);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 1001;
+        }
+
+        .menu-toggle:hover {
+            color: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 2rem;
+            position: relative;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            bottom: 0;
+            left: 0;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links .active {
+            color: var(--accent);
+        }
+
+        .nav-links .active::after {
+            width: 100%;
+        }
+
+        /* Hero Section - Futuristic */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 80px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(16, 0, 43, 0.9), rgba(16, 0, 43, 0.7)), 
+                        url('asset/img/Banner/Banner.gif') no-repeat center center/cover;
+            z-index: -1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, var(--darker), transparent);
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, var(--light), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(157, 78, 221, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: var(--text-secondary);
+            animation: fadeInUp 1.2s ease;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(123, 44, 191, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(123, 44, 191, 0.6);
+        }
+
+        .btn:hover::before {
+            opacity: 1;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Contact Section - Holographic UI */
+        .contact-section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(123, 44, 191, 0.1), transparent 70%);
+            z-index: -1;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            color: var(--text);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 15px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 3px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(123, 44, 191, 0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                transparent 45%,
+                rgba(123, 44, 191, 0.1) 50%,
+                transparent 55%
+            );
+            transform: rotate(30deg);
+            transition: var(--transition);
+            opacity: 0;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), var(--glow);
+            border-color: rgba(123, 44, 191, 0.4);
+        }
+
+        .contact-card:hover::before {
+            animation: shine 1.5s;
+        }
+
+        .contact-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-card h3 i {
+            margin-right: 12px;
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        .contact-card p, .contact-card a {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            transition: var(--transition);
+            display: block;
+        }
+
+        .contact-card a {
+            text-decoration: none;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .contact-card a::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .contact-card a:hover {
+            color: var(--text);
+            padding-left: 25px;
+        }
+
+        .contact-card a:hover::before {
+            opacity: 1;
+        }
+
+        /* Social Grid - Holographic Icons */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .social-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(123, 44, 191, 0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 158, 0, 0.1), transparent 70%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .social-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4), var(--glow);
+            border-color: rgba(123, 44, 191, 0.4);
+        }
+
+        .social-card:hover::after {
+            opacity: 1;
+        }
+
+        .social-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(123, 44, 191, 0.2), rgba(30, 6, 66, 0.5));
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            font-size: 1.8rem;
+            color: var(--light);
+            transition: var(--transition);
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .social-card:hover .social-icon {
+            transform: rotateY(180deg);
+            color: var(--accent);
+        }
+
+        .social-card:hover .social-icon::before {
+            opacity: 1;
+        }
+
+        .social-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .social-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer - Cyber Lines */
+        footer {
+            background: linear-gradient(to top, var(--darker), var(--dark));
+            padding: 4rem 0 2rem;
+            position: relative;
+            border-top: 1px solid rgba(123, 44, 191, 0.3);
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-col {
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .footer-col::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+
+        .footer-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .footer-col p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .footer-col ul li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .footer-col ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 3rem;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(123, 44, 191, 0.2);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                opacity: 0;
+                transform: rotate(30deg) translate(-30%, -30%);
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: rotate(30deg) translate(30%, 30%);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: rgba(16, 0, 43, 0.95);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: var(--transition);
+                border-left: 1px solid rgba(123, 44, 191, 0.3);
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+
+            .hero {
+                padding-top: 100px;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .hero-content {
+                padding: 4rem 20px;
+            }
+
+            .contact-grid, .social-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                margin-bottom: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .logo img {
+                height: 30px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 12px 24px;
+            }
+
+            .contact-card, .social-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar"style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
-        <div class="container">
-            <a href="#home" class="logo">Rosan Xettri</a>
-            <div class="menu-toggle">☰</div>
-            <ul class="nav-links">
+    <!-- Header - Cyber Style -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <img src="asset/img/logo/RX2061.png" alt="RX Logo">
+                Rosan Xettri
+            </a>
+            <div class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="Service.html">Services</a></li>
-                <li class="dropdown"><a href="#" onclick="toggleDropdown(event)">More</a></li>
+                <li><a href="Contact.html" class="active">Contact</a></li>
                 <li><a id="toggleSmartButton" href="#">◉</a></li>
             </ul>
         </div>
-    </nav>
+    </header>
 
-<section 
-    class="banner" 
-    id="home"
-    style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner.gif');"
->
-    <div class="banner-content">
-        <h1>Rosan Khattri Chettri</h1>
-        <p id="auto-writer" class="auto-writer"></p>
-        <a href="Service.html" class="btn">Our Services</a>
-    </div>
-</section>
+    <!-- Hero Section - Futuristic -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Rosan Khattri Chettri</h1>
+            <p id="auto-writer" class="auto-writer"></p>
+            <a href="Service.html" class="btn">Our Services</a>
+        </div>
+    </section>
 
-    <!-- Services Section -->
-    <section class="services" id="services"  style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
+    <!-- Contact Section - Holographic UI -->
+    <section class="contact-section" id="contact">
         <div class="container">
             <div class="section-title">
-                <h2> Contact US </h2>
+                <h2>CONTACT MATRIX</h2>
             </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon"><div class="service-icon"><a href="https://www.facebook.com/Rosan.2061"><img src="asset/img/icon/facebook.png" alt="facebook" style="width: 120px; height: 120px; object-fit: cover;"></a></div></div>
-                    <h3> Facebook </h3>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3><i class="fas fa-map-marker-alt"></i> Physical Coordinates</h3>
+                    <p>Banganga-10, Pakadiachapa</p>
+                    <p>Kapilvastu, Nepal</p>
+                    
+                    <h3 style="margin-top: 2rem;"><i class="fas fa-clock"></i> Local Time</h3>
+                    <p id="current-time">Syncing...</p>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon"><div class="service-icon"><a href="https://www.youtube.com/@RX_E-SPORTS" ><img src="asset/img/icon/youtube1.png" alt="youtube" style="width: 120px; height: 120px; object-fit: cover;"></a></div></div>
-                    <h3>Youtube</h3>
-                    <p></p>
+                
+                <div class="contact-card">
+                    <h3><i class="fas fa-envelope"></i> Digital Communications</h3>
+                    <a href="mailto:rkc242855@gmail.com">rkc242855@gmail.com</a>
+                    <a href="mailto:rosankc820@gmail.com">rosankc820@gmail.com</a>
+                    
+                    <h3 style="margin-top: 2rem;"><i class="fas fa-phone-alt"></i> Voice Channel</h3>
+                    <a href="tel:9826482279">+977 9826482279</a>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon"><div class="service-icon"><a href="https://www.instagram.com/Rosan.2061" ><img src="asset/img/icon/insta.png" alt="instagram" style="width: 120px; height: 120px; object-fit: cover;"></a></div></div>
-                    <h3>Instagram</h3>
-                    <p></p>
+            </div>
+            
+            <div class="section-title" style="margin-top: 6rem;">
+                <h2>SOCIAL NETWORKS</h2>
+            </div>
+            
+            <div class="social-grid">
+                <div class="social-card">
+                    <div class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <h4>Facebook</h4>
+                    <p>@Rosan.2061</p>
+                    <a href="https://www.facebook.com/Rosan.2061" target="_blank" class="btn" style="padding: 8px 16px; margin-top: 10px; font-size: 0.9rem;">Access</a>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon"><div class="service-icon"><a href="https://www.facebook.com/RosanXettri.2004" ><img src="asset/img/icon/facebook.png" alt="fb page" style="width: 120px; height: 120px; object-fit: cover;"></a></div></div>
-                    <h3>Facebook Page</h3>
-                    <p></p>
+                
+                <div class="social-card">
+                    <div class="social-icon">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <h4>YouTube</h4>
+                    <p>@RX_E-SPORTS</p>
+                    <a href="https://www.youtube.com/@RX_E-SPORTS" target="_blank" class="btn" style="padding: 8px 16px; margin-top: 10px; font-size: 0.9rem;">Access</a>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon"><div class="service-icon"><a href="https://www.tiktok.com/@rosan2061"><img src="asset/img/icon/tiktok.png" alt="tiktok" style="width: 120px; height: 120px; object-fit: cover;"></a></div></div>
-                    <h3>Tik Tok </h3>
-                    <p></p>
+                
+                <div class="social-card">
+                    <div class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <h4>Instagram</h4>
+                    <p>@Rosan.2061</p>
+                    <a href="https://www.instagram.com/Rosan.2061" target="_blank" class="btn" style="padding: 8px 16px; margin-top: 10px; font-size: 0.9rem;">Access</a>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon"><div class="service-icon"><a href="https://x.com/Rx_Rosan"><img src="asset/img/icon/xcorp.png" alt="twitter" style="width: 120px; height: 120px; object-fit: cover;"></a></div></div>
-                    <h3>Twitter </h3>
-                    <p></p>
+                
+                <div class="social-card">
+                    <div class="social-icon">
+                        <i class="fab fa-facebook"></i>
+                    </div>
+                    <h4>Facebook Page</h4>
+                    <p>@RosanXettri.2004</p>
+                    <a href="https://www.facebook.com/RosanXettri.2004" target="_blank" class="btn" style="padding: 8px 16px; margin-top: 10px; font-size: 0.9rem;">Access</a>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon"><div class="service-icon"><a href="https://www.youtube.com/@RxRosan-2061"><img src="asset/img/icon/youtube1.png" alt="youtube" style="width: 120px; height: 120px; object-fit: cover;"></a></div></div>
-                    <h3>Youtube </h3>
-                    <p></p>
+                
+                <div class="social-card">
+                    <div class="social-icon">
+                        <i class="fab fa-tiktok"></i>
+                    </div>
+                    <h4>TikTok</h4>
+                    <p>@rosan2061</p>
+                    <a href="https://www.tiktok.com/@rosan2061" target="_blank" class="btn" style="padding: 8px 16px; margin-top: 10px; font-size: 0.9rem;">Access</a>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon"><div class="service-icon"><a href="mailto:rkc242855@gmail.com"><img src="asset/img/icon/email.png" alt="e-mail" style="width: 120px; height: 120px; object-fit: cover;"></a></div></div>
-                    <h3>E-Mail </h3>
-                    <p></p>
+                
+                <div class="social-card">
+                    <div class="social-icon">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <h4>Twitter</h4>
+                    <p>@Rx_Rosan</p>
+                    <a href="https://x.com/Rx_Rosan" target="_blank" class="btn" style="padding: 8px 16px; margin-top: 10px; font-size: 0.9rem;">Access</a>
                 </div>
-                <div class="service-card">
-                    <div class="service-icon"><div class="service-icon"><a href="mailto:rosankc820@gmail.com"><img src="asset/img/icon/email.png" alt="e-mail" style="width: 120px; height: 120px; object-fit: cover;"></a></div></div>
-                    <h3>E-mail</h3>
-                    <p></p>
+                
+                <div class="social-card">
+                    <div class="social-icon">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <h4>YouTube</h4>
+                    <p>@RxRosan-2061</p>
+                    <a href="https://www.youtube.com/@RxRosan-2061" target="_blank" class="btn" style="padding: 8px 16px; margin-top: 10px; font-size: 0.9rem;">Access</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer" id="contact"style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('asset/img/Banner/Banner1.jpg');">
+    <!-- Footer - Cyber Lines -->
+    <footer>
         <div class="container">
             <div class="footer-grid">
-                    <div class="footer-col">
-                    <h3>About Us</h3>
-                    <p>Rosan Xettri is a passionate graphic designer and gamer who loves blending creativity with technical skills. With a keen eye for detail and an innovative mindset, he always strives to create something unique and high-quality.</p>
-                      <a href="Rosan.html" class="btn"> ABOUT ROSAN </a>
+                <div class="footer-col">
+                    <h3>Digital Entity</h3>
+                    <p>Rosan Xettri is a multidimensional creator merging design, technology, and gaming into unique digital experiences.</p>
+                    <a href="Rosan.html" class="btn" style="margin-top: 1rem; display: inline-block;">Explore Profile</a>
                 </div>
+                
                 <div class="footer-col">
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="index.html">Home</a></li>
                         <li><a href="Service.html">Services</a></li>
+                        <li><a href="Contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="RX ALL.html">Korean Course</a></li>
+                        <li><a href="SQRC.html">QR Scanner</a></li>
                         <li class="dropdown"><a href="#" onclick="toggleDropdown(event)">More</a></li>
                     </ul>
                 </div>
+                
                 <div class="footer-col">
-                    <h3>Services</h3>
+                    <h3>Contact Node</h3>
                     <ul>
-                        <!--<li><a href="#">Web Development</a></li>
-                        <li><a href="#">Mobile Apps</a></li>
-                        <li><a href="#">SEO Optimization</a></li>
-                        <li><a href="#">Digital Marketing</a></li>
-                        <li><a href="#">UI/UX Design</a></li>-->
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h3>Contact Info</h3>
-                    <ul>
-                        <li>Address : Banganga-10,Pakadiachapa Kapilvastu( NEPAL )</li>
-                        <li>Contact : 9826482279</li>
-                        <li>Email : rkc242855@gmail.com</li> 
-                        <li>Current Time : <span id="current-time"></span></li>
-
-<script>
-  function updateTime() {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    document.getElementById('current-time').textContent = timeString;
-  }
-  
-  // Update time immediately and then every minute
-  updateTime();
-  setInterval(updateTime, 60000);
-</script>
+                        <li><a href="tel:9826482279">+977 9826482279</a></li>
+                        <li><a href="mailto:rkc242855@gmail.com">rkc242855@gmail.com</a></li>
+                        <li>Kapilvastu, Nepal</li>
                     </ul>
                 </div>
             </div>
-           <div class="footer-bottom">
-    <p>&copy; <script>document.write(new Date().getFullYear())</script> Rosan Xettri. All Rights Reserved.</p>
-</div>
+            
+            <div class="footer-bottom">
+                <p>&copy; <script>document.write(new Date().getFullYear())</script> Rosan Xettri. All systems operational.</p>
+            </div>
         </div>
+    </footer>
 
+    <script>
+        // Mobile menu toggle with animation
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
         
-<!-- The popup/modal -->
+        menuToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+
+        // Close menu when clicking on nav links
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuToggle.classList.remove('active');
+            });
+        });
+
+        // Update current time with animation
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+            const timeElement = document.getElementById('current-time');
+            
+            // Add fade effect
+            timeElement.style.opacity = '0';
+            setTimeout(() => {
+                timeElement.textContent = timeString;
+                timeElement.style.opacity = '1';
+            }, 200);
+        }
+        
+        // Update immediately and every second
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Smooth scrolling with offset for fixed header
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Add hover effects to all cards
+        const cards = document.querySelectorAll('.contact-card, .social-card');
+        
+        cards.forEach(card => {
+            // Add random delay for staggered animations
+            const delay = Math.random() * 0.5;
+            card.style.animationDelay = `${delay}s`;
+            
+            // Add tilt effect on mouse move
+            card.addEventListener('mousemove', (e) => {
+                const x = e.offsetX;
+                const y = e.offsetY;
+                const centerX = card.offsetWidth / 2;
+                const centerY = card.offsetHeight / 2;
+                
+                const angleX = (y - centerY) / 20;
+                const angleY = (centerX - x) / 20;
+                
+                card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+            });
+            
+            // Reset on mouse leave
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        });
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.contact-card, .social-card, .section-title').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Add floating animation to hero elements
+        const heroElements = document.querySelectorAll('.hero h1, .hero p, .hero .btn');
+        
+        heroElements.forEach((el, index) => {
+            el.style.animation = `float 4s ease-in-out infinite`;
+            el.style.animationDelay = `${index * 0.5}s`;
+        });
+    </script>
+
+    <!-- The popup/modal -->
 <div class="modal-overlay" id="moreModal">
   <div class="modal-content">
     <a href="RX ALL.html">Korean Course</a>
@@ -178,11 +1006,9 @@
 </div>
 <!-- smart button end  end  -->
 
-    </footer>
+</body>
         <script src="asset/js/smartbtn.js"></script>
-        <script src="asset/js/script.js"></script>
-        <script src="asset/js/Navbar function.js"></script>
-        <script src="asset/js/pop up navbar more.js"></script>
         <script src="asset/js/autowriting animation.js"></script>
+        <script src="asset/js/pop up navbar more.js"></script>
 </body>
 </html>
