@@ -1,251 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>404 | Rosan Xettri</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #ff4b5c;
-      --secondary: #6a11cb;
-      --dark: #1a1a2e;
-      --light: #f8f9fa;
-    }
-
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-    }
-
-    body {
-      min-height: 100vh;
-      background: linear-gradient(-45deg, #1a1a2e, #16213e, #0f3460);
-      background-size: 400% 400%;
-      color: var(--light);
-      font-family: 'Poppins', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
-      overflow: hidden;
-      animation: gradientBG 12s ease infinite;
-    }
-
-    /* Brand Logo */
-    .brand {
-      position: absolute;
-      top: 2rem;
-      left: 2rem;
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--primary);
-      opacity: 0;
-      animation: fadeIn 0.8s ease-out forwards 0.2s;
-      z-index: 10;
-    }
-
-    /* Main Container */
-    .error-container {
-      position: relative;
-      z-index: 5;
-      animation: fadeInUp 0.8s ease-out;
-      max-width: 800px;
-    }
-
-    /* 404 Text */
-    h1 {
-      font-size: 10rem;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-      text-shadow: 
-        0 0 10px rgba(255, 75, 92, 0.3),
-        0 0 20px rgba(255, 75, 92, 0.2);
-      position: relative;
-      display: inline-block;
-      opacity: 0;
-      animation: fadeIn 0.8s ease-out forwards 0.3s;
-    }
-
-    /* Underline Animation */
-    h1::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 4px;
-      bottom: 15px;
-      left: 0;
-      background: linear-gradient(90deg, var(--primary), transparent);
-      border-radius: 5px;
-      transform: scaleX(0);
-      transform-origin: left;
-      animation: underline 1.5s ease-in-out forwards 0.8s;
-    }
-
-    /* Subtitle */
-    h2 {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      opacity: 0;
-      animation: fadeIn 0.8s ease-out forwards 0.5s;
-      font-weight: 600;
-    }
-
-    /* Description */
-    p {
-      font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.8);
-      margin-bottom: 2.5rem;
-      max-width: 600px;
-      line-height: 1.6;
-      opacity: 0;
-      animation: fadeIn 0.8s ease-out forwards 0.7s;
-    }
-
-    /* Animated Button */
-    .home-btn {
-      position: relative;
-      display: inline-block;
-      padding: 0.9rem 2rem;
-      border-radius: 50px;
-      background: linear-gradient(45deg, var(--primary), #ff1e3c);
-      color: white;
-      font-weight: 600;
-      text-decoration: none;
-      overflow: hidden;
-      opacity: 0;
-      animation: fadeIn 0.8s ease-out forwards 0.9s;
-      box-shadow: 0 4px 15px rgba(255, 75, 92, 0.3);
-      transition: all 0.3s ease;
-      z-index: 2;
-    }
-
-    .home-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(255, 75, 92, 0.4);
-    }
-
-    .home-btn:active {
-      transform: translateY(1px);
-    }
-
-    /* Button Hover Effect */
-    .home-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: 0.5s;
-    }
-
-    .home-btn:hover::before {
-      left: 100%;
-    }
-
-    /* Floating Particles (Subtle) */
-    .particles {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-
-    .particle {
-      position: absolute;
-      background: rgba(255, 75, 92, 0.15);
-      border-radius: 50%;
-      pointer-events: none;
-      filter: blur(1px);
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes underline {
-      to { transform: scaleX(1); }
-    }
-
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      50% { transform: translateY(-20px) translateX(10px); }
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-      h1 { font-size: 6rem; }
-      h2 { font-size: 1.8rem; }
-      p { font-size: 1rem; }
-      .brand { font-size: 1.5rem; }
-    }
-
-    @media (max-width: 480px) {
-      h1 { font-size: 4.5rem; }
-      h2 { font-size: 1.5rem; }
-      .home-btn { padding: 0.8rem 1.8rem; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found | Rosan KC</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid #00ff00;
+            padding: 20px;
+        }
+        h1 {
+            color: #ff5555;
+            text-align: center;
+        }
+        .terminal {
+            margin-top: 20px;
+            border-top: 1px solid #333;
+            padding-top: 15px;
+        }
+        #output {
+            height: 200px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .command-line {
+            display: flex;
+            align-items: center;
+        }
+        .prompt {
+            margin-right: 10px;
+        }
+        #input {
+            background: transparent;
+            border: none;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+            flex-grow: 1;
+        }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background-color: #00ff00;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        .help-option {
+            color: #00ffff;
+            margin-left: 20px;
+        }
+    </style>
 </head>
 <body>
-  <div class="brand">Rosan Xettri</div>
-  <div class="particles" id="particles-js"></div>
-  
-  <div class="error-container">
-    <h1>404</h1>
-    <h2>Oops! Page Not Found</h2>
-    <p>The page you're looking for has vanished into the digital void. Don't worry, you can always go back home.</p>
-    <a href="https://www.rosankc.com.np" class="home-btn">⟵ Go Back Home</a>
-  </div>
+    <div class="container">
+        <h1 id="title"></h1>
+        <p id="message"></p>
+        
+        <div class="terminal">
+            <div id="output"></div>
+            <div class="command-line">
+                <span class="prompt">RX2061
+                <input type="text" id="input" autofocus>
+                
+            </div>
+        </div>
+    </div>
 
-  <script>
-    // Floating Particles (Subtle Background Effect)
-    document.addEventListener('DOMContentLoaded', function() {
-      const particlesContainer = document.getElementById('particles-js');
-      const particleCount = window.innerWidth < 768 ? 20 : 40;
-      
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        
-        // Random Properties
-        const size = Math.random() * 5 + 1;
-        const posX = Math.random() * window.innerWidth;
-        const posY = Math.random() * window.innerHeight;
-        const delay = Math.random() * 5;
-        const duration = Math.random() * 10 + 10;
-        
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${posX}px`;
-        particle.style.top = `${posY}px`;
-        particle.style.opacity = Math.random() * 0.3 + 0.1;
-        particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
-        
-        particlesContainer.appendChild(particle);
-      }
-    });
-  </script>
+    <script>
+        // Auto-writing effect
+        function typeWriter(element, text, speed, callback) {
+            let i = 0;
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typing, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            typing();
+        }
+
+        // Initialize elements
+        const title = document.getElementById('title');
+        const message = document.getElementById('message');
+        const output = document.getElementById('output');
+        const input = document.getElementById('input');
+
+        // Type the header and message
+        typeWriter(title, "Rosan Xettri 404 - Page Not Found", 100, () => {
+            typeWriter(message, "The page you're looking for doesn't exist or has been moved.", 50, () => {
+                typeWriter(output, "", 30, initializeTerminal);
+            });
+        });
+
+        function initializeTerminal() {
+            typeWriter(output, "", 30, () => {
+                typeWriter(output, "Type 'help' for options.\n", 30, () => {
+                    // Now make the input functional
+                    setupTerminal();
+                });
+            });
+        }
+
+        // Available commands
+        const commands = {
+            help: showHelp,
+            home: goHome,
+            contact: showContact,
+        };
+
+        // Contact options
+        const contacts = {
+            facebook: "https://facebook.com/Rosan.2061",
+            email: "mailto:rkc242855@gmail.com",
+            website: "https://rosankc.com.np"
+        };
+
+        function setupTerminal() {
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    const cmd = this.value.trim().toLowerCase();
+                    addOutput("→ " + cmd);
+                    
+                    if (cmd in commands) {
+                        commands[cmd]();
+                    } 
+                    else if (cmd in contacts) {
+                        addOutput(`Opening ${cmd}...`);
+                        setTimeout(() => {
+                            window.open(contacts[cmd], '_blank');
+                        }, 500);
+                    }
+                    else {
+                        addOutput(`Command not found: ${cmd}`);
+                        addOutput("Type 'help' for available commands");
+                    }
+                    
+                    this.value = '';
+                    output.scrollTop = output.scrollHeight;
+                }
+            });
+        }
+
+        function addOutput(text) {
+            const newLine = document.createElement('div');
+            output.appendChild(newLine);
+            typeWriter(newLine, text, 10);
+        }
+
+        function showHelp() {
+            addOutput("Available commands:");
+            addOutput("help - Show this help");
+            addOutput("home - Go to homepage");
+            addOutput("contact- Contact options");
+        }
+
+        function goHome() {
+            addOutput("Redirecting to homepage...");
+            setTimeout(() => {
+                window.location.href = "https://rosankc.com.np";
+            }, 1000);
+        }
+
+        function showContact() {
+            addOutput("Available contact methods:");
+            addOutput("facebook - Contact on Facebook");
+            addOutput("email - Send an email");
+            addOutput("website - Visit website");
+            addOutput("Type one of these options to proceed");
+        }
+
+    </script>
 </body>
 </html>
