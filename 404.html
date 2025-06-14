@@ -1,196 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 Not Found | Rosan KC</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-        .container {
-            width: 100%;
-            max-width: 800px;
-            border: 1px solid #00ff00;
-            padding: 20px;
-        }
-        h1 {
-            color: #ff5555;
-            text-align: center;
-        }
-        .terminal {
-            margin-top: 20px;
-            border-top: 1px solid #333;
-            padding-top: 15px;
-        }
-        #output {
-            height: 200px;
-            overflow-y: auto;
-            margin-bottom: 10px;
-        }
-        .command-line {
-            display: flex;
-            align-items: center;
-        }
-        .prompt {
-            margin-right: 10px;
-        }
-        #input {
-            background: transparent;
-            border: none;
-            color: #00ff00;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            width: 100%;
-            outline: none;
-            flex-grow: 1;
-        }
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 20px;
-            background-color: #00ff00;
-            animation: blink 1s infinite;
-        }
-        @keyframes blink {
-            50% { opacity: 0; }
-        }
-        .help-option {
-            color: #00ffff;
-            margin-left: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 Not Found | Rosan KC</title>
+  <style id="theme-style">
+    body {
+      background-color: #000000;
+      color: #230885;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      border: 1px solid #e70316;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    h1 {
+      color: #d40909;
+      text-align: center;
+    }
+    .terminal {
+      margin-top: 20px;
+      border-top: 1px solid #dd091b;
+      padding-top: 15px;
+    }
+    #output {
+      height: 200px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+      scroll-behavior: smooth;
+    }
+    .command-line {
+      display: flex;
+      align-items: center;
+    }
+    .prompt {
+      margin-right: 10px;
+    }
+    #input {
+      background: transparent;
+      border: none;
+      color: #df3112;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      width: 100%;
+      outline: none;
+      flex-grow: 1;
+    }
+    
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    .typing-cursor {
+      animation: blink 1s infinite;
+    }
+    .rainbow-text {
+      background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rainbow 8s linear infinite;
+      background-size: 400% 100%;
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1 id="title"></h1>
-        <p id="message"></p>
-        
-        <div class="terminal">
-            <div id="output"></div>
-            <div class="command-line">
-                <span class="prompt">RX2061
-                <input type="text" id="input" autofocus>
-                
-            </div>
-        </div>
+  <div class="container">
+    <h1 id="title"></h1>
+    <p id="message"></p>
+    <div class="terminal">
+      <div id="output"></div>
+      <div class="command-line">
+        <span class="prompt">RX2061 &gt;</span>
+        <input type="text" id="input" placeholder="Input command here..." autofocus />
+      </div>
     </div>
+  </div>
 
-    <script>
-        // Auto-writing effect
-        function typeWriter(element, text, speed, callback) {
-            let i = 0;
-            function typing() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(typing, speed);
-                } else if (callback) {
-                    callback();
-                }
-            }
-            typing();
+  <script>
+    // Enhanced TypeWriter class with queue system and auto-scroll
+    class TypeWriter {
+      constructor(outputElement) {
+        this.queue = [];
+        this.isTyping = false;
+        this.defaultSpeed = 20;
+        this.lineDelay = 200;
+        this.outputElement = outputElement;
+        this.currentColor = '#00ff00'; // Default green
+        this.rainbowMode = false;
+      }
+
+      addToQueue(element, text, speed = this.defaultSpeed, callback = null, forceColor = null) {
+        this.queue.push({ element, text, speed, callback, forceColor });
+        if (!this.isTyping) this.processQueue();
+      }
+
+      processQueue() {
+        if (this.queue.length === 0) {
+          this.isTyping = false;
+          return;
         }
 
-        // Initialize elements
-        const title = document.getElementById('title');
-        const message = document.getElementById('message');
-        const output = document.getElementById('output');
-        const input = document.getElementById('input');
-
-        // Type the header and message
-        typeWriter(title, "Rosan Xettri 404 - Page Not Found", 100, () => {
-            typeWriter(message, "The page you're looking for doesn't exist or has been moved.", 50, () => {
-                typeWriter(output, "", 30, initializeTerminal);
-            });
+        this.isTyping = true;
+        const { element, text, speed, callback, forceColor } = this.queue.shift();
+        this.type(element, text, speed, forceColor, () => {
+          this.scrollToBottom();
+          if (callback) callback();
+          setTimeout(() => this.processQueue(), this.lineDelay);
         });
+      }
 
-        function initializeTerminal() {
-            typeWriter(output, "", 30, () => {
-                typeWriter(output, "Type 'help' for options.\n", 30, () => {
-                    // Now make the input functional
-                    setupTerminal();
-                });
-            });
+      type(element, text, speed, forceColor, callback) {
+        let i = 0;
+        element.innerHTML = '';
+        
+        // Apply color based on current mode or forced color
+        if (forceColor) {
+          element.style.color = forceColor;
+          element.classList.remove('rainbow-text');
+        } else if (this.rainbowMode) {
+          element.classList.add('rainbow-text');
+          element.style.color = '';
+        } else {
+          element.style.color = this.currentColor;
+          element.classList.remove('rainbow-text');
         }
+        
+        const cursorSpan = document.createElement('span');
+        cursorSpan.className = 'typing-cursor';
+        cursorSpan.textContent = '|';
+        element.appendChild(cursorSpan);
 
-        // Available commands
-        const commands = {
-            help: showHelp,
-            home: goHome,
-            contact: showContact,
-        };
+        const typingInterval = setInterval(() => {
+          if (i < text.length) {
+            cursorSpan.insertAdjacentText('beforebegin', text.charAt(i));
+            i++;
+            if (i % 20 === 0) this.scrollToBottom();
+          } else {
+            clearInterval(typingInterval);
+            element.removeChild(cursorSpan);
+            if (callback) callback();
+          }
+        }, speed);
+      }
 
-        // Contact options
-        const contacts = {
-            facebook: "https://facebook.com/Rosan.2061",
-            email: "https://mail.google.com/mail/u/0/#inbox?compose=CllgCJfmrDXJzTVhfXVNWsDcXgCvPdSVqrrzBNCfRGmRBKDZwtXvSXHcBtKZfBWNqkGcsqLZRgV",
-            website: "https://rosankc.com.np"
-        };
+      scrollToBottom() {
+        this.outputElement.scrollTop = this.outputElement.scrollHeight;
+      }
 
-        function setupTerminal() {
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    const cmd = this.value.trim().toLowerCase();
-                    addOutput("→ " + cmd);
-                    
-                    if (cmd in commands) {
-                        commands[cmd]();
-                    } 
-                    else if (cmd in contacts) {
-                        addOutput(`Opening ${cmd}...`);
-                        setTimeout(() => {
-                            window.open(contacts[cmd], '_blank');
-                        }, 500);
-                    }
-                    else {
-                        addOutput(`Command not found: ${cmd}`);
-                        addOutput("Type 'help' for available commands");
-                    }
-                    
-                    this.value = '';
-                    output.scrollTop = output.scrollHeight;
-                }
-            });
+      setTextColor(color) {
+        this.currentColor = color;
+        this.rainbowMode = false;
+        this.updateColors();
+      }
+
+      setRainbowMode(enable) {
+        this.rainbowMode = enable;
+        this.updateColors();
+      }
+
+      updateColors() {
+        // Update all existing output
+        document.querySelectorAll('#output div').forEach(el => {
+          if (this.rainbowMode) {
+            el.classList.add('rainbow-text');
+            el.style.color = '';
+          } else {
+            el.classList.remove('rainbow-text');
+            el.style.color = this.currentColor;
+          }
+        });
+        
+        // Update input and cursor
+        if (this.rainbowMode) {
+          document.getElementById('input').classList.add('rainbow-text');
+          document.querySelector('.cursor').style.backgroundColor = 'transparent';
+        } else {
+          document.getElementById('input').classList.remove('rainbow-text');
+          document.getElementById('input').style.color = this.currentColor;
+          document.querySelector('.cursor').style.backgroundColor = this.currentColor;
         }
+      }
+    }
 
-        function addOutput(text) {
-            const newLine = document.createElement('div');
-            output.appendChild(newLine);
-            typeWriter(newLine, text, 10);
+    const output = document.getElementById('output');
+    const writer = new TypeWriter(output);
+    const title = document.getElementById('title');
+    const message = document.getElementById('message');
+    const input = document.getElementById('input');
+    const styleTag = document.getElementById('theme-style');
+
+    const commands = {
+      help: showHelp,
+      home: goHome,
+      contact: showContact,
+      about: showAbout,
+      clear: clearTerminal
+    };
+
+    const hiddenCommands = {
+      "i love you": () => {
+        addOutput(" Sorry Babe , But i am loyal for my Girl.");
+        addOutput("❤️");
+      },
+      "darkmode": () => {
+        setTheme("dark");
+        addOutput("Switched to Dark Mode....");
+      },
+      "lightmode": () => {
+        setTheme("light");
+        addOutput("Light Mode activated...");
+      },
+      "mono": () => setFont("Courier New font applying..."),
+      "poppins": () => setFont("Poppins font applying..."),
+      "comic": () => setFont("Comic Sans MS font applying..."),
+      "rickroll": () => {
+        addOutput("Never gonna give you up...");
+        setTimeout(() => window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", '_blank'), 1000);
+      },
+      "test scroll": () => {
+        for (let i = 1; i <= 20; i++) {
+          addOutput(`Testing the function Scrolling . ${i} Rosan Xettri | RX2061 | Rosan Khattri Chettri.`);
         }
+      },
+      // Color commands
+      "color green": () => {
+        writer.setTextColor('#00ff00');
+        addOutput("Text color changed to green.");
+      },
+      "color red": () => {
+        writer.setTextColor('#ff5555');
+        addOutput("Text color changed to red.");
+      },
+      "color blue": () => {
+        writer.setTextColor('#5555ff');
+        addOutput("Text color changed to blue.");
+      },
+      "color yellow": () => {
+        writer.setTextColor('#ffff55');
+        addOutput("Text color changed to yellow.");
+      },
+      "color white": () => {
+        writer.setTextColor('#ffffff');
+        addOutput("Text color changed to white.");
+      },
+      "color cyan": () => {
+        writer.setTextColor('#00ffff');
+        addOutput("Text color changed to cyan.");
+      },
+      "color pink": () => {
+        writer.setTextColor('#ff55ff');
+        addOutput("Text color changed to pink.");
+      },
+      "color orange": () => {
+        writer.setTextColor('#ffaa00');
+        addOutput("Text color changed to orange.");
+      },
+      "color random": () => {
+        const colors = ['#ff5555', '#55ff55', '#5555ff', '#ffff55', '#ff55ff', '#55ffff', '#ffaa00'];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        writer.setTextColor(randomColor);
+        addOutput(`Text color changed to random color..: ${randomColor}`);
+      },
+      "rainbow": () => {
+        writer.setRainbowMode(true);
+        addOutput("Rainbow mode activated...");
+      },
+      "normal color": () => {
+        writer.setRainbowMode(false);
+        writer.setTextColor('#00ff00');
+        addOutput("Returned to normal text color.");
+      },
+      "show colors": () => {
+        addOutput("Available color commands:");
+        addOutput("color green    - Change to green");
+        addOutput("color red      - Change to red");
+        addOutput("color blue     - Change to blue");
+        addOutput("color yellow   - Change to yellow");
+        addOutput("color white    - Change to white");
+        addOutput("color cyan     - Change to cyan");
+        addOutput("color pink     - Change to pink");
+        addOutput("color orange   - Change to orange");
+        addOutput("color random   - Random color");
+        addOutput("rainbow        - Rainbow color effect");
+        addOutput("normal color   - Reset to default");
+      }
+    };
 
-        function showHelp() {
-            addOutput("Available commands:");
-            addOutput("help - Show this help");
-            addOutput("home - Go to homepage");
-            addOutput("contact- Contact options");
+    const contacts = {
+      facebook: "https://facebook.com/Rosan.2061",
+      email: "mailto:rkc242855@gmail.com",
+      website: "https://rosankc.com.np"
+    };
+
+    function setTheme(mode) {
+      if (mode === "light") {
+        styleTag.innerHTML = styleTag.innerHTML.replace(/#121212/g, "#ffffff").replace(/#00ff00/g, "#333333").replace(/#ff5555/g, "#aa0000");
+        writer.setTextColor('#333333');
+      } else if (mode === "dark") {
+        styleTag.innerHTML = styleTag.innerHTML.replace(/#ffffff/g, "#121212").replace(/#333333/g, "#00ff00").replace(/#aa0000/g, "#ff5555");
+        writer.setTextColor('#00ff00');
+      } else if (mode === "matrix") {
+        styleTag.innerHTML = styleTag.innerHTML.replace(/#121212/g, "#000000").replace(/#333333/g, "#00ff00").replace(/#aa0000/g, "#00ff00");
+        writer.setTextColor('#00ff00');
+      }
+    }
+
+    function setFont(font) {
+      document.body.style.fontFamily = font + ', monospace';
+      addOutput("Font switched to: " + font);
+    }
+
+    // Initialize page
+    writer.addToQueue(title, "Rosan Xettri 404 - Page Not Found", 80);
+    writer.addToQueue(message, "The page you're looking for doesn't exist or has been moved.", 40, () => {
+      addOutput("Type 'help' for options...\n");
+      setupTerminal();
+    });
+
+    function setupTerminal() {
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          const cmd = this.value.trim().toLowerCase();
+          this.value = ''; // Clear the input field immediately
+          processCommand(cmd);
         }
+      });
+      
+      // Also handle paste events to keep the input clean
+      input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        this.value = text.trim();
+      });
+    }
 
-        function goHome() {
-            addOutput("Redirecting to homepage...");
-            setTimeout(() => {
-                window.location.href = "https://rosankc.com.np";
-            }, 1000);
+    function processCommand(cmd) {
+      addOutput("→ " + cmd);
+
+      if (commands[cmd]) {
+        commands[cmd]();
+      } else if (contacts[cmd]) {
+        addOutput(`Opening ${cmd}...`);
+        setTimeout(() => window.open(contacts[cmd], '_blank'), 500);
+      } else if (hiddenCommands[cmd]) {
+        hiddenCommands[cmd]();
+      } else if (cmd.startsWith("cd ")) {
+        const folder = cmd.substring(3);
+        if (hiddenCommands[`cd ${folder}`]) {
+          hiddenCommands[`cd ${folder}`]();
+        } else {
+          addOutput(`bash: cd: ${folder}: No such file or directory`);
         }
-
-        function showContact() {
-            addOutput("Available contact methods:");
-            addOutput("facebook - Contact on Facebook");
-            addOutput("email - Send an email");
-            addOutput("website - Visit website");
-            addOutput("Type one of these options to proceed");
+      } else if (cmd.startsWith("color ")) {
+        const colorCmd = cmd.substring(6);
+        if (hiddenCommands[`color ${colorCmd}`]) {
+          hiddenCommands[`color ${colorCmd}`]();
+        } else {
+          addOutput(`Color '${colorCmd}' not found. Type 'show colors' for options.`);
         }
+      } else {
+        addOutput(`Command not found: ${cmd}`);
+        addOutput("Type 'help' for available commands");
+      }
+      
+      // Ensure input is focused for next command
+      input.focus();
+    }
 
-    </script>
+    function addOutput(text, forceColor = null) {
+      const newLine = document.createElement('div');
+      output.appendChild(newLine);
+      writer.addToQueue(newLine, text, 10, null, forceColor);
+    }
+
+    function clearTerminal() {
+      output.innerHTML = '';
+      writer.scrollToBottom();
+    }
+
+    function showHelp() {
+      addOutput("Available commands:");
+      addOutput("help     - Show this help");
+      addOutput("home     - Go to homepage");
+      addOutput("contact  - Contact options");
+      addOutput("about    - About Rosan");
+      addOutput("clear    - Clear terminal output");
+    }
+
+    function goHome() {
+      addOutput("Redirecting to homepage...");
+      setTimeout(() => window.location.href = "https://rosankc.com.np", 1000);
+    }
+
+    function showContact() {
+      addOutput("Contact methods:");
+      addOutput("facebook - Message via Facebook");
+      addOutput("email    - Send an email");
+      addOutput("website  - Visit main site");
+    }
+
+    function showAbout() {
+      addOutput("Rosan Khattri Chettri — I am Rosan Khattri Chettri, a 20-year-old passionate and driven individual from Banganga-10, Kapilvastu. Currently pursuing my BBS 3rd year, I have always been deeply fascinated by the world of creativity and technology. With a strong skill set in designing, web development, and e-sports gaming, I continuously push myself to learn, evolve, and stay ahead in the digital realm.Designing allows me to bring my imagination to life, creating visually compelling and meaningful graphics that leave an impact. Web development fuels my technical curiosity, enabling me to craft functional, user-friendly, and aesthetically pleasing websites. On the other hand, my passion for e-sports gaming challenges my strategic thinking, reflexes, and competitive spirit, making me thrive in high-intensity environments.I believe in continuous growth and innovation, always seeking new ways to enhance my skills and contribute meaningfully to the digital space. Whether it's crafting designs, coding dynamic websites, or competing in the gaming world, I am dedicated to pushing boundaries, learning from experiences, and making a mark with my work...");
+      addOutput("For more detail Visit to Rosan Xettri's website .");
+    }
+  </script>
 </body>
 </html>
