@@ -1,135 +1,143 @@
 window.questions = [
-  {
-    question: "1<br>이 사진 뭐의 입니까?",
-    options: { a: "자동차 입니다.", b: "전화기 입니다.", c: "냉장고 입니다.", d: "세탁기 입니다." },
-    answer: "c",
-    explanation: "Review not Aviable.",
-    image: "rxasset/QSM1/img/img1.jpg",
-    audio: "rxasset/QSM1/audio/audio1.mp3"
-  },
-  {
-    question: "2<br> 당신의 이름은 뭐 입니까?",
-    options: { a: "저는 학생입니다.", b: "깨 시 로선 입니다.", c: "집에 갑니다.", d: "안녕하세요." },
+ {
+    question: "1<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
     answer: "b",
-    explanation: "Question asks 'What is your name?'"
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio21.mp3"
   },
   {
-    question: "3<br>듣고 가장 알맞은 것을 고르십시오.",
-    options: { a: "자기야, 사랑해. 너랑 결혼하고 싶어요.", b: "저는 학교 가고 싶어요", c: "밥을 먹고 싶어요", d: "영화를 보고 싶어요" },
-    answer: "a",
-    explanation: "Romantic sentence – matches the audio.",
-    audio: "rxasset/QSM1/audio/audio1.mp3"
-  },
-  {
-    question: "4<br> 이 사진은 뭐의 입니까?",
-    options: { a: "돈 입니다.", b: "원 입나다.", c: "물소 입니다.", d: "소 입니다." },
+    question: "2<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
     answer: "a",
     explanation: "Review not Aviable.",
-    image: "rxasset/QSM1/img/img2.jpg"
+    audio: "rxasset/QSM4/audio/audio22.mp3"
   },
   {
-    question: "5<br>이 사진은 뭐의 입니까?",
-    options: { a: "짐대 입니다.", b: "텔레비전 입니다.", c: "노트북 입니다.", d: "컴프터 입니다" },
+    question: "3<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "b",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio23.mp3"
+  },
+  {
+    question: "4<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
     answer: "d",
     explanation: "Review not Aviable.",
-    image: "rxasset/QSM1/img/img14.jpg"
+    audio: "rxasset/QSM4/audio/audio24.mp3"
   },
   {
-    question: "6<br> 저는 어제 시장에 가서 두 ...... 바지를 샀습니다.",
-    options: { a: "개", b: "벌", c: "송이", d: "켤레" },
-    answer: "b",
-    explanation: "Review Not aviable."
-  },
-  {
-    question: " 7<br>이 사진은 뭐의 입니까?",
-    options: { a: "이 사진은 학교의 사진입니다.", b: "이 사진은 병원의 사진입니다.", c: "이 사진은 공원의 사진입니다.", d: "이 사진은 경찰서의 사진입니다." },
-    answer: "a",
-    explanation: "Review not Aviable.",
-    image: "rxasset/QSM1/img/img21.jpg"
-  },
-  {
-    question: "8<br> 이 소리는 무엇입니까?",
-    options: { a: "전화벨", b: "문 여는 소리", c: "기차", d: "개 짖는 소리" },
-    answer: "a",
-    explanation: "Audio is a phone ringing.",
-    audio: "rxasset/QSM1/audio/audio2.wav"
-  },
-  {
-    question: " 9<br> 이 사진은 뭐의 입니까?",
-    options: { a: "버스 입니다.", b: "기차 입니다.", c: "택시 입니다.", d: "차 입니다." },
-    answer: "c",
-    explanation: "Review not Aviable.",
-    image: "rxasset/QSM1/img/img15.jpg"
-  },
-  {
-    question: " 10<br> 이 사진은 뭐의 입니까?",
-    options: { a: "소 입니다.", b: "모자 입니다", c: "바지 입니다.", d: "사자 입니다." },
+    question: "5<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
     answer: "b",
     explanation: "Review not Aviable.",
-    image: "rxasset/QSM1/img/img3.jpg"
+    audio: "rxasset/QSM4/audio/audio25.mp3"
   },
   {
-    question: " 11<br>선픙기가 두 ....... 있습니다.",
-    options: { a: "대", b: "개", c: "채", d: "켤레" },
-    answer: "a",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: "12<br> 저는 어제 시장에 갔어요, ...... 에서 과일을 샀어요.",
-    options: { a: "여기", b: "커기", c: "저기", d: "어디" },
-    answer: "a",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: " 13<br>이 사진은 뭐의 입니까?",
-    options: { a: "모자 입니다.", b: "유니픔 입니다.", c: "바지 입니다.", d: "가방 입니다." },
+    question: "6<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
     answer: "c",
     explanation: "Review not Aviable.",
-    image: "rxasset/QSM1/img/img4.jpg"
+    audio: "rxasset/QSM4/audio/audio26.mp3"
   },
   {
-    question: "14<br> 가：내일 ....이/가 어때요?<br>나：비가 오고 바람이 많이 불 거예요.",
-    options: { a: "시간", b: "날씨", c: "날짜", d: "계절" },
+    question: "7<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "a",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio27.mp3"
+  },
+  {
+    question: "8<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio28.mp3"
+  },
+  {
+    question: "9<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
     answer: "b",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: "15<br> 100000",
-    options: { a: "십만", b: "천만", c: "만", d: "조" },
-    answer: "a",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: "16<br> 이 사진은 뭐의 입니까?",
-    options: { a: "공항 입니다.", b: "자전거 입니다.", c: "배 입니다.", d: "비행기 입니다." },
-    answer: "d",
     explanation: "Review not Aviable.",
-    image: "rxasset/QSM1/img/img5.jpg"
+    audio: "rxasset/QSM4/audio/audio29.mp3"
   },
   {
-    question: "17<br> 만오천백오십일",
-    options: { a: "151515", b: "10500", c: "15151", d: "15235" },
+    question: "10<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "a",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio30.mp3"
+  },
+{
+    question: "11<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
     answer: "c",
-    explanation: "Review not Aviable."
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio31.mp3"
   },
   {
-    question: "18<br> 지금 일요일 입니다, 모레 ..... 입니다.",
-    options: { a: "화요일 입니다.", b: "월요일 입니다.", c: "토요일 입니다.", d: "목요일 입니다." },
-    answer: "a",
-    explanation: "Review not Aviable."
+    question: "12<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio32.mp3"
   },
   {
-    question: " 19<br>이 사진은 뭐의 입니까?",
-    options: { a: "선픙기 입니다.", b: "자동차 입니다.", c: "버스 입니다.", d: "차 입니다." },
+    question: "13<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio33.mp3"
+  },
+  {
+    question: "14<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
     answer: "a",
     explanation: "Review not Aviable.",
-    image: "rxasset/QSM1/img/img6.jpg"
+    audio: "rxasset/QSM4/audio/audio34.mp3"
   },
   {
-    question: "20<br> 여기에서 제 집까지 ..... 입니다.",
-    options: { a: "세 길로미터 거리", b: "삼 길로미터", c: "세 길로미터", d: "삼 길로미터 거리" },
-    answer: "d",
-    explanation: "Review not Aviable.'"
+    question: "15<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio35.mp3"
+  },
+  {
+    question: "16<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "b",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio36.mp3"
+  },
+  {
+    question: "17<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio37.mp3"
+  },
+  {
+    question: "18<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "b",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio38.mp3"
+  },
+  {
+    question: "19<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "b",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio39.mp3"
+  },
+  {
+    question: "20<br>듣기 가장 알맞은 것을 고르십시오.",
+    options: { a: "일번호 입니다.", b: "이번호 입니다.", c: "삼번호 입니다.", d: "사번호 입니다." },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    audio: "rxasset/QSM4/audio/audio40.mp3"
   },
   {
     question: "21<br>듣기 가장 알맞은 것을 고르십시오.",
