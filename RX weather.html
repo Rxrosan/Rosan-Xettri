@@ -828,7 +828,7 @@
                         <i class="wi wi-refresh"></i> Refresh
                     </button>
                     <button id="unitToggle">
-                        <i class="wi wi-celsius"></i> Switch to °F
+                        <i class="wi wi-celsius"></i> Convert To °F
                     </button>
                     <button id="backToHome" onclick="window.location.href='index.html'">
                         <i class="wi wi-direction-left"></i> Back to Home
@@ -1149,8 +1149,8 @@ document.addEventListener('DOMContentLoaded', function() {
         isCelsius = !isCelsius;
         tempUnitElement.textContent = isCelsius ? '°C' : '°F';
         unitToggle.innerHTML = isCelsius 
-            ? '<i class="wi wi-fahrenheit"></i> Switch to °F' 
-            : '<i class="wi wi-celsius"></i> Switch to °C';
+            ? '<i class="wi wi-celsius"></i> Convert To °F' 
+            : '<i class="wi wi-fahrenheit"></i> Convert To °C';
         
         if (weatherData) {
             updateWeatherDisplay(weatherData);
@@ -1191,7 +1191,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     geocodeCity(lastKnownLocation.city, lastKnownLocation.country);
                 }
             }
-        }, 15 * 60 * 1000); // 15 minutes
+        }, 1 * 60 * 1000); // 1 minutes
     }
     
     function getLocation() {

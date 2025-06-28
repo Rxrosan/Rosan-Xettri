@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rosan Xettri Studio</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #3a86ff;
+      --secondary-color: #8338ec;
+      --dark-color: #212529;
+      --light-color: #f8f9fa;
+      --danger-color: #ff006e;
+      --success-color: #06d6a0;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+    
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+    
+    nav a:hover {
+      background-color: rgba(255,255,255,0.2);
+    }
+    
+    #loginScreen {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+      color: white;
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    #loginScreen h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+    
+    #loginScreen p {
+      margin-bottom: 2rem;
+      max-width: 600px;
+      opacity: 0.9;
+    }
+    
+    .login-form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .login-form input {
+      padding: 12px 15px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 30px;
+      font-size: 1rem;
+      background-color: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .login-form input:focus {
+      outline: none;
+      background-color: rgba(255,255,255,0.2);
+      border-color: var(--primary-color);
+    }
+    
+    .login-form input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .login-form button {
+      padding: 12px;
+      border: none;
+      border-radius: 30px;
+      background-color: var(--primary-color);
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .login-form button:hover {
+      background-color: #2a75e6;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    #mainContent {
+      display: none;
+      padding: 0;
+      animation: fadeIn 0.5s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .toggle-buttons {
+      margin: 20px auto;
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    
+    .toggle-buttons button {
+      padding: 12px 25px;
+      margin: 0 5px;
+      cursor: pointer;
+      border: none;
+      background-color: #e9ecef;
+      color: #495057;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .toggle-buttons button.active {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      box-shadow: 0 4px 15px rgba(58, 134, 255, 0.4);
+    }
+    
+    .toggle-buttons button:hover:not(.active) {
+      background-color: #dee2e6;
+    }
+    
+    .section {
+      display: none;
+      padding: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .section h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: var(--dark-color);
+      font-size: 2rem;
+      position: relative;
+    }
+    
+    .section h2::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      margin: 10px auto;
+      border-radius: 2px;
+    }
+    
+    .upload-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    
+    .file-upload {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+    
+    .file-upload-btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 30px;
+      background-color: var(--success-color);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .file-upload-btn:hover {
+      background-color: #05c191;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .file-upload input[type="file"] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .add-link-btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 30px;
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .add-link-btn:hover {
+      background-color: #2a75e6;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .gallery, .videos {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    
+    .gallery-item, .video-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      background-color: white;
+    }
+    
+    .gallery-item:hover, .video-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .gallery img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+    
+    .video-item iframe {
+      width: 100%;
+      height: 250px;
+      border: none;
+      display: block;
+    }
+    
+    .video-info, .image-info {
+      padding: 15px;
+      background: white;
+    }
+    
+    .video-info h3, .image-info h3 {
+      margin-bottom: 8px;
+      color: var(--dark-color);
+    }
+    
+    .video-info p, .image-info p {
+      color: #6c757d;
+      font-size: 0.9rem;
+    }
+    
+    .item-actions {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 5px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .gallery-item:hover .item-actions,
+    .video-item:hover .item-actions {
+      opacity: 1;
+    }
+    
+    .delete-btn {
+      background-color: var(--danger-color);
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .delete-btn:hover {
+      background-color: #e0005e;
+      transform: scale(1.1);
+    }
+    
+    .view-btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .view-btn:hover {
+      background-color: #2a75e6;
+      transform: scale(1.1);
+    }
+    
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: var(--success-color);
+      color: white;
+      padding: 15px 25px;
+      border-radius: 5px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    
+    .toast.error {
+      background-color: var(--danger-color);
+    }
+    
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      overflow: auto;
+    }
+    
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 90%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 35px;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: var(--primary-color);
+    }
+    
+    footer {
+      background: var(--dark-color);
+      color: white;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 50px;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .social-links {
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 20px;
+    }
+    
+    .social-links a {
+      color: white;
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      color: var(--primary-color);
+      transform: translateY(-3px);
+    }
+    
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-links a {
+      color: #adb5bd;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary-color);
+    }
+    
+    .copyright {
+      color: #adb5bd;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 1rem;
+      }
+      
+      header h1 {
+        margin-bottom: 10px;
+      }
+      
+      nav {
+        margin-top: 10px;
+      }
+      
+      .gallery, .videos {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+      
+      .upload-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .section h2 {
+        font-size: 1.5rem;
+      }
+      
+      .toggle-buttons button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+      }
+      
+      .gallery, .videos {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <h2>Welcome to Rosan Xettri Studio</h2>
+  <p>Enter your password to access the exclusive gallery and video content</p>
+  <div class="login-form">
+    <input type="password" id="passwordInput" placeholder="Enter Password" autocomplete="current-password">
+    <button onclick="checkPassword()"><i class="fas fa-lock"></i> Login</button>
+<p> </P>
+<button onclick="window.location.href='index.html'"><i class="wi wi-direction-left"></i> Back to Home</button>
+
+  </div>
+</div>
+
+<div id="mainContent">
+  <header>
+    <h1>Rosan Xettri Studio</h1>
+    <nav>
+      <a href="index.html"><i class="fas fa-home"></i> Home</a>
+    </nav>
+  </header>
+
+  <div class="toggle-buttons">
+    <button id="galleryBtn" class="active" onclick="showSection('gallery')">
+      <i class="fas fa-images"></i> Gallery
+    </button>
+    <button id="videoBtn" onclick="showSection('video')">
+      <i class="fas fa-film"></i> Videos
+    </button>
+  </div>
+
+  <div id="gallerySection" class="section" style="display:block;">
+    <h2>Image Gallery</h2>
+    <div class="gallery" id="gallery">
+      <!-- Images will be added here through coding -->
+    </div>
+  </div>
+
+  <div id="videoSection" class="section">
+    <h2>Video Collection</h2>
+    <div class="videos" id="videos">
+      <!-- Videos will be added here through coding -->
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="social-links">
+        <a href="https://www.facebook.com/Rosan.2061"><i class="fab fa-facebook"></i></a>
+        <a href="https://www.instagram.com/Rosan.2061"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.youtube.com/@RX_E-SPORTS"><i class="fab fa-youtube"></i></a>
+        <a href="https://x.com/Rx_Rosan"><i class="fab fa-twitter"></i></a>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="About.html">About</a>
+        <a href="Contact.html">Contact</a>
+      </div>
+      <p class="copyright">© 2025 Rosan Xettri Studio. All rights reserved.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <img class="modal-content" id="modalImage">
+</div>
+
+<!-- Video Modal -->
+<div id="videoModal" class="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <iframe id="modalVideo" class="modal-content" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  const PASSWORD = "RX2061";
+  
+  // Predefined image links (added through coding)
+  const predefinedImages = [
+    
+    {
+  title: "RX LOGO 1 ",
+  description: "Shared via Facebook",
+  url: "https://scontent.fbwa1-1.fna.fbcdn.net/v/t39.30808-6/486770486_673582481703782_1961369161341151785_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=xmUOeoutQhgQ7kNvwGbASFg&_nc_oc=Adm3phyBPTCzB4e3qSeZHwdaz70PWUoUWLV-6zKYC3F-mnTg_NZi3uD1TxqQrsbToM8&_nc_zt=23&_nc_ht=scontent.fbwa1-1.fna&_nc_gid=8Og0UtSRhh8e0NLUMQHH6Q&oh=00_AfN2LU4dmA9OCrpPKIiU2n-NXIgfY8zf6OZUhgtq74NeWQ&oe=6865D70A"
+},
+    {
+      title: "UPDATING",
+      description: "",
+      url: ""
+    }
+  ];
+
+  // Predefined video links (added through coding)
+  const predefinedVideos = [
+    {
+      title: "EVENT",
+      description: "",
+      url: "https://www.youtube.com/embed/lsT5z3ZEkXY"
+    },
+    {
+      title: "UPDATING",
+      description: "",
+      url: ""
+    }
+  ];
+
+  // Check if user is already logged in
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  
+  // Initialize the page based on login status
+  window.onload = function() {
+    if (isLoggedIn) {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    } else {
+      document.getElementById("loginScreen").style.display = "flex";
+    }
+    
+    loadPredefinedImages();
+    loadPredefinedVideos();
+  };
+
+  function checkPassword() {
+    const input = document.getElementById("passwordInput").value;
+    if (input === PASSWORD) {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+      localStorage.setItem('isLoggedIn', 'true');
+      showToast("Login successful!");
+    } else {
+      showToast("Incorrect password!", true);
+      document.getElementById("passwordInput").value = "";
+      document.getElementById("passwordInput").focus();
+    }
+  }
+
+  function showToast(message, isError = false) {
+    const toast = document.getElementById("toast");
+    toast.textContent = message;
+    toast.className = isError ? "toast error show" : "toast show";
+    
+    setTimeout(() => {
+      toast.className = "toast";
+    }, 3000);
+  }
+
+  function showSection(type) {
+    document.getElementById("gallerySection").style.display = type === 'gallery' ? 'block' : 'none';
+    document.getElementById("videoSection").style.display = type === 'video' ? 'block' : 'none';
+    document.getElementById("galleryBtn").classList.toggle("active", type === 'gallery');
+    document.getElementById("videoBtn").classList.toggle("active", type === 'video');
+  }
+
+  function addImageToGallery(url, title, description) {
+    const gallery = document.getElementById("gallery");
+    const galleryItem = document.createElement("div");
+    galleryItem.className = "gallery-item";
+    
+    const img = document.createElement("img");
+    img.src = url;
+    img.alt = title || "Gallery image";
+    img.onerror = function() {
+      showToast("Failed to load image", true);
+      galleryItem.remove();
+    };
+    
+    const imageInfo = document.createElement("div");
+    imageInfo.className = "image-info";
+    imageInfo.innerHTML = `
+      <h3>${title || "Image"}</h3>
+      <p>${description || ""}</p>
+    `;
+    
+    const actions = document.createElement("div");
+    actions.className = "item-actions";
+    
+    const viewBtn = document.createElement("button");
+    viewBtn.className = "view-btn";
+    viewBtn.innerHTML = '<i class="fas fa-expand"></i>';
+    viewBtn.onclick = function(e) {
+      e.stopPropagation();
+      openImageModal(url);
+    };
+    
+    actions.appendChild(viewBtn);
+    galleryItem.appendChild(img);
+    galleryItem.appendChild(imageInfo);
+    galleryItem.appendChild(actions);
+    gallery.appendChild(galleryItem);
+  }
+
+  function openImageModal(imageUrl) {
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+    modal.style.display = "block";
+    modalImg.src = imageUrl;
+  }
+
+  function loadPredefinedImages() {
+    const galleryContainer = document.getElementById("gallery");
+    
+    // Load predefined images
+    predefinedImages.forEach(image => {
+      addImageToGallery(image.url, image.title, image.description);
+    });
+  }
+
+  function loadPredefinedVideos() {
+    const videosContainer = document.getElementById("videos");
+    
+    // Load predefined videos
+    predefinedVideos.forEach(video => {
+      addVideoToGallery(video.url, video.title, video.description);
+    });
+  }
+
+  function addVideoToGallery(url, title, description) {
+    const videosContainer = document.getElementById("videos");
+    
+    const videoItem = document.createElement("div");
+    videoItem.className = "video-item";
+    
+    const iframe = document.createElement("iframe");
+    iframe.src = url;
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+    iframe.allowFullscreen = true;
+    
+    const videoInfo = document.createElement("div");
+    videoInfo.className = "video-info";
+    videoInfo.innerHTML = `
+      <h3>${title}</h3>
+      <p>${description}</p>
+    `;
+    
+    const actions = document.createElement("div");
+    actions.className = "item-actions";
+    
+    const viewBtn = document.createElement("button");
+    viewBtn.className = "view-btn";
+    viewBtn.innerHTML = '<i class="fas fa-expand"></i>';
+    viewBtn.onclick = function(e) {
+      e.stopPropagation();
+      openVideoModal(url);
+    };
+    
+    actions.appendChild(viewBtn);
+    videoItem.appendChild(iframe);
+    videoItem.appendChild(videoInfo);
+    videoItem.appendChild(actions);
+    videosContainer.appendChild(videoItem);
+  }
+
+  function openVideoModal(videoUrl) {
+    const modal = document.getElementById("videoModal");
+    const modalVideo = document.getElementById("modalVideo");
+    modal.style.display = "block";
+    modalVideo.src = videoUrl + "?autoplay=1";
+  }
+
+  function closeModal() {
+    document.getElementById("imageModal").style.display = "none";
+    document.getElementById("videoModal").style.display = "none";
+    // Reset video src when closing to stop playback
+    document.getElementById("modalVideo").src = "";
+  }
+
+  // Close modals when clicking outside
+  window.onclick = function(event) {
+    const imageModal = document.getElementById("imageModal");
+    const videoModal = document.getElementById("videoModal");
+    if (event.target === imageModal || event.target === videoModal) {
+      closeModal();
+    }
+  };
+
+  // Allow login with Enter key
+  document.getElementById("passwordInput").addEventListener("keyup", function(event) {
+    if (event.key === "Enter") {
+      checkPassword();
+    }
+  });
+</script>
+
+</body>
+</html>
