@@ -30,7 +30,7 @@
   transition: all 0.6s ease-in-out;
   background: radial-gradient(circle at center, rgba(255, 0, 0, 0.6), rgba(0, 0, 255, 0.6), rgba(0, 255, 0, 0.6));
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.7), 
-              0 0 30px rgba(0, 255, 0, 0.7),
+              0 0 30px rgba(168, 5, 5, 0.7),
               0 0 40px rgba(0, 0, 255, 0.7);
   display: flex;
   align-items: center;
@@ -42,7 +42,7 @@
 .center-point {
   width: var(--center-size);
   height: var(--center-size);
-  background-color: #3498db;
+  background-color: #eb0a0a;
   border-radius: 50%;
   position: absolute;
   top: 50%;
@@ -52,7 +52,6 @@
   transition: opacity 0.7s ease-in-out;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
-
 .menu-item {
   position: absolute;
   width: var(--menu-item-size);
