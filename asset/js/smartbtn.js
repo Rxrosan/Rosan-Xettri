@@ -11,7 +11,7 @@
         <div class="menu-item" data-link="gallery.html" style="--index: 3;"><img src="asset/img/icon/gallery.png" alt="gallery"></div>
         <div class="menu-item" data-link="SQRC.html" style="--index: 4;"><img src="asset/img/icon/qrsc.png" alt="QR Code"></div>
         <div class="menu-item" data-link="index.html" style="--index: 5;"><img src="asset/img/icon/home.png" alt="home"></div>
-        <div class="menu-item" data-link="RX ALL.html" style="--index: 6;"><img src="asset/img/icon/other.png" alt="other"></div>
+        <div class="menu-item" data-link="RX ALL2061.html" style="--index: 6;"><img src="asset/img/icon/other.png" alt="other"></div>
         <div class="menu-item" data-link="About.html" style="--index: 7;"><img src="asset/img/icon/about.png" alt="about"></div>
         <div class="menu-item" data-link="https://x.com/Rx_Rosan" style="--index: 8;"><img src="asset/img/icon/xcorp.png" alt="xcorp"></div>
         <div class="menu-item" data-link="https://www.youtube.com/@RX_E-SPORTS" style="--index: 9;"><img src="asset/img/icon/youtube1.png" alt="YouTube"></div>
