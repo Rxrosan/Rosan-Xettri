@@ -4,11 +4,22 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentIndex = 0;
     let rotationInterval;
     let isAnimating = false;
+    let isPaused = false;
+
+    // Configuration object for easy customization
+    const config = {
+        rotationInterval: 5000,    // Time between rotations (ms)
+        animationDuration: 500,   // Animation duration (ms)
+        verticalOffset: 20,       // Vertical movement during animation (px)
+        mobileBreakpoint: 768,    // Breakpoint for mobile adjustments (px)
+        bgOverlay: 'linear-gradient(rgba(0, 0, 2, 0.7), rgba(6, 0, 10, 0.7))',
+        bgColor: 'rgba(6, 0, 10, 0.7)'
+    };
 
     // Initialize cards with proper transitions
     function initializeCards() {
         reviewCards.forEach((card, index) => {
-            // Set card dimensions to 4:4 aspect ratio
+            // Responsive card styling
             card.style.aspectRatio = '1/1';
             card.style.display = 'flex';
             card.style.position = 'absolute';
@@ -17,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.width = '100%';
             card.style.height = '100%';
             card.style.opacity = index === 0 ? '1' : '0';
-            card.style.transform = index === 0 ? 'translateY(0)' : 'translateY(20px)';
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease, background-image 0.5s ease';
+            card.style.transform = index === 0 ? 'translateY(0)' : `translateY(${config.verticalOffset}px)`;
+            card.style.transition = `opacity ${config.animationDuration}ms ease, transform ${config.animationDuration}ms ease, background ${config.animationDuration}ms ease`;
             card.style.pointerEvents = 'auto';
             
             // Set background image properties
@@ -28,38 +39,64 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.backgroundPosition = 'center center';
             card.style.backgroundRepeat = 'no-repeat';
             
+            // Set initial state
             if (index === 0) {
                 card.classList.add('current');
             } else {
                 card.classList.remove('current');
             }
+
+            // Add accessibility attributes
+            card.setAttribute('aria-hidden', index !== 0);
+            card.setAttribute('tabindex', index === 0 ? '0' : '-1');
+        });
+
+        // Handle mobile layout
+        updateMobileLayout();
+    }
+
+    // Update layout for mobile devices
+    function updateMobileLayout() {
+        const isMobile = window.innerWidth < config.mobileBreakpoint;
+        reviewCards.forEach(card => {
+            if (isMobile) {
+                card.style.aspectRatio = '3/4';
+                card.style.backgroundPosition = 'top center';
+            } else {
+                card.style.aspectRatio = '1/1';
+                card.style.backgroundPosition = 'center center';
+            }
         });
     }
 
     // Rotate to next review with smooth animation
-    function rotateReviews() {
-        if (isAnimating) return;
+    function rotateReviews(direction = 1) {
+        if (isAnimating || isPaused) return;
         
         isAnimating = true;
         const currentCard = reviewCards[currentIndex];
-        const nextIndex = (currentIndex + 1) % reviewCards.length;
+        const nextIndex = (currentIndex + direction + reviewCards.length) % reviewCards.length;
         const nextCard = reviewCards[nextIndex];
         
         // Prepare next card
         nextCard.style.display = 'flex';
         nextCard.style.opacity = '0';
-        nextCard.style.transform = 'translateY(20px)';
+        nextCard.style.transform = `translateY(${direction * config.verticalOffset}px)`;
         
         // Animate out current card
         currentCard.style.opacity = '0';
-        currentCard.style.transform = 'translateY(-20px)';
+        currentCard.style.transform = `translateY(${-direction * config.verticalOffset}px)`;
         currentCard.classList.remove('current');
+        currentCard.setAttribute('aria-hidden', 'true');
+        currentCard.setAttribute('tabindex', '-1');
         
         // Animate in next card
         setTimeout(() => {
             nextCard.style.opacity = '1';
             nextCard.style.transform = 'translateY(0)';
             nextCard.classList.add('current');
+            nextCard.setAttribute('aria-hidden', 'false');
+            nextCard.setAttribute('tabindex', '0');
             
             // Hide previous card after animation
             setTimeout(() => {
@@ -73,10 +110,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Start auto-rotation
     function startRotation() {
         clearInterval(rotationInterval);
-        rotationInterval = setInterval(rotateReviews, 5000);
+        rotationInterval = setInterval(() => rotateReviews(1), config.rotationInterval);
     }
 
-    // Toggle image background without affecting rotation
+    // Pause rotation on hover/focus
+    function pauseRotation() {
+        isPaused = true;
+        clearInterval(rotationInterval);
+    }
+
+    // Resume rotation
+    function resumeRotation() {
+        isPaused = false;
+        startRotation();
+    }
+
+    // Toggle image background with enhanced effects
     function toggleReviewImage(card) {
         if (isAnimating) return;
         
@@ -85,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (el !== card) {
                 el.classList.remove('active');
                 el.style.backgroundImage = 'none';
-                el.style.backgroundColor = 'rgba(6, 0, 10, 0.7)';
+                el.style.backgroundColor = config.bgColor;
             }
         });
         
@@ -95,10 +144,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (isActivating) {
             const imageUrl = card.getAttribute('data-image');
-            card.style.backgroundImage = `linear-gradient(rgba(0, 0, 2, 0.7), rgba(6, 0, 10, 0.7)), url(${imageUrl})`;
+            card.style.backgroundImage = `${config.bgOverlay}, url(${imageUrl})`;
         } else {
             card.style.backgroundImage = 'none';
-            card.style.backgroundColor = 'rgba(6, 0, 10, 0.7)';
+            card.style.backgroundColor = config.bgColor;
         }
     }
 
@@ -106,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeCards();
     startRotation();
 
-    // Attach click handlers
+    // Event listeners
     reviewsContainer.addEventListener('click', function(e) {
         const card = e.target.closest('.review-card');
         if (card && !isAnimating) {
@@ -114,23 +163,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Handle window resize
+    // Pause on hover/focus for better UX
+    reviewsContainer.addEventListener('mouseenter', pauseRotation);
+    reviewsContainer.addEventListener('mouseleave', resumeRotation);
+    reviewsContainer.addEventListener('focusin', pauseRotation);
+    reviewsContainer.addEventListener('focusout', resumeRotation);
+
+    // Navigation controls
+    document.querySelector('.prev-btn')?.addEventListener('click', () => rotateReviews(-1));
+    document.querySelector('.next-btn')?.addEventListener('click', () => rotateReviews(1));
+
+    // Handle window resize with debounce
     let resizeTimeout;
     window.addEventListener('resize', function() {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
             if (!isAnimating) {
+                updateMobileLayout();
                 reviewCards.forEach(card => {
                     card.style.transition = 'none';
                     card.style.opacity = card.classList.contains('current') ? '1' : '0';
-                    card.style.transform = card.classList.contains('current') ? 'translateY(0)' : 'translateY(20px)';
+                    card.style.transform = card.classList.contains('current') ? 'translateY(0)' : `translateY(${config.verticalOffset}px)`;
                     
                     // Force reflow
                     void card.offsetHeight;
                     
-                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease, background-image 0.5s ease';
+                    card.style.transition = `opacity ${config.animationDuration}ms ease, transform ${config.animationDuration}ms ease, background ${config.animationDuration}ms ease`;
                 });
             }
         }, 100);
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.target.closest('.review-card')) {
+            if (e.key === 'ArrowLeft') {
+                rotateReviews(-1);
+            } else if (e.key === 'ArrowRight') {
+                rotateReviews(1);
+            }
+        }
     });
 });

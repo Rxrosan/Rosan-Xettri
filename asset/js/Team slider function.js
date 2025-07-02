@@ -3,33 +3,175 @@ document.addEventListener('DOMContentLoaded', function() {
     const slides = document.querySelectorAll('.team-slide');
     const totalSlides = slides.length;
     let currentIndex = 0;
-    const slideDuration = 5000; // 5 seconds per slide
-    
-    function goToSlide(index) {
+    let isAnimating = false;
+    let isPaused = false;
+    let slideInterval;
+
+    // Configuration object for easy customization
+    const config = {
+        slideDuration: 5000,          // Time between slides (ms)
+        animationDuration: 800,       // Slide transition duration (ms)
+        animationEasing: 'cubic-bezier(0.4, 0, 0.2, 1)', // Smooth easing function
+        pauseOnHover: true,           // Pause on hover
+        touchSensitivity: 50,         // Minimum swipe distance (px)
+        responsiveBreakpoint: 768     // Mobile breakpoint (px)
+    };
+
+    // Initialize slider
+    function initSlider() {
+        // Set initial positions and styles
+        slider.style.transition = `transform ${config.animationDuration}ms ${config.animationEasing}`;
+        slides.forEach((slide, index) => {
+            slide.style.width = '100%';
+            slide.style.flexShrink = '0';
+            slide.setAttribute('data-index', index);
+            slide.setAttribute('aria-hidden', index !== 0);
+        });
+
+        // Clone first and last slides for infinite looping
+        const firstClone = slides[0].cloneNode(true);
+        const lastClone = slides[totalSlides - 1].cloneNode(true);
+        
+        firstClone.id = 'first-clone';
+        lastClone.id = 'last-clone';
+        
+        slider.appendChild(firstClone);
+        slider.insertBefore(lastClone, slides[0]);
+        
+        // Adjust current index for the new slides
+        currentIndex = 1;
+        goToSlide(currentIndex, false);
+    }
+
+    // Navigate to specific slide
+    function goToSlide(index, animate = true) {
+        if (isAnimating) return;
+        
+        isAnimating = true;
         currentIndex = index;
         
-        // Wrap around to first slide if at end
-        if (currentIndex >= totalSlides) {
-            // Jump to first slide without animation
+        if (!animate) {
             slider.style.transition = 'none';
-            slider.style.transform = 'translateY(0%)';
-            // Force reflow to apply the change
-            void slider.offsetWidth;
-            // Restore transition
-            slider.style.transition = 'transform 0.8s ease-in-out';
-            currentIndex = 0;
         }
         
         slider.style.transform = `translateY(-${currentIndex * 100}%)`;
+        
+        // Handle infinite loop
+        setTimeout(() => {
+            if (currentIndex === totalSlides + 1) {
+                currentIndex = 1;
+                slider.style.transition = 'none';
+                slider.style.transform = `translateY(-${currentIndex * 100}%)`;
+            } else if (currentIndex === 0) {
+                currentIndex = totalSlides;
+                slider.style.transition = 'none';
+                slider.style.transform = `translateY(-${currentIndex * 100}%)`;
+            }
+            
+            // Update aria-hidden attributes
+            slides.forEach((slide, i) => {
+                slide.setAttribute('aria-hidden', i !== currentIndex - 1);
+            });
+            
+            isAnimating = false;
+        }, config.animationDuration);
     }
-    
+
+    // Navigate to next slide
     function nextSlide() {
+        if (isPaused) return;
         goToSlide(currentIndex + 1);
     }
-    
+
+    // Navigate to previous slide
+    function prevSlide() {
+        if (isPaused) return;
+        goToSlide(currentIndex - 1);
+    }
+
     // Start auto-sliding
-    let slideInterval = setInterval(nextSlide, slideDuration);
-    
-    // Initialize first slide
-    goToSlide(0);
+    function startAutoSlide() {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(nextSlide, config.slideDuration);
+    }
+
+    // Pause auto-sliding
+    function pauseAutoSlide() {
+        isPaused = true;
+        clearInterval(slideInterval);
+    }
+
+    // Resume auto-sliding
+    function resumeAutoSlide() {
+        isPaused = false;
+        startAutoSlide();
+    }
+
+    // Handle touch events for swipe navigation
+    function setupTouchEvents() {
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        slider.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+            pauseAutoSlide();
+        }, { passive: true });
+
+        slider.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+            resumeAutoSlide();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const xDiff = touchStartX - touchEndX;
+            const yDiff = touchStartY - touchEndY;
+            
+            // Only consider vertical swipes
+            if (Math.abs(yDiff) > Math.abs(xDiff)) {
+                if (yDiff > config.touchSensitivity) {
+                    nextSlide();
+                } else if (yDiff < -config.touchSensitivity) {
+                    prevSlide();
+                }
+            }
+        }
+    }
+
+    // Initialize everything
+    initSlider();
+    startAutoSlide();
+    setupTouchEvents();
+
+    // Pause on hover if enabled
+    if (config.pauseOnHover) {
+        slider.addEventListener('mouseenter', pauseAutoSlide);
+        slider.addEventListener('mouseleave', resumeAutoSlide);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') {
+            nextSlide();
+        } else if (e.key === 'ArrowUp') {
+            prevSlide();
+        }
+    });
+
+    // Responsive adjustments
+    window.addEventListener('resize', () => {
+        // Force reflow to prevent animation glitches
+        slider.style.transition = 'none';
+        slider.style.transform = `translateY(-${currentIndex * 100}%)`;
+        void slider.offsetWidth;
+        slider.style.transition = `transform ${config.animationDuration}ms ${config.animationEasing}`;
+    });
+
+    // Optional navigation buttons
+    document.querySelector('.team-next')?.addEventListener('click', nextSlide);
+    document.querySelector('.team-prev')?.addEventListener('click', prevSlide);
 });
