@@ -16,7 +16,6 @@
     pointer-events: none;
     transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
 }
-
 #popup.show {
     opacity: 1;
     transform: scale(1);
@@ -24,12 +23,12 @@
 }
 
 .popup-content {
-    background: #fff;
+    background: #ffffff;
     width: 92%;
     max-width: 620px;
     padding: 35px 25px 25px;
     border-radius: 18px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 12px 30px rgba(29, 1, 92, 0.822);
     position: relative;
     font-family: 'Segoe UI', 'Arial', sans-serif;
     overflow: hidden;
@@ -60,7 +59,7 @@
     object-fit: cover;
     border-radius: 12px;
     margin: 18px 0;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 12px rgba(241, 238, 238, 0.1);
 }
 
 .popup-content h2 {
@@ -78,9 +77,9 @@
 
 /* Close Button */
 .btn-close {
-    background: #ff4d4f;
+    background: #1c038b;
     border: none;
-    color: #fff;
+    color: #f10909;
     width: 42px;
     height: 42px;
     font-size: 22px;
@@ -94,7 +93,7 @@
 }
 
 .btn-close:hover {
-    background: #d62828;
+    background: #33e706;
     transform: scale(1.1);
 }
 
@@ -110,8 +109,8 @@
 }
 
 .carousel-btn {
-    background: rgba(0, 0, 0, 0.55);
-    color: #fff;
+    background: rgba(9, 2, 73, 0.856);
+    color: #f50505;
     border: none;
     padding: 10px;
     font-size: 20px;
@@ -126,7 +125,7 @@
 }
 
 .carousel-btn:hover {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(44, 230, 6, 0.877);
     transform: scale(1.1);
 }
 
@@ -141,14 +140,14 @@
     display: block;
     width: 12px;
     height: 12px;
-    background: #bbb;
+    background: #ffffff;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .carousel-indicators span.active {
-    background: #e63946;
+    background: #000000;
     transform: scale(1.2);
 }
 
@@ -173,7 +172,7 @@
 .carousel-btn:focus,
 .btn-close:focus,
 .carousel-indicators span:focus {
-    outline: 2px solid #4d90fe;
+    outline: 2px solid #fc0730;
     outline-offset: 2px;
 }
 
