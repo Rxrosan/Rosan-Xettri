@@ -17,7 +17,7 @@
         enableDebuggerProtection: true, // Debugger protection
         enableBlurProtection: true,    // Blur content when detected
         enableAssetProtection: true,   // Hide assets when detected
-        lockoutDuration: 3600000,      // 1 hour lockout duration (ms)
+        lockoutDuration: 86400000,      // 24 hour lockout duration (ms)
         warningMessages: [
             "Warning: Developer tools are restricted on this site.",
             "Final warning: Continued attempts may result in restricted access.",
