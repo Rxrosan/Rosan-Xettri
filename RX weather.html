@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <script src="toolassets/js/DEVTOOLPROTECTSIMPLE.js"></script>
+    <script src="toolassets/js/DEVTOOLPROTECTSIMPLE.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="icon" type="image/png" href="asset/img/logo/RX2061.png">
+    <link rel="icon" type="image/png" href="asset/img/logo/RX2061.png">
     <title>RX |Real-Time Weather</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.12/css/weather-icons.min.css">
+    <!-- Add Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         :root {
             --primary-color: #3498db;
@@ -463,38 +465,6 @@
             color: var(--danger-color);
         }
 
-        .aqi-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-
-        .aqi-good {
-            background-color: #00e400;
-        }
-
-        .aqi-moderate {
-            background-color: #ffff00;
-        }
-
-        .aqi-unhealthy-sensitive {
-            background-color: #ff7e00;
-        }
-
-        .aqi-unhealthy {
-            background-color: #ff0000;
-        }
-
-        .aqi-very-unhealthy {
-            background-color: #8f3f97;
-        }
-
-        .aqi-hazardous {
-            background-color: #7e0023;
-        }
-
         .hourly-forecast {
             display: flex;
             overflow-x: auto;
@@ -565,15 +535,10 @@
 
         .weather-map {
             width: 100%;
-            height: 300px;
-            background-color: var(--background-color);
+            height: 400px;
             border-radius: 8px;
             margin-bottom: 20px;
             border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-light);
         }
 
         .loading {
@@ -657,6 +622,10 @@
                 justify-content: space-between;
                 width: 100%;
             }
+
+            .weather-map {
+                height: 300px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -679,6 +648,29 @@
             .weather-icon {
                 font-size: 40px;
             }
+
+            .weather-map {
+                height: 250px;
+            }
+        }
+
+        /* Leaflet map adjustments for dark theme */
+        [data-theme="dark"] .leaflet-tile {
+            filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7);
+        }
+
+        [data-theme="dark"] .leaflet-container {
+            background: var(--card-color);
+        }
+
+        .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+            background-color: var(--card-color);
+            color: var(--text-color);
+            box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+        }
+
+        .leaflet-container a.leaflet-popup-close-button {
+            color: var(--text-color);
         }
     </style>
 </head>
@@ -744,31 +736,10 @@
                             </div>
                         </div>
                         <div class="detail-item">
-                            <i class="wi wi-barometer"></i>
-                            <div>
-                                <span class="detail-value" id="pressure">--</span>
-                                <span class="detail-label">Pressure</span>
-                            </div>
-                        </div>
-                        <div class="detail-item">
                             <i class="wi wi-raindrop"></i>
                             <div>
                                 <span class="detail-value" id="rain">--</span>
                                 <span class="detail-label">Precipitation</span>
-                            </div>
-                        </div>
-                        <div class="detail-item">
-                            <i class="wi wi-day-sunny"></i>
-                            <div>
-                                <span class="detail-value" id="uv">--</span>
-                                <span class="detail-label">UV Index</span>
-                            </div>
-                        </div>
-                        <div class="detail-item">
-                            <i class="wi wi-eye"></i>
-                            <div>
-                                <span class="detail-value" id="visibility">--</span>
-                                <span class="detail-label">Visibility</span>
                             </div>
                         </div>
                         <div class="detail-item">
@@ -785,20 +756,6 @@
                                 <span class="detail-label">Sunset</span>
                             </div>
                         </div>
-                        <div class="detail-item">
-                            <i class="wi wi-moon-new"></i>
-                            <div>
-                                <span class="detail-value" id="moon-phase">--</span>
-                                <span class="detail-label">Moon Phase</span>
-                            </div>
-                        </div>
-                        <div class="detail-item">
-                            <i class="wi wi-dust"></i>
-                            <div>
-                                <span class="detail-value" id="aqi">--</span>
-                                <span class="detail-label">Air Quality</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 
@@ -809,9 +766,7 @@
                 </div>
                 
                 <div class="tab-content" id="map-tab">
-                    <div class="weather-map" id="weather-map">
-                        Weather map would be displayed here
-                    </div>
+                    <div id="weather-map" class="weather-map"></div>
                 </div>
             </div>
             
@@ -868,6 +823,8 @@
         </div>
     </div>
     
+    <!-- Add Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
 document.addEventListener('DOMContentLoaded', function() {
     // DOM Elements
@@ -879,14 +836,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const feelsLikeElement = document.getElementById('feels-like');
     const humidityElement = document.getElementById('humidity');
     const windElement = document.getElementById('wind');
-    const pressureElement = document.getElementById('pressure');
     const rainElement = document.getElementById('rain');
-    const uvElement = document.getElementById('uv');
-    const visibilityElement = document.getElementById('visibility');
     const sunriseElement = document.getElementById('sunrise-time');
     const sunsetElement = document.getElementById('sunset-time');
-    const moonPhaseElement = document.getElementById('moon-phase');
-    const aqiElement = document.getElementById('aqi');
     const weatherIcon = document.getElementById('weather-icon');
     const weatherAnimation = document.getElementById('weather-animation');
     const refreshBtn = document.getElementById('refreshBtn');
@@ -918,6 +870,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let deferredPrompt = null;
     let lastKnownLocation = null;
     let currentTheme = localStorage.getItem('theme') || 'light';
+    let map = null;
+    let marker = null;
+    let circle = null;
 
     // Initialize
     setTheme(currentTheme);
@@ -961,6 +916,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 tab.classList.add('active');
                 const tabId = tab.getAttribute('data-tab');
                 document.getElementById(`${tabId}-tab`).classList.add('active');
+                
+                // When map tab is activated, trigger a resize
+                if (tabId === 'map' && map) {
+                    setTimeout(() => {
+                        map.invalidateSize();
+                    }, 10);
+                }
             });
         });
     }
@@ -972,6 +934,12 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update theme toggle icon
         const themeIcon = theme === 'dark' ? 'wi-night-clear' : 'wi-day-sunny';
         themeToggle.innerHTML = `<i class="wi ${themeIcon}"></i>`;
+        
+        // Reinitialize map if it exists to apply theme changes
+        if (map && weatherData) {
+            const { latitude, longitude } = lastKnownLocation.coords || { latitude: 27.7172, longitude: 85.3240 };
+            initMap(latitude, longitude);
+        }
     }
 
     function toggleTheme() {
@@ -1216,17 +1184,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 error => {
                     console.error('Error getting location:', error);
                     locationElement.textContent = 'Unable to get location';
-                    getWeather(40.7128, -74.0060); // Default to New York
+                    // Default to Kathmandu, Nepal if location access is denied
+                    getWeather(27.7172, 85.3240);
                     refreshBtn.innerHTML = '<i class="wi wi-refresh"></i> Refresh';
                 },
                 { enableHighAccuracy: true, maximumAge: 0 }
             );
         } else {
             locationElement.textContent = 'Geolocation not supported';
-            getWeather(40.7128, -74.0060); // Default to New York
+            // Default to Kathmandu, Nepal if geolocation is not supported
+            getWeather(27.7172, 85.3240);
         }
     }
     
+    function initMap(lat, lon) {
+        if (map === null) {
+            map = L.map('weather-map').setView([lat, lon], 10);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        } else {
+            map.setView([lat, lon], 10);
+        }
+
+        // Remove existing marker and circle if they exist
+        if (marker) map.removeLayer(marker);
+        if (circle) map.removeLayer(circle);
+
+        // Add new marker and circle
+        marker = L.marker([lat, lon]).addTo(map)
+            .bindPopup(`<b>${weatherData?.location || 'Current location'}</b><br>${lat.toFixed(4)}, ${lon.toFixed(4)}`)
+            .openPopup();
+
+        circle = L.circle([lat, lon], {
+            color: 'var(--primary-color)',
+            fillColor: 'var(--primary-color)',
+            fillOpacity: 0.2,
+            radius: 5000 // 5km radius
+        }).addTo(map);
+    }
+
     async function getWeather(lat, lon) {
         try {
             // Show loading state
@@ -1242,18 +1240,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             const weatherJson = await weatherResponse.json();
-            
-            // Fetch air quality data
-            let aqiValue = null;
-            try {
-                const aqiResponse = await fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=us_aqi`);
-                if (aqiResponse.ok) {
-                    const aqiJson = await aqiResponse.json();
-                    aqiValue = aqiJson.current?.us_aqi || null;
-                }
-            } catch (aqiError) {
-                console.error('Error fetching air quality data:', aqiError);
-            }
             
             // Process the data
             let locationName = 'Unknown Location';
@@ -1271,20 +1257,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     feels_like: weatherJson.hourly.apparent_temperature[currentHour],
                     humidity: weatherJson.hourly.relativehumidity_2m[currentHour],
                     wind_speed: weatherJson.current_weather.windspeed,
-                    wind_direction: weatherJson.current_weather.winddirection,
-                    pressure: 1015, // Default pressure
                     rain: weatherJson.hourly.precipitation[currentHour],
-                    uv: weatherJson.daily.uv_index_max ? weatherJson.daily.uv_index_max[0] : Math.floor(Math.random() * 8) + 1,
-                    visibility: 10, // Default visibility
                     weather: [{
                         main: getWeatherMain(weatherJson.current_weather.weathercode),
                         description: getWeatherDescription(weatherJson.current_weather.weathercode)
                     }],
                     sunrise: new Date(weatherJson.daily.sunrise[0]).getTime() / 1000,
-                    sunset: new Date(weatherJson.daily.sunset[0]).getTime() / 1000,
-                    moon_phase: calculateMoonPhase(new Date()),
-                    aqi: aqiValue,
-                    aqi_category: aqiValue ? getAQICategory(aqiValue) : null
+                    sunset: new Date(weatherJson.daily.sunset[0]).getTime() / 1000
                 },
                 hourly: processHourlyData(weatherJson.hourly),
                 daily: processForecastData(weatherJson.daily)
@@ -1294,53 +1273,15 @@ document.addEventListener('DOMContentLoaded', function() {
             weatherData = processedData;
             saveWeatherData(processedData);
             updateWeatherDisplay(processedData);
+            
+            // Initialize or update the map
+            initMap(lat, lon);
         } catch (error) {
             console.error('Error fetching weather:', error);
             locationElement.textContent = 'Error loading weather data';
             loadCachedWeather();
         }
     }
-    
-function calculateMoonPhase(date) {
-    // Validate input
-    if (!(date instanceof Date) || isNaN(date)) {
-        console.error('Invalid date provided to calculateMoonPhase');
-        return 0.5; // Return a default value
-    }
-
-    let year = date.getFullYear();
-    let month = date.getMonth();
-    const day = date.getDate();
-    
-    let c, e, jd, b;
-    
-    // Adjust year and month if needed
-    if (month < 3) {
-        year--;
-        month += 12;
-    }
-    
-    month++; // Months are 1-based in this calculation
-    
-    // Calculate Julian Day
-    c = 365.25 * year;
-    e = 30.6 * month;
-    jd = c + e + day - 694039.09;
-    
-    // Calculate moon phase (0 to 1)
-    jd /= 29.5305882; // Lunar cycle length in days
-    b = parseInt(jd);
-    jd -= b;
-    b = Math.round(jd * 8);
-    
-    // Normalize to 0-7
-    if (b >= 8) {
-        b = 0;
-    }
-    
-    // Return phase as decimal (0 = new moon, 0.5 = full moon)
-    return b / 8;
-}
     
     function processHourlyData(hourlyData) {
         const hourly = [];
@@ -1379,21 +1320,10 @@ function calculateMoonPhase(date) {
                     description: getWeatherDescription(dailyData.weathercode[i])
                 }],
                 sunrise: new Date(dailyData.sunrise[i]).getTime() / 1000,
-                sunset: new Date(dailyData.sunset[i]).getTime() / 1000,
-                moon_phase: calculateMoonPhase(new Date(dailyData.time[i]))
+                sunset: new Date(dailyData.sunset[i]).getTime() / 1000
             });
         }
         return forecast;
-    }
-    
-    function getAQICategory(aqi) {
-        if (!aqi) return { level: 'Unknown', color: 'aqi-moderate' };
-        if (aqi <= 50) return { level: 'Good', color: 'aqi-good' };
-        if (aqi <= 100) return { level: 'Moderate', color: 'aqi-moderate' };
-        if (aqi <= 150) return { level: 'Unhealthy for Sensitive Groups', color: 'aqi-unhealthy-sensitive' };
-        if (aqi <= 200) return { level: 'Unhealthy', color: 'aqi-unhealthy' };
-        if (aqi <= 300) return { level: 'Very Unhealthy', color: 'aqi-very-unhealthy' };
-        return { level: 'Hazardous', color: 'aqi-hazardous' };
     }
     
     async function getLocationName(lat, lon) {
@@ -1455,17 +1385,6 @@ function calculateMoonPhase(date) {
         return descriptions[weatherCode] || 'Unknown';
     }
     
-    function getMoonPhaseDescription(phase) {
-        if (phase === 0 || phase === 1) return 'New Moon';
-        if (phase < 0.25) return 'Waxing Crescent';
-        if (phase === 0.25) return 'First Quarter';
-        if (phase < 0.5) return 'Waxing Gibbous';
-        if (phase === 0.5) return 'Full Moon';
-        if (phase < 0.75) return 'Waning Gibbous';
-        if (phase === 0.75) return 'Last Quarter';
-        return 'Waning Crescent';
-    }
-    
     function updateWeatherDisplay(data) {
         if (!data) return;
         
@@ -1480,25 +1399,12 @@ function calculateMoonPhase(date) {
         weatherDescElement.textContent = data.current.weather[0].description;
         humidityElement.textContent = `${data.current.humidity}%`;
         windElement.textContent = `${data.current.wind_speed.toFixed(1)} m/s`;
-        pressureElement.textContent = `${data.current.pressure} hPa`;
         rainElement.textContent = `${data.current.rain.toFixed(1)} mm`;
-        uvElement.textContent = data.current.uv;
-        visibilityElement.textContent = `${data.current.visibility.toFixed(1)} km`;
         
         const sunriseTime = new Date(data.current.sunrise * 1000);
         const sunsetTime = new Date(data.current.sunset * 1000);
         sunriseElement.textContent = sunriseTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
         sunsetElement.textContent = sunsetTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        
-        moonPhaseElement.textContent = getMoonPhaseDescription(data.current.moon_phase);
-        
-        // Update AQI display
-        const aqiCategory = data.current.aqi_category || getAQICategory(data.current.aqi || 50);
-        if (data.current.aqi) {
-            aqiElement.innerHTML = `<span class="aqi-indicator ${aqiCategory.color}"></span> ${data.current.aqi} (${aqiCategory.level})`;
-        } else {
-            aqiElement.textContent = 'Data not available';
-        }
         
         updateWeatherIcon(data.current.weather[0].main);
         updateWeatherAnimation(data.current.weather[0].main);
