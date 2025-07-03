@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <script src="toolassets/js/DEVTOOLPROTECTSIMPLE.js"></script>
+  <script src="toolassets/js/DEVTOOLPROTECTSIMPLE.js"></script>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="asset/img/logo/RX2061.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -48,11 +48,12 @@
     }
     .prompt {
       margin-right: 10px;
+      color: #e70316;
     }
     #input {
       background: transparent;
       border: none;
-      color: #df3112;
+      color: #00ff00;
       font-family: 'Courier New', monospace;
       font-size: 16px;
       width: 100%;
@@ -78,6 +79,35 @@
       0% { background-position: 0% 50%; }
       100% { background-position: 100% 50%; }
     }
+    .system-message {
+      color: #5555ff;
+    }
+    .warning-message {
+      color: #ff5555;
+    }
+    .success-message {
+      color: #55ff55;
+    }
+    .tutorial-header {
+      color: #ffaa00;
+      font-weight: bold;
+      border-bottom: 1px solid #ffaa00;
+      margin: 10px 0;
+      padding-bottom: 5px;
+    }
+    .tutorial-message {
+      color: #ffcc66;
+    }
+    .tutorial-command {
+      color: #ffffff;
+      background-color: #333333;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .function-option {
+      color: #ffaa00;
+    }
   </style>
 </head>
 <body>
@@ -88,7 +118,7 @@
       <div id="output"></div>
       <div class="command-line">
         <span class="prompt">RX2061 &gt;</span>
-        <input type="text" id="input" placeholder="Input command here..." autofocus />
+        <input type="text" id="input" placeholder="Initializing terminal..." autofocus disabled />
       </div>
     </div>
   </div>
@@ -187,14 +217,12 @@
           }
         });
         
-        // Update input and cursor
+        // Update input color
         if (this.rainbowMode) {
           document.getElementById('input').classList.add('rainbow-text');
-          document.querySelector('.cursor').style.backgroundColor = 'transparent';
         } else {
           document.getElementById('input').classList.remove('rainbow-text');
           document.getElementById('input').style.color = this.currentColor;
-          document.querySelector('.cursor').style.backgroundColor = this.currentColor;
         }
       }
     }
@@ -204,145 +232,110 @@
     const title = document.getElementById('title');
     const message = document.getElementById('message');
     const input = document.getElementById('input');
-    const styleTag = document.getElementById('theme-style');
+    let terminalReady = false;
+
+    // Custom function paths - can be extended easily
+    const functionPaths = {
+      "weather": {
+        path: "RX weather.html",
+        description: "Open Weather detail page."
+      },
+      "qr": {
+        path: "SQRC.html",
+        description: "Open QR massage reader or generator."
+      },
+      "calendar": {
+        path: "RX Calendar.html",
+        description: "Open english calendar."
+      },
+      "korean": {
+        path: "KRALL.html",
+        description: "Open korean Exam Question bank login page."
+      }
+    };
 
     const commands = {
       help: showHelp,
       home: goHome,
       contact: showContact,
       about: showAbout,
-      clear: clearTerminal
+      clear: clearTerminal,
+      color: showColorOptions,
+      function: showFunctions
     };
 
-    const hiddenCommands = {
-      "i love you": () => {
-        addOutput(" Sorry Babe , But i am loyal for my Girl.");
-        addOutput("❤️");
-      },
-      "darkmode": () => {
-        setTheme("dark");
-        addOutput("Switched to Dark Mode....");
-      },
-      "lightmode": () => {
-        setTheme("light");
-        addOutput("Light Mode activated...");
-      },
-      "mono": () => setFont("Courier New font applying..."),
-      "poppins": () => setFont("Poppins font applying..."),
-      "comic": () => setFont("Comic Sans MS font applying..."),
-      "rickroll": () => {
-        addOutput("Never gonna give you up...");
-        setTimeout(() => window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", '_blank'), 1000);
-      },
-      "test scroll": () => {
-        for (let i = 1; i <= 20; i++) {
-          addOutput(`Testing the function Scrolling . ${i} Rosan Xettri | RX2061 | Rosan Khattri Chettri.`);
-        }
-      },
-      // Color commands
-      "color green": () => {
+    const colorCommands = {
+      "green": () => {
         writer.setTextColor('#00ff00');
-        addOutput("Text color changed to green.");
+        addOutput("Text color changed to green.", '#55ff55');
       },
-      "color red": () => {
+      "red": () => {
         writer.setTextColor('#ff5555');
-        addOutput("Text color changed to red.");
+        addOutput("Text color changed to red.", '#ff5555');
       },
-      "color blue": () => {
-        writer.setTextColor('#5555ff');
-        addOutput("Text color changed to blue.");
-      },
-      "color yellow": () => {
-        writer.setTextColor('#ffff55');
-        addOutput("Text color changed to yellow.");
-      },
-      "color white": () => {
+      "white": () => {
         writer.setTextColor('#ffffff');
-        addOutput("Text color changed to white.");
+        addOutput("Text color changed to white.", '#ffffff');
       },
-      "color cyan": () => {
-        writer.setTextColor('#00ffff');
-        addOutput("Text color changed to cyan.");
-      },
-      "color pink": () => {
-        writer.setTextColor('#ff55ff');
-        addOutput("Text color changed to pink.");
-      },
-      "color orange": () => {
-        writer.setTextColor('#ffaa00');
-        addOutput("Text color changed to orange.");
-      },
-      "color random": () => {
-        const colors = ['#ff5555', '#55ff55', '#5555ff', '#ffff55', '#ff55ff', '#55ffff', '#ffaa00'];
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
-        writer.setTextColor(randomColor);
-        addOutput(`Text color changed to random color..: ${randomColor}`);
+      "black": () => {
+        writer.setTextColor('#000000');
+        addOutput("Text color changed to black.", '#000000');
       },
       "rainbow": () => {
         writer.setRainbowMode(true);
-        addOutput("Rainbow mode activated...");
+        addOutput("Rainbow mode activated!", null, true);
       },
-      "normal color": () => {
+      "normal": () => {
         writer.setRainbowMode(false);
         writer.setTextColor('#00ff00');
-        addOutput("Returned to normal text color.");
-      },
-      "show colors": () => {
-        addOutput("Available color commands:");
-        addOutput("color green    - Change to green");
-        addOutput("color red      - Change to red");
-        addOutput("color blue     - Change to blue");
-        addOutput("color yellow   - Change to yellow");
-        addOutput("color white    - Change to white");
-        addOutput("color cyan     - Change to cyan");
-        addOutput("color pink     - Change to pink");
-        addOutput("color orange   - Change to orange");
-        addOutput("color random   - Random color");
-        addOutput("rainbow        - Rainbow color effect");
-        addOutput("normal color   - Reset to default");
+        addOutput("Returned to default green color.", '#55ff55');
       }
     };
 
     const contacts = {
       facebook: "https://facebook.com/Rosan.2061",
-      website: "https://rosankc.com.np/KRALL.html"
+      email: "https://mail.google.com/mail/u/0/#inbox?compose=CllgCHrhTmhrZCVmJJJHmnCtbBCzbGwvqtHTLklCfsFHPtfzWQpzrzFfhTZrCMTjSRhsDhSXdxV"
     };
 
-    function setTheme(mode) {
-      if (mode === "light") {
-        styleTag.innerHTML = styleTag.innerHTML.replace(/#121212/g, "#ffffff").replace(/#00ff00/g, "#333333").replace(/#ff5555/g, "#aa0000");
-        writer.setTextColor('#333333');
-      } else if (mode === "dark") {
-        styleTag.innerHTML = styleTag.innerHTML.replace(/#ffffff/g, "#121212").replace(/#333333/g, "#00ff00").replace(/#aa0000/g, "#ff5555");
-        writer.setTextColor('#00ff00');
-      } else if (mode === "matrix") {
-        styleTag.innerHTML = styleTag.innerHTML.replace(/#121212/g, "#000000").replace(/#333333/g, "#00ff00").replace(/#aa0000/g, "#00ff00");
-        writer.setTextColor('#00ff00');
-      }
+    // Combine all direct commands (contacts + functions)
+    const directCommands = {
+      ...contacts,
+      ...Object.fromEntries(Object.entries(functionPaths).map(([key, value]) => [key, value.path]))
+    };
+
+    // Initialize page with appropriate welcome message
+    function initializeTerminal() {
+      writer.addToQueue(title, "Rosan Xettri 404 - Page Not Found", 80);
+      writer.addToQueue(message, "The page you're looking for doesn't exist or has been moved.", 40, () => {
+        setTimeout(() => {
+          addOutput("=== ROSAN KHATTRI CHETTRI ===", '#5555ff');
+          setTimeout(() => {
+            welcomeUser();
+          }, 1000);
+        }, 500);
+      });
     }
 
-    function setFont(font) {
-      document.body.style.fontFamily = font + ', monospace';
-      addOutput("Font switched to: " + font);
+    function welcomeUser() {
+      addOutput("\nWelcome to RX2061 Terminal!", '#55ff55');
+      addOutput("Type 'help' to see available commands.", '#ffffff');
+      input.placeholder = "Type a command...";
+      input.disabled = false;
+      terminalReady = true;
     }
-
-    // Initialize page
-    writer.addToQueue(title, "Rosan Xettri 404 - Page Not Found", 80);
-    writer.addToQueue(message, "The page you're looking for doesn't exist or has been moved.", 40, () => {
-      addOutput("Type 'help' for options...\n");
-      setupTerminal();
-    });
 
     function setupTerminal() {
       input.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
           const cmd = this.value.trim().toLowerCase();
           this.value = ''; // Clear the input field immediately
-          processCommand(cmd);
+          if (cmd) {
+            processCommand(cmd);
+          }
         }
       });
       
-      // Also handle paste events to keep the input clean
+      // Handle paste events to keep the input clean
       input.addEventListener('paste', function(e) {
         e.preventDefault();
         const text = (e.clipboardData || window.clipboardData).getData('text');
@@ -355,37 +348,42 @@
 
       if (commands[cmd]) {
         commands[cmd]();
-      } else if (contacts[cmd]) {
-        addOutput(`Opening ${cmd}...`);
-        setTimeout(() => window.open(contacts[cmd], '_blank'), 500);
-      } else if (hiddenCommands[cmd]) {
-        hiddenCommands[cmd]();
-      } else if (cmd.startsWith("cd ")) {
-        const folder = cmd.substring(3);
-        if (hiddenCommands[`cd ${folder}`]) {
-          hiddenCommands[`cd ${folder}`]();
+      } 
+      else if (directCommands[cmd]) {
+        addOutput(`Opening ${cmd}...`, '#5555ff');
+        setTimeout(() => {
+          if (cmd in contacts) {
+            window.open(directCommands[cmd], '_blank');
+          } else {
+            window.location.href = directCommands[cmd];
+          }
+        }, 500);
+      }
+      else if (cmd.startsWith("color ")) {
+        const colorName = cmd.substring(6);
+        if (colorCommands[colorName]) {
+          colorCommands[colorName]();
         } else {
-          addOutput(`bash: cd: ${folder}: No such file or directory`);
+          addOutput(`Color '${colorName}' not available. Type 'color' to see options.`, '#ff5555');
         }
-      } else if (cmd.startsWith("color ")) {
-        const colorCmd = cmd.substring(6);
-        if (hiddenCommands[`color ${colorCmd}`]) {
-          hiddenCommands[`color ${colorCmd}`]();
-        } else {
-          addOutput(`Color '${colorCmd}' not found. Type 'show colors' for options.`);
-        }
-      } else {
-        addOutput(`Command not found: ${cmd}`);
-        addOutput("Type 'help' for available commands");
+      } else if (cmd) {
+        addOutput(`Command not found: ${cmd}`, '#ff5555');
+        addOutput("Type 'help' for available commands", '#ffffff');
       }
       
       // Ensure input is focused for next command
       input.focus();
     }
 
-    function addOutput(text, forceColor = null) {
+    function addOutput(text, forceColor = null, isRainbow = false, customClass = null) {
       const newLine = document.createElement('div');
+      if (customClass) {
+        newLine.className = customClass;
+      }
       output.appendChild(newLine);
+      if (isRainbow) {
+        newLine.classList.add('rainbow-text');
+      }
       writer.addToQueue(newLine, text, 10, null, forceColor);
     }
 
@@ -394,30 +392,56 @@
       writer.scrollToBottom();
     }
 
-    function showHelp() {
-      addOutput("Available commands:");
-      addOutput("help     - Show this help");
-      addOutput("home     - Go to homepage");
-      addOutput("contact  - Contact options");
-      addOutput("about    - About Rosan");
-      addOutput("clear    - Clear terminal output");
+     function showHelp() {
+      addOutput("\nAvailable commands:", '#5555ff');
+      addOutput("help     - Show this help", '#ffffff');
+      addOutput("home     - Go to Wbsite homepage", '#ffffff');
+      addOutput("contact  - Contact options", '#ffffff');
+      addOutput("about    - About Rosan", '#ffffff');
+      addOutput("clear    - Clear terminal", '#ffffff');
+      addOutput("color    - Show color options", '#ffffff');
+      addOutput("function - Show feature paths", '#ffffff');
+    }
+
+    function showFunctions() {
+      addOutput("\nAvailable functions :", '#5555ff');
+      Object.entries(functionPaths).forEach(([cmd, {description}]) => {
+        addOutput(`${cmd.padEnd(8)} - ${description}`, '#ffaa00');
+      });
+    }
+
+    function showColorOptions() {
+      addOutput("\nAvailable color options:", '#5555ff');
+      addOutput("color green   - Green text", '#55ff55');
+      addOutput("color red     - Red text", '#ff5555');
+      addOutput("color white   - White text", '#ffffff');
+      addOutput("color black   - Black text", '#000000');
+      addOutput("color rainbow - Rainbow colors", null, true);
+      addOutput("color normal  - Reset to default", '#55ff55');
     }
 
     function goHome() {
-      addOutput("Redirecting to homepage...");
+      addOutput("Redirecting to homepage...", '#5555ff');
       setTimeout(() => window.location.href = "https://rosankc.com.np", 1000);
     }
 
     function showContact() {
-      addOutput("Contact methods:");
-      addOutput("facebook - Message via Facebook");
-      addOutput("website  - Open Korean Course");
+      addOutput("\nContact methods :", '#5555ff');
+      Object.keys(contacts).forEach(cmd => {
+        addOutput(`${cmd.padEnd(8)} - ${cmd === 'facebook' ? 'Message via Facebook' : 'Message via email'}`, '#ffffff');
+      });
     }
 
     function showAbout() {
-      addOutput("Rosan Khattri Chettri — I am Rosan Khattri Chettri, a 20-year-old passionate and driven individual from Banganga-10, Kapilvastu. Currently pursuing my BBS 3rd year, I have always been deeply fascinated by the world of creativity and technology. With a strong skill set in designing, web development, and e-sports gaming, I continuously push myself to learn, evolve, and stay ahead in the digital realm.Designing allows me to bring my imagination to life, creating visually compelling and meaningful graphics that leave an impact. Web development fuels my technical curiosity, enabling me to craft functional, user-friendly, and aesthetically pleasing websites. On the other hand, my passion for e-sports gaming challenges my strategic thinking, reflexes, and competitive spirit, making me thrive in high-intensity environments.I believe in continuous growth and innovation, always seeking new ways to enhance my skills and contribute meaningfully to the digital space. Whether it's crafting designs, coding dynamic websites, or competing in the gaming world, I am dedicated to pushing boundaries, learning from experiences, and making a mark with my work...");
-      addOutput("For more detail Visit to Rosan Xettri's website .");
+      addOutput("\nRosan Khattri Chettri:", '#5555ff');
+      addOutput("A passionate individual with skills in design, web development, and e-sports gaming.", '#ffffff');
+      addOutput("Currently pursuing BBS and continuously learning in the digital space.", '#ffffff');
+      addOutput("For more details, visit my website.", '#ffffff');
     }
+
+    // Start the terminal
+    initializeTerminal();
+    setupTerminal();
   </script>
 </body>
 </html>
