@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="toolassets/js/DEVTOOLPROTECTSIMPLE.js"></script>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="ASSETS/MAIN-FILE/IMG/LOGO/RX-3.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Bank</title>
+    <link rel="stylesheet" href="ASSETS/MAIN-FILE/CSS/SMART-BTN.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #5a75f1;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --accent-dark: #d91a6d;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #ef233c;
+            --card-colors: #7209b7, #3a86ff, #ff006e, #8338ec, #fb5607, #ffbe0b;
+            --border-radius: 12px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .login-box {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            transform: translateY(0);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #7209b7, #3a86ff, #ff006e, #8338ec, #fb5607, #ffbe0b);
+        }
+        
+        .login-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .login-box h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            text-align: left;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 0.85rem 1.25rem;
+            border: 2px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: #fefefe;
+        }
+        
+        .input-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            background-color: white;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.85rem 1.75rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .btn-link {
+            color: var(--primary);
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            font-size: 0.95rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .btn-link:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        /* Question Bank */
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn-logout {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-logout:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        
+        .container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Question Grid */
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.75rem;
+            margin-top: 1.5rem;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            border-top: 4px solid;
+            animation: fadeInUp 0.5s ease-out;
+            animation-fill-mode: backwards;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .question-card:nth-child(6n+1) { border-color: #7209b7; }
+        .question-card:nth-child(6n+2) { border-color: #3a86ff; }
+        .question-card:nth-child(6n+3) { border-color: #ff006e; }
+        .question-card:nth-child(6n+4) { border-color: #8338ec; }
+        .question-card:nth-child(6n+5) { border-color: #fb5607; }
+        .question-card:nth-child(6n+6) { border-color: #ffbe0b; }
+        
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-content {
+            padding: 1.75rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .question-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        .question-card p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            flex: 1;
+        }
+        
+        .card-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .category-badge {
+            font-size: 0.75rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            background-color: var(--light-gray);
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        .btn-view {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1.25rem;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            gap: 0.5rem;
+        }
+        
+        .btn-view:hover {
+            background-color: var(--accent-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
+        }
+        
+        .btn-view i {
+            font-size: 0.9rem;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+        
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+        
+        .modal h3 {
+            margin-bottom: 1.25rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .modal p {
+            margin-bottom: 1.5rem;
+            color: var(--gray);
+            line-height: 1.7;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Loading State */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .question-grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+            
+            .header {
+                padding: 1rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .header-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+            
+            .login-box {
+                padding: 2rem 1.5rem;
+            }
+            
+            .modal-content {
+                padding: 2rem 1.5rem;
+            }
+            
+            .modal-actions {
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .login-box {
+                padding: 1.75rem 1.25rem;
+            }
+            
+            .question-card h3 {
+                font-size: 1.2rem;
+            }
+            
+            .btn-view {
+                width: 100%;
+            }
+            
+            .card-footer {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+        }
+        
+        /* Shake animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        /* Floating action button */
+        .floating-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(247, 37, 133, 0.3);
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 99;
+            border: none;
+            font-size: 1.25rem;
+        }
+        
+        .floating-btn:hover {
+            transform: translateY(-5px) scale(1.1);
+            background-color: var(--accent-dark);
+        }
+        
+        @media (max-width: 768px) {
+            .floating-btn {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="login-box">
+            <h2>RX | Question Bank</h2>
+            <div class="input-group">
+                <label for="password-input">Password</label>
+                <input type="password" id="password-input" placeholder="Enter your password" autocomplete="current-password">
+            </div>
+            <button id="login-btn" class="btn btn-primary">
+                <span id="login-text">Access Question Bank</span>
+                <span id="login-loader" class="loader hidden"></span>
+            </button>
+            <div class="mt-3">
+                <button id="forgot-password" class="btn-link">Forgot Password?</button>
+                <span class="mx-2">|</span>
+                <a href="index.html" class="btn-link">Go Back Home</a>
+            </div>
+            <div id="error-message" class="hidden" style="color: var(--danger); margin-top: 1.5rem; font-weight: 500;"></div>
+        </div>
+    </div>
+    
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal">
+        <div class="modal-content">
+            <h3>Forgot Password?</h3>
+            <p>Please contact the administrator to get access to the question bank and information about new features or updates.</p>
+            <p>Join our support group to connect with the admin team for assistance:</p>
+            <div class="modal-actions">
+                <a href="https://www.messenger.com/t/30846317941634363/" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-users"></i> Join Support Group
+                </a>
+                <button id="close-modal-btn" class="btn btn-link">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Question Bank -->
+    <div id="question-bank" class="hidden">
+        <div class="header">
+            <h1><i class="fas fa-book-open"></i> RX Question Bank</h1>
+            <div class="header-actions">
+                <button id="toggleSmartButton" class="btn-logout" style="background: rgba(255,255,255,0.1);">
+                   ◉
+                </button>
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="question-grid" id="question-grid">
+                <!-- Questions will be loaded here -->
+            </div>
+        </div>
+        
+        <button id="scroll-to-top" class="floating-btn hidden">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <script>
+        // Configuration
+        const PASSWORD = "RX2061"; // password
+        const QUESTIONS = [
+            {
+                id: 1,
+                title: "Question Model 1",
+                content: "Korean Language Test Exam Model - Basic level with easy questions to get you started with the fundamentals.",
+                link: "KR-EXAM-QM-1.html",
+                category: "Basic | 1st Level"
+            },
+            {
+                id: 2,
+                title: "Question Model 2",
+                content: "Korean Language Test Exam Model - Basic level with more challenging questions to test your understanding.",
+                link: "KR-EXAM-QM-2.html",
+                category: "Basic | 3rd Level"
+            },
+            {
+                id: 3,
+                title: "Question Model 3",
+                content: "Korean Language Test Exam Model - Basic level with medium difficulty questions to bridge between easy and hard.",
+                link: "KR-EXAM-QM-3.html",
+                category: "Basic | 2nd Level"
+            },
+            {
+                id: 4,
+                title: "Question Model 4",
+                content: "Korean Language Test Exam Model - Another basic level set with easy questions for practice and reinforcement.",
+                link: "KR-EXAM-QM-4.html",
+                category: "Basic | 1st Level"
+            }
+        ];
+
+        // DOM Elements
+        const dom = {
+            loginScreen: document.getElementById('login-screen'),
+            questionBank: document.getElementById('question-bank'),
+            passwordInput: document.getElementById('password-input'),
+            loginBtn: document.getElementById('login-btn'),
+            loginText: document.getElementById('login-text'),
+            loginLoader: document.getElementById('login-loader'),
+            errorMessage: document.getElementById('error-message'),
+            logoutBtn: document.getElementById('logout-btn'),
+            questionGrid: document.getElementById('question-grid'),
+            forgotPasswordBtn: document.getElementById('forgot-password'),
+            forgotPasswordModal: document.getElementById('forgot-password-modal'),
+            closeModalBtn: document.getElementById('close-modal-btn'),
+            loginBox: document.querySelector('.login-box'),
+            scrollToTopBtn: document.getElementById('scroll-to-top')
+        };
+
+        // State
+        let state = {
+            isAuthenticated: sessionStorage.getItem('isAuthenticated') === 'true'
+        };
+
+        // Check authentication status on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (state.isAuthenticated) {
+                showQuestionBank();
+            } else {
+                showLoginScreen();
+            }
+            
+            // Initialize scroll to top button visibility
+            checkScrollPosition();
+        });
+
+        // Event Listeners
+        dom.loginBtn.addEventListener('click', handleLogin);
+        dom.logoutBtn.addEventListener('click', handleLogout);
+        dom.forgotPasswordBtn.addEventListener('click', showForgotPasswordModal);
+        dom.closeModalBtn.addEventListener('click', hideForgotPasswordModal);
+        dom.passwordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
+        });
+        
+        // Scroll to top button
+        dom.scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Show/hide scroll to top button based on scroll position
+        window.addEventListener('scroll', checkScrollPosition);
+
+        // Functions
+        async function handleLogin() {
+            const password = dom.passwordInput.value.trim();
+            
+            if (!password) {
+                showError("Please enter a password");
+                return;
+            }
+            
+            // Show loading state
+            dom.loginText.classList.add('hidden');
+            dom.loginLoader.classList.remove('hidden');
+            dom.loginBtn.disabled = true;
+            
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 800));
+            
+            if (password === PASSWORD) {
+                state.isAuthenticated = true;
+                sessionStorage.setItem('isAuthenticated', 'true');
+                showQuestionBank();
+            } else {
+                showError("Incorrect password. Please try again.");
+                dom.passwordInput.value = '';
+            }
+            
+            // Reset button state
+            dom.loginText.classList.remove('hidden');
+            dom.loginLoader.classList.add('hidden');
+            dom.loginBtn.disabled = false;
+        }
+
+        function handleLogout() {
+            state.isAuthenticated = false;
+            sessionStorage.removeItem('isAuthenticated');
+            dom.passwordInput.value = '';
+            dom.errorMessage.textContent = '';
+            dom.errorMessage.classList.add('hidden');
+            showLoginScreen();
+        }
+
+        function showQuestionBank() {
+            dom.errorMessage.classList.add('hidden');
+            dom.loginScreen.classList.add('hidden');
+            dom.questionBank.classList.remove('hidden');
+            
+            // Add subtle animation to cards
+            const cards = document.querySelectorAll('.question-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // Focus on first question for better keyboard navigation
+            if (cards.length > 0) {
+                cards[0].focus();
+            }
+        }
+
+        function showLoginScreen() {
+            dom.loginScreen.classList.remove('hidden');
+            dom.questionBank.classList.add('hidden');
+            dom.passwordInput.focus();
+        }
+
+        function showForgotPasswordModal() {
+            dom.forgotPasswordModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideForgotPasswordModal() {
+            dom.forgotPasswordModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function showError(message) {
+            dom.errorMessage.textContent = message;
+            dom.errorMessage.classList.remove('hidden');
+            
+            // Shake animation for error
+            dom.loginBox.classList.add('shake');
+            setTimeout(() => {
+                dom.loginBox.classList.remove('shake');
+            }, 500);
+        }
+
+        function renderQuestions() {
+            dom.questionGrid.innerHTML = '';
+            
+            QUESTIONS.forEach((question, index) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.tabIndex = 0; // Make cards focusable for keyboard navigation
+                
+                card.innerHTML = `
+                    <div class="card-content">
+                        <h3>${question.title}</h3>
+                        <p>${question.content}</p>
+                        <div class="card-footer">
+                            <span class="category-badge">${question.category}</span>
+                            <a href="${question.link}" class="btn-view">
+                                <i class="fas fa-play"></i> Start Test
+                            </a>
+                        </div>
+                    </div>
+                `;
+                
+                // Add keyboard support for cards
+                card.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        window.location.href = question.link;
+                    }
+                });
+                
+                dom.questionGrid.appendChild(card);
+            });
+        }
+        
+        function checkScrollPosition() {
+            if (window.scrollY > 300) {
+                dom.scrollToTopBtn.classList.remove('hidden');
+            } else {
+                dom.scrollToTopBtn.classList.add('hidden');
+            }
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === dom.forgotPasswordModal) {
+                hideForgotPasswordModal();
+            }
+        });
+
+        // Initialize
+        renderQuestions();
+    </script>
+    <script src="ASSETS/MAIN-FILE/JS/SMART-BTN.js"></script>
+</body>
+</html>
