@@ -1,7 +1,3 @@
-// users.js
-
-// This acts as a simple database of users.
-// In a real-world application, this data would come from a secure server.
 const USERS = [
     {
         name: "ROSAN KC",
@@ -72,8 +68,8 @@ const USERS = [
     {
         name: "PUBLIC",
         link: "ASSETS/KR-EXAM-FILES/KR-EXAM-LOGIN-FUNCTION/IMG/USER.png", // Example profile image
-        phone: "0123456789",
-        key: "RX-PUBLIC",
+        phone: "9800000000",
+        key: "RX-P01",
         purchases: [
             {
                 questionId: 5,
