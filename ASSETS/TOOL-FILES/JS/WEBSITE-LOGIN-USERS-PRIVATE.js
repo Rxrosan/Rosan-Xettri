@@ -2,11 +2,6 @@
 
 const userDetails = [
   {
-    name: "PUBLIC",
-    phone: "000",
-    key: "000"
-  },
-  {
     name: "Rosan KC",
     phone: "9826482279",
     key: "RX-2061"
@@ -15,5 +10,5 @@ const userDetails = [
     name: "",
     phone: "",
     key: ""
-  },
+  }
 ];
