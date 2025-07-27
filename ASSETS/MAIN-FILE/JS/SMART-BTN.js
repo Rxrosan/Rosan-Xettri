@@ -11,7 +11,7 @@
         <div class="menu-item" data-link="RX-GALLERY" style="--index: 3;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/gallery.png" alt="gallery"></div>
         <div class="menu-item" data-link="RX-S-QR" style="--index: 4;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/qrsc.png" alt="QR Code"></div>
         <div class="menu-item" data-link="index.html" style="--index: 5;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/home.png" alt="home"></div>
-        <div class="menu-item" data-link="KR-EXAM-ALL-COLLECTION.html" style="--index: 6;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/other.png" alt="other"></div>
+        <div class="menu-item" data-link="KR-EXAM-ALL-COLLECTION-LOGIN.html" style="--index: 6;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/other.png" alt="other"></div>
         <div class="menu-item" data-link="About.html" style="--index: 7;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/about.png" alt="about"></div>
         <div class="menu-item" data-link="https://x.com/Rx_Rosan" style="--index: 8;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/xcorp.png" alt="xcorp"></div>
         <div class="menu-item" data-link="https://www.youtube.com/@RX_E-SPORTS" style="--index: 9;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/youtube.png" alt="YouTube"></div>

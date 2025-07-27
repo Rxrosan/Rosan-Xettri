@@ -2,401 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="ASSETS/TOOL-FILES/JS/DEV-TOOL-PROTECTION-2.js"></script>
     <link rel="icon" type="image/png" href="ASSETS/MAIN-FILE/IMG/LOGO/RX-3.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question Bank</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        :root {
-            --primary: #4361ee;
-            --primary-light: #5a75f1;
-            --secondary: #3f37c9;
-            --accent: #f72585;
-            --accent-dark: #d91a6d;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --success: #4cc9f0;
-            --warning: #f8961e;
-            --danger: #ef233c;
-            --border-radius: 12px;
-            --box-shadow: 0 5px B15px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            background-color: var(--light);
-            color: var(--dark);
-            min-height: 100vh;
-            overflow-x: hidden;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .btn-header {
-            background-color: rgba(255, 255, 255, 0.15);
-            color: white;
-            padding: 0.6rem 1.25rem;
-            border-radius: 8px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: var(--transition);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-        
-        .btn-header:hover {
-            background-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-        }
-
-        .container {
-            padding: 2.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        /* Question Grid */
-        .question-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        .question-card {
-            background: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-            transition: var(--transition);
-            border-top: 4px solid;
-            animation: fadeInUp 0.5s ease-out forwards;
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .question-card:nth-child(6n+1) { border-color: #7209b7; }
-        .question-card:nth-child(6n+2) { border-color: #3a86ff; }
-        .question-card:nth-child(6n+3) { border-color: #ff006e; }
-        .question-card:nth-child(6n+4) { border-color: #8338ec; }
-        .question-card:nth-child(6n+5) { border-color: #fb5607; }
-        .question-card:nth-child(6n+6) { border-color: #ffbe0b; }
-
-        .question-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-content {
-            padding: 1.75rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .question-card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.75rem;
-            color: var(--dark);
-            font-weight: 700;
-        }
-
-        .question-card p {
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
-            line-height: 1.6;
-            flex-grow: 1;
-        }
-
-        .card-footer {
-            margin-top: auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .category-badge {
-            font-size: 0.8rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 50px;
-            background-color: var(--light-gray);
-            color: var(--dark);
-            font-weight: 600;
-        }
-
-        .btn-view {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.7rem 1.3rem;
-            background-color: var(--accent);
-            color: white;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.95rem;
-            transition: var(--transition);
-            gap: 0.5rem;
-            border: none;
-        }
-
-        .btn-view:hover {
-            background-color: var(--accent-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
-        }
-
-        /* Utility Classes */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Floating action button */
-        .floating-btn {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--accent);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 20px rgba(247, 37, 133, 0.3);
-            cursor: pointer;
-            transition: var(--transition);
-            z-index: 99;
-            border: none;
-            font-size: 1.25rem;
-        }
-
-        .floating-btn:hover {
-            transform: translateY(-5px) scale(1.1);
-            background-color: var(--accent-dark);
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1.5rem;
-            }
-            .question-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            .header {
-                padding: 1rem 1.5rem;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-            .header-actions {
-                width: 100%;
-                justify-content: flex-start;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 1rem;
-            }
-            .question-card h3 {
-                font-size: 1.2rem;
-            }
-            .card-footer {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
-            .btn-view {
-                width: 100%;
-            }
-            .floating-btn {
-                bottom: 1.5rem;
-                right: 1.5rem;
-                width: 45px;
-                height: 45px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="ASSETS/KR-EXAM-FILES/KR-EXAM-LOGIN-FUNCTION/CSS/KR-EXAM-ALL-COLLECTION.css">
 </head>
 <body>
-    <div id="question-bank">
+    <div id="app-root" style="display: none;">
         <header class="header">
-            <h1><i class="fas fa-book-open"></i> RX Question Bank</h1>
+            <h1>RX|QB</h1>
             <div class="header-actions">
-                <a href="index.html" class="btn-header">
-                    <i class="fas fa-home"></i> Go Back Home
-                </a>
+                <button id="profile-btn" class="btn-header"><i class="fas fa-user"></i> My Profile</button>
+                <button id="logout-btn" class="btn-header"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </header>
         
         <main class="container">
+            <div class="filter-tabs">
+                <button class="tab-btn active" data-filter="all">All Questions</button>
+                <button class="tab-btn" data-filter="purchased">My Purchased Questions</button>
+            </div>
             <div class="question-grid" id="question-grid">
                 <!-- Questions will be loaded here by JavaScript -->
             </div>
         </main>
-        
-        <button id="scroll-to-top" class="floating-btn hidden" aria-label="Scroll to top">
-            <i class="fas fa-arrow-up"></i>
-        </button>
+
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="#" class="footer-link" id="privacy-policy-link">Privacy Policy</a>
+                <a href="#" class="footer-link" id="terms-of-use-link">Terms of Use</a>
+                <a href="#" class="footer-link" id="contact-us-link">Contact Us</a>
+            </div>
+            <p class="copyright">© 2024 Rosan Xettri Studio. All rights reserved.</p>
+        </footer>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- Configuration ---
-            const QUESTIONS = [
-                {
-                    id: 1,
-                    title: "Question Model 1",
-                    content: "Korean Language Test Exam Model - Basic level with easy questions to get you started with the fundamentals.",
-                    link: "KR-EXAM-QM-1.html",
-                    category: "Basic | 1st Level"
-                },
-                {
-                    id: 2,
-                    title: "Question Model 2",
-                    content: "Korean Language Test Exam Model - Basic level with more challenging questions to test your understanding.",
-                    link: "KR-EXAM-QM-2.html",
-                    category: "Basic | 3rd Level"
-                },
-                {
-                    id: 3,
-                    title: "Question Model 3",
-                    content: "Korean Language Test Exam Model - Basic level with medium difficulty questions to bridge between easy and hard.",
-                    link: "KR-EXAM-QM-3.html",
-                    category: "Basic | 2nd Level"
-                },
-                {
-                    id: 4,
-                    title: "Question Model 4",
-                    content: "Korean Language Test Exam Model - Another basic level set with easy questions for practice and reinforcement.",
-                    link: "KR-EXAM-QM-4.html",
-                    category: "Basic | 1st Level"
-                },
-                {
-                    id: 5,
-                    title: "Question Model 5",
-                    content: "Korean Language Test Exam Model - Advance 1-10 LESSON ",
-                    link: "KR-EXAM-QM-5.html",
-                    category: "ADVANCE | 1-10 LESSON "
-                }
-            ];
-
-            // --- DOM Elements ---
-            const questionGrid = document.getElementById('question-grid');
-            const scrollToTopBtn = document.getElementById('scroll-to-top');
-
-            // --- Functions ---
-            function renderQuestions() {
-                if (!questionGrid) return;
-                questionGrid.innerHTML = '';
-                
-                QUESTIONS.forEach((question, index) => {
-                    const card = document.createElement('div');
-                    card.className = 'question-card';
-                    card.style.animationDelay = `${index * 0.1}s`;
-                    
-                    card.innerHTML = `
-                        <div class="card-content">
-                            <h3>${question.title}</h3>
-                            <p>${question.content}</p>
-                            <div class="card-footer">
-                                <span class="category-badge">${question.category}</span>
-                                <a href="${question.link}" class="btn-view">
-                                    <i class="fas fa-play"></i> Start Test
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                    questionGrid.appendChild(card);
-                });
-            }
-            
-            function checkScrollPosition() {
-                if (window.scrollY > 300) {
-                    scrollToTopBtn.classList.remove('hidden');
-                } else {
-                    scrollToTopBtn.classList.add('hidden');
-                }
-            }
-
-            // --- Event Listeners ---
-            scrollToTopBtn.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            });
-            
-            window.addEventListener('scroll', checkScrollPosition);
-
-            // --- Initialize ---
-            renderQuestions();
-            checkScrollPosition();
-        });
-    </script>
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>User Profile</h2>
+            <img id="profile-img" src="" alt="Profile Picture" style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 1rem; object-fit: cover;">
+            <div class="profile-info">
+                <p><strong>Name:</strong> <span id="profile-name"></span></p>
+                <p><strong>Phone:</strong> <span id="profile-phone"></span></p>
+                <p><strong>Key:</strong> <span id="profile-key"></span></p>
+            </div>
+            <button id="modal-close-btn" class="modal-close">Close</button>
+        </div>
+    </div>
+    
+    <script src="ASSETS/KR-EXAM-FILES/KR-EXAM-LOGIN-FUNCTION/JS/KR-EXAM-ALL-COLLECTION-LOGIN-MEMBER.js"></script>
+    <script src="ASSETS/KR-EXAM-FILES/KR-EXAM-LOGIN-FUNCTION/JS/KR-EXAM-ALL-COLLECTION.js"></script>
 </body>
 </html>
