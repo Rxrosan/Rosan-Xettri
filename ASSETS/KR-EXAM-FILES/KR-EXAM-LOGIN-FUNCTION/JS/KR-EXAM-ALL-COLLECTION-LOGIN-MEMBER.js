@@ -68,5 +68,18 @@ const USERS = [
                 purchaseDate: new Date('2024-01-01').toISOString()
             }
         ]
+    },
+    {
+        name: "PUBLIC",
+        link: "ASSETS/KR-EXAM-FILES/KR-EXAM-LOGIN-FUNCTION/IMG/USER.png", // Example profile image
+        phone: "000",
+        key: "RX-PUBLIC",
+        purchases: [
+            {
+                questionId: 5,
+                purchaseType: 'lifetime', // This will never expire
+                purchaseDate: new Date('2024-01-01').toISOString()
+            }
+        ]
     }
 ];
