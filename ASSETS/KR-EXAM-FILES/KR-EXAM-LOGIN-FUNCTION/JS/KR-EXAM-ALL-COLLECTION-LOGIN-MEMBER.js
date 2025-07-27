@@ -72,7 +72,7 @@ const USERS = [
     {
         name: "PUBLIC",
         link: "ASSETS/KR-EXAM-FILES/KR-EXAM-LOGIN-FUNCTION/IMG/USER.png", // Example profile image
-        phone: "000",
+        phone: "0123456789",
         key: "RX-PUBLIC",
         purchases: [
             {
