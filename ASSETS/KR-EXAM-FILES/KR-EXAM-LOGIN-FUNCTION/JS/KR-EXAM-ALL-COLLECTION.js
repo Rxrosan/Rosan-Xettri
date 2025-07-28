@@ -83,10 +83,27 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Specific Modal Content ---
     function showPrivacyPolicy() {
         const content = `
+            <p>This privacy policy explains how we collect, use, and protect your personal information when you use our website.</p>
             <h3>1. Information We Collect</h3>
-            <p>We collect information you provide directly to us...</p>
+           <p>When you log in to our website, we collect the following information:</p>
+              <ul>
+                <li>Your image</li>
+                <li>Your name</li>
+                <li>Phone number</li>
+                <li>Access key</li>
+              </ul>
             <h3>2. How We Use Your Information</h3>
-            <p>We use the information we collect to...</p>
+            <p>We use the information we collect to:</p>
+              <ul>
+                <li>Verify your identity for access to the website</li>
+                <li>Provide customer support</li>
+                <li>Improve our services</li>
+              </ul>
+            <h3>3. Data Security</h3>
+              <p>We implement appropriate security measures to protect your personal information. Your login details are stored locally in your browser's session storage and are not transmitted to our servers.</p>
+              
+            <h3>4. Changes to This Policy</h3>
+              <p>We may update this privacy policy from time to time. Any changes will be posted on this page.</p>
         `;
         const modal = createModal('Privacy Policy', content, 'policy-modal-content');
         showModal(modal);
@@ -94,10 +111,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showTermsOfUse() {
         const content = `
-            <h3>1. Acceptance of Terms</h3>
-            <p>By accessing or using our services...</p>
-            <h3>2. Account Responsibilities</h3>
-            <p>You are responsible for...</p>
+            <p>By accessing and using this website, you accept and agree to be bound by these Terms of Service.</p>
+            <h3>1. Account Access</h3>
+              <ul>
+                <li>You must provide accurate and complete information when creating an account</li>
+                <li>You are responsible for maintaining the confidentiality of your access key</li>
+                <li>You are responsible for all activities that occur under your account</li>
+              </ul>
+            <h3>2. Prohibited Activities</h3>
+              <p>You agree not to:</p>
+              <ul>
+                <li>Use the website for any illegal purpose</li>
+                <li>Share your access key with others</li>
+                <li>Attempt to gain unauthorized access to other accounts</li>
+                <li>Disrupt or interfere with the security of the website</li>
+              </ul>
+              
+              <h3>3. Intellectual Property</h3>
+              <p>All content on this website, including models, designs, and materials, are the property of Rosan Xettri Studio and are protected by copyright laws.</p>
+              
+              <h3>4. Termination</h3>
+              <p>We may terminate or suspend your access to the website immediately, without prior notice, for any violation of these Terms.</p>
+              
+              <h3>5. Limitation of Liability</h3>
+              <p>Rosan Xettri Studio shall not be liable for any indirect, incidental, or consequential damages resulting from your use of the website.</p>
+              
+              <h3>6. Changes to Terms</h3>
+              <p>We reserve the right to modify these Terms at any time. Your continued use of the website constitutes acceptance of the modified Terms.</p>
         `;
         const modal = createModal('Terms of Use', content, 'policy-modal-content');
         showModal(modal);
@@ -106,10 +146,13 @@ document.addEventListener('DOMContentLoaded', function() {
     function showContactUs() {
         const content = `
             <div class="contact-links">
-                <a href="https://facebook.com/yourpage" target="_blank" class="contact-link facebook">
+                <a href="https://www.facebook.com/Rosan.2061" target="_blank" class="contact-link facebook">
                     <i class="fab fa-facebook-f"></i> Facebook
                 </a>
-                <a href="mailto:support@example.com" class="contact-link gmail">
+                 <a href="https://www.facebook.com/RosanXettri.2004" target="_blank" class="contact-link facebook">
+                    <i class="fab fa-facebook-f"></i> Facebook page
+                </a>
+                <a href="mailto:rosankc820@.com" class="contact-link gmail">
                     <i class="fas fa-envelope"></i> Email
                 </a>
             </div>
@@ -122,10 +165,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const content = `
             <p>To purchase this question bank, please contact our admin team:</p>
             <div class="contact-links">
-                <a href="https://facebook.com/yourpage" target="_blank" class="contact-link facebook">
+                <a href="https://www.facebook.com/RosanXettri.2004" target="_blank" class="contact-link facebook">
                     <i class="fab fa-facebook-f"></i> Facebook
                 </a>
-                <a href="mailto:admin@example.com" class="contact-link gmail">
+                <a href="mailto:rosankc820@.com" class="contact-link gmail">
                     <i class="fas fa-envelope"></i> Email
                 </a>
             </div>
