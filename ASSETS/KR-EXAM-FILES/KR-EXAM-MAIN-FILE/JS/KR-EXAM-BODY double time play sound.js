@@ -510,6 +510,7 @@ function showContent(questionNumber) {
 
 function setupAudioPlayback(questionNumber) {
   const audioElement = document.getElementById(`audio-${questionNumber}`);
+  let playCount = 0;
   
   // Disable all interactive elements
   const disableElements = () => {
@@ -553,11 +554,22 @@ function setupAudioPlayback(questionNumber) {
   };
   
   const endedHandler = function() {
-    enableElements();
-    disabledAudios.add(questionNumber);
-    audioElement.removeEventListener("ended", endedHandler);
-    audioElement.removeEventListener("play", playHandler);
-    showContent(questionNumber);
+    playCount++;
+    
+    if (playCount >= 2) {
+      enableElements();
+      disabledAudios.add(questionNumber);
+      audioElement.removeEventListener("ended", endedHandler);
+      audioElement.removeEventListener("play", playHandler);
+      showContent(questionNumber);
+    } else {
+      // Prepare for second playback
+      setTimeout(() => {
+        audioElement.currentTime = 0;
+        disableElements();
+        audioElement.play().catch(e => console.error("Audio play failed:", e));
+      }, 300);
+    }
   };
   
   const playHandler = function() {
