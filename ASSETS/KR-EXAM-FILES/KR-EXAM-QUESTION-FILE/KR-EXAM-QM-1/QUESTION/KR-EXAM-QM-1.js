@@ -152,7 +152,7 @@ window.questions = [
   },
   {
     question: "",
-    options: { a: "", b: "", c: "", d: "." },
+    options: { a: "", b: "", c: "", d: "" },
     answer: "c",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-11.png",
@@ -265,14 +265,14 @@ window.questions = [
   },
   {
     question: "",
-    options: { a: "로선 씨는 저녁 8 시에 공부해요.", b: "로선 씨는 아침 7 시에 공부해요.", c: "로선 씨는 오후 2 시에 공부해요.", d: "로선 씨는 밤 10 시에 공부해요." },
+    options: { a: "로선 씨는 저녁 8 시에 공부해요.", b: "로선 씨는 아침 8 시에 공부해요.", c: "여자는 저녁 8 시에 공부해요.", d: "여자는 밤 8 시에 공부해요." },
     answer: "a",
     explanation: "Review not Aviable.",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-19.mp3"
   },
   {
     question: "",
-    options: { a: "리따 씨가 아침 열 시에 먹어요.", b: "리따 씨가 점심 열두 시에 먹어요.", c: "리따 씨가 저녁 열한 시에 먹어요.", d: "리따 씨가 밤 한 시에 먹어요." },
+    options: { a: "남자가 점심 12 시에 먹어요.", b: "리따 씨가 점심 12 시에 먹어요.", c: "리따 씨가 저녁 11 시에 먹어요.", d: "남자가 저녁 11 시에 먹어요." },
     answer: "b",
     explanation: "Review not Aviable.",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-20.mp3"
