@@ -2,14 +2,14 @@ window.questions = [
  {
     question: "[1-2] 그림을 보고 단어나 문장을 고르십시오.",
     options: { a: "신용카드", b: "지폐", c: "동전", d: "현금" },
-    answer: "d",
+    answer: "a",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-1.png"
   },
   {
     question: "",
     options: { a: "학교", b: "공장", c: "회사", d: "은행" },
-    answer: "a",
+    answer: "b",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-2.png"
   },
@@ -22,7 +22,7 @@ window.questions = [
   {
     question: "아픈 사람들을 의사와 간호사가 치료하고 돌보는 장소입니다.",
     options: { a: "극장", b: "병원", c: "은행", d: "식당" },
-    answer: "b",
+    answer: "d",
     explanation: "Review not Aviable."
   },
   {
@@ -41,55 +41,55 @@ window.questions = [
   {
     question: "[7-8] 다음 질문에 답하십시오.<br>다음 단어와 관계 있는 무엇입니까?<br>  <br>분뉴사",
     options: { a: "마리", b: "빵", c: "두", d: "명사" },
-    answer: "a",
+    answer: "b",
     explanation: "Review not Aviable."
   },
   {
     question: "다음 단어와 관계있는  것은 무엇입니까?<br>  <br>가방",
     options: { a: "나라", b: "물건", c: "장소", d: "음식" },
-    answer: "b",
+    answer: "a",
     explanation: "Review not Aviable."
   },
   {
     question: "[9-10] 다음 글을 내용과 같은 것을 고르십시오.<br>  <br>중고 거랫품을 이용하면 싸게 구할 수 있습니다. 생활용뿐만 아니라 가전제품, 가구에 이르기까지 다양한 물건을 살 수 있습니다. 사용하지 않은 새 물건을 파는 경우도 있습니다.플랫품을 통해 물건을 사고팔 때는 주로 같은 지역에 서는 사람들 사이에서 직거래로 이루어집니다.",
     options: { a: "물건 거래할 때 대부분 택배를 이용해서 물건을 받습니다. ", b: "중고 거래 플랫품에서 가구와 같은 물건은 구할 수 없습니다.", c: "중고 거래 플랫품으로 새 물건을 구입할 수 있습니다.", d: "중고 거래 플랫품에서 비싼 가격에 물건이 거래됩니다." },
-    answer: "c",
+    answer: "b",
     explanation: "Review not Aviable."
   },
   {
     question: "한국 사람들은 자신보다 나이가 많거나 지위가 높은 사람에게 인사할 때 허리를 굽혀 인사합니다. 자신보다 어리거나 친한 사람에게는 손을 흔들어 인사합니다. 공작인 상황에서는 주로 악수를 하며 인사합니다. 이때 자신보다 니이가 훨씬 많거나 지위가 높은 사림이라면 왼손으로 오른팔을 받치고 악수해야 합니다.",
     options: { a: "지위가 높은 사람과 악수할 때는 왼손으로 오른팔을 받칩니다.", b: "친한 친구에게는 허리를 급혀 인사해햐 합니다.", c: "공적인 상황에서 인사할 때는 주로 손을 흔듭니다.", d: "자신보다 나이가 많은 사람과는 악수를 하지 않습니다." },
-    answer: "a",
+    answer: "d",
     explanation: "Review not Aviable."
   },
 {
     question: "[11-14] 빈칸에 들어갈 가장 알맞은 것을 고르십시오.<br>  <br> 머리가 너무 길어요. 내일 머리를 자르러 ---------- 에 갈 거에요.",
     options: { a: "우체국", b: "편의점", c: "커피솝", d: "미용실" },
-    answer: "d",
+    answer: "a",
     explanation: "Review not Aviable."
   },
   {
     question: "다음 단어와 관계있는 것은 무엇입니까?<br>  <br>토요일 , 일요일 ",
     options: { a: "주말", b: "요일 ", c: "평일", d: "월" },
-    answer: "a",
+    answer: "c",
     explanation: "Review not Aviable."
   },
   {
     question: "빈칸에 들어갈 가장 알맞은 것을 고르십시오.<br>  <br>김찌개가 너무 ---------- 조심해서 천천히 드세요.",
     options: { a: "비쌉니다", b: "뜨겁습니다", c: "맛있습니다", d: "적습니다" },
-    answer: "b",
+    answer: "c",
     explanation: "Review not Aviable."
   },
   {
     question: "빈칸에 들어갈 가장 알맞은 것을 고르십시오.<br>  <br>저는 집안일 중에서 정리하는 것을 ---------- 좋아합니다.",
     options: { a: "보통", b: "자주", c: "가장", d: "항상" },
-    answer: "c",
+    answer: "a",
     explanation: "Review not Aviable."
   },
   {
     question: "[15-18] 다음 질문에 답하십시오.<br>  <br> 이것은 무엇입니까?",
     options: { a: "우유 입니다.", b: "우체국 입니다.", c: "우산 입니다.", d: "유산 입니다." },
-    answer: "c",
+    answer: "d",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-4.png"
   },
@@ -110,7 +110,7 @@ window.questions = [
   {
     question: "다음 그래프에 대한 설명으로 알맞은 것을 고르십시오.",
     options: { a: "김치찌개 음식은 가장 많이 있습니다.", b: "기타은 가장 많습니다.", c: "비빔밥은 가장 적습니다.", d: "불고기 보다 김치찌개가 더 많습니다." },
-    answer: "d",
+    answer: "b",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-7.png"
   },
@@ -123,13 +123,13 @@ window.questions = [
   {
     question: "두 사람은 무엇에 대해 말하고 있습니까?<br>  <br>남 : 가방에 뭐가 있어요 ?<br>여 : 열쇠하고 지갑이 있어요.그리고 여권도 있어요.",
     options: { a: "직업", b: "나이", c: "물건", d: "국적" },
-    answer: "c",
+    answer: "d",
     explanation: "Review not Aviable."
   },
   {
     question: "[21-24] 들은 것을 고르십시오.",
     options: { a: "", b: "", c: "", d: "" },
-    answer: "d",
+    answer: "c",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-8.png",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-1.mp3"
@@ -137,7 +137,7 @@ window.questions = [
   {
     question: "",
     options: { a: "", b: "", c: "", d: "" },
-    answer: "c",
+    answer: "a",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-9.png",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-2.mp3"
@@ -153,7 +153,7 @@ window.questions = [
   {
     question: "",
     options: { a: "", b: "", c: "", d: "." },
-    answer: "c",
+    answer: "b",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-11.png",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-4.mp3"
@@ -169,7 +169,7 @@ window.questions = [
   {
     question: "여기는 어디 입니까?",
     options: { a: "", b: "", c: "", d: "" },
-    answer: "b",
+    answer: "d",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-13.png",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-6.mp3"
@@ -177,7 +177,7 @@ window.questions = [
   {
     question: "이 사람은 무엇을 하고 있습니까?",
     options: { a: "", b: "", c: "", d: "" },
-    answer: "d",
+    answer: "c",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-14.png",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-7.mp3"
@@ -185,7 +185,7 @@ window.questions = [
   {
     question: "맥주가 얼마나 있습니까?",
     options: { a: "", b: "", c: "", d: "" },
-    answer: "c",
+    answer: "b",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-15.png",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-8.mp3"
@@ -201,21 +201,21 @@ window.questions = [
   {
     question: "[30-33] 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
     options: { a: "네, 컴퓨터가 있어요.", b: "아니요, 컴퓨터예요.", c: "아니요, 컴퓨터가 아니예요.", d: "네, 컴퓨터가 없어요." },
-    answer: "a",
+    answer: "b",
     explanation: "Review not Aviable.",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-10.mp3"
   },
   {
     question: "",
     options: { a: "네, 회사원이 있습니다.", b: "네, 회사원 입니다.", c: "아니요, 회사원 많습니다.", d: "아니요, 회사원이 좋습니다." },
-    answer: "b",
+    answer: "c",
     explanation: "Review not Aviable.",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-11.mp3"
   },
   {
     question: "",
     options: { a: "서른 살 입니다", b: "기술자 입니다.", c: "네팔 사람 입니다.", d: "남자 입니다" },
-    answer: "c",
+    answer: "d",
     explanation: "Review not Aviable.",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-12.mp3"
   },
@@ -251,7 +251,7 @@ window.questions = [
   {
     question: "",
     options: { a: "", b: "", c: "", d: "" },
-    answer: "d",
+    answer: "b",
     explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-18.png",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-17.mp3"
@@ -273,7 +273,7 @@ window.questions = [
   {
     question: "",
     options: { a: "리따 씨가 아침 열 시에 먹어요.", b: "리따 씨가 점심 열두 시에 먹어요.", c: "리따 씨가 저녁 열한 시에 먹어요.", d: "리따 씨가 밤 한 시에 먹어요." },
-    answer: "b",
+    answer: "d",
     explanation: "Review not Aviable.",
     audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-5/AUDIO/AUDIO-20.mp3"
   },
