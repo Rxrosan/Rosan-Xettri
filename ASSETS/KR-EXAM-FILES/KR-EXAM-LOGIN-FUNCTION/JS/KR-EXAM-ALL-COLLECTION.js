@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // --- Configuration ---
     const ALL_QUESTIONS = [
-        { id: 1, title: "Question Model 1", content: "Korean Language Test Exam Model - Basic level with easy questions to get you started.", link: "KR-EXAM.html", category: "Basic | 1st Level" },
-        { id: 2, title: "Question Model 2", content: "Korean Language Test Exam Model - Basic level with more challenging questions.", link: "KR-EXAM.html", category: "Basic | 3rd Level" },
-        { id: 3, title: "Question Model 3", content: "Korean Language Test Exam Model - Basic level with medium difficulty questions.", link: "KR-EXAM.html", category: "Basic | 2nd Level" },
-        { id: 4, title: "Question Model 4", content: "Korean Language Test Exam Model - Another basic level set for reinforcement.", link: "KR-EXAM.html", category: "Basic | 1st Level" },
-        { id: 5, title: "Question Model 5", content: "Korean Language Test Exam Model - Advance 1-10 LESSON.", link: "KR-EXAM.html", category: "ADVANCE | 1-10 LESSON" },
-        { id: 6, title: "Question Model 6", content: "Korean Language Test Exam Model - Advance 1-5 LESSON. QUESTION ON UPDATE ", link: "KR-EXAM.html", category: "ADVANCE | 1-5 LESSON |GENERATING " }
+        { id: 1, title: "Question Model 1", content: "KLTEM - A 1 - 10 L", link: "KR-EXAM.html", category: "ADVANCE | 1 - 10 LESSON" },
+        { id: 2, title: "Question Model 2", content: "KLTEM - A 1 - 5 L", link: "KR-EXAM.html", category: "UPDATING ...." },
+        { id: 3, title: "Question Model 3", content: "KLTEM - A 6 - 10 L", link: "KR-EXAM.html", category: "UPDATING ...." },
+        { id: 4, title: "Question Model 4", content: "KLTEM - A 11 - 15 L", link: "KR-EXAM.html", category: "UPDATING ...." },
+        { id: 5, title: "Question Model 5", content: "KLTEM - A 16 - 20 L", link: "KR-EXAM.html", category: "UPDATING ...." },
+        { id: 6, title: "Question Model 6", content: "KLTEM - A 21 - 25 L", link: "KR-EXAM.html", category: "UPDATING ...." }
     ];
 
     // --- DOM Elements ---

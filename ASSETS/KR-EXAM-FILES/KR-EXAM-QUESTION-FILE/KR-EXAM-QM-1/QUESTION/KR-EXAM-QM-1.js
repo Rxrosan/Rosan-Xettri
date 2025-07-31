@@ -1,267 +1,280 @@
-const questions = [
-  {
-    question: " 이 사진 뭐의 입니까 ?",
-    options: { a: "자동차 입니다.", b: "전화기 입니다.", c: "냉장고 입니다.", d: "세탁기 입니다." },
-    answer: "c",
-    explanation: "In Korea, fridge is called 냉장고.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img1.jpg"
-  },
-  {
-    question: " 당신의 이름은 뭐 입니까?",
-    options: { a: "저는 학생입니다.", b: "깨 시 로선 입니다.", c: "집에 갑니다.", d: "안녕하세요." },
-    answer: "b",
-    explanation: "Question asks 'What is your name?'"
-  },
-  {
-    question: "듣고 가장 알맞은 것을 고르십시오.",
-    options: { a: "자기야, 사랑해. 너랑 결혼하고 싶어요.", b: "저는 학교 가고 싶어요", c: "밥을 먹고 싶어요", d: "영화를 보고 싶어요" },
-    answer: "a",
-    explanation: "Romantic sentence – matches the audio.",
-    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/audio1.mp3"
-  },
-  {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "돈 입니다.", b: "원 입나다.", c: "물소 입니다.", d: "소 입니다." },
-    answer: "a",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img2.jpg"
-  },
-  {
-    question: "이 사진은 뭐의 입니까?",
-    options: { a: "짐대 입니다.", b: "텔레비전 입니다.", c: "노트북 입니다.", d: "컴프터 입니다" },
+window.questions = [
+ {
+    question: "[1-2] 그림을 보고 단어나 문장을 고르십시오.",
+    options: { a: "신용카드", b: "지폐", c: "동전", d: "현금" },
     answer: "d",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img14.jpg"
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-1.png"
   },
   {
-    question: " 저는 어제 시장에 가서 두 ...... 바지를 샀습니다.",
-    options: { a: "개", b: "벌", c: "송이", d: "켤레" },
-    answer: "b",
-    explanation: "Review Not aviable."
-  },
-  {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "이 사진은 학교의 사진입니다.", b: "이 사진은 병원의 사진입니다.", c: "이 사진은 공원의 사진입니다.", d: "이 사진은 경찰서의 사진입니다." },
+    question: "",
+    options: { a: "학교", b: "공장", c: "회사", d: "은행" },
     answer: "a",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img21.jpg"
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-2.png"
   },
   {
-    question: " 이 소리는 무엇입니까?",
-    options: { a: "전화벨", b: "문 여는 소리", c: "기차", d: "개 짖는 소리" },
-    answer: "a",
-    explanation: "Audio is a phone ringing.",
-    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/audio2.wav"
-  },
-  {
-    question: "  이 사진은 뭐의 입니까?",
-    options: { a: "버스 입니다.", b: "기차 입니다.", c: "택시 입니다.", d: "차 입니다." },
+    question: "[3-4] 다음 설명에 알맞은 어휘를 고르십시오.<br>회사 , 공장 , 학고 등 일성한 장소에 근무나 일을 하기 위해 가는 것을 의미합니다.",
+    options: { a: "퇴근 ", b: "참석", c: "출근", d: "경험" },
     answer: "c",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img15.jpg"
-  },
-  {
-    question: "  이 사진은 뭐의 입니까?",
-    options: { a: "소 입니다.", b: "모자 입니다", c: "바지 입니다.", d: "사자 입니다." },
-    answer: "b",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img3.jpg"
-  },
-  {
-    question: " 선픙기가 두 ....... 있습니다.",
-    options: { a: "대", b: "개", c: "채", d: "켤레" },
-    answer: "a",
     explanation: "Review not Aviable."
   },
   {
-    question: " 저는 어제 시장에 갔어요, ...... 에서 과일을 샀어요.",
-    options: { a: "여기", b: "커기", c: "저기", d: "어디" },
-    answer: "a",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "모자 입니다.", b: "유니픔 입니다.", c: "바지 입니다.", d: "가방 입니다." },
-    answer: "c",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img4.jpg"
-  },
-  {
-    question: " 가：내일 ....이/가 어때요?<br>나：비가 오고 바람이 많이 불 거예요.",
-    options: { a: "시간", b: "날씨", c: "날짜", d: "계절" },
+    question: "아픈 사람들을 의사와 간호사가 치료하고 돌보는 장소입니다.",
+    options: { a: "극장", b: "병원", c: "은행", d: "식당" },
     answer: "b",
     explanation: "Review not Aviable."
   },
   {
-    question: " 100000",
-    options: { a: "십만", b: "천만", c: "만", d: "조" },
-    answer: "a",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "공항 입니다.", b: "자전거 입니다.", c: "배 입니다.", d: "비행기 입니다." },
+    question: "[5-6]다음 질문에 답하십시오.<br>다음 파이 차트에 대한 설명으로 가장 알맞은 갓을 고르십시오.",
+    options: { a: "귤보다 감이 더 많이 발립니다.", b: "바나나 가장 작은 사람이 좋아핮니다.", c: "바나나는 두 번째로 많이 팔맂니다.", d: "포도를 좋아하는 사람이 가장 많습니다." },
     answer: "d",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img5.jpg"
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-3.png"
   },
   {
-    question: " 만오천백오십일",
-    options: { a: "151515", b: "10500", c: "15151", d: "15235" },
+    question: "다음 밑줄 친 부분이 맞는 문장을 고르십시오.",
+    options: { a: "할머니깨서 음식을 <u>만들십니다</u>.", b: "<u>책이</u> 읽어요.", c: "다라 씨는 <u>회사에</U> 있어요.", d: "학교에 <u>가아요</u>." },
     answer: "c",
     explanation: "Review not Aviable."
   },
   {
-    question: " 지금 일요일 입니다, 모레 ..... 입니다.",
-    options: { a: "화요일 입니다.", b: "월요일 입니다.", c: "토요일 입니다.", d: "목요일 입니다." },
+    question: "[7-8] 다음 질문에 답하십시오.<br>다음 단어와 관계 있는 무엇입니까?<br>  <br>분뉴사",
+    options: { a: "마리", b: "빵", c: "두", d: "명사" },
     answer: "a",
     explanation: "Review not Aviable."
   },
   {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "선픙기 입니다.", b: "자동차 입니다.", c: "버스 입니다.", d: "차 입니다." },
-    answer: "a",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img6.jpg"
+    question: "다음 단어와 관계있는  것은 무엇입니까?<br>  <br>가방",
+    options: { a: "나라", b: "물건", c: "장소", d: "음식" },
+    answer: "b",
+    explanation: "Review not Aviable."
   },
   {
-    question: " 여기에서 제 집까지 ..... 입니다.",
-    options: { a: "세 길로미터 거리", b: "삼 길로미터", c: "세 길로미터", d: "삼 길로미터 거리" },
+    question: "[9-10] 다음 글을 내용과 같은 것을 고르십시오.<br>  <br>중고 거랫품을 이용하면 싸게 구할 수 있습니다. 생활용뿐만 아니라 가전제품, 가구에 이르기까지 다양한 물건을 살 수 있습니다. 사용하지 않은 새 물건을 파는 경우도 있습니다.플랫품을 통해 물건을 사고팔 때는 주로 같은 지역에 서는 사람들 사이에서 직거래로 이루어집니다.",
+    options: { a: "물건 거래할 때 대부분 택배를 이용해서 물건을 받습니다. ", b: "중고 거래 플랫품에서 가구와 같은 물건은 구할 수 없습니다.", c: "중고 거래 플랫품으로 새 물건을 구입할 수 있습니다.", d: "중고 거래 플랫품에서 비싼 가격에 물건이 거래됩니다." },
+    answer: "c",
+    explanation: "Review not Aviable."
+  },
+  {
+    question: "한국 사람들은 자신보다 나이가 많거나 지위가 높은 사람에게 인사할 때 허리를 굽혀 인사합니다. 자신보다 어리거나 친한 사람에게는 손을 흔들어 인사합니다. 공작인 상황에서는 주로 악수를 하며 인사합니다. 이때 자신보다 니이가 훨씬 많거나 지위가 높은 사림이라면 왼손으로 오른팔을 받치고 악수해야 합니다.",
+    options: { a: "지위가 높은 사람과 악수할 때는 왼손으로 오른팔을 받칩니다.", b: "친한 친구에게는 허리를 급혀 인사해햐 합니다.", c: "공적인 상황에서 인사할 때는 주로 손을 흔듭니다.", d: "자신보다 나이가 많은 사람과는 악수를 하지 않습니다." },
+    answer: "a",
+    explanation: "Review not Aviable."
+  },
+{
+    question: "[11-14] 빈칸에 들어갈 가장 알맞은 것을 고르십시오.<br>  <br> 머리가 너무 길어요. 내일 머리를 자르러 ---------- 에 갈 거에요.",
+    options: { a: "우체국", b: "편의점", c: "커피솝", d: "미용실" },
     answer: "d",
-    explanation: "Review not Aviable.'"
+    explanation: "Review not Aviable."
   },
   {
-    question: "가: 지금 몇 시 입니까?<br>나: ....있어요.",
-    options: { a: "일 시 삼 분", b: "한 시 세 분", c: "한 시 삼 분", d: "일 시 세 분" },
+    question: "다음 단어와 관계있는 것은 무엇입니까?<br>  <br>토요일 , 일요일 ",
+    options: { a: "주말", b: "요일 ", c: "평일", d: "월" },
+    answer: "a",
+    explanation: "Review not Aviable."
+  },
+  {
+    question: "빈칸에 들어갈 가장 알맞은 것을 고르십시오.<br>  <br>김찌개가 너무 ---------- 조심해서 천천히 드세요.",
+    options: { a: "비쌉니다", b: "뜨겁습니다", c: "맛있습니다", d: "적습니다" },
+    answer: "b",
+    explanation: "Review not Aviable."
+  },
+  {
+    question: "빈칸에 들어갈 가장 알맞은 것을 고르십시오.<br>  <br>저는 집안일 중에서 정리하는 것을 ---------- 좋아합니다.",
+    options: { a: "보통", b: "자주", c: "가장", d: "항상" },
     answer: "c",
     explanation: "Review not Aviable."
   },
   {
-    question: "  이 사진은 뭐의 입니까?",
-    options: { a: "신발장 입니다.", b: "옷장 입니다.", c: "식탁 입니다.", d: "주스 입니다." },
+    question: "[15-18] 다음 질문에 답하십시오.<br>  <br> 이것은 무엇입니까?",
+    options: { a: "우유 입니다.", b: "우체국 입니다.", c: "우산 입니다.", d: "유산 입니다." },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-4.png"
+  },
+  {
+    question: "이 사람의 주소는 어디입니까?",
+    options: { a: "서울특별시 구로구청장 입니다.", b: "서울특별시 구로구 입니다.", c: "서울특별시 구로구청장 입니다.", d: "2022년 2월 8일 입니다." },
     answer: "b",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img7.jpg"
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-5.png"
   },
   {
-    question: " 저는 밥... 먹습니다.",
-    options: { a: "을", b: "븐", c: "은", d: "블" },
+    question: "이것은 무엇입니까?",
+    options: { a: "칼 입니다.", b: "창문 입니다.", c: " 의자 입니다.", d: "책 입니다." },
     answer: "a",
+    explanation: "Review not Aviable.",
+   image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-6.png"
+  },
+  {
+    question: "다음 그래프에 대한 설명으로 알맞은 것을 고르십시오.",
+    options: { a: "김치찌개 음식은 가장 많이 있습니다.", b: "기타은 가장 많습니다.", c: "비빔밥은 가장 적습니다.", d: "불고기 보다 김치찌개가 더 많습니다." },
+    answer: "d",
+    explanation: "Review not Aviable.",
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-7.png"
+  },
+  {
+    question: "[19-20] 다음 글을 읽고 무엇에 대한 글인지 고르십시오.<br>  <br> 오늘은 토요일입니다. 학교에 가지 않아도 되니까 늦게까지 잤습니다. 오후에는 집안일을 정리하고 나서 장을 보려고 합니다.",
+    options: { a: "평일 예정", b: "쇼핑 예정", c: "휴일 일정", d: "공부 일정" },
+    answer: "c",
     explanation: "Review not Aviable."
   },
   {
-    question: "  이 사진은 뭐의 입니까?",
-    options: { a: "보도", b: "밥", c: "사과", d: "술" },
+    question: "두 사람은 무엇에 대해 말하고 있습니까?<br>  <br>남 : 가방에 뭐가 있어요 ?<br>여 : 열쇠하고 지갑이 있어요.그리고 여권도 있어요.",
+    options: { a: "직업", b: "나이", c: "물건", d: "국적" },
     answer: "c",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img16.jpg"
+    explanation: "Review not Aviable."
   },
   {
-    question: "  이 사진은 뭐의 입니까?",
-    options: { a: "버스 입니다.", b: "차 입니다.", c: "의자 입니다.", d: "짐대 입니다." },
-    answer: "c",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img8.jpg"
-  },
-  {
-    question: "  이 사진은 뭐의 입니까?",
-    options: { a: "나라", b: "집", c: "지도", d: "도시" },
-    answer: "c",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img17.jpg"
-  },
-  {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "구두가 세 켤레 있습니다.", b: "구두가 다섯 켤레 있습니다.", c: "구두가 네 켤레 있습니다.", d: "구두가 여섯 켤레 있습니다." },
-    answer: "c",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img18.jpg"
-  },
-  {
-    question: "  이 사진은 뭐의 입니까?",
-    options: { a: "기차 입니다.", b: "택시 입니다.", c: "버스 입니다.", d: "자동차 입니다." },
+    question: "[21-24] 들은 것을 고르십시오.",
+    options: { a: "", b: "", c: "", d: "" },
     answer: "d",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img9.jpg"
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-8.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-1.mp3"
   },
   {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "가방 입니다.", b: "차 입니다.", c: "공책 입니다.", d: "짐대 입니다." },
+    question: "",
+    options: { a: "", b: "", c: "", d: "" },
     answer: "c",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img19.jpg"
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-9.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-2.mp3"
   },
   {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "여섯 사람이 회의를 하고 있습니다.", b: "다섯 사람이 회의를 하고 있습니다.", c: "네 사람이 회의를 하고 있습니다.", d: "세 사람이 회의를 하고 있습니다." },
+    question: "",
+    options: { a: "", b: "", c: "", d: "" },
+    answer: "d",
+    explanation: "Review not Aviable.",
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-10.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-3.mp3"
+  },
+  {
+    question: "",
+    options: { a: "", b: "", c: "", d: "." },
     answer: "c",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img20.jpg"
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-11.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-4.mp3"
   },
   {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "자전거 입니다.", b: "택시 입니다.", c: "버스 입니다.", d: "지하천 입니다." },
+    question: "[25-29] 그림을 보고 알맞은 대답을 고르십시오.<br>  <br> 이것은 무엇입니까?",
+    options: { a: "", b: "", c: "", d: "" },
     answer: "a",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img10.jpg"
+   image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-12.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-5.mp3"
   },
   {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "집 입니다.", b: "공원 입니다.", c: "회사 입니다.", d: "하교 입니다." },
-    answer: "a",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img22.jpg"
-  },
-  {
-    question: "  이 사진은 뭐의 입니까?",
-    options: { a: "라디오", b: "택시", c: "버스", d: "나라" },
-    answer: "a",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img23.jpg"
-  },
-  {
-    question: " 이 사진은 뭐의 입니까?",
-    options: { a: "비행기 입니다.", b: "기차 입니다.", c: "트레그 입니다.", d: "유교 입니다." },
+    question: "여기는 어디 입니까?",
+    options: { a: "", b: "", c: "", d: "" },
     answer: "b",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img11.jpg"
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-13.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-6.mp3"
   },
   {
-    question: " 길로미터",
-    options: { a: "마리", b: "분", c: "거리", d: "무게" },
-    answer: "c",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: " 길로그램",
-    options: { a: "거리", b: "본", c: "무게", d: "미국" },
-    answer: "c",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: "  이 사진은 뭐의 입니까?",
-    options: { a: "신문 입니다.", b: "버스 입니다다", c: "책 입니다", d: "빗자루 입니다." },
-    answer: "c",
-    explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img12.jpg"
-  },
-  {
-    question: " 두.... 학생 하교 가요 .",
-    options: { a: "명", b: "분", c: "학교", d: "공원" },
-    answer: "a",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: " 9999999",
-    options: { a: "구구구구구구구", b: "구구십구만구구백구십구", c: "구백구십구만구천구백구십구", d: "백구십구만구천구백구구" },
-    answer: "c",
-    explanation: "Review not Aviable."
-  },
-  {
-    question: " 이 사진은 뭐의 입니까?<br>",
-    options: { a: "에어컨 입니다.", b: "사진 입니다.", c: "양돈 입니다.", d: "사진기 입니다" },
+    question: "이 사람은 무엇을 하고 있습니까?",
+    options: { a: "", b: "", c: "", d: "" },
     answer: "d",
     explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/IMG/img13.jpg"
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-14.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-7.mp3"
+  },
+  {
+    question: "맥주가 얼마나 있습니까?",
+    options: { a: "", b: "", c: "", d: "" },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-15.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-8.mp3"
+  },
+  {
+    question: "이것은 무엇입니까?",
+    options: { a: "", b: "", c: "", d: "" },
+    answer: "a",
+    explanation: "Review not Aviable.",
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-16.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-9.mp3"
+  },
+  {
+    question: "[30-33] 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
+    options: { a: "네, 컴퓨터가 있어요.", b: "아니요, 컴퓨터예요.", c: "아니요, 컴퓨터가 아니예요.", d: "네, 컴퓨터가 없어요." },
+    answer: "a",
+    explanation: "Review not Aviable.",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-10.mp3"
+  },
+  {
+    question: "",
+    options: { a: "네, 회사원이 있습니다.", b: "네, 회사원 입니다.", c: "아니요, 회사원 많습니다.", d: "아니요, 회사원이 좋습니다." },
+    answer: "b",
+    explanation: "Review not Aviable.",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-11.mp3"
+  },
+  {
+    question: "",
+    options: { a: "서른 살 입니다", b: "기술자 입니다.", c: "네팔 사람 입니다.", d: "남자 입니다" },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-12.mp3"
+  },
+  {
+    question: "",
+    options: { a: "네, 시장에서 과일을 살 거예요.", b: "아니요, 채소는 시장에서 사는 게 좋아요.", c: "네, 저는 시장에서 자주 가요.", d: "아니요, 시장은 없고 마트는 있어요." },
+    answer: "d",
+    explanation: "Review not Aviable.",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-13.mp3"
+  },
+  {
+    question: "[34-35] 다음을 듣고 이어지는 말을 고르십시오.",
+    options: { a: "어서 오세요.", b: "안녕히 계세요.", c: "괜찮아요.", d: "반가워요." },
+    answer: "b",
+    explanation: "Review not Aviable.",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-14.mp3"
+  },
+  {
+    question: "",
+    options: { a: "반갑습니다.", b: "죽하합니다.", c: "감사합니다.", d: "괜찮습니다." },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-15.mp3"
+  },
+  {
+    question: "[36-37] 잘 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+    options: { a: "", b: "", c: "", d: "" },
+    answer: "a",
+    explanation: "Review not Aviable.",
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-17.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-16.mp3"
+  },
+  {
+    question: "",
+    options: { a: "", b: "", c: "", d: "" },
+    answer: "d",
+    explanation: "Review not Aviable.",
+    image: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-18.png",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-17.mp3"
+  },
+  {
+    question: "[38-40] 이야기를 듣고 질문에 알맞은 대답을 고르십시오.",
+    options: { a: "규칙을 정하랴고", b: "예약을 정하랴고", c: "약속을 정하려고", d: "주문을 하려고" },
+    answer: "c",
+    explanation: "Review not Aviable.",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-18.mp3"
+  },
+  {
+    question: "",
+    options: { a: "로선 씨는 저녁 8 시에 공부해요.", b: "로선 씨는 아침 7 시에 공부해요.", c: "로선 씨는 오후 2 시에 공부해요.", d: "로선 씨는 밤 10 시에 공부해요." },
+    answer: "a",
+    explanation: "Review not Aviable.",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-19.mp3"
+  },
+  {
+    question: "",
+    options: { a: "리따 씨가 아침 열 시에 먹어요.", b: "리따 씨가 점심 열두 시에 먹어요.", c: "리따 씨가 저녁 열한 시에 먹어요.", d: "리따 씨가 밤 한 시에 먹어요." },
+    answer: "b",
+    explanation: "Review not Aviable.",
+    audio: "ASSETS/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-20.mp3"
   },
 ];

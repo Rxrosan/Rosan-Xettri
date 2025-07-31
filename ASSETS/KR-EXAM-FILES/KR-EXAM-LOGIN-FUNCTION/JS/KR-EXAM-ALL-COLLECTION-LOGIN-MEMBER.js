@@ -9,31 +9,6 @@ const USERS = [
                 questionId: 1,
                 purchaseType: 'lifetime', // This will never expire
                 purchaseDate: new Date('2024-01-01').toISOString()
-            },
-            {
-                questionId: 2,
-                purchaseType: 'lifetime', // This will never expire
-                purchaseDate: new Date('2024-01-01').toISOString()
-            },
-            {
-                questionId: 3,
-                purchaseType: 'lifetime', // This will never expire
-                purchaseDate: new Date('2024-01-01').toISOString()
-            },
-            {
-                questionId: 4,
-                purchaseType: 'lifetime', // This will never expire
-                purchaseDate: new Date('2024-01-01').toISOString()
-            },
-            {
-                questionId: 5,
-                purchaseType: 'lifetime', // This will never expire
-                purchaseDate: new Date('2024-01-01').toISOString()
-            },
-            {
-                questionId: 6,
-                purchaseType: 'lifetime', // This will never expire
-                purchaseDate: new Date('2024-01-01').toISOString()
             }
         ]
     },
@@ -47,26 +22,6 @@ const USERS = [
                 questionId: 1,
                 purchaseType: 'lifetime', // This will never expire
                 purchaseDate: new Date('2024-01-01').toISOString()
-            },
-            {
-                questionId: 2,
-                purchaseType: 'lifetime', // This will never expire
-                purchaseDate: new Date('2024-01-01').toISOString()
-            },
-            {
-                questionId: 3,
-                purchaseType: 'lifetime', // This will never expire
-                purchaseDate: new Date('2024-01-01').toISOString()
-            },
-            {
-                questionId: 4,
-                purchaseType: 'lifetime', // This will never expire
-                purchaseDate: new Date('2024-01-01').toISOString()
-            },
-            {
-                questionId: 5,
-                purchaseType: 'lifetime', // This will never expire
-                purchaseDate: new Date('2024-01-01').toISOString()
             }
         ]
     },
@@ -77,7 +32,7 @@ const USERS = [
         key: "RX-P01",
         purchases: [
             {
-                questionId: 5,
+                questionId: 1,
                 purchaseType: 'lifetime', // This will never expire
                 purchaseDate: new Date('2024-01-01').toISOString()
             }
