@@ -28,6 +28,21 @@ const USERS = [
                 purchaseType: 'lifetime', // This will never expire
                 purchaseDate: new Date('2024-01-01').toISOString()
             }
+            
+        ]
+    },
+    {
+        name: "Rita Magar",
+        link: "ASSETS/KR-EXAM-FILES/KR-EXAM-LOGIN-FUNCTION/IMG/Rita Magar.jpg", // Example profile image
+        phone: "9807483578",
+        key: "RX-RM02",
+        purchases: [
+            {
+                questionId: 1,
+                purchaseType: 'lifetime', // This will never expire
+                purchaseDate: new Date('2024-01-01').toISOString()
+            }
+            
         ]
     },
     {
