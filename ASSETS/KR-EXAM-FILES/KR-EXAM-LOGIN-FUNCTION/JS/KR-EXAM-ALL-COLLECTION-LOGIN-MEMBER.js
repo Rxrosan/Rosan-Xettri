@@ -9,6 +9,11 @@ const USERS = [
                 questionId: 1,
                 purchaseType: 'lifetime', // This will never expire
                 purchaseDate: new Date('2024-01-01').toISOString()
+            },
+            {
+                questionId: 2,
+                purchaseType: 'lifetime', // This will never expire
+                purchaseDate: new Date('2024-01-01').toISOString()
             }
         ]
     },
