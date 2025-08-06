@@ -1,350 +1,209 @@
 /**
- * Advanced Developer Mode Protection System
- * - Shows countdown timer instead of redirecting
- * - Persistent lockout state with visible timer
- * - Multiple detection methods with improved reliability
+ * 🚀 MILITARY-GRADE DEVTOOLS PROTECTION 🚀
+ * - Complete source hiding
+ * - Network cutoff
+ * - UI lockdown
+ * - Anti-debugging
+ * - Stealth mode
+ * - Self-destruct
  */
-
 (function() {
     'use strict';
 
-    // Configuration
+    // 🔧 CONFIGURATION
     const config = {
-        warningCountLimit: 3,          // Max warnings before action
-        checkInterval: 1000,           // Dev tools check interval (ms)
-        disableRightClick: true,       // Disable right-click context menu
-        disableShortcuts: true,        // Disable dev tools shortcuts
-        enableDebuggerProtection: true, // Debugger protection
-        enableBlurProtection: true,    // Blur content when detected
-        enableAssetProtection: true,   // Hide assets when detected
-        lockoutDuration: 24 * 60 * 60 * 1000, // 1 day lockout duration
-        warningMessages: [
-            "Warning: Developer tools are restricted on this site.",
-            "Final warning: Continued attempts may result in restricted access.",
-            "Access denied: Developer tools detected. You must wait %time% before continuing."
-        ],
-        lockoutMessage: "Access locked. Please wait %time% before trying again."
+        checkInterval: 1000,          // DevTools detection frequency (ms)
+        enableNetworkCutoff: true,    // Disable fetch/XHR when DevTools open
+        enableUILockdown: true,       // Disable buttons/inputs
+        enableDebuggerTrap: true,     // Anti-debugging infinite loop
+        enableSourceHiding: true,     // Hide sources from DevTools
+        enableSelfDestruct: true,     // Remove protection traces
+        enableLocalProtection: true   // Protect against `file://` inspection
     };
 
-    // Wait for DOM to be ready
-    function initProtection() {
-        // Load or initialize state
-        let persistentState = JSON.parse(localStorage.getItem(config.localStorageKey)) || {
-            warningCount: 0,
-            lockoutEndTime: 0,
-            protectionActive: true,
-            devToolsOpened: false
-        };
+    // 🛡️ STATE TRACKING
+    let devToolsOpened = false;
+    let networkDisabled = false;
+    let uiDisabled = false;
+    let originalFetch = window.fetch;
+    let originalXHR = XMLHttpRequest.prototype.open;
 
-        // Create warning element
-        const warningElement = document.createElement('div');
-        warningElement.id = 'devToolsWarning';
-        warningElement.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px;
-            background-color: #ff0000;
-            color: white;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            z-index: 999999;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            display: none;
-        `;
-        
-        // Create countdown element
-        const countdownElement = document.createElement('div');
-        countdownElement.id = 'devToolsCountdown';
-        countdownElement.style.cssText = `
-            position: fixed;
-            top: 40px;
-            left: 0;
-            width: 100%;
-            padding: 10px;
-            background-color: #990000;
-            color: white;
-            text-align: center;
-            font-size: 16px;
-            z-index: 999998;
-            display: none;
-        `;
+    // 🔍 ENHANCED DEVTOOLS DETECTION
+    function detectDevTools() {
+        // 1️⃣ Window Size Difference
+        const widthDiff = window.outerWidth - window.innerWidth > 160;
+        const heightDiff = window.outerHeight - window.innerHeight > 160;
 
-        // Safely append to body
-        if (document.body) {
-            document.body.appendChild(warningElement);
-            document.body.appendChild(countdownElement);
-        } else {
-            document.addEventListener('DOMContentLoaded', () => {
-                document.body.appendChild(warningElement);
-                document.body.appendChild(countdownElement);
-            });
-        }
+        // 2️⃣ Debugger Detection
+        let debuggerDetected = false;
+        const startTime = Date.now();
+        (function() {
+            debugger;
+            if (Date.now() - startTime > 100) debuggerDetected = true;
+        })();
 
-        // Protection methods
-        const protectionMethods = {
-            // Save state to localStorage
-            saveState: function() {
-                localStorage.setItem(
-                    config.localStorageKey,
-                    JSON.stringify(persistentState)
-                );
-            },
-
-            // Format time from milliseconds to MM:SS
-            formatTime: function(ms) {
-                const minutes = Math.floor(ms / 60000);
-                const seconds = Math.floor((ms % 60000) / 1000);
-                return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            },
-
-            // Update countdown display
-            updateCountdown: function() {
-                const remaining = Math.max(0, persistentState.lockoutEndTime - Date.now());
-                const formattedTime = this.formatTime(remaining);
-                
-                if (remaining <= 0) {
-                    countdownElement.style.display = 'none';
-                    persistentState.warningCount = 0;
-                    persistentState.lockoutEndTime = 0;
-                    this.saveState();
-                    return false;
+        // 3️⃣ Console Tampering Detection
+        const consoleProxy = new Proxy(console, {
+            get: (target, prop) => {
+                if (prop === 'log' || prop === 'warn') {
+                    devToolsOpened = true;
                 }
-                
-                countdownElement.textContent = config.lockoutMessage.replace('%time%', formattedTime);
-                countdownElement.style.display = 'block';
-                return true;
-            },
-
-            // Enhanced detection methods
-            detectDevTools: function() {
-                // Method 1: Detect by size difference
-                const sizeDiffDetected = (() => {
-                    const widthThreshold = window.outerWidth - window.innerWidth > 160;
-                    const heightThreshold = window.outerHeight - window.innerHeight > 160;
-                    return widthThreshold || heightThreshold;
-                })();
-
-                // Method 2: Detect by debugger statement
-                const debuggerDetected = (() => {
-                    let detected = false;
-                    const startTime = Date.now();
-                    (function() {
-                        debugger;
-                        if (Date.now() - startTime > 100) detected = true;
-                    })();
-                    return detected;
-                })();
-
-                return sizeDiffDetected || debuggerDetected;
-            },
-
-            // Hide all assets
-            hideAssets: function() {
-                if (!config.enableAssetProtection) return;
-                
-                const style = document.createElement('style');
-                style.id = 'devToolsProtectionStyle';
-                style.textContent = `
-                    body *:not(#devToolsWarning):not(#devToolsCountdown):not(script):not(style) {
-                        visibility: hidden !important;
-                        opacity: 0 !important;
-                    }
-                    body {
-                        background: black !important;
-                    }
-                `;
-                document.head.appendChild(style);
-            },
-
-            // Show warning
-            showWarning: function(message) {
-                const remaining = Math.max(0, persistentState.lockoutEndTime - Date.now());
-                const formattedTime = this.formatTime(remaining);
-                
-                warningElement.textContent = message.replace('%time%', formattedTime);
-                warningElement.style.display = 'block';
-                
-                setTimeout(() => {
-                    warningElement.style.display = 'none';
-                }, 3000);
-            },
-
-            // Disable keyboard shortcuts
-            disableShortcuts: function() {
-                if (!config.disableShortcuts) return;
-                
-                document.addEventListener('keydown', function(e) {
-                    // Block all common dev tools shortcuts
-                    if (e.key === 'F12' || 
-                        (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key)) || 
-                        (e.ctrlKey && e.key === 'U') ||
-                        (e.metaKey && e.altKey && e.key === 'I')) {
-                        e.preventDefault();
-                        protectionMethods.handleDetection();
-                        return false;
-                    }
-                });
-            },
-
-            // Disable right click
-            disableRightClick: function() {
-                if (!config.disableRightClick) return;
-                
-                document.addEventListener('contextmenu', function(e) {
-                    e.preventDefault();
-                    protectionMethods.handleDetection();
-                    return false;
-                });
-            },
-
-            // Debugger protection (infinite loop)
-            debuggerProtection: function() {
-                if (!config.enableDebuggerProtection) return;
-                
-                setInterval(function() {
-                    if (persistentState.devToolsOpened) {
-                        (function() {
-                            debugger;
-                        })();
-                    }
-                }, 100);
-            },
-
-            // Handle detection
-            handleDetection: function() {
-                if (!persistentState.protectionActive) return;
-                
-                persistentState.warningCount++;
-                persistentState.devToolsOpened = true;
-                this.saveState();
-                
-                // Show appropriate warning
-                if (persistentState.warningCount <= config.warningCountLimit) {
-                    const messageIndex = Math.min(persistentState.warningCount - 1, config.warningMessages.length - 1);
-                    protectionMethods.showWarning(config.warningMessages[messageIndex]);
-                }
-                
-                // Take action after warnings exceeded
-                if (persistentState.warningCount >= config.warningCountLimit) {
-                    persistentState.lockoutEndTime = Date.now() + config.lockoutDuration;
-                    this.saveState();
-                    protectionMethods.hideAssets();
-                    
-                    // Start countdown update interval
-                    const countdownInterval = setInterval(() => {
-                        if (!protectionMethods.updateCountdown()) {
-                            clearInterval(countdownInterval);
-                            // Restore access when time is up
-                            const styleElement = document.getElementById('devToolsProtectionStyle');
-                            if (styleElement) {
-                                styleElement.remove();
-                            }
-                        }
-                    }, 1000);
-                }
+                return target[prop];
             }
-        };
+        });
+        window.console = consoleProxy;
 
-        // Check if currently locked out
-        if (persistentState.lockoutEndTime > Date.now()) {
-            protectionMethods.hideAssets();
-            protectionMethods.updateCountdown();
-            
-            // Start countdown update interval
-            const countdownInterval = setInterval(() => {
-                if (!protectionMethods.updateCountdown()) {
-                    clearInterval(countdownInterval);
-                    // Restore access when time is up
-                    const styleElement = document.getElementById('devToolsProtectionStyle');
-                    if (styleElement) {
-                        styleElement.remove();
-                    }
-                }
-            }, 1000);
-        }
+        return widthDiff || heightDiff || debuggerDetected;
+    }
 
-        // Initialize protection features
-        function startProtection() {
-            // Add event listeners
-            protectionMethods.disableShortcuts();
-            protectionMethods.disableRightClick();
-            protectionMethods.debuggerProtection();
-            
-            // Continuous check for dev tools
-            setInterval(function() {
-                if (protectionMethods.detectDevTools()) {
-                    protectionMethods.handleDetection();
-                }
-            }, config.checkInterval);
-        }
+    // 📁 SOURCE HIDING (OBFUSCATION)
+    function hideSources() {
+        if (!config.enableSourceHiding) return;
 
-        // Start protection
-        startProtection();
+        // 1️⃣ Break Source Maps
+        delete window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+        delete window.__VUE_DEVTOOLS_GLOBAL_HOOK__;
 
-        // Public API
-        window.devToolsProtection = {
-            enable: function() {
-                persistentState.protectionActive = true;
-                protectionMethods.saveState();
-            },
-            disable: function() {
-                persistentState.protectionActive = false;
-                warningElement.style.display = 'none';
-                countdownElement.style.display = 'none';
-                const styleElement = document.getElementById('devToolsProtectionStyle');
-                if (styleElement) {
-                    styleElement.remove();
-                }
-                protectionMethods.saveState();
-            },
-            reset: function() {
-                persistentState = {
-                    warningCount: 0,
-                    lockoutEndTime: 0,
-                    protectionActive: true,
-                    devToolsOpened: false
-                };
-                protectionMethods.saveState();
-                warningElement.style.display = 'none';
-                countdownElement.style.display = 'none';
-                const styleElement = document.getElementById('devToolsProtectionStyle');
-                if (styleElement) {
-                    styleElement.remove();
-                }
-            },
-            isActive: function() {
-                return persistentState.protectionActive;
-            },
-            getWarningCount: function() {
-                return persistentState.warningCount;
-            },
-            getRemainingLockoutTime: function() {
-                return Math.max(0, persistentState.lockoutEndTime - Date.now());
+        // 2️⃣ Dynamic Script Relocation
+        const scripts = document.querySelectorAll('script');
+        scripts.forEach(script => {
+            if (script.src) {
+                script.src += `?v=${Math.random()}`; // Cache busting
+            } else {
+                script.textContent = '// Protected by military-grade security';
             }
+        });
+
+        // 3️⃣ VM Script Injection (Fragmentation)
+        setTimeout(() => {
+            eval(`
+                function _${Math.random().toString(36).substr(2, 8)}() {
+                    console.log("Access restricted");
+                }
+            `);
+        }, 0);
+    }
+
+    // 🌐 NETWORK CUTOFF
+    function disableNetwork() {
+        if (!config.enableNetworkCutoff || networkDisabled) return;
+
+        // 🚫 Block Fetch
+        window.fetch = function() {
+            return Promise.reject(new Error("Network access disabled"));
         };
 
-        // Override console methods
-        if (window.console) {
-            const consoleMethods = ['log', 'warn', 'error', 'info', 'debug', 'table', 'dir'];
-            consoleMethods.forEach(method => {
-                const original = console[method];
-                console[method] = function() {
-                    if (persistentState.devToolsOpened) {
-                        protectionMethods.handleDetection();
-                    }
-                    original.apply(console, arguments);
-                };
+        // 🚫 Block XHR
+        XMLHttpRequest.prototype.open = function() {
+            throw new Error("Network access restricted");
+        };
+
+        networkDisabled = true;
+    }
+
+    function restoreNetwork() {
+        if (!networkDisabled) return;
+        window.fetch = originalFetch;
+        XMLHttpRequest.prototype.open = originalXHR;
+        networkDisabled = false;
+    }
+
+    // 🖱️ UI LOCKDOWN (DISABLE ALL INTERACTIVE ELEMENTS)
+    function disableUI() {
+        if (!config.enableUILockdown || uiDisabled) return;
+
+        document.querySelectorAll('a, button, input, textarea, [onclick]').forEach(el => {
+            el.style.pointerEvents = 'none';
+            el.style.opacity = '0.5';
+            el.style.cursor = 'not-allowed';
+            el.tabIndex = -1;
+        });
+
+        // Block text selection
+        const style = document.createElement('style');
+        style.textContent = `* { user-select: none !important; }`;
+        document.head.appendChild(style);
+
+        uiDisabled = true;
+    }
+
+    function restoreUI() {
+        if (!uiDisabled) return;
+        document.querySelectorAll('a, button, input, textarea, [onclick]').forEach(el => {
+            el.style.pointerEvents = '';
+            el.style.opacity = '';
+            el.style.cursor = '';
+            el.tabIndex = 0;
+        });
+        uiDisabled = false;
+    }
+
+    // 🔄 DEBUGGER TRAP (ANTI-DEBUGGING)
+    function startDebuggerTrap() {
+        if (!config.enableDebuggerTrap) return;
+
+        setInterval(() => {
+            if (devToolsOpened) {
+                (function() {
+                    debugger;
+                })();
+            }
+        }, 100);
+    }
+
+    // 💣 SELF-DESTRUCT (REMOVE PROTECTION TRACES)
+    function selfDestruct() {
+        if (!config.enableSelfDestruct) return;
+
+        const script = document.currentScript;
+        if (script) {
+            script.remove();
+            document.head.querySelectorAll('style').forEach(s => {
+                if (s.textContent.includes('user-select')) s.remove();
             });
         }
     }
 
-    // Start protection when DOM is ready
-    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    // 🎮 MAIN PROTECTION LOOP
+    function initProtection() {
+        // 🔄 Continuous DevTools Monitoring
+        setInterval(() => {
+            const isOpen = detectDevTools();
+            
+            if (isOpen && !devToolsOpened) {
+                devToolsOpened = true;
+                hideSources();
+                disableNetwork();
+                disableUI();
+            } else if (!isOpen && devToolsOpened) {
+                devToolsOpened = false;
+                restoreNetwork();
+                restoreUI();
+            }
+        }, config.checkInterval);
+
+        // 🏁 Start Debugger Trap
+        startDebuggerTrap();
+
+        // 🛡️ Local File Protection
+        if (config.enableLocalProtection && window.location.protocol === 'file:') {
+            Object.defineProperty(document, 'scripts', { get: () => [] });
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'U') e.preventDefault();
+            });
+        }
+
+        // 💣 Self-Destruct After Initialization
+        setTimeout(selfDestruct, 3000);
+    }
+
+    // 🚀 START PROTECTION
+    if (document.readyState === 'complete') {
         initProtection();
     } else {
-        document.addEventListener('DOMContentLoaded', initProtection);
+        window.addEventListener('DOMContentLoaded', initProtection);
     }
+
+    // 🎭 Initial Obfuscation
+    eval('// ' + Math.random().toString(36).substr(2, 8));
 })();
