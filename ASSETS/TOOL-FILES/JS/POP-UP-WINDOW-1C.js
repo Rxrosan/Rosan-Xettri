@@ -1,5 +1,150 @@
-// RX-POP-UP-WINDOW.js (Crystal Design)
+// RX-POP-UP-WINDOW.js (Dynamic Crystal Themes with Refresh Change)
 document.addEventListener('DOMContentLoaded', () => {
+    // =============================================
+    // 1. THEME CONFIGURATION
+    // =============================================
+    const crystalThemes = {
+        "amethyst": {
+            primary: "rgba(180, 140, 255, 0.8)",
+            secondary: "rgba(100, 70, 255, 0.6)",
+            accent: "rgba(230, 200, 255, 0.9)",
+            bgGradient: "linear-gradient(145deg, rgba(15, 5, 35, 0.7), rgba(30, 10, 60, 0.8))",
+            lightEffect: "radial-gradient(circle at 20% 30%, rgba(180, 140, 255, 0.15) 0%, transparent 40%)"
+        },
+        "sapphire": {
+            primary: "rgba(100, 150, 255, 0.8)",
+            secondary: "rgba(70, 100, 255, 0.6)",
+            accent: "rgba(200, 220, 255, 0.9)",
+            bgGradient: "linear-gradient(145deg, rgba(5, 15, 35, 0.7), rgba(10, 30, 60, 0.8))",
+            lightEffect: "radial-gradient(circle at 20% 30%, rgba(100, 150, 255, 0.15) 0%, transparent 40%)"
+        },
+        "ruby": {
+            primary: "rgba(255, 100, 150, 0.8)",
+            secondary: "rgba(220, 70, 100, 0.6)",
+            accent: "rgba(255, 200, 220, 0.9)",
+            bgGradient: "linear-gradient(145deg, rgba(35, 5, 15, 0.7), rgba(60, 10, 20, 0.8))",
+            lightEffect: "radial-gradient(circle at 20% 30%, rgba(255, 100, 150, 0.15) 0%, transparent 40%)"
+        },
+        "emerald": {
+            primary: "rgba(100, 255, 180, 0.8)",
+            secondary: "rgba(70, 220, 150, 0.6)",
+            accent: "rgba(200, 255, 230, 0.9)",
+            bgGradient: "linear-gradient(145deg, rgba(5, 35, 15, 0.7), rgba(10, 60, 20, 0.8))",
+            lightEffect: "radial-gradient(circle at 20% 30%, rgba(100, 255, 180, 0.15) 0%, transparent 40%)"
+        },
+        "citrine": {
+            primary: "rgba(255, 200, 100, 0.8)",
+            secondary: "rgba(255, 180, 70, 0.6)",
+            accent: "rgba(255, 230, 200, 0.9)",
+            bgGradient: "linear-gradient(145deg, rgba(35, 25, 5, 0.7), rgba(60, 40, 10, 0.8))",
+            lightEffect: "radial-gradient(circle at 20% 30%, rgba(255, 200, 100, 0.15) 0%, transparent 40%)"
+        },
+        "rainbow": {
+            primary: "rgba(255, 100, 255, 0.8)",
+            secondary: "rgba(100, 255, 255, 0.6)",
+            accent: "rgba(255, 255, 200, 0.9)",
+            bgGradient: "linear-gradient(145deg, rgba(35, 5, 35, 0.7), rgba(60, 10, 60, 0.8))",
+            lightEffect: "radial-gradient(circle at 20% 30%, rgba(255, 100, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(100, 255, 255, 0.1) 0%, transparent 40%)"
+        }
+    };
+
+    // Get random theme different from last one
+    function getRandomTheme() {
+        const lastTheme = localStorage.getItem('rxCrystalTheme');
+        const themeKeys = Object.keys(crystalThemes);
+        
+        // If no last theme or only one theme available
+        if (!lastTheme || themeKeys.length === 1) {
+            return themeKeys[Math.floor(Math.random() * themeKeys.length)];
+        }
+        
+        // Filter out last theme and pick random from remaining
+        const availableThemes = themeKeys.filter(theme => theme !== lastTheme);
+        return availableThemes[Math.floor(Math.random() * availableThemes.length)];
+    }
+
+    // Apply theme dynamically
+    function applyTheme(themeName) {
+        const theme = crystalThemes[themeName];
+        const style = document.createElement('style');
+        style.id = 'rx-crystal-theme';
+        
+        style.textContent = `
+            /* Dynamic Crystal Theme: ${themeName} */
+            #RX-POP-UP-Window::before {
+                background: ${theme.lightEffect};
+            }
+            
+            .RX-POP-UP-Window-content {
+                background: ${theme.bgGradient};
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                            0 0 0 1px rgba(255, 255, 255, 0.05),
+                            0 0 40px ${theme.secondary.replace('0.6', '0.2')},
+                            0 0 80px ${theme.secondary.replace('0.6', '0.1')};
+            }
+            
+            h2 {
+                text-shadow: 0 2px 10px ${theme.primary.replace('0.8', '0.4')};
+            }
+            
+            h2::before {
+                background: linear-gradient(90deg, transparent, ${theme.primary}, transparent);
+            }
+            
+            .RX-POP-UP-Window-gallery img:hover {
+                box-shadow: 0 8px 30px ${theme.primary.replace('0.8', '0.3')},
+                            inset 0 0 15px rgba(255,255,255,0.1);
+                border: 1px solid ${theme.primary.replace('0.8', '0.3')};
+            }
+            
+            .RX-POP-UP-Window-carousel-btn:hover {
+                background: ${theme.primary.replace('0.8', '0.3')};
+                box-shadow: 0 6px 20px ${theme.primary.replace('0.8', '0.3')};
+            }
+            
+            .RX-POP-UP-Window-btn-close:hover {
+                background: ${theme.secondary.replace('0.6', '0.3')};
+                box-shadow: 0 6px 20px ${theme.secondary.replace('0.6', '0.3')};
+            }
+            
+            .RX-POP-UP-Window-carousel-indicators span.RX-POP-UP-Window-active {
+                background: ${theme.primary};
+                box-shadow: 0 0 15px ${theme.primary};
+            }
+            
+            .RX-POP-UP-Window-scroll-content::-webkit-scrollbar-thumb {
+                background: ${theme.primary.replace('0.8', '0.6')};
+            }
+            
+            /* Facet Colors */
+            .facet-1 {
+                background: linear-gradient(135deg, ${theme.primary.replace('0.8', '0.1')}, transparent);
+            }
+            
+            .facet-2 {
+                background: linear-gradient(45deg, ${theme.secondary.replace('0.6', '0.1')}, transparent);
+            }
+            
+            .facet-3 {
+                background: linear-gradient(90deg, ${theme.accent.replace('0.9', '0.05')}, transparent);
+            }
+        `;
+        
+        // Remove existing theme if exists
+        const existingTheme = document.getElementById('rx-crystal-theme');
+        if (existingTheme) {
+            document.head.removeChild(existingTheme);
+        }
+        
+        document.head.appendChild(style);
+        
+        // Store current theme
+        localStorage.setItem('rxCrystalTheme', themeName);
+    }
+
+    // =============================================
+    // 2. POPUP HTML STRUCTURE
+    // =============================================
     const popupHTML = `
         <div id="RX-POP-UP-Window">
             <div class="RX-POP-UP-Window-content">
@@ -45,9 +190,12 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     `;
 
-    const style = document.createElement('style');
-    style.textContent = `
-        /* Crystal Base Styles */
+    // =============================================
+    // 3. BASE CSS STYLES
+    // =============================================
+    const baseStyle = document.createElement('style');
+    baseStyle.textContent = `
+        /* Base Styles */
         #RX-POP-UP-Window {
             position: fixed;
             top: 0;
@@ -72,8 +220,6 @@ document.addEventListener('DOMContentLoaded', () => {
             left: 0;
             right: 0;
             bottom: 0;
-            background: radial-gradient(circle at 20% 30%, rgba(100, 70, 255, 0.15) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 100, 200, 0.15) 0%, transparent 40%);
             pointer-events: none;
         }
         
@@ -84,15 +230,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         .RX-POP-UP-Window-content {
             position: relative;
-            background: rgba(15, 5, 35, 0.6);
             width: 90%;
             max-width: 700px;
             border-radius: 24px;
             padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
-                        0 0 0 1px rgba(255, 255, 255, 0.05),
-                        0 0 40px rgba(100, 70, 255, 0.2),
-                        0 0 80px rgba(100, 70, 255, 0.1);
             transform: translateY(30px) scale(0.98);
             opacity: 0;
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s;
@@ -116,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         .RX-POP-UP-Window-crystal-facets div {
             position: absolute;
-            background: linear-gradient(45deg, rgba(255,255,255,0.03), transparent);
             border-radius: 10px;
         }
         
@@ -126,7 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
             width: 200px;
             height: 200px;
             transform: rotate(45deg);
-            background: linear-gradient(135deg, rgba(180, 140, 255, 0.1), transparent);
         }
         
         .facet-2 {
@@ -135,7 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
             width: 150px;
             height: 150px;
             transform: rotate(20deg);
-            background: linear-gradient(45deg, rgba(100, 200, 255, 0.1), transparent);
         }
         
         .facet-3 {
@@ -144,7 +282,6 @@ document.addEventListener('DOMContentLoaded', () => {
             width: 100px;
             height: 300px;
             transform: translate(-50%, -50%) rotate(15deg);
-            background: linear-gradient(90deg, rgba(255, 100, 200, 0.05), transparent);
         }
         
         #RX-POP-UP-Window.RX-POP-UP-Window-show .RX-POP-UP-Window-content {
@@ -152,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
             opacity: 1;
         }
         
-        /* Crystal Carousel Items */
+        /* Carousel Items */
         .RX-POP-UP-Window-carousel-item {
             display: none;
             animation: RX-POP-UP-Window-fadeIn 0.8s ease;
@@ -180,7 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         .RX-POP-UP-Window-scroll-content::-webkit-scrollbar-thumb {
-            background: rgba(180, 140, 255, 0.6);
             border-radius: 10px;
             border: 1px solid rgba(255,255,255,0.1);
         }
@@ -191,7 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
             margin-bottom: 25px;
             text-align: center;
             font-weight: 600;
-            text-shadow: 0 2px 10px rgba(180, 140, 255, 0.4);
             position: relative;
             display: inline-block;
             padding: 0 20px;
@@ -205,7 +340,6 @@ document.addEventListener('DOMContentLoaded', () => {
             transform: translateX(-50%);
             width: 60px;
             height: 3px;
-            background: linear-gradient(90deg, transparent, rgba(180, 140, 255, 0.8), transparent);
             border-radius: 3px;
         }
         
@@ -248,9 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         .RX-POP-UP-Window-gallery img:hover {
             transform: scale(1.03);
-            box-shadow: 0 8px 30px rgba(180, 140, 255, 0.3),
-                        inset 0 0 15px rgba(255,255,255,0.1);
-            border: 1px solid rgba(180, 140, 255, 0.3);
         }
         
         /* Controls */
@@ -264,8 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         .RX-POP-UP-Window-carousel-btn {
-            background: rgba(180, 140, 255, 0.15);
-            color: #fff;
+            color:red;
             border: none;
             width: 50px;
             height: 50px;
@@ -281,9 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         .RX-POP-UP-Window-carousel-btn:hover {
-            background: rgba(180, 140, 255, 0.3);
             transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(180, 140, 255, 0.3);
         }
         
         .RX-POP-UP-Window-carousel-btn svg {
@@ -315,9 +443,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         .RX-POP-UP-Window-btn-close:hover {
-            background: rgba(255, 100, 200, 0.3);
-            transform: rotate(90deg) scale(1.1);
-            box-shadow: 0 6px 20px rgba(255, 100, 200, 0.3);
+            transform: rotate(360deg) scale(1.1);
         }
         
         /* Indicators */
@@ -341,9 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         .RX-POP-UP-Window-carousel-indicators span.RX-POP-UP-Window-active {
-            background: rgba(180, 140, 255, 0.8);
             transform: scale(1.4);
-            box-shadow: 0 0 15px rgba(180, 140, 255, 0.8);
         }
         
         /* Animations */
@@ -355,12 +479,6 @@ document.addEventListener('DOMContentLoaded', () => {
         @keyframes RX-POP-UP-Window-fadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Crystal Light Effects */
-        @keyframes crystalPulse {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.6; }
         }
         
         /* Responsive */
@@ -410,10 +528,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
 
-    // The JavaScript functionality remains the same as before
+    // =============================================
+    // 4. INITIALIZATION
+    // =============================================
     document.body.insertAdjacentHTML('beforeend', popupHTML);
-    document.head.appendChild(style);
+    document.head.appendChild(baseStyle);
+    
+    // Apply random theme on each load
+    const randomTheme = getRandomTheme();
+    applyTheme(randomTheme);
 
+    // =============================================
+    // 5. CORE FUNCTIONALITY
+    // =============================================
     const popup = document.getElementById("RX-POP-UP-Window");
     const closeBtn = document.getElementById("RX-POP-UP-Window-close");
     const carouselItems = document.querySelectorAll(".RX-POP-UP-Window-carousel-item");
@@ -423,14 +550,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let currentIndex = 0;
     let autoSlideInterval;
-    const slideDuration = 10000;
+    const slideDuration = 10000; // 10 seconds
     
+    // Initialize popup
     function init() {
         createIndicators();
         updateCarousel();
         showPopup();
     }
     
+    // Create carousel indicators
     function createIndicators() {
         carouselItems.forEach((_, index) => {
             const indicator = document.createElement("span");
@@ -439,17 +568,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // Show popup with animation
     function showPopup() {
         popup.classList.add("RX-POP-UP-Window-show");
         startAutoSlide();
     }
     
+    // Close popup
     function closePopup() {
         popup.classList.remove("RX-POP-UP-Window-show");
         stopAutoSlide();
         pauseAllMedia();
     }
     
+    // Update carousel to current slide
     function updateCarousel() {
         carouselItems.forEach((item, index) => {
             item.classList.toggle("RX-POP-UP-Window-active", index === currentIndex);
@@ -470,6 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Pause all media elements
     function pauseAllMedia() {
         document.querySelectorAll('.RX-POP-UP-Window-media').forEach(media => {
             if (media.tagName === 'VIDEO' || media.tagName === 'AUDIO') {
@@ -478,40 +611,50 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
+    // Navigate to specific slide
     function goToSlide(index) {
         currentIndex = (index + carouselItems.length) % carouselItems.length;
         updateCarousel();
         resetAutoSlide();
     }
     
+    // Go to next slide
     function nextSlide() {
         goToSlide(currentIndex + 1);
     }
     
+    // Go to previous slide
     function prevSlide() {
         goToSlide(currentIndex - 1);
     }
     
+    // Start auto-sliding
     function startAutoSlide() {
         if (!autoSlideInterval) {
             autoSlideInterval = setInterval(nextSlide, slideDuration);
         }
     }
     
+    // Stop auto-sliding
     function stopAutoSlide() {
         clearInterval(autoSlideInterval);
         autoSlideInterval = null;
     }
     
+    // Reset auto-slide timer
     function resetAutoSlide() {
         stopAutoSlide();
         startAutoSlide();
     }
     
+    // =============================================
+    // 6. EVENT LISTENERS
+    // =============================================
     closeBtn.addEventListener("click", closePopup);
     prevBtn.addEventListener("click", prevSlide);
     nextBtn.addEventListener("click", nextSlide);
     
+    // Keyboard navigation
     document.addEventListener("keydown", (e) => {
         if (popup.classList.contains("RX-POP-UP-Window-show")) {
             if (e.key === "Escape") {
@@ -524,5 +667,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
+    // Initialize after slight delay
     setTimeout(init, 500);
 });
