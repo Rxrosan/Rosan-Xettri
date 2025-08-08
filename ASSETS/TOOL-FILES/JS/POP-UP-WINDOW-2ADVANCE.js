@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Get next theme in sequence on refresh
+    // Get next theme in sequence on refresh or login
     function getNextTheme() {
         const lastTheme = localStorage.getItem('rxLiquidTheme');
         const themeKeys = Object.keys(liquidThemes);
@@ -683,10 +683,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // =============================================
     document.body.insertAdjacentHTML('beforeend', popupHTML);
     document.head.appendChild(liquidStyle);
-    
-    // Apply liquid theme on load
-    const nextLiquidTheme = getNextTheme();
-    applyLiquidTheme(nextLiquidTheme);
+
+    // Always get the next theme in sequence on page load
+    const nextTheme = getNextTheme();
+    applyLiquidTheme(nextTheme);
 
     // =============================================
     // 5. ENHANCED CORE FUNCTIONALITY
@@ -701,14 +701,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentIndex = 0;
     let autoSlideInterval;
     const slideDuration = 10000; // 10 seconds
-    let themeRotationInterval;
     
     // Initialize popup
     function init() {
         createIndicators();
         updateCarousel();
         showPopup();
-        startThemeRotation();
         setGalleryItemOrder();
     }
     
@@ -739,7 +737,6 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.classList.remove("RX-POP-UP-Window-show");
         stopAutoSlide();
         pauseAllMedia();
-        clearInterval(themeRotationInterval);
     }
     
     // Update carousel to current slide
@@ -809,17 +806,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetAutoSlide() {
         stopAutoSlide();
         startAutoSlide();
-    }
-    
-    // Rotate through themes automatically
-    function startThemeRotation() {
-        themeRotationInterval = setInterval(() => {
-            const currentTheme = localStorage.getItem('rxLiquidTheme');
-            const themeKeys = Object.keys(liquidThemes);
-            const currentIndex = themeKeys.indexOf(currentTheme);
-            const nextIndex = (currentIndex + 1) % themeKeys.length;
-            applyLiquidTheme(themeKeys[nextIndex]);
-        }, 15000); // Rotate every 15 seconds
     }
     
     // =============================================
