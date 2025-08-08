@@ -1,4 +1,5 @@
 :root {
+    /* Default theme (original colors) */
     --primary: #00b4d8;
     --secondary: #48cae4;
     --accent: #90e0ef;
@@ -10,6 +11,54 @@
     --card-bg: rgba(4, 95, 141, 0.3);
     --glow: 0 0 15px rgba(0, 180, 216, 0.5);
     --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+
+.theme-purple {
+    --primary: #8000d8;
+    --secondary: #a348e4;
+    --accent: #c890ef;
+    --dark: #2d035e;
+    --darker: #1b023a;
+    --light: #e8caf8;
+    --text-secondary: #d4adf4;
+    --card-bg: rgba(76, 4, 141, 0.3);
+    --glow: 0 0 15px rgba(128, 0, 216, 0.5);
+}
+
+.theme-blue {
+    --primary: #0066ff;
+    --secondary: #4895ff;
+    --accent: #90c6ff;
+    --dark: #001a5e;
+    --darker: #000f3a;
+    --light: #cae1ff;
+    --text-secondary: #adcfff;
+    --card-bg: rgba(4, 68, 141, 0.3);
+    --glow: 0 0 15px rgba(0, 102, 255, 0.5);
+}
+
+.theme-silver {
+    --primary: #a0a0a0;
+    --secondary: #c0c0c0;
+    --accent: #e0e0e0;
+    --dark: #303030;
+    --darker: #202020;
+    --light: #f0f0f0;
+    --text-secondary: #d0d0d0;
+    --card-bg: rgba(100, 100, 100, 0.3);
+    --glow: 0 0 15px rgba(160, 160, 160, 0.5);
+}
+.theme-black {
+    --primary: #000000;
+    --secondary: #303030;
+    --accent: #606060;
+    --dark: #000000;
+    --darker: #000000;
+    --light: #e0e0e0;
+    --text-secondary: #a0a0a0;
+    --card-bg: rgba(0, 0, 0, 0.3);
+    --glow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
 * {

@@ -1,3 +1,43 @@
+// Theme management system
+const themes = [
+    'theme-default', 
+    'theme-purple', 
+    'theme-blue', 
+    'theme-silver', 
+    'theme-black', 
+];
+
+function setTheme() {
+    const savedTheme = localStorage.getItem('liquidTheme');
+    let themeIndex;
+    
+    if (savedTheme) {
+        // If theme exists in localStorage, get the next one in sequence
+        themeIndex = (themes.indexOf(savedTheme) + 1) % themes.length;
+    } else {
+        // No saved theme, pick a random one
+        themeIndex = Math.floor(Math.random() * themes.length);
+    }
+    
+    const newTheme = themes[themeIndex];
+    
+    // Remove all theme classes first
+    document.body.classList.remove(...themes);
+    // Add the new theme class
+    document.body.classList.add(newTheme);
+    
+    // Save to localStorage
+    localStorage.setItem('liquidTheme', newTheme);
+    
+    // Add smooth transition for theme change
+    document.body.style.transition = 'background 0.8s ease, color 0.8s ease';
+    setTimeout(() => {
+        document.body.style.transition = '';
+    }, 800);
+}
+
+// Initialize theme on page load
+document.addEventListener('DOMContentLoaded', setTheme);
 // Mobile menu toggle with animation
         const menuToggle = document.getElementById('menuToggle');
         const navLinks = document.getElementById('navLinks');
