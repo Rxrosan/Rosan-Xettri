@@ -1,6 +1,155 @@
-// Smart Button System - Complete Implementation
+// SMART-BTN.js - Combined CSS and JavaScript
 (function() {
-  // 1. HTML Injection Function
+  // 1. Inject CSS Styles
+  const smartButtonCSS = `
+  /* smartbtn.css */
+  :root {
+    --circle-size: 2cm;
+    --menu-item-size: 1.5cm;
+    --center-size: 0.8cm;
+    --menu-item-distance: 4cm;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .circle-container {
+    position: fixed;
+    bottom: 45%;
+    right: 25%;
+    z-index: 1000;
+    display: none;
+    touch-action: none;
+  }
+
+  .circle {
+    width: var(--circle-size);
+    height: var(--circle-size);
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.6s ease-in-out;
+    background: radial-gradient(circle at center, rgba(255, 0, 0, 0.6), rgba(0, 0, 255, 0.6), rgba(0, 255, 0, 0.6));
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.7), 
+                0 0 30px rgba(168, 5, 5, 0.7),
+                0 0 40px rgba(0, 0, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .center-point {
+    width: var(--center-size);
+    height: var(--center-size);
+    background-color: #eb0a0a;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    transition: opacity 0.7s ease-in-out;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  }
+  .menu-item {
+    position: absolute;
+    width: var(--menu-item-size);
+    height: var(--menu-item-size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    overflow: hidden;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.7s ease;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 10px rgba(0, 255, 0, 0.8),
+                0 0 10px rgba(0, 0, 255, 0.8);
+    transform-origin: center;
+  }
+
+  .menu-item img {
+    width: 60%;
+    height: 60%;
+    object-fit: contain;
+    transition: filter 0.5s ease;
+  }
+
+  .circle.expanded .menu-item {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+
+  .circle.expanded .menu-item[style] {
+    transform: rotate(calc(30deg * var(--index))) 
+               translateX(var(--menu-item-distance)) 
+               rotate(calc(-30deg * var(--index)));
+  }
+
+  .circle.expanded .menu-item:hover img {
+    filter: brightness(1.2) contrast(1.2);
+  }
+
+  .smart-button-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1001;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    :root {
+      --circle-size: 2cm;
+      --menu-item-size: 1.2cm;
+      --center-size: 0.7cm;
+      --menu-item-distance: 3.5cm;
+    }
+    
+    .circle-container {
+      bottom: 3vh;
+      right: 3vw;
+    }
+  }
+
+  @media (max-width: 480px) {
+    :root {
+      --circle-size: 2cm;
+      --menu-item-size: 1cm;
+      --center-size: 0.6cm;
+      --menu-item-distance: 3cm;
+    }
+    
+    .smart-button-toggle {
+      padding: 0.6rem 1rem;
+    }
+  }
+  `;
+
+  // Create style element and inject CSS
+  const styleElement = document.createElement('style');
+  styleElement.textContent = smartButtonCSS;
+  document.head.appendChild(styleElement);
+
+  // 2. HTML Injection Function
   function injectSmartButton() {
     const smartButtonHTML = `
     <div class="circle-container">
@@ -33,7 +182,7 @@
     }
   }
 
-  // 2. State Management Functions
+  // 3. State Management Functions
   function loadState() {
     const savedState = localStorage.getItem('circleContainerState');
     if (savedState) {
@@ -80,7 +229,7 @@
     }
   }
 
-  // 3. Event Handlers
+  // 4. Event Handlers
   function setupToggleButton() {
     const toggleBtn = document.getElementById('toggleSmartButton');
     const circleContainer = document.querySelector('.circle-container');
@@ -122,7 +271,7 @@
     }
   }
 
-  // 4. Drag and Drop Functions
+  // 5. Drag and Drop Functions
   function setupDragAndDrop() {
     const circleContainer = document.querySelector('.circle-container');
     if (!circleContainer) return;
@@ -168,7 +317,7 @@
     window.addEventListener('touchend', stopDrag);
   }
 
-  // 5. Initialization Function
+  // 6. Initialization Function
   function initSmartButton() {
     injectSmartButton();
     loadState();
