@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="ASSETS/TOOL-FILES/JS/DEV-TOOL-PROTECTION-2.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="ASSETS/MAIN-FILE/IMG/LOGO/RX-3.png">
+    <title>RX|LEKHA-PADI-DASHBOARD</title>
+    <link rel="stylesheet" href="ASSETS/CSS/LEKHAPADI-ACCOUNT-LOGIN.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body onload="loadDashboard()">
+    <div class="container">
+        <div class="dashboard">
+            <div class="header">
+                <h1 id="welcomeMessage"><i class="fas fa-home"></i> Welcome</h1>
+                <div class="profile-dropdown">
+                    <button class="profile-btn" aria-expanded="false" aria-haspopup="true">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Profile</span>
+                    </button>
+                    <div class="dropdown-content" aria-hidden="true">
+                        <img id="profileImg" src="" alt="Profile Image">
+                        <p id="profileName"></p>
+                        <p id="profileUsername"></p>
+                        <button onclick="logout()" class="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                        <a href="index.html">
+                            <button class="logout-btn" type="button">Home</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-section">
+                <h2><i class="fas fa-star"></i> Rosan Xettri Studio</h2>
+                <div id="contentCards" class="content-cards">
+                    <div class="loading"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Purchase Modal -->
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2><i class="fas fa-shopping-cart"></i> Purchase Form</h2>
+            <h3 id="modalTitle"></h3>
+            <div class="modal-body">
+                <p>To purchase this content, please contact Rosan Xettri Studio:</p>
+                <div class="contact-methods">
+                    <a href="https://www.facebook.com/RosanXettri.2004" target="_blank" class="contact-btn facebook">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </a>
+                    <a href="mailto:rkc242855@gmail.com" class="contact-btn email">
+                        <i class="fas fa-envelope"></i> Email
+                    </a>
+                </div>
+                <p class="note">Please mention the content ID in your message.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="ASSETS/JS/LEKHAPADI-ACCOUNT-LOGIN.js"></script>
+</body>
+</html>

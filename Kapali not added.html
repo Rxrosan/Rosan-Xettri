@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROSAN XETTRI STUDIO |KAPALI-TAMSUK</title>
+    <!-- jsPDF and html2canvas for high-quality PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #4cafef; --primary-hover: #357acb; --success: #38a169;
+            --error: #ef4444; --bg-dark: #121212; --card-bg: #1e1e1e;
+            --text-light: #eee; --text-muted: #ccc; --input-bg: #444; --page-gap: 2em;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'times new roman', preeti, Kantipur, Kalimati, sans-serif;
+            background: var(--bg-dark); color: var(--text-light); min-height: 100vh;
+            padding: var(--page-gap); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; line-height: 1.6; gap: var(--page-gap);
+        }
+        .card {
+            width: 100%; max-width: 700px; background: var(--card-bg);
+            border-radius: 12px; padding: 30px; box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        h1 { font-size: 24px; color: var(--primary); text-align: center; }
+        .description { color: var(--text-muted); text-align: center; margin-top: -10px; }
+        .editable-area, .result-area {
+            background: #222; padding: 20px; border-radius: 10px;
+            font-size: 18px; color: var(--text-light);
+            font-family: 'Preeti', Kantipur, Mangal, sans-serif;
+        }
+        .editable-area input {
+            font-size: inherit; padding: 4px 8px; margin: 2px;
+            border-radius: 4px; border: none; background: var(--input-bg);
+            color: var(--text-light); min-width: 120px;
+            font-family: 'Preeti', Kantipur, Mangal, sans-serif;
+        }
+        .result-area { white-space: pre-wrap; min-height: 80px; }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; }
+        .btn-group .btn { flex: 1 1 auto; }
+        .btn {
+            background: var(--primary); border: none; border-radius: 8px;
+            padding: 12px 20px; font-size: 16px; cursor: pointer; color: white;
+            transition: background-color 0.3s ease; font-weight: 600;
+        }
+        .btn:hover { background: var(--primary-hover); }
+        .btn-success { background: var(--success); }
+        .btn-success:hover { background: var(--success-hover); }
+        .notification {
+            position: fixed; bottom: 30px; right: 30px; background: var(--success);
+            color: white; padding: 12px 20px; border-radius: 25px; font-size: 14px;
+            opacity: 0; pointer-events: none; transform: translateY(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 5000;
+        }
+        .notification.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        .hidden { display: none !important; }
+        .loader-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 4000;
+        }
+        .loader {
+            border: 8px solid #f3f3f3; border-top: 8px solid var(--primary);
+            border-radius: 50%; width: 60px; height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        .loader-text { color: white; margin-top: 20px; font-size: 18px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .typing-cursor {
+            display: inline-block; width: 2px; height: 1em;
+            background-color: var(--text-light); margin-left: 2px;
+            vertical-align: middle; animation: blink 0.7s infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        .footer-links { display: flex; justify-content: center; gap: 20px; margin-top: 10px; }
+        .footer-link { color: var(--primary); text-decoration: underline; cursor: pointer; font-size: 14px; }
+        .footer-link:hover { color: var(--primary-hover); }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8); display: flex;
+            justify-content: center; align-items: center; z-index: 2000;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-content {
+            background: var(--card-bg); border-radius: 12px; width: 90%;
+            max-width: 700px; max-height: 80vh; padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5); position: relative; overflow-y: auto;
+        }
+        .modal-close {
+            position: absolute; top: 15px; right: 15px; background: var(--error);
+            color: white; border: none; width: 30px; height: 30px;
+            border-radius: 50%; font-size: 16px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-title { font-size: 22px; margin-bottom: 15px; color: var(--primary); text-align: center; }
+        .modal-text { line-height: 1.7; font-size: 15px; }
+
+
+        @media print {
+            @page { size: A4; margin: 3in 1in 1in 2in; }
+            body, html { background: #fff !important; color: #000 !important; }
+            body * { visibility: hidden; }
+            #result, #result * { visibility: visible; }
+            #result {
+                position: absolute; left: 0; top: 0; width: 100%;
+                padding: 0; margin: 0; font-size: 12pt;
+                font-family: 'Times New Roman', serif;
+                text-align: justify; color: black;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="card" id="loginScreen">
+    <h1>KAPALI-TAMSUK</h1>
+    <p class="description">Enter access code to generate custom kapali-tamsuk</p>
+    <input type="password" class="input-field" id="accessCodeInput" placeholder="Access Code" autocomplete="off">
+    <button class="btn" id="loginBtn">Continue</button>
+    <div id="loginError" style="color:var(--error); text-align:center; min-height: 24px;"></div>
+</div>
+
+<div class="card hidden" id="mainContent">
+    <h1>रोसन क्षेत्री स्टुडियो</h1>
+    <p class="description">कपाली  तमसुक</p>
+    <textarea id="sourceText" class="hidden">लिखितम् धनीका नाम ----- जिल्ला ----- वडा नं  ----- बस्ने बर्ष ----- काे  ----- काे नाति ----- काे ----- ----- ऋणीकाे नाम ----- जिल्ला ----- वडा नं  ----- बस्ने बर्ष ----- काे  ----- काे नाति ----- काे ----- ----- ले नगद नेपाली रूपैयाँ ----- अक्षेरेपी ----- कर्जा लिए वापत घर खर्च गर्न लिएकाे ठीक हाे । याे रूपैयाँकाे व्याज  -----काे दरले बुझाउँला । साँवा व्याज बुझाउने भाखा ----- भयाे साे भाखामा बुझाउन नसकी भाखा नाघ्याे भने तपाई साहुकाे थैली प्रचलित नेपाल कानूनबमाेजिम मेराे घर घरानाबाट असूल उपर गरी लिनु भनी मेराे मनाेमान खुशीराजीसँग तपाई साहुकै घर पिंढी बसी कपाली तमसुक लेखी तपाई साहुलाई दिएँ । साक्षी बायाँ किनाराकाे सदर ।
+        इति सम्वत् ----- साल ----- ----- गते राेज ----- शुभम् ।
+        
+                                                                                     दायाँ                बायाँ
+    </textarea>
+    <div class="editable-area" id="editableParagraph"></div>
+    <div class="result-area hidden" id="result"></div>
+    <div class="btn-group" id="buttonContainer">
+        <button class="btn" id="generateBtn">Generate Text</button>
+        <button class="btn btn-success hidden" id="editBtn">Edit</button>
+        <button class="btn btn-success hidden" id="copyBtn">Copy Text</button>
+        <button class="btn btn-success hidden" id="printBtn">Print</button>
+        <button class="btn btn-success hidden" id="downloadBtn">Download PDF</button>
+    </div>
+    <div class="footer-links">
+        <div class="footer-link" id="termsLink">प्रयोगका सर्तहरू</div>
+        <div class="footer-link" id="privacyLink">गोपनीयता नीति</div>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="termsModal">
+    <div class="modal-content">
+        <button class="modal-close" id="closeTerms">&times;</button>
+        <h2 class="modal-title">प्रयोगका सर्तहरू</h2>
+        <div class="modal-text">
+            <p><strong>अन्तिम अद्यावधिक: साउन २०८०</strong></p>
+            
+            <h3>१. सर्तहरूको स्वीकृति</h3>
+            <p>रोसन क्षेत्री स्टुडियोको खाली स्थान भर्ने जनरेटर (“सेवा”) पहुँच वा प्रयोग गरेर, तपाईं यी प्रयोगका सर्तहरू पालना गर्न सहमत हुनुहुन्छ।</p>
+                        
+            <h3>२. सेवाको विवरण</h3>
+            <p>यो सेवा नेपाली भाषामा खाली स्थान भर्ने प्रकारका कागजातहरू बनाउनको लागि उपकरण प्रदान गर्दछ।</p>
+                        
+            <h3>३. प्रयोगकर्ताको जिम्मेवारी</h3>
+            <p>तपाईं निम्न कुराहरूको जिम्मेवार हुनुहुन्छ:</p>
+            <ul>
+                <li>तपाईंको पहुँच कोडको गोपनीयता कायम राख्न</li>
+                <li>सेवा केवल वैध र कानूनी उद्देश्यका लागि मात्र प्रयोग गर्न</li>
+                <li>तपाईंले प्रविष्ट गर्ने जानकारीको शुद्धता सुनिश्चित गर्न</li>
+            </ul>
+                        
+            <h3>४. निषेधित प्रयोगहरू</h3>
+            <p>तपाईंलाई निम्न कार्यहरूका लागि सेवा प्रयोग गर्न अनुमति छैन:</p>
+            <ul>
+                <li>झूटो वा भ्रामक कागजातहरू तयार गर्न</li>
+                <li>कुनै पनि कानून वा नियम उल्लङ्घन गर्न</li>
+                <li>सेवा वा यसको प्रयोगकर्ताहरूलाई हानि पुर्‍याउन वा हानि पुर्‍याउने प्रयास गर्न</li>
+            </ul>
+                        
+            <h3>५. बौद्धिक सम्पत्ति</h3>
+            <p>यो सेवा र यसको मौलिक सामग्री, सुविधाहरू, तथा कार्यक्षमताहरू रोसन क्षेत्री स्टुडियोको स्वामित्वमा छन् र अन्तर्राष्ट्रिय प्रतिलिपि अधिकार कानूनद्वारा संरक्षित छन्।</p>
+                        
+            <h3>६. जिम्मेवारीको सीमांकन</h3>
+            <p>यो सेवाको प्रयोगबाट तयार गरिएका कुनै पनि कागजातहरू वा तिनीहरूको प्रयोगबाट हुने कुनै पनि क्षतिको लागि रोसन क्षेत्री स्टुडियो जिम्मेवार हुने छैन।</p>
+                        
+            <h3>७. सर्तहरूमा परिवर्तन</h3>
+            <p>हामी कुनै पनि समयमा यी सर्तहरू संशोधन गर्ने अधिकार राख्छौं। सेवाको निरन्तर प्रयोगलाई तपाईंले संशोधित सर्तहरूको स्वीकृति मानेर लिइनेछ।</p>
+        </div>
+    </div>
+</div>
+<div class="modal-overlay" id="privacyModal">
+    <div class="modal-content">
+        <button class="modal-close" id="closePrivacy">&times;</button>
+        <h2 class="modal-title">गोपनीयता नीति</h2>
+        <div class="modal-text">
+            <p><strong>अन्तिम अद्यावधिक: साउन २०८०</strong></p>
+
+            <h3>१. हामीले संकलन गर्ने जानकारी</h3>
+            <p>यो सेवा सञ्चालनका लागि आवश्यक न्यूनतम जानकारी मात्र हामी संकलन गर्दछौं:</p>
+            <ul>
+                <li>तपाईंले प्रविष्ट गर्ने पहुँच कोड (तपाईंको ब्राउजरमा मात्र स्थानीय रूपमा संग्रहित)</li>
+                <li>तपाईंले जनरेटरमा प्रविष्ट गर्ने पाठ सामग्री</li>
+                <li>मास्टर की प्रयोगको मिति (दर सीमित गर्नका लागि)</li>
+            </ul>
+            
+            <h3>२. जानकारीको प्रयोग</h3>
+            <p>हामीले संकलन गरेको जानकारी निम्न उद्देश्यका लागि प्रयोग गर्छौं:</p>
+            <ul>
+                <li>सेवा उपलब्ध गराउन र निरन्तर सञ्चालनमा राख्न</li>
+                <li>मास्टर की सुविधाको दुरुपयोग रोक्न</li>
+                <li>सेवाको गुणस्तर सुधार गर्न</li>
+            </ul>
+            
+            <h3>३. डेटा भण्डारण</h3>
+            <p>सबै डेटा तपाईंको ब्राउजरमै स्थानीय रूपमा संग्रहित हुन्छ:</p>
+            <ul>
+                <li>लगइन स्थितिका लागि सेसन स्टोरेज</li>
+                <li>मास्टर की प्रयोगको विवरण ट्र्याक गर्न लोकल स्टोरेज</li>
+                <li>कुनै पनि डेटा हाम्रो सर्भरमा पठाइँदैन</li>
+            </ul>
+            
+            <h3>४. सुरक्षा</h3>
+            <p>तपाईंको जानकारी सुरक्षित राख्न हामी आवश्यक सुरक्षा उपायहरू अपनाउँछौं:</p>
+            <ul>
+                <li>पहुँच कोडहरू साधारण पाठमा संग्रहित हुँदैनन्</li>
+                <li>सबै प्रक्रिया क्लाइन्ट-साइडमै सञ्चालन हुन्छन्</li>
+            </ul>
+            
+            <h3>५. तेस्रो–पक्ष सेवाहरू</h3>
+            <p>यो सेवाले कुनै पनि तेस्रो–पक्ष विश्लेषण वा ट्र्याकिङ सेवाहरू प्रयोग गर्दैन।</p>
+            
+            <h3>६. नीतिमा परिवर्तन</h3>
+            <p>हामी समय–समयमा गोपनीयता नीति अद्यावधिक गर्न सक्छौं। कुनै परिवर्तन भएमा नयाँ नीति यसै पृष्ठमा प्रकाशित गरेर तपाईंलाई जानकारी गराइनेछ।</p>
+            
+            <h3>७. सम्पर्क</h3>
+            <p>यस गोपनीयता नीतिसम्बन्धी कुनै प्रश्न भएमा कृपया रोसन क्षेत्री स्टुडियोसँग सम्पर्क गर्नुहोस्।</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="notification" id="copyNotification"></div>
+<div id="loader" class="loader-overlay hidden">
+    <div class="loader"></div>
+    <p class="loader-text">Generating PDF, please wait...</p>
+</div>
+
+<script>
+    const { jsPDF } = window.jspdf;
+
+    const dom = {
+        loginScreen: document.getElementById('loginScreen'), mainContent: document.getElementById('mainContent'),
+        accessCodeInput: document.getElementById('accessCodeInput'), loginBtn: document.getElementById('loginBtn'),
+        loginError: document.getElementById('loginError'), sourceText: document.getElementById('sourceText'),
+        editableParagraph: document.getElementById('editableParagraph'), resultDiv: document.getElementById('result'),
+        generateBtn: document.getElementById('generateBtn'), editBtn: document.getElementById('editBtn'),
+        copyBtn: document.getElementById('copyBtn'), printBtn: document.getElementById('printBtn'),
+        downloadBtn: document.getElementById('downloadBtn'), copyNotification: document.getElementById('copyNotification'),
+        loader: document.getElementById('loader'), termsLink: document.getElementById('termsLink'),
+        privacyLink: document.getElementById('privacyLink'), termsModal: document.getElementById('termsModal'),
+        privacyModal: document.getElementById('privacyModal'), closeTerms: document.getElementById('closeTerms'),
+        closePrivacy: document.getElementById('closePrivacy'),
+    };
+
+    const CONFIG = {
+        ACCESS_CODE: 'RX-2061',
+        PLACEHOLDERS: ["धनीको जिल्लाकाे नाम","नपा वा गापाकाे नाम", "धनीको वडा नं", "धनीको उमेर", "धनीको हजुरबुबाकाे नाम", "धनीको बुबाकाे नाम", "छाेरा वा छाेरी", "धनीकाे पुरा नाम", "ऋणीकाे जिल्लाकाे नाम","नपा वा गापाकाे नाम", "ऋणीको वडा नं.", "ऋणीको उमेर", "ऋणीको हजुरबुबाकाे नाम","ऋणीको बुबाकाे नाम", "छाेरा वा छाेरी","ऋणीको पुरा नाम", "रकम अंकमा", "रकम अक्षरमा", "१० प्रतिशत भन्दा कम", "पुरा भाखा मिति", "तमसुक लेखिएको साल", "नेपाली महिना", "नेपाली गते", "रोज बार संख्या"],
+        SESSION_KEY: 'fillBlankAuth', TYPING_SPEED: 20,
+    };
+
+    function init() {
+        if (sessionStorage.getItem(CONFIG.SESSION_KEY)) showMainContent();
+        else dom.accessCodeInput.focus();
+    }
+
+    function showMainContent() {
+        dom.loginScreen.classList.add('hidden');
+        dom.mainContent.classList.remove('hidden');
+        renderEditableParagraph();
+        updateUIState('editing');
+    }
+
+    function updateUIState(state) {
+        const isEditing = state === 'editing';
+        dom.editableParagraph.classList.toggle('hidden', !isEditing);
+        dom.resultDiv.classList.toggle('hidden', isEditing);
+        if (isEditing) dom.resultDiv.innerHTML = '';
+        dom.generateBtn.classList.toggle('hidden', !isEditing);
+        [dom.editBtn, dom.copyBtn, dom.printBtn, dom.downloadBtn].forEach(btn => btn.classList.toggle('hidden', isEditing));
+    }
+
+    function renderEditableParagraph() {
+        dom.editableParagraph.innerHTML = '';
+        const parts = dom.sourceText.value.split('-----');
+        parts.forEach((part, index) => {
+            if (part) dom.editableParagraph.appendChild(document.createTextNode(part));
+            if (index < parts.length - 1) {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = CONFIG.PLACEHOLDERS[index] || 'यहाँ भर्नुहोस्';
+                input.classList.add('blank-input');
+                dom.editableParagraph.appendChild(input);
+            }
+        });
+    }
+
+    async function generateFinal() {
+        dom.generateBtn.disabled = true; dom.generateBtn.textContent = 'RX STUDIO GENERATING DOCUMENT PLEASE WAIT...';
+        let finalText = ''; let inputIndex = 0;
+        dom.editableParagraph.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) finalText += node.textContent;
+            else if (node.tagName === 'INPUT') {
+                finalText += node.value.trim() || `[${CONFIG.PLACEHOLDERS[inputIndex] || 'खाली'}]`;
+                inputIndex++;
+            }
+        });
+        dom.editableParagraph.classList.add('hidden');
+        dom.resultDiv.classList.remove('hidden');
+        dom.resultDiv.innerHTML = '';
+        await typeText(dom.resultDiv, finalText);
+        updateUIState('generated');
+        dom.generateBtn.disabled = false; dom.generateBtn.textContent = 'Generate Text';
+    }
+
+    function typeText(element, text) {
+        return new Promise(resolve => {
+            const cursor = document.createElement('span');
+            cursor.className = 'typing-cursor';
+            element.appendChild(cursor);
+            let i = 0;
+            const typingInterval = setInterval(() => {
+                if (i < text.length) {
+                    element.insertBefore(document.createTextNode(text.charAt(i)), cursor);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                    element.removeChild(cursor);
+                    resolve();
+                }
+            }, CONFIG.TYPING_SPEED);
+        });
+    }
+
+    function handlePrint() { window.print(); }
+
+    async function handleDownloadPdf() {
+        dom.loader.classList.remove('hidden');
+        const printableContent = document.createElement('div');
+        try {
+            const printableWidth = 8.27 - 2 - 1; // A4 width minus L/R margins
+            Object.assign(printableContent.style, {
+                position: 'absolute', left: '-9999px', top: '0', padding: '0', margin: '0',
+                fontFamily: "'Times New Roman', serif", fontSize: '12pt', color: 'black',
+                textAlign: 'justify', whiteSpace: 'pre-wrap', width: `${printableWidth}in`
+            });
+            printableContent.textContent = dom.resultDiv.textContent;
+            document.body.appendChild(printableContent);
+            const canvas = await html2canvas(printableContent, { scale: 2, useCORS: true, backgroundColor: null });
+            document.body.removeChild(printableContent);
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({ orientation: 'p', unit: 'in', format: 'a4' });
+            const imgProps = pdf.getImageProperties(imgData);
+            const pdfImgWidth = pdf.internal.pageSize.getWidth() - 2 - 1;
+            const pdfImgHeight = (imgProps.height * pdfImgWidth) / imgProps.width;
+            pdf.addImage(imgData, 'PNG', 2, 3, pdfImgWidth, pdfImgHeight);
+            pdf.save('RX-STUDIO-GENERATED-DOCUMENT-KAPALI-TAMSUK.pdf');
+        } catch (error) {
+            console.error("Failed to generate PDF:", error);
+            showNotification('Error generating PDF.', true);
+            if (document.body.contains(printableContent)) document.body.removeChild(printableContent);
+        } finally {
+            dom.loader.classList.add('hidden');
+        }
+    }
+
+    function copyResult() {
+        navigator.clipboard.writeText(dom.resultDiv.textContent)
+            .then(() => showNotification('Copied to clipboard!'))
+            .catch(() => showNotification('Could not copy text.', true));
+    }
+
+    function showNotification(message, isError = false) {
+        dom.copyNotification.textContent = message;
+        dom.copyNotification.style.background = isError ? 'var(--error)' : 'var(--success)';
+        dom.copyNotification.classList.add('show');
+        setTimeout(() => dom.copyNotification.classList.remove('show'), 3000);
+    }
+
+    function showModal(modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hideModal(modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // --- Event Listeners ---
+    dom.loginBtn.addEventListener('click', () => {
+        if (dom.accessCodeInput.value.trim() === CONFIG.ACCESS_CODE) {
+            sessionStorage.setItem(CONFIG.SESSION_KEY, 'true');
+            showMainContent();
+        } else dom.loginError.textContent = 'Incorrect access code.';
+    });
+    dom.accessCodeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') dom.loginBtn.click(); });
+    dom.generateBtn.addEventListener('click', generateFinal);
+    dom.editBtn.addEventListener('click', () => updateUIState('editing'));
+    dom.copyBtn.addEventListener('click', copyResult);
+    dom.printBtn.addEventListener('click', handlePrint);
+    dom.downloadBtn.addEventListener('click', handleDownloadPdf);
+    
+    // Modal Listeners
+    dom.termsLink.addEventListener('click', () => showModal(dom.termsModal));
+    dom.privacyLink.addEventListener('click', () => showModal(dom.privacyModal));
+    dom.closeTerms.addEventListener('click', () => hideModal(dom.termsModal));
+    dom.closePrivacy.addEventListener('click', () => hideModal(dom.privacyModal));
+    
+    init();
+</script>
+
+</body>
+</html>

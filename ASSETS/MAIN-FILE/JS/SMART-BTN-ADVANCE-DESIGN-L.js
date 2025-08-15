@@ -245,7 +245,7 @@
         <div class="RX-SMART-BUTTON-menu-item" data-link="https://www.youtube.com/@RX_E-SPORTS" style="--index: 9;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/youtube.png" alt="YouTube"></div>
         <div class="RX-SMART-BUTTON-menu-item" data-link="https://www.facebook.com/RosanXettri.2004" style="--index: 10;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/facebook.png" alt="Facebook"></div>
         <div class="RX-SMART-BUTTON-menu-item" data-link="mailto:rkc242855@gmail.com" style="--index: 11;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/email.png" alt="email"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="404.html" style="--index: 12;"><img src="ASSETS/MAIN-FILE/IMG/LOGO/RX-2.png" alt="Logo"></div>
+        <div class="RX-SMART-BUTTON-menu-item" data-link="LEKHAPADI-ACCOUNT-LOGIN.html" style="--index: 12;"><img src="ASSETS/MAIN-FILE/IMG/LOGO/RX-2.png" alt="Logo"></div>
       </div>
     </div>
     `;
