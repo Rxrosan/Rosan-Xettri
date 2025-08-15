@@ -5,23 +5,35 @@ const users = [
         username: "Rosan2061",
         password: "RX2061",
         name: "ROSAN KC",
-        image: "ASSETS/IMG/RO S AN KC.jpg",
-        access: ["file1"]
+        image: "LEKHA_PADI_ASSETS/IMG/RO S AN KC.jpg",
+        access: ["1", "2"]
     }
 ];
 
-// Content cards
-const contentCards = [
-    { 
-        id: "file1", 
-        title: "KAPALI-TAMSUK", 
-        description: "Login Code : RX-2061", 
-        link: "WEB-SOFTWARE/RX-STUDIO-KAPALI_TAMSUK_GENERATOR.html",
-        icon: "fas fa-star"
-    }
-];
+// Content cards organized by store
+const contentCards = {
+    store1: [
+        { 
+            id: "1", 
+            title: "KAPALI-TAMSUK", 
+            description: "Login Code : RX-2061", 
+            link: "LEKHA_PADI_WEB-SOFTWARE/RX-STUDIO-KAPALI_TAMSUK_GENERATOR.html",
+            icon: "fas fa-star"
+        }
+    ],
+    store2: [
+        { 
+            id: "2", 
+            title: "STORE 2 ITEM", 
+            description: "Special content for Store 2", 
+            link: "KR-EXAM.html",
+            icon: "fas fa-gem"
+        }
+    ]
+};
 
 let currentUser = null;
+let currentStore = 'store1';
 
 // Initialize profile dropdown
 function setupProfileDropdown() {
@@ -68,13 +80,41 @@ function setupProfileDropdown() {
     });
 }
 
+// Switch between stores
+function switchStore(storeId) {
+    currentStore = storeId;
+    // Update active button styling
+    document.querySelectorAll('.store-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.toLowerCase().includes(storeId));
+    });
+    renderContentCards();
+}
+
+// Show modal function
+function showModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// Close modal function
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
 // Login as guest
 function loginAsGuest() {
     currentUser = {
         id: 0,
         username: "guest",
         name: "Guest User",
-        image: "ASSETS/IMG/USER.png",
+        image: "LEKHA_PADI_ASSETS/IMG/USER.png",
         access: []
     };
     redirectToDashboard();
@@ -155,25 +195,25 @@ function loadDashboard() {
     setupProfileDropdown();
 }
 
-// Render content cards
+// Render content cards for current store
 function renderContentCards() {
     const cardsContainer = document.getElementById('contentCards');
     if (!cardsContainer) return;
     
     cardsContainer.innerHTML = '';
     
-    if (contentCards.length === 0) {
-        cardsContainer.innerHTML = '<p class="no-content">No content available at this time.</p>';
+    const currentStoreCards = contentCards[currentStore] || [];
+    
+    if (currentStoreCards.length === 0) {
+        cardsContainer.innerHTML = '<p class="no-content">No content available in this store.</p>';
         return;
     }
     
-    contentCards.forEach(card => {
+    currentStoreCards.forEach(card => {
         const hasAccess = currentUser.access.includes(card.id);
         const cardElement = document.createElement('div');
         cardElement.className = `card ${hasAccess ? '' : 'locked'}`;
 
-        // Conditionally create the description HTML
-        // It will be an empty string if the user is a guest.
         const descriptionHtml = currentUser.username !== 'guest' ? `<p>${card.description}</p>` : '<p>Purchase to unlock the code.</p>';
         
         if (hasAccess) {
@@ -201,45 +241,26 @@ function renderContentCards() {
 
 // Purchase content function
 function purchaseContent(contentId) {
-    showPurchaseModal(contentId);
-}
-
-// Show purchase modal
-function showPurchaseModal(contentId) {
-    const modal = document.getElementById('purchaseModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const card = contentCards.find(c => c.id === contentId);
-    
-    if (card && modal && modalTitle) {
-        modalTitle.textContent = card.title;
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
+    const card = contentCards[currentStore].find(c => c.id === contentId);
+    if (card) {
+        showModal('purchaseModal');
+        document.getElementById('modalTitle').textContent = card.title;
     }
 }
 
-// Close modal function
-function closeModal() {
-    const modal = document.getElementById('purchaseModal');
-    if(modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// Close modal when clicking outside
+// Close all modals when clicking outside
 window.addEventListener('click', function(e) {
-    const modal = document.getElementById('purchaseModal');
-    if (e.target === modal) {
-        closeModal();
+    if (e.target.classList.contains('modal')) {
+        // Disabled to only allow closing via close button
+        // closeModal(e.target.id);
     }
 });
 
-// Close modal with Escape key
+// Close modals with Escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-        const modal = document.getElementById('purchaseModal');
-        if (modal && modal.style.display === 'block') {
-            closeModal();
-        }
+        // Disabled to only allow closing via close button
+        // const openModals = document.querySelectorAll('.modal[style="display: block;"]');
+        // openModals.forEach(modal => closeModal(modal.id));
     }
 });

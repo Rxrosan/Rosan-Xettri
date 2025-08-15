@@ -501,3 +501,106 @@ body {
         flex-direction: column;
     }
 }
+/* Add these styles to your existing CSS file */
+.store-navigation {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1rem 1rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
+}
+
+.store-btn {
+    padding: 0.5rem 1rem;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.store-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.store-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+/* Footer Links */
+.footer-links {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--secondary-color);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    z-index: 99;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.footer-links a:hover {
+    color: var(--primary-color);
+}
+
+/* Modal Enhancements */
+.modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-body {
+    padding: 0 1rem;
+}
+
+.modal-body h3 {
+    margin: 1rem 0 0.5rem;
+    color: var(--secondary-color);
+}
+
+.modal-body ul {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.modal-body li {
+    margin-bottom: 0.3rem;
+}
+
+/* Store Navigation */
+.store-navigation {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 1rem 1rem;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 1rem;
+}
+
+.store-btn {
+    padding: 0.5rem 1rem;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.store-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.store-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
