@@ -59,14 +59,14 @@ const contentCards = [
     { 
         id: "file5", 
         title: "RX-PRIVATE-QR-Scanner/Generator", 
-        description: "LESSON A 1 - 10L", 
+        description: "You can create personalized messages using a QR code with this app, and the generated QR can also be read directly through this web application. Note: Do not clear your browser data. Doing so will result in the loss of your stored information.", 
         link: "ASSETS/WEB-SOFTWARE/RX-S-QR.html",
         icon: "fas fa-qrcode"
     },
     { 
         id: "file6", 
         title: "RX-CALENDER", 
-        description: "LESSON A 1 - 10L", 
+        description: "English Calendar – Allows you to add tasks and notes for future work schedules. Note: This feature works online only. Note: Do not clear your browser data. Doing so will result in the loss of your stored information.", 
         link: "ASSETS/WEB-SOFTWARE/RX-Calendar.html",
         icon: "fas fa-calendar"
     },
