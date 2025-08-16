@@ -73,7 +73,7 @@ const contentCards = [
     { 
         id: "file7", 
         title: "KAPALI-TAMSUK", 
-        description: "Old Version | Login Code : RX-2061 | Not any update or special feature", 
+        description: "Old Version | Login Code: RX-2061 | No updates or special features available.", 
         link: "ASSETS/WEB-SOFTWARE/Kapali.html",
         icon: "fas fa-pencil"
     }
