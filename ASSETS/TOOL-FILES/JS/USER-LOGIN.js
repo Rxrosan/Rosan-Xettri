@@ -45,7 +45,7 @@ const contentCards = [
     { 
         id: "file3", 
         title: "LIVE-WEATHER", 
-        description: "LESSON A 1 - 10L", 
+        description: "A platform where you can check the environmental conditions in your area.", 
         link: "ASSETS/WEB-SOFTWARE/RX-Weather.html",
         icon: "fas fa-cloud"
     },
@@ -58,7 +58,7 @@ const contentCards = [
     },
     { 
         id: "file5", 
-        title: "RX-PRIVATE-QR-Scanner/Generator", 
+        title: "RX-QR-Scanner/Generator", 
         description: "You can create personalized messages using a QR code with this app, and the generated QR can also be read directly through this web application. Note: Do not clear your browser data. Doing so will result in the loss of your stored information.", 
         link: "ASSETS/WEB-SOFTWARE/RX-S-QR.html",
         icon: "fas fa-qrcode"
