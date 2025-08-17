@@ -5,7 +5,7 @@ const users = [
         username: "ROSAN",
         password: "RX2061",
         name: "ROSAN KC",
-        image: "ASSETS/TOOL-FILES/USER-LOGIN-IMG/ROSAN-KC.jpg",
+        image: "IMG/USER/ROSAN-KC.jpg",
         access: ["file1","file2","file3","file4","file5","file6"] // User access card id
     },
     {
@@ -13,7 +13,7 @@ const users = [
         username: "KESHAB",
         password: "RX@KDM",
         name: "Keshab Disuwa Magar",
-        image: "ASSETS/TOOL-FILES/USER-LOGIN-IMG/Keshab-Disuwa-Magar.jpg",
+        image: "IMG/USER/Keshab-Disuwa-Magar.jpg",
         access: ["file2","file3","file4","file5","file6"] // User access card id
     },
     {
@@ -21,7 +21,7 @@ const users = [
         username: "RITA",
         password: "RX@RRM",
         name: "Rita Rana Magar",
-        image: "ASSETS/TOOL-FILES/USER-LOGIN-IMG/Rita-Magar.jpg",
+        image: "IMG/USER/Rita-Magar.jpg",
         access: ["file2","file3","file4","file5","file6"] // User access card id
     }
 ];
@@ -274,7 +274,7 @@ function setupProfileDropdown() {
 }
 
 function loginAsGuest() {
-    currentUser = { id: 0, username: "guest", name: "Guest User", image: "ASSETS/TOOL-FILES/USER-LOGIN-IMG/USER.png", access: ["file3","file4","file5","file6"] };
+    currentUser = { id: 0, username: "guest", name: "Guest User", image: "IMG/USER/USER.png", access: ["file3","file4","file5","file6"] };
     redirectToDashboard();
 }
 
