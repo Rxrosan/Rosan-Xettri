@@ -40,7 +40,7 @@ const contentCards = [
         id: "file2", 
         title: "QUESTION-MODEL-1", 
         description: "LESSON A 1 - 10L", 
-        link: "ASSETS/WEB-SOFTWARE/KR-EXAM.html",
+        link: "KR-EXAM.html",
         icon: "fas fa-book"
     },
     { 
