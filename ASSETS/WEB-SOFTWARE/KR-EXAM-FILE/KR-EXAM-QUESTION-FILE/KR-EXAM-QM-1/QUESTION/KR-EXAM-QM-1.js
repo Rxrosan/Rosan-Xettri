@@ -4,14 +4,14 @@ window.questions = [
      options: { a: "신용카드", b: "지폐", c: "동전", d: "현금" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-1.png"
+     image: "ASSETS/WEB-SOFTWARE/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-1.png"
    },
    {
      question: "",
      options: { a: "학교", b: "공장", c: "회사", d: "은행" },
      answer: "a",
      explanation: "Review not Aviable.",
-     image: "../KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-2.png"
+     image: "KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-2.png"
    },
    {
      question: "[3-4] 다음 설명에 알맞은 어휘를 고르십시오.<br>회사 , 공장 , 학고 등 일성한 장소에 근무나 일을 하기 위해 가는 것을 의미합니다.",
