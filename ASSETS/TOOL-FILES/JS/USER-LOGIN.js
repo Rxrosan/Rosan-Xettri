@@ -3,7 +3,7 @@ const users = [
     {
         id: 1,
         username: "ROSAN",
-        password: "RX2061",
+        password: "RX9826482279",
         name: "ROSAN KC",
         image: "ASSETS/TOOL-FILES/USER/ROSAN-KC.jpg",
         access: ["file1","file2","file3","file4","file5","file6"] // User access card id
@@ -11,7 +11,7 @@ const users = [
     {
         id: 2,
         username: "RITA",
-        password: "RX@RRM",
+        password: "RX9807483578",
         name: "Rita Rana Magar",
         image: "ASSETS/TOOL-FILES/USER/Rita-Magar.jpg",
         access: ["file2","file3","file4","file5","file6"] // User access card id
@@ -19,7 +19,7 @@ const users = [
     {
         id: 3,
         username: "KESHAB",
-        password: "RX@KDM",
+        password: "RX9748780170",
         name: "Keshab Disuwa Magar",
         image: "ASSETS/TOOL-FILES/USER/Keshab-Disuwa-Magar.jpg",
         access: ["file2","file3","file4","file5","file6"] // User access card id

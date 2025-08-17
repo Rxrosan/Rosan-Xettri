@@ -4,14 +4,14 @@ window.questions = [
      options: { a: "신용카드", b: "지폐", c: "동전", d: "현금" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-1.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-1.png"
    },
    {
      question: "",
      options: { a: "학교", b: "공장", c: "회사", d: "은행" },
      answer: "a",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-2.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-2.png"
    },
    {
      question: "[3-4] 다음 설명에 알맞은 어휘를 고르십시오.<br>회사 , 공장 , 학고 등 일성한 장소에 근무나 일을 하기 위해 가는 것을 의미합니다.",
@@ -30,7 +30,7 @@ window.questions = [
      options: { a: "귤보다 감이 더 많이 발립니다.", b: "바나나 가장 작은 사람이 좋아핮니다.", c: "바나나는 두 번째로 많이 팔맂니다.", d: "포도를 좋아하는 사람이 가장 많습니다." },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-3.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-3.png"
    },
    {
      question: "다음 밑줄 친 부분이 맞는 문장을 고르십시오.",
@@ -91,28 +91,28 @@ window.questions = [
      options: { a: "우유 입니다.", b: "우체국 입니다.", c: "우산 입니다.", d: "유산 입니다." },
      answer: "c",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-4.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-4.png"
    },
    {
      question: "이 사람의 주소는 어디입니까?",
      options: { a: "서울특별시 구로구청장 입니다.", b: "서울특별시 구로구 입니다.", c: "서울특별시 구로구청장 입니다.", d: "2022년 2월 8일 입니다." },
      answer: "b",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-5.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-5.png"
    },
    {
      question: "이것은 무엇입니까?",
      options: { a: "칼 입니다.", b: "창문 입니다.", c: " 의자 입니다.", d: "책 입니다." },
      answer: "a",
      explanation: "Review not Aviable.",
-    image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-6.png"
+    image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-6.png"
    },
    {
      question: "다음 그래프에 대한 설명으로 알맞은 것을 고르십시오.",
      options: { a: "김치찌개 음식은 가장 많이 있습니다.", b: "기타은 가장 많습니다.", c: "비빔밥은 가장 적습니다.", d: "불고기 보다 김치찌개가 더 많습니다." },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-7.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-7.png"
    },
    {
      question: "[19-20] 다음 글을 읽고 무엇에 대한 글인지 고르십시오.<br>  <br> 오늘은 토요일입니다. 학교에 가지 않아도 되니까 늦게까지 잤습니다. 오후에는 집안일을 정리하고 나서 장을 보려고 합니다.",
@@ -131,150 +131,150 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-8.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-1.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-8.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-1.mp3"
    },
    {
      question: "",
      options: { a: "", b: "", c: "", d: "" },
      answer: "c",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-9.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-2.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-9.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-2.mp3"
    },
    {
      question: "",
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-10.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-3.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-10.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-3.mp3"
    },
    {
      question: "",
      options: { a: "", b: "", c: "", d: "" },
      answer: "c",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-11.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-4.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-11.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-4.mp3"
    },
    {
      question: "[25-29] 그림을 보고 알맞은 대답을 고르십시오.<br>  <br> 이것은 무엇입니까?",
      options: { a: "", b: "", c: "", d: "" },
      answer: "a",
      explanation: "Review not Aviable.",
-    image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-12.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-5.mp3"
+    image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-12.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-5.mp3"
    },
    {
      question: "여기는 어디 입니까?",
      options: { a: "", b: "", c: "", d: "" },
      answer: "b",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-13.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-6.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-13.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-6.mp3"
    },
    {
      question: "이 사람은 무엇을 하고 있습니까?",
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-14.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-7.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-14.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-7.mp3"
    },
    {
      question: "맥주가 얼마나 있습니까?",
      options: { a: "", b: "", c: "", d: "" },
      answer: "c",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-15.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-8.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-15.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-8.mp3"
    },
    {
      question: "이것은 무엇입니까?",
      options: { a: "", b: "", c: "", d: "" },
      answer: "a",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-16.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-9.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-16.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-9.mp3"
    },
    {
      question: "[30-33] 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
      options: { a: "네, 컴퓨터가 있어요.", b: "아니요, 컴퓨터예요.", c: "아니요, 컴퓨터가 아니예요.", d: "네, 컴퓨터가 없어요." },
      answer: "a",
      explanation: "Review not Aviable.",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-10.mp3"
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-10.mp3"
    },
    {
      question: "",
      options: { a: "네, 회사원이 있습니다.", b: "네, 회사원 입니다.", c: "아니요, 회사원 많습니다.", d: "아니요, 회사원이 좋습니다." },
      answer: "b",
      explanation: "Review not Aviable.",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-11.mp3"
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-11.mp3"
    },
    {
      question: "",
      options: { a: "서른 살 입니다", b: "기술자 입니다.", c: "네팔 사람 입니다.", d: "남자 입니다" },
      answer: "c",
      explanation: "Review not Aviable.",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-12.mp3"
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-12.mp3"
    },
    {
      question: "",
      options: { a: "네, 시장에서 과일을 살 거예요.", b: "아니요, 채소는 시장에서 사는 게 좋아요.", c: "네, 저는 시장에서 자주 가요.", d: "아니요, 시장은 없고 마트는 있어요." },
      answer: "d",
      explanation: "Review not Aviable.",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-13.mp3"
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-13.mp3"
    },
    {
      question: "[34-35] 다음을 듣고 이어지는 말을 고르십시오.",
      options: { a: "어서 오세요.", b: "안녕히 계세요.", c: "괜찮아요.", d: "반가워요." },
      answer: "b",
      explanation: "Review not Aviable.",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-14.mp3"
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-14.mp3"
    },
    {
      question: "",
      options: { a: "반갑습니다.", b: "죽하합니다.", c: "감사합니다.", d: "괜찮습니다." },
      answer: "c",
      explanation: "Review not Aviable.",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-15.mp3"
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-15.mp3"
    },
    {
      question: "[36-37] 잘 듣고 들은 내용과 관계있는 그림을 고르십시오.",
      options: { a: "", b: "", c: "", d: "" },
      answer: "a",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-17.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-16.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-17.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-16.mp3"
    },
    {
      question: "",
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-18.png",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-17.mp3"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-18.png",
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-17.mp3"
    },
    {
      question: "[38-40] 이야기를 듣고 질문에 알맞은 대답을 고르십시오.",
      options: { a: "규칙을 정하랴고", b: "예약을 정하랴고", c: "약속을 정하려고", d: "주문을 하려고" },
      answer: "c",
      explanation: "Review not Aviable.",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-18.mp3"
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-18.mp3"
    },
    {
      question: "",
      options: { a: "로선 씨는 저녁 8 시에 공부해요.", b: "로선 씨는 아침 8 시에 공부해요.", c: "여자는 저녁 8 시에 공부해요.", d: "여자는 밤 8 시에 공부해요." },
      answer: "a",
      explanation: "Review not Aviable.",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-19.mp3"
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-19.mp3"
    },
    {
      question: "",
      options: { a: "남자가 점심 12 시에 먹어요.", b: "리따 씨가 점심 12 시에 먹어요.", c: "리따 씨가 저녁 11 시에 먹어요.", d: "남자가 저녁 11 시에 먹어요." },
      answer: "b",
      explanation: "Review not Aviable.",
-     audio: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-20.mp3"
+     audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/AUDIO/AUDIO-20.mp3"
    },
  ];
