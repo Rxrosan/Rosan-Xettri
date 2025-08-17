@@ -6,7 +6,7 @@ const users = [
         password: "RX9826482279",
         name: "ROSAN KC",
         image: "ASSETS/TOOL-FILES/USER/ROSAN-KC.jpg",
-        access: ["file1","file2","file3","file4","file5","file6"] // User access card id
+        access: ["file1","file2","file3","file4","file5","file6","file7"] // User access card id
     },
     {
         id: 2,
