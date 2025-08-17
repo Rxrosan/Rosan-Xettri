@@ -31,7 +31,7 @@ function initializeExamPage() {
     const userDataString = sessionStorage.getItem('currentUser');
     if (!userDataString) {
         alert("Authentication required. Redirecting to login page.");
-        window.location.href = "USER-LOGIN.html";
+        window.location.href = "https://rosankc.com.np/USER-LOGIN.html";
         return;
     }
 
