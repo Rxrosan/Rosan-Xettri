@@ -4,7 +4,7 @@ window.questions = [
      options: { a: "신용카드", b: "지폐", c: "동전", d: "현금" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-1.png"
+     image: "/KR-EXAM-FILES/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-1.png"
    },
    {
      question: "",
