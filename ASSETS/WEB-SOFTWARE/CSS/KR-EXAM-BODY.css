@@ -34,8 +34,8 @@ body {
 /* UPDATED: User Profile Display */
 .user-profile-display { cursor: pointer; flex-shrink: 0; }
 .user-profile-image {
-  width: 75px;  /* Approx 2cm */
-  height: 75px; /* Approx 2cm */
+  width: 1cm;  /* Approx 2cm */
+  height: 1cm; /* Approx 2cm */
   border-radius: 8px; border: 3px solid var(--white); object-fit: cover;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: var(--shadow-md);
@@ -147,3 +147,70 @@ body {
 .hidden { display: none !important; }
 @media (max-width: 992px) { .exam-container { flex-direction: column; } .left-panel { width: 100%; border-right: none; border-bottom: 1px solid var(--medium-gray); } }
 @media (max-width: 768px) { #content-display, .navigation-controls { padding: 1rem; } .panel-header { flex-direction: row; align-items: center; } }
+/* --- Add these styles for the on-screen results review --- */
+
+.detailed-review-container {
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.review-question-container {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.option-item-review {
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  transition: background-color 0.3s;
+}
+
+/* Correct Answer (Green) */
+.option-item-review.correct {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+/* Incorrect Answer (Red) */
+.option-item-review.incorrect {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+/* Highlight for Correct Answer when user was wrong (Yellow) */
+.option-item-review.correct-answer {
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+
+.option-item-review input[type="radio"]:disabled {
+  opacity: 0.8;
+}
+
+.review-status {
+  margin-top: 15px;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.review-status.correct {
+  color: #155724;
+  background-color: #d4edda;
+}
+
+.review-status.incorrect {
+  color: #721c24;
+  background-color: #f8d7da;
+}
+
+.review-status.not-attempted {
+  color: #856404;
+  background-color: #fff3cd;
+}

@@ -239,13 +239,13 @@
         <div class="RX-SMART-BUTTON-menu-item" data-link="RX-GALLERY" style="--index: 3;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/gallery.png" alt="gallery"></div>
         <div class="RX-SMART-BUTTON-menu-item" data-link="RX-S-QR" style="--index: 4;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/qrsc.png" alt="QR Code"></div>
         <div class="RX-SMART-BUTTON-menu-item" data-link="index.html" style="--index: 5;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/home.png" alt="home"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="KR-EXAM-ALL-COLLECTION-LOGIN.html" style="--index: 6;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/other.png" alt="other"></div>
+        <div class="RX-SMART-BUTTON-menu-item" data-link="USER-LOGIN.html" style="--index: 6;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/other.png" alt="other"></div>
         <div class="RX-SMART-BUTTON-menu-item" data-link="About.html" style="--index: 7;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/about.png" alt="about"></div>
         <div class="RX-SMART-BUTTON-menu-item" data-link="https://x.com/Rx_Rosan" style="--index: 8;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/xcorp.png" alt="xcorp"></div>
         <div class="RX-SMART-BUTTON-menu-item" data-link="https://www.youtube.com/@RX_E-SPORTS" style="--index: 9;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/youtube.png" alt="YouTube"></div>
         <div class="RX-SMART-BUTTON-menu-item" data-link="https://www.facebook.com/RosanXettri.2004" style="--index: 10;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/facebook.png" alt="Facebook"></div>
         <div class="RX-SMART-BUTTON-menu-item" data-link="mailto:rkc242855@gmail.com" style="--index: 11;"><img src="ASSETS/MAIN-FILE/IMG/FUNCTION-ICON/email.png" alt="email"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="USER-LOGIN.html" style="--index: 12;"><img src="ASSETS/MAIN-FILE/IMG/LOGO/RX-2.png" alt="Logo"></div>
+        <div class="RX-SMART-BUTTON-menu-item" data-link="#" style="--index: 12;"><img src="ASSETS/MAIN-FILE/IMG/LOGO/RX-2.png" alt="Logo"></div>
       </div>
     </div>
     `;

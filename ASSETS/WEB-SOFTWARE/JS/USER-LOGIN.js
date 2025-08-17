@@ -5,25 +5,26 @@ const users = [
         username: "ROSAN",
         password: "RX2061",
         name: "ROSAN KC",
-        image: "IMG/USER/ROSAN-KC.jpg",
+        image: "ASSETS/WEB-SOFTWARE/IMG/USER/ROSAN-KC.jpg",
         access: ["file1","file2","file3","file4","file5","file6"] // User access card id
     },
     {
-        id: 4,
-        username: "KESHAB",
-        password: "RX@KDM",
-        name: "Keshab Disuwa Magar",
-        image: "IMG/USER/Keshab-Disuwa-Magar.jpg",
+        id: 2,
+        username: "RITA",
+        password: "RX@RRM",
+        name: "Rita Rana Magar",
+        image: "ASSETS/WEB-SOFTWARE/IMG/USER/Rita-Magar.jpg",
         access: ["file2","file3","file4","file5","file6"] // User access card id
     },
     {
         id: 3,
-        username: "RITA",
-        password: "RX@RRM",
-        name: "Rita Rana Magar",
-        image: "IMG/USER/Rita-Magar.jpg",
+        username: "KESHAB",
+        password: "RX@KDM",
+        name: "Keshab Disuwa Magar",
+        image: "ASSETS/WEB-SOFTWARE/IMG/USER/Keshab-Disuwa-Magar.jpg",
         access: ["file2","file3","file4","file5","file6"] // User access card id
-    }
+    },
+    
 ];
 
 // Content cards database
@@ -274,7 +275,7 @@ function setupProfileDropdown() {
 }
 
 function loginAsGuest() {
-    currentUser = { id: 0, username: "guest", name: "Guest User", image: "IMG/USER/USER.png", access: ["file3","file4","file5","file6"] };
+    currentUser = { id: 0, username: "guest", name: "Guest User", image: "ASSETS/WEB-SOFTWARE/IMG/USER/USER.png", access: ["file3","file4","file5","file6"] };
     redirectToDashboard();
 }
 
@@ -301,19 +302,19 @@ function loginAsUser(username, password) {
 function logout() {
     if (confirm("Are you sure you want to logout?")) {
         sessionStorage.removeItem('currentUser');
-        window.location.href = "USER-LOGIN.html";
+        window.location.href = "https://rosankc.com.np/USER-LOGIN.html";
     }
 }
 
 function redirectToDashboard() {
     sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
-    window.location.href = "USER-DASHBOARD.html";
+    window.location.href = "https://rosankc.com.np/USER-DASHBOARD.html";
 }
 
 function loadDashboard() {
     const userData = sessionStorage.getItem('currentUser');
     if (!userData) {
-        window.location.href = "USER-LOGIN.html";
+        window.location.href = "https://rosankc.com.np/USER-LOGIN.html";
         return;
     }
     
