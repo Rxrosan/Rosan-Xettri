@@ -1,31 +1,61 @@
-// ========== GLOBAL VARIABLES ==========
+// ========== GLOBAL VARIABLES & CONFIGURATION ==========
 let currentQuestion = 0;
-const totalQuestions = 40;
+const TOTAL_QUESTIONS = 40;
+const EXAM_DURATION_MINUTES = 50;
+
+// State management
 const reviewedQuestions = new Set();
 const completedQuestions = new Set();
 const userAnswers = {};
 let quizSubmitted = false;
 const disabledAudios = new Set();
+
+// Timer variables
 let timerInterval = null;
 let targetTime;
-const examDuration = 50 * 60 * 1000;
+const examDurationMs = EXAM_DURATION_MINUTES * 60 * 1000;
 
+// Student information
 const studentInfo = {
-  id: null, name: "", username: "", image: "",
-  serial: "", startTime: null, endTime: null
+  id: null,
+  name: "",
+  username: "",
+  image: "",
+  serial: "",
+  startTime: null,
+  endTime: null
 };
 
-// DOM Elements
-const timerBox = document.getElementById("floating-timer");
-const minimizedTimer = document.getElementById("minimized-timer");
-const countdownEl = document.getElementById("countdown");
-const minimizedTime = document.getElementById("minimized-time");
-const timerProgressBar = document.getElementById("timer-progress-bar");
-const contentDisplay = document.getElementById("content-display");
-const lockOverlay = document.getElementById("lock-overlay");
-const profileModalOverlay = document.getElementById("profile-modal-overlay");
+// Cached DOM Elements for performance
+const dom = {};
 
-// ========== 1. INITIALIZATION & USER AUTHENTICATION ==========
+// ========== 1. INITIALIZATION & PAGE SETUP ==========
+
+document.addEventListener("DOMContentLoaded", () => {
+    cacheDOMElements();
+    initializeExamPage();
+    window.goToPrevious = goToPrevious;
+    window.goToNext = goToNext;
+    window.markForReview = markForReview;
+    window.submitQuiz = submitQuiz;
+    window.selectOption = selectOption;
+    window.generateResultPDF = generateResultPDF;
+    window.showContent = showContent; // Make it globally accessible for number buttons
+});
+
+function cacheDOMElements() {
+    dom.timerBox = document.getElementById("floating-timer");
+    dom.minimizedTimer = document.getElementById("minimized-timer");
+    dom.countdownEl = document.getElementById("countdown");
+    dom.minimizedTime = document.getElementById("minimized-time");
+    dom.timerProgressBar = document.getElementById("timer-progress-bar");
+    dom.contentDisplay = document.getElementById("content-display");
+    dom.profileModalOverlay = document.getElementById("profile-modal-overlay");
+    dom.readingGrid = document.getElementById("reading-questions");
+    dom.listeningGrid = document.getElementById("listening-questions");
+    dom.navigationControls = document.querySelector('.navigation-controls');
+    dom.questionNavigation = document.querySelector('.question-navigation');
+}
 
 function initializeExamPage() {
     const userDataString = sessionStorage.getItem('currentUser');
@@ -36,8 +66,8 @@ function initializeExamPage() {
     }
 
     const user = JSON.parse(userDataString);
-
-    // [RESTORED FIX] Correct the relative path for the user image
+    
+    // Correct user image path if necessary
     if (user.image && user.image.startsWith("ASSETS/WEB-SOFTWARE/")) {
         user.image = user.image.replace("ASSETS/WEB-SOFTWARE/", "");
     }
@@ -45,7 +75,7 @@ function initializeExamPage() {
     studentInfo.id = user.id;
     studentInfo.name = user.name;
     studentInfo.username = user.username;
-    studentInfo.image = user.image; // The corrected path is now used
+    studentInfo.image = user.image;
     studentInfo.serial = `RX-${String(user.id).padStart(2, '0')}`;
 
     populateUserProfile();
@@ -53,15 +83,12 @@ function initializeExamPage() {
     setupEventListeners();
     handleScreenResize();
 
-    timerBox.style.display = "none";
+    if (dom.timerBox) dom.timerBox.style.display = "none";
 }
 
 function populateUserProfile() {
-    // Populate header image
     document.getElementById("user-profile-image").src = studentInfo.image;
     document.getElementById("welcome-user-name").textContent = `Welcome, ${studentInfo.name}!`;
-
-    // Populate modal details
     document.getElementById("modal-profile-image").src = studentInfo.image;
     document.getElementById("modal-profile-name").textContent = studentInfo.name;
     document.getElementById("modal-profile-username").textContent = `@${studentInfo.username}`;
@@ -69,12 +96,10 @@ function populateUserProfile() {
 }
 
 function createQuestionNavigation() {
-    const readingGrid = document.getElementById("reading-questions");
-    const listeningGrid = document.getElementById("listening-questions");
-    readingGrid.innerHTML = '';
-    listeningGrid.innerHTML = '';
-    for (let i = 1; i <= 20; i++) readingGrid.appendChild(createNumberButton(i));
-    for (let i = 21; i <= 40; i++) listeningGrid.appendChild(createNumberButton(i));
+    dom.readingGrid.innerHTML = '';
+    dom.listeningGrid.innerHTML = '';
+    for (let i = 1; i <= 20; i++) dom.readingGrid.appendChild(createNumberButton(i));
+    for (let i = 21; i <= TOTAL_QUESTIONS; i++) dom.listeningGrid.appendChild(createNumberButton(i));
 }
 
 function createNumberButton(number) {
@@ -87,26 +112,29 @@ function createNumberButton(number) {
 }
 
 function setupEventListeners() {
-    document.getElementById("minimize-btn").addEventListener("click", minimizeTimer);
-    document.getElementById("close-btn").addEventListener("click", closeTimer);
-    document.getElementById("minimized-timer").addEventListener("click", restoreTimer);
-    // [MODIFIED] Button now calls submitQuiz directly, no confirmation
+    document.getElementById("minimize-btn")?.addEventListener("click", minimizeTimer);
+    document.getElementById("close-btn")?.addEventListener("click", closeTimer);
+    dom.minimizedTimer?.addEventListener("click", restoreTimer);
     document.getElementById("submit-now-btn")?.addEventListener("click", submitQuiz);
     
-    makeDraggable(timerBox);
-    makeDraggable(minimizedTimer);
+    makeDraggable(dom.timerBox);
+    makeDraggable(dom.minimizedTimer);
     
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('resize', handleScreenResize);
 
-    document.getElementById('user-profile-display').addEventListener('click', openProfileModal);
-    document.getElementById('profile-modal-close-btn').addEventListener('click', closeProfileModal);
+    document.getElementById('user-profile-display')?.addEventListener('click', openProfileModal);
+    document.getElementById('profile-modal-close-btn')?.addEventListener('click', closeProfileModal);
 }
 
-// ========== 2. PROFILE MODAL CONTROLS ==========
+// ========== 2. PROFILE MODAL & UI CONTROLS ==========
 
-function openProfileModal() { if (profileModalOverlay) profileModalOverlay.style.display = 'flex'; }
-function closeProfileModal() { if (profileModalOverlay) profileModalOverlay.style.display = 'none'; }
+function openProfileModal() { if (dom.profileModalOverlay) dom.profileModalOverlay.style.display = 'flex'; }
+function closeProfileModal() { if (dom.profileModalOverlay) dom.profileModalOverlay.style.display = 'none'; }
+function setExamControlsDisabled(disabled) {
+    document.querySelectorAll('.number-btn, .navigation-controls button, .options-list input, #submit-now-btn')
+        .forEach(control => { if (control) control.disabled = disabled; });
+}
 
 // ========== 3. EXAM FLOW & QUESTION DISPLAY ==========
 
@@ -116,41 +144,71 @@ function startExam() {
 }
 
 function showContent(questionNumber) {
-    if (quizSubmitted) return;
-    if (currentQuestion === 0) startExam();
-    if (questionNumber < 1 || questionNumber > totalQuestions) return;
+    if (quizSubmitted || questionNumber < 1 || questionNumber > TOTAL_QUESTIONS) return;
+    if (currentQuestion === 0) startExam(); // Start exam on first question click
     
     currentQuestion = questionNumber;
     
     if (typeof questions === 'undefined' || !questions.length) {
-        contentDisplay.innerHTML = `<div class="question-container"><p class="danger">Error: Question data file (KR-EXAM-QM-1.js) could not be loaded.</p></div>`;
+        dom.contentDisplay.innerHTML = `<div class="question-container"><p class="danger">Error: Question data file (KR-EXAM-QM-1.js) could not be loaded.</p></div>`;
         return;
     }
+    
     const question = questions[questionNumber - 1];
-    
-    let html = `<div class="question-container">
-        <div class="question-header"><span class="question-number">Question ${questionNumber}</span></div>
-        <div class="question-text">${question.question}</div>`;
-    if (question.image) html += `<div class="question-media"><img src="${question.image}" alt="Question image" class="question-image"></div>`;
-    if (question.audio) {
-        if (!disabledAudios.has(questionNumber)) {
-            html += `<div class="question-media"><audio id="audio-${questionNumber}" controls class="question-audio" onplay="setupAudioPlayback(${questionNumber})"><source src="${question.audio}"></audio></div>`;
-        } else {
-            html += `<p class="warning"><i class="fas fa-info-circle"></i> Audio already played</p>`;
-        }
+    if (!question) {
+        dom.contentDisplay.innerHTML = `<div class="question-container"><p class="warning">Error: Question ${questionNumber} data is missing.</p></div>`;
+        return;
     }
-    html += `<ul class="options-list">`;
-    for (const [key, value] of Object.entries(question.options)) {
-        const isSelected = userAnswers[questionNumber] === key;
-        html += `<li class="option-item ${isSelected ? "selected" : ""}"><label class="option-label"><input type="radio" name="q${questionNumber}" value="${key}" onchange="selectOption(${questionNumber}, '${key}')" ${isSelected ? "checked" : ""}>
-                 <span class="option-text"><strong>${key.toUpperCase()}.</strong> ${value}</span></label></li>`;
-    }
-    html += `</ul></div>`;
     
-    contentDisplay.innerHTML = html;
+    dom.contentDisplay.innerHTML = buildQuestionHTML(question, questionNumber);
     updateQuestionNavigation();
     handleScreenResize();
-    contentDisplay.scrollTo(0, 0);
+    dom.contentDisplay.scrollTo(0, 0);
+}
+
+function buildQuestionHTML(question, questionNumber) {
+    const userAnswer = userAnswers[questionNumber];
+    
+    // Build media HTML (Image and Audio)
+    let mediaHTML = '';
+    if (question.image) {
+        // IMPORTANT: This path is relative to your HTML file.
+        // The onerror attribute will log an error to the console (F12) if the path is wrong.
+        mediaHTML += `<div class="question-media">
+            <img src="${question.image}" alt="Question media for question ${questionNumber}" class="question-image" onerror="console.error('IMAGE NOT FOUND: Check the path for ${question.image}'); this.alt='Image not found';">
+        </div>`;
+    }
+    if (question.audio) {
+        if (!disabledAudios.has(questionNumber)) {
+            // IMPORTANT: This path is relative to your HTML file.
+            mediaHTML += `<div class="question-media">
+                <audio id="audio-${questionNumber}" controls class="question-audio" onplay="setupAudioPlayback(${questionNumber})">
+                    <source src="${question.audio}">
+                    Your browser does not support the audio element.
+                </audio>
+            </div>`;
+        } else {
+            mediaHTML += `<p class="warning"><i class="fas fa-info-circle"></i> Audio for this question has already been played.</p>`;
+        }
+    }
+
+    // Build options HTML
+    const optionsHTML = Object.entries(question.options).map(([key, value]) => {
+        const isSelected = userAnswer === key;
+        return `<li class="option-item ${isSelected ? "selected" : ""}">
+            <label class="option-label">
+                <input type="radio" name="q${questionNumber}" value="${key}" onchange="selectOption(${questionNumber}, '${key}')" ${isSelected ? "checked" : ""}>
+                <span class="option-text"><strong>${key.toUpperCase()}.</strong> ${value || ''}</span>
+            </label>
+        </li>`;
+    }).join('');
+
+    return `<div class="question-container">
+                <div class="question-header"><span class="question-number">Question ${questionNumber}</span></div>
+                <div class="question-text">${question.question || ''}</div>
+                ${mediaHTML}
+                <ul class="options-list">${optionsHTML}</ul>
+            </div>`;
 }
 
 function selectOption(questionNumber, selectedOption) {
@@ -162,7 +220,7 @@ function selectOption(questionNumber, selectedOption) {
 
 function updateQuestionNavigation() {
     document.querySelectorAll(".number-btn").forEach(button => {
-        const questionNum = parseInt(button.dataset.question);
+        const questionNum = parseInt(button.dataset.question, 10);
         button.classList.remove("current", "answered", "marked");
         if (questionNum === currentQuestion) button.classList.add("current");
         else if (completedQuestions.has(questionNum)) button.classList.add("answered");
@@ -170,79 +228,101 @@ function updateQuestionNavigation() {
     });
 }
 
-function setExamControlsDisabled(disabled) {
-    const controls = [
-        ...document.querySelectorAll('.number-btn'),
-        ...document.querySelectorAll('.navigation-controls button'),
-        ...document.querySelectorAll('.options-list input'),
-        document.getElementById('submit-now-btn')
-    ];
-    controls.forEach(control => { if (control) control.disabled = disabled; });
-}
-
 function setupAudioPlayback(questionNumber) {
     const audio = document.getElementById(`audio-${questionNumber}`);
+    if (!audio) return;
+
     setExamControlsDisabled(true);
-    audio.style.pointerEvents = 'none';
+    audio.style.pointerEvents = 'none'; // Prevent re-clicking during play
 
-    if (audio.dataset.listenerAttached) return;
-
-    audio.addEventListener('ended', () => {
+    const onAudioEnd = () => {
         disabledAudios.add(questionNumber);
         setExamControlsDisabled(false);
-        if(currentQuestion === questionNumber) showContent(questionNumber);
-    });
-    audio.dataset.listenerAttached = 'true';
+        if (currentQuestion === questionNumber) {
+            showContent(questionNumber); // Re-render to show the 'audio played' message
+        }
+        audio.removeEventListener('ended', onAudioEnd); // Clean up listener
+    };
+    
+    audio.addEventListener('ended', onAudioEnd);
 }
 
 // ========== 4. NAVIGATION & SUBMISSION ==========
 
 function goToPrevious() { if (currentQuestion > 1) showContent(currentQuestion - 1); }
-function goToNext() { if (currentQuestion < totalQuestions) showContent(currentQuestion + 1); }
+function goToNext() { if (currentQuestion < TOTAL_QUESTIONS) showContent(currentQuestion + 1); }
+
 function markForReview() {
     if (currentQuestion === 0) return;
     reviewedQuestions.add(currentQuestion);
-    completedQuestions.delete(currentQuestion);
+    completedQuestions.delete(currentQuestion); // A reviewed question is not "completed"
     updateQuestionNavigation();
     goToNext();
 }
 
 function submitQuiz() {
     if (quizSubmitted) return;
+    
+    // Optional: Add a confirmation dialog
+    // const confirmed = confirm("Are you sure you want to submit the exam?");
+    // if (!confirmed) return;
+
     quizSubmitted = true;
     clearInterval(timerInterval);
     studentInfo.endTime = new Date();
     window.removeEventListener('beforeunload', handleBeforeUnload);
-    displayResults(calculateResults());
+    
+    const results = calculateResults();
+    displayResults(results);
 }
 
 // ========== 5. RESULTS & REPORTING ==========
 
 function calculateResults() {
     let attempted = 0, correct = 0;
-    for (let i = 1; i <= totalQuestions; i++) {
+    for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
         if (userAnswers[i] && questions[i - 1]) {
             attempted++;
-            if (userAnswers[i] === questions[i - 1].answer) correct++;
+            if (userAnswers[i] === questions[i - 1].answer) {
+                correct++;
+            }
         }
     }
-    const score = Math.round((correct / totalQuestions) * 100);
+    const score = Math.round((correct / TOTAL_QUESTIONS) * 100);
     const duration = Math.floor(((studentInfo.endTime || new Date()) - studentInfo.startTime) / 1000);
+    
     return {
-        total: totalQuestions, attempted, correct, incorrect: attempted - correct,
-        left: totalQuestions - attempted, score, duration,
+        total: TOTAL_QUESTIONS,
+        attempted,
+        correct,
+        incorrect: attempted - correct,
+        left: TOTAL_QUESTIONS - attempted,
+        score,
+        duration,
         dateTime: formatDateTime(new Date())
     };
 }
 
 function displayResults(results) {
-    let resultsHtml = `<div class="result-container">
+    const summaryHtml = buildResultsSummaryHTML(results);
+    const reviewHtml = generateDetailedReviewHTML();
+    
+    dom.contentDisplay.innerHTML = summaryHtml + reviewHtml;
+    dom.navigationControls.style.display = 'none';
+    dom.questionNavigation.style.display = 'none';
+    dom.contentDisplay.scrollTo(0, 0);
+    closeTimer();
+}
+
+function buildResultsSummaryHTML(results) {
+    const durationStr = `${Math.floor(results.duration / 60)}m ${results.duration % 60}s`;
+    return `<div class="result-container">
         <div class="result-header"><h1 class="result-title">Exam Results</h1></div>
         <div class="result-meta">
             <div class="meta-item"><div class="meta-label">Student Name</div><div class="meta-value">${studentInfo.name}</div></div>
             <div class="meta-item"><div class="meta-label">Exam ID</div><div class="meta-value">${studentInfo.serial}</div></div>
             <div class="meta-item"><div class="meta-label">Date</div><div class="meta-value">${results.dateTime.date}</div></div>
-            <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">${Math.floor(results.duration / 60)}m ${results.duration % 60}s</div></div>
+            <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">${durationStr}</div></div>
         </div>
         <div class="result-summary">
             <div class="summary-item"><div class="summary-value">${results.total}</div><div class="summary-label">Total</div></div>
@@ -253,18 +333,11 @@ function displayResults(results) {
         </div>
         <a href="#" onclick="generateResultPDF()" class="download-btn"><i class="fas fa-download"></i> Download Detailed Result</a>
     </div>`;
-    
-    resultsHtml += generateDetailedReviewHTML();
-    
-    contentDisplay.innerHTML = resultsHtml;
-    document.querySelector('.navigation-controls').style.display = 'none';
-    document.querySelector('.question-navigation').style.display = 'none'; // Hide question numbers on result
-    contentDisplay.scrollTo(0, 0);
 }
 
 function generateDetailedReviewHTML() {
     let reviewHtml = '<div class="detailed-review-container"><h2>Detailed Question Review</h2>';
-    for (let i = 1; i <= totalQuestions; i++) {
+    for (let i = 1; i <= TOTAL_QUESTIONS; i++) {
         const question = questions[i - 1];
         if (!question) continue;
 
@@ -273,29 +346,35 @@ function generateDetailedReviewHTML() {
         const isCorrect = userAnswer === correctAnswer;
         const isAttempted = userAnswer !== undefined;
 
-        reviewHtml += `<div class="review-question-container">
+        let questionReviewHTML = `<div class="review-question-container">
             <div class="question-header"><span class="question-number">Question ${i}</span></div>
             <div class="question-text">${question.question}</div>`;
 
-        if (question.image) reviewHtml += `<div class="question-media"><img src="${question.image}" alt="Question image" class="question-image"></div>`;
-        if (question.audio) reviewHtml += `<div class="question-media"><audio controls class="question-audio"><source src="${question.audio}"></audio></div>`;
+        if (question.image) questionReviewHTML += `<div class="question-media"><img src="${question.image}" alt="Question image" class="question-image"></div>`;
+        if (question.audio) questionReviewHTML += `<div class="question-media"><audio controls class="question-audio"><source src="${question.audio}"></audio></div>`;
 
-        reviewHtml += `<ul class="options-list">`;
+        questionReviewHTML += `<ul class="options-list">`;
         for (const [key, value] of Object.entries(question.options)) {
             let itemClass = 'option-item-review';
+            if (key === correctAnswer) itemClass += ' correct-answer';
             if (isAttempted && key === userAnswer) itemClass += isCorrect ? ' correct' : ' incorrect';
-            else if (key === correctAnswer) itemClass += ' correct-answer';
             
             const isChecked = key === userAnswer ? "checked" : "";
-            reviewHtml += `<li class="${itemClass}"><label class="option-label"><input type="radio" name="review-q${i}" ${isChecked} disabled> <span class="option-text"><strong>${key.toUpperCase()}.</strong> ${value}</span></label></li>`;
+            questionReviewHTML += `<li class="${itemClass}">
+                <label class="option-label">
+                    <input type="radio" name="review-q${i}" ${isChecked} disabled>
+                    <span class="option-text"><strong>${key.toUpperCase()}.</strong> ${value}</span>
+                </label>
+            </li>`;
         }
-        reviewHtml += `</ul>`;
+        questionReviewHTML += `</ul>`;
 
-        if (!isAttempted) reviewHtml += `<p class="review-status not-attempted">Not Attempted. The correct answer is highlighted.</p>`;
-        else if (isCorrect) reviewHtml += `<p class="review-status correct">Your answer was correct.</p>`;
-        else reviewHtml += `<p class="review-status incorrect">Your answer was incorrect. The correct answer is highlighted.</p>`;
+        if (!isAttempted) questionReviewHTML += `<p class="review-status not-attempted">Not Attempted. The correct answer is highlighted.</p>`;
+        else if (isCorrect) questionReviewHTML += `<p class="review-status correct">Your answer was correct.</p>`;
+        else questionReviewHTML += `<p class="review-status incorrect">Your answer was incorrect. The correct answer is highlighted.</p>`;
         
-        reviewHtml += `</div>`;
+        questionReviewHTML += `</div>`;
+        reviewHtml += questionReviewHTML;
     }
     reviewHtml += '</div>';
     return reviewHtml;
@@ -318,21 +397,24 @@ function generateResultPDF() {
         .option-item-review{padding:8px;border-radius:5px;margin-bottom:5px}
         .option-item-review.correct{background-color:#d4edda!important;border:1px solid #c3e6cb!important}
         .option-item-review.incorrect{background-color:#f8d7da!important;border:1px solid #f5c6cb!important}
-        .option-item-review.correct-answer{background-color:#fff3cd!important;border:1px solid #ffeeba!important}
+        .option-item-review.correct-answer{background-color:#d1ecf1!important;border:1px solid #bee5eb!important}
         @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
     `;
-    const summaryHtml = `<div class="meta"><div><strong>Student:</strong> ${studentInfo.name}</div><div><strong>Exam ID:</strong> ${studentInfo.serial}</div><div><strong>Date:</strong> ${results.dateTime.fullDateTime}</div><div><strong>Duration:</strong> ${Math.floor(results.duration/60)}m ${results.duration%60}s</div></div><div class="summary"><div class="summary-item"><div>${results.score}%</div><p>Score</p></div><div class="summary-item"><div>${results.correct}/${results.total}</div><p>Correct</p></div><div class="summary-item"><div>${results.attempted}</div><p>Attempted</p></div></div>`;
+    const durationStr = `${Math.floor(results.duration/60)}m ${results.duration%60}s`;
+    const summaryHtml = `<div class="meta"><div><strong>Student:</strong> ${studentInfo.name}</div><div><strong>Exam ID:</strong> ${studentInfo.serial}</div><div><strong>Date:</strong> ${results.dateTime.fullDateTime}</div><div><strong>Duration:</strong> ${durationStr}</div></div><div class="summary"><div class="summary-item"><div>${results.score}%</div><p>Score</p></div><div class="summary-item"><div>${results.correct}/${results.total}</div><p>Correct</p></div><div class="summary-item"><div>${results.attempted}</div><p>Attempted</p></div></div>`;
 
-    printWindow.document.write(`<html><head><title>Exam Result - ${studentInfo.serial}</title><style>${styles}</style></head><body><div class="header"><h1>Rosan Xettri Studio</h1><h2>Korean Language Exam Result</h2></div>${summaryHtml}${reviewHtml}<script>setTimeout(()=>{window.print();window.close()},500)</script></body></html>`);
+    printWindow.document.write(`<html><head><title>Exam Result - ${studentInfo.serial}</title><style>${styles}</style></head><body><div class="header"><h1>Rosan Xettri Studio</h1><h2>Korean Language Exam Result</h2></div>${summaryHtml}${reviewHtml}</body></html>`);
     printWindow.document.close();
+    setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
 }
+
+
+// ========== 6. UTILITY & HELPER FUNCTIONS ==========
 
 function formatDateTime(date) {
     const d = new Date(date);
     return { date: d.toLocaleDateString(), time: d.toLocaleTimeString(), fullDateTime: d.toLocaleString() };
 }
-
-// ========== 6. UTILITY & HELPER FUNCTIONS ==========
 
 function handleScreenResize() {
     const isMobile = window.innerWidth <= 768;
@@ -349,15 +431,34 @@ function handleBeforeUnload(e) {
 function makeDraggable(element) {
     if (!element) return;
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    const dragMouseDown = (e) => { e.preventDefault(); pos3 = e.clientX; pos4 = e.clientY; document.onmouseup = closeDragElement; document.onmousemove = elementDrag; };
-    const elementDrag = (e) => { e.preventDefault(); pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY; pos3 = e.clientX; pos4 = e.clientY; element.style.top = (element.offsetTop - pos2) + "px"; element.style.left = (element.offsetLeft - pos1) + "px"; };
-    const closeDragElement = () => { document.onmouseup = null; document.onmousemove = null; };
+    const dragMouseDown = (e) => {
+        e.preventDefault();
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+    };
+    const elementDrag = (e) => {
+        e.preventDefault();
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        element.style.top = (element.offsetTop - pos2) + "px";
+        element.style.left = (element.offsetLeft - pos1) + "px";
+    };
+    const closeDragElement = () => {
+        document.onmouseup = null;
+        document.onmousemove = null;
+    };
     element.onmousedown = dragMouseDown;
 }
 
+// ========== 7. TIMER FUNCTIONS ==========
+
 function startTimer() {
-    targetTime = Date.now() + examDuration;
-    timerBox.style.display = "block";
+    targetTime = Date.now() + examDurationMs;
+    dom.timerBox.style.display = "block";
     timerInterval = setInterval(updateCountdown, 1000);
 }
 
@@ -365,29 +466,23 @@ function updateCountdown() {
     const distance = targetTime - Date.now();
     if (distance <= 0) {
         clearInterval(timerInterval);
+        alert("Time is up! The exam will be submitted automatically.");
         submitQuiz();
         return;
     }
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
     const timeString = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    countdownEl.textContent = timeString;
-    minimizedTime.textContent = timeString;
-    timerProgressBar.style.width = `${(distance / examDuration) * 100}%`;
-    if (distance < 5 * 60 * 1000) countdownEl.style.color = 'var(--danger-color)';
+    
+    dom.countdownEl.textContent = timeString;
+    dom.minimizedTime.textContent = timeString;
+    dom.timerProgressBar.style.width = `${(distance / examDurationMs) * 100}%`;
+    
+    if (distance < 5 * 60 * 1000) { // Less than 5 minutes
+        dom.countdownEl.style.color = 'var(--danger-color)';
+    }
 }
 
-function minimizeTimer() { timerBox.classList.add("hidden"); minimizedTimer.classList.remove("hidden"); }
-function restoreTimer() { timerBox.classList.remove("hidden"); minimizedTimer.classList.add("hidden"); }
-function closeTimer() { timerBox.style.display = 'none'; minimizedTimer.style.display = 'none'; }
-
-// ========== 7. PAGE LOAD ENTRY POINT ==========
-document.addEventListener("DOMContentLoaded", () => {
-    initializeExamPage();
-    window.goToPrevious = goToPrevious;
-    window.goToNext = goToNext;
-    window.markForReview = markForReview;
-    window.submitQuiz = submitQuiz; // Global function is now the direct submit
-    window.selectOption = selectOption;
-    window.generateResultPDF = generateResultPDF;
-});
+function minimizeTimer() { dom.timerBox.classList.add("hidden"); dom.minimizedTimer.classList.remove("hidden"); }
+function restoreTimer() { dom.timerBox.classList.remove("hidden"); dom.minimizedTimer.classList.add("hidden"); }
+function closeTimer() { dom.timerBox.style.display = 'none'; dom.minimizedTimer.style.display = 'none'; }
