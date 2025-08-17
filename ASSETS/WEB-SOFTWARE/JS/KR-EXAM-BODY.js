@@ -40,8 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.submitQuiz = submitQuiz;
     window.selectOption = selectOption;
     window.generateResultPDF = generateResultPDF;
-    window.showContent = showContent;
-    window.handleImageError = handleImageError;
+    window.showContent = showContent; // Make it globally accessible for number buttons
 });
 
 function cacheDOMElements() {
@@ -68,6 +67,7 @@ function initializeExamPage() {
 
     const user = JSON.parse(userDataString);
     
+    // Correct user image path if necessary
     if (user.image && user.image.startsWith("ASSETS/WEB-SOFTWARE/")) {
         user.image = user.image.replace("ASSETS/WEB-SOFTWARE/", "");
     }
@@ -129,14 +129,8 @@ function setupEventListeners() {
 
 // ========== 2. PROFILE MODAL & UI CONTROLS ==========
 
-function openProfileModal() { 
-    if (dom.profileModalOverlay) dom.profileModalOverlay.style.display = 'flex'; 
-}
-
-function closeProfileModal() { 
-    if (dom.profileModalOverlay) dom.profileModalOverlay.style.display = 'none'; 
-}
-
+function openProfileModal() { if (dom.profileModalOverlay) dom.profileModalOverlay.style.display = 'flex'; }
+function closeProfileModal() { if (dom.profileModalOverlay) dom.profileModalOverlay.style.display = 'none'; }
 function setExamControlsDisabled(disabled) {
     document.querySelectorAll('.number-btn, .navigation-controls button, .options-list input, #submit-now-btn')
         .forEach(control => { if (control) control.disabled = disabled; });
@@ -175,28 +169,21 @@ function showContent(questionNumber) {
 function buildQuestionHTML(question, questionNumber) {
     const userAnswer = userAnswers[questionNumber];
     
-    // Build media HTML with improved path handling
+    // Build media HTML (Image and Audio)
     let mediaHTML = '';
     if (question.image) {
-        const imagePath = question.image.startsWith('http') ? question.image : 
-                        `/${question.image.replace(/^\/?KR-EXAM-FILES\//, '')}`;
-        
+        // IMPORTANT: This path is relative to your HTML file.
+        // The onerror attribute will log an error to the console (F12) if the path is wrong.
         mediaHTML += `<div class="question-media">
-            <img src="${imagePath}" 
-                 alt="Question media for question ${questionNumber}" 
-                 class="question-image" 
-                 onerror="handleImageError(this, ${questionNumber})">
+            <img src="${question.image}" alt="Question media for question ${questionNumber}" class="question-image" onerror="console.error('IMAGE NOT FOUND: Check the path for ${question.image}'); this.alt='Image not found';">
         </div>`;
     }
-    
     if (question.audio) {
         if (!disabledAudios.has(questionNumber)) {
-            const audioPath = question.audio.startsWith('http') ? question.audio : 
-                            `/${question.audio.replace(/^\/?KR-EXAM-FILES\//, '')}`;
-            
+            // IMPORTANT: This path is relative to your HTML file.
             mediaHTML += `<div class="question-media">
                 <audio id="audio-${questionNumber}" controls class="question-audio" onplay="setupAudioPlayback(${questionNumber})">
-                    <source src="${audioPath}">
+                    <source src="${question.audio}">
                     Your browser does not support the audio element.
                 </audio>
             </div>`;
@@ -224,17 +211,6 @@ function buildQuestionHTML(question, questionNumber) {
             </div>`;
 }
 
-function handleImageError(imgElement, questionNumber) {
-    console.error(`Image not found for question ${questionNumber}: ${imgElement.src}`);
-    imgElement.alt = 'Image not available';
-    imgElement.style.display = 'none';
-    
-    const mediaContainer = imgElement.closest('.question-media');
-    if (mediaContainer) {
-        mediaContainer.innerHTML += `<p class="warning">Image not available for this question</p>`;
-    }
-}
-
 function selectOption(questionNumber, selectedOption) {
     userAnswers[questionNumber] = selectedOption;
     completedQuestions.add(questionNumber);
@@ -257,15 +233,15 @@ function setupAudioPlayback(questionNumber) {
     if (!audio) return;
 
     setExamControlsDisabled(true);
-    audio.style.pointerEvents = 'none';
+    audio.style.pointerEvents = 'none'; // Prevent re-clicking during play
 
     const onAudioEnd = () => {
         disabledAudios.add(questionNumber);
         setExamControlsDisabled(false);
         if (currentQuestion === questionNumber) {
-            showContent(questionNumber);
+            showContent(questionNumber); // Re-render to show the 'audio played' message
         }
-        audio.removeEventListener('ended', onAudioEnd);
+        audio.removeEventListener('ended', onAudioEnd); // Clean up listener
     };
     
     audio.addEventListener('ended', onAudioEnd);
@@ -273,18 +249,13 @@ function setupAudioPlayback(questionNumber) {
 
 // ========== 4. NAVIGATION & SUBMISSION ==========
 
-function goToPrevious() { 
-    if (currentQuestion > 1) showContent(currentQuestion - 1); 
-}
-
-function goToNext() { 
-    if (currentQuestion < TOTAL_QUESTIONS) showContent(currentQuestion + 1); 
-}
+function goToPrevious() { if (currentQuestion > 1) showContent(currentQuestion - 1); }
+function goToNext() { if (currentQuestion < TOTAL_QUESTIONS) showContent(currentQuestion + 1); }
 
 function markForReview() {
     if (currentQuestion === 0) return;
     reviewedQuestions.add(currentQuestion);
-    completedQuestions.delete(currentQuestion);
+    completedQuestions.delete(currentQuestion); // A reviewed question is not "completed"
     updateQuestionNavigation();
     goToNext();
 }
@@ -292,6 +263,10 @@ function markForReview() {
 function submitQuiz() {
     if (quizSubmitted) return;
     
+    // Optional: Add a confirmation dialog
+    // const confirmed = confirm("Are you sure you want to submit the exam?");
+    // if (!confirmed) return;
+
     quizSubmitted = true;
     clearInterval(timerInterval);
     studentInfo.endTime = new Date();
@@ -375,11 +350,7 @@ function generateDetailedReviewHTML() {
             <div class="question-header"><span class="question-number">Question ${i}</span></div>
             <div class="question-text">${question.question}</div>`;
 
-        if (question.image) {
-            const imagePath = question.image.startsWith('http') ? question.image : 
-                            `/${question.image.replace(/^\/?KR-EXAM-FILES\//, '')}`;
-            questionReviewHTML += `<div class="question-media"><img src="${imagePath}" alt="Question image" class="question-image" onerror="this.style.display='none'"></div>`;
-        }
+        if (question.image) questionReviewHTML += `<div class="question-media"><img src="${question.image}" alt="Question image" class="question-image"></div>`;
         if (question.audio) questionReviewHTML += `<div class="question-media"><audio controls class="question-audio"><source src="${question.audio}"></audio></div>`;
 
         questionReviewHTML += `<ul class="options-list">`;
@@ -436,6 +407,7 @@ function generateResultPDF() {
     printWindow.document.close();
     setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
 }
+
 
 // ========== 6. UTILITY & HELPER FUNCTIONS ==========
 
@@ -506,22 +478,11 @@ function updateCountdown() {
     dom.minimizedTime.textContent = timeString;
     dom.timerProgressBar.style.width = `${(distance / examDurationMs) * 100}%`;
     
-    if (distance < 5 * 60 * 1000) {
+    if (distance < 5 * 60 * 1000) { // Less than 5 minutes
         dom.countdownEl.style.color = 'var(--danger-color)';
     }
 }
 
-function minimizeTimer() { 
-    dom.timerBox.classList.add("hidden"); 
-    dom.minimizedTimer.classList.remove("hidden"); 
-}
-
-function restoreTimer() { 
-    dom.timerBox.classList.remove("hidden"); 
-    dom.minimizedTimer.classList.add("hidden"); 
-}
-
-function closeTimer() { 
-    dom.timerBox.style.display = 'none'; 
-    dom.minimizedTimer.style.display = 'none'; 
-}
+function minimizeTimer() { dom.timerBox.classList.add("hidden"); dom.minimizedTimer.classList.remove("hidden"); }
+function restoreTimer() { dom.timerBox.classList.remove("hidden"); dom.minimizedTimer.classList.add("hidden"); }
+function closeTimer() { dom.timerBox.style.display = 'none'; dom.minimizedTimer.style.display = 'none'; }
