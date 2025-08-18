@@ -334,7 +334,7 @@ function loadDashboard() {
     }
     currentUser = JSON.parse(userData);
 
-    document.getElementById('welcomeMessage').innerHTML = `<i class="fas fa-home"></i> Welcome : ${currentUser.name || currentUser.username}`;
+    document.getElementById('welcomeMessage').innerHTML = `</i> Welcome : ${currentUser.name || currentUser.username}`;
     document.getElementById('profileName').textContent = currentUser.name || "No name";
     document.getElementById('profileUsername').textContent = `@${currentUser.username}`;
     document.getElementById('profileImg').src = currentUser.image || "https://via.placeholder.com/80";
