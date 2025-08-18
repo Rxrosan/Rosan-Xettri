@@ -1,8 +1,4 @@
 // --- USER DATABASE WITH FIXED, DATE-BASED TIMED ACCESS ---
-// 'access': Holds card IDs for PERMANENT access.
-// 'timedAccessConfig': Defines temporary access for specific cards.
-//   - startDate: "YYYY-MM-DD". The exact day the access period begins.
-//   - duration: The number of days the access is valid from the startDate.
 const users = [
     {
         id: 1,
@@ -10,15 +6,8 @@ const users = [
         password: "RX9826482279",
         name: "ROSAN KC",
         image: "ASSETS/TOOL-FILES/USER/ROSAN-KC.jpg",
-        access: ["file1","file2","file3","file4","file5","file6","file7"], // Permanent access card lnk here
-        timedAccessConfig: {
-            //"file1": { startDate: "2025-08-15", duration: 30 },  // Access starts Aug 15th for 30 days
-            //"file2": { startDate: "2025-08-10", duration: 90 },  // Access starts Aug 10th for 90 days
-            //"file3": { startDate: "2025-08-01", duration: 365 }, // Access for all of 2025
-            //"file4": { startDate: "2025-08-01", duration: 365 }, // Access for all of 2025
-            //"file5": { startDate: "2025-08-01", duration: 365 }, // Access for all of 2025
-            //"file7": { startDate: "2025-08-20", duration: 10 }   // Starts Aug 20th
-        }
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7"], // Permanent access
+        timedAccessConfig: {} // No timed access needed due to permanent access
     },
     {
         id: 2,
@@ -26,13 +15,13 @@ const users = [
         password: "RX9807483578",
         name: "Rita Rana Magar",
         image: "ASSETS/TOOL-FILES/USER/Rita-Magar.jpg",
-        access: [], // Permanent access card lnk here
+        access: [],
         timedAccessConfig: {
-            "file2": { startDate: "2025-08-18", duration: 365 }, // Rita's access started Aug 1st
+            "file2": { startDate: "2025-08-18", duration: 365 },
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file4": { startDate: "2025-08-18", duration: 365 },
             "file5": { startDate: "2025-08-18", duration: 365 },
-            "file6": { startDate: "2025-08-18", duration: 365 }
+            "file6": { startDate: "2025-08-18", duration: 365 } 
         }
     },
     {
@@ -41,7 +30,7 @@ const users = [
         password: "RX9748780170",
         name: "Keshab Disuwa Magar",
         image: "ASSETS/TOOL-FILES/USER/Keshab-Disuwa-Magar.jpg",
-        access: [], // Permanent access card lnk here
+        access: [],
         timedAccessConfig: {
             "file2": { startDate: "2025-08-18", duration: 365 },
             "file3": { startDate: "2025-08-18", duration: 365 },
@@ -52,50 +41,66 @@ const users = [
     },
 ];
 
-// --- CONTENT CARDS DATABASE ---
+// --- CONTENT CARDS DATABASE WITH PRICES ---
 const contentCards = [
-    {   id: "file1", 
+    {   
+        id: "file1", 
         title: "KAPALI-TAMSUK", 
         description: "Login Code : RX-2061", 
         link: "ASSETS/WEB-SOFTWARE/RX-STUDIO-KAPALI_TAMSUK_GENERATOR.html", 
-        icon: "fas fa-pen" },
-
-    {   id: "file2", 
+        icon: "fas fa-pen",
+        prices: { default: "Rs. 1500", 2: "Rs. 1000", 3: "Rs. 1000" }
+    },
+    {   
+        id: "file2", 
         title: "QUESTION-MODEL-1", 
         description: "LESSON A 1 - 10L", 
         link: "KR-EXAM.html", 
-        icon: "fas fa-book" },
-
-    {   id: "file3", 
+        icon: "fas fa-book",
+        prices: { default: "Rs. 150" }
+    },
+    {   
+        id: "file3", 
         title: "LIVE-WEATHER", 
         description: "A platform where you can check the environmental conditions in your area.", 
         link: "ASSETS/WEB-SOFTWARE/RX-Weather.html", 
-        icon: "fas fa-cloud" },
-
-    {   id: "file4", 
+        icon: "fas fa-cloud",
+        prices: { default: "Rs. 0" }
+    },
+    {   
+        id: "file4", 
         title: "RX-GALLERY", 
         description: "Login Code : RX2061", 
         link: "ASSETS/WEB-SOFTWARE/RX-GALLERY.html", 
-        icon: "fas fa-image" },
-
-    {   id: "file5", 
+        icon: "fas fa-image",
+        prices: { default: "Rs. 0" }
+    },
+    {   
+        id: "file5", 
         title: "RX-QR-Scanner/Generator", 
         description: "You can create personalized messages using a QR code with this app.", 
         link: "ASSETS/WEB-SOFTWARE/RX-S-QR.html", 
-        icon: "fas fa-qrcode" },
-
-    {   id: "file6", 
+        icon: "fas fa-qrcode",
+        prices: { default: "Rs. 500" }
+    },
+    {   
+        id: "file6", 
         title: "RX-CALENDER", 
         description: "English Calendar – Allows you to add tasks and notes for future work schedules.", 
         link: "ASSETS/WEB-SOFTWARE/RX-Calendar.html", 
-        icon: "fas fa-calendar" },
-
-    {   id: "file7", 
+        icon: "fas fa-calendar",
+        prices: { default: "Rs. 0" }
+    },
+    {   
+        id: "file7", 
         title: "KAPALI-TAMSUK", 
         description: "Old Version | Login Code: RX-2061", 
         link: "ASSETS/WEB-SOFTWARE/Kapali.html", 
-        icon: "fas fa-pencil" }
+        icon: "fas fa-pencil",
+        prices: { default: "Rs. 1000", 2: "Rs. 500", 3: "Rs. 500" }
+    }
 ];
+
 
 // --- DEVELOPER-MANAGED STORES ---
 const defaultStores = [
@@ -161,6 +166,13 @@ function switchStore(storeId) {
     }
 }
 
+// --- Helper function to get the correct price for a user ---
+function getPriceForUser(card, user) {
+    if (!card.prices) return "Not for sale";
+    if (user && card.prices[user.id]) return card.prices[user.id];
+    return card.prices.default || "Contact for price";
+}
+
 // --- CONTENT RENDERING AND ACCESS LOGIC ---
 function renderContentCards() {
     const cardsContainer = document.getElementById('contentCards');
@@ -177,12 +189,11 @@ function renderContentCards() {
     storeContent.forEach(card => {
         const permanentAccess = currentUser.access && currentUser.access.includes(card.id);
         
-        // Calculate expiration from the fixed start date in the user's config
         let timedAccessEnd = null;
         const cardConfig = currentUser.timedAccessConfig ? currentUser.timedAccessConfig[card.id] : null;
 
         if (cardConfig && cardConfig.startDate && cardConfig.duration) {
-            const startDate = new Date(`${cardConfig.startDate}T00:00:00Z`); // Use UTC for consistency
+            const startDate = new Date(`${cardConfig.startDate}T00:00:00Z`);
             timedAccessEnd = startDate.getTime() + (cardConfig.duration * 24 * 60 * 60 * 1000);
         }
 
@@ -202,12 +213,12 @@ function renderContentCards() {
             buttonHtml = `<a href="${card.link}"><i class="fas fa-external-link-alt"></i> Open</a>`;
         } else {
             if (isExpired) {
-                detailsHtml = `<p class="time-limit-expired">Your configured access has expired.</p>`;
-                buttonHtml = `<button class="purchase-btn" onclick="requestAccess('${card.id}')"><i class="fas fa-envelope"></i> Request Renewal</button>`;
+                detailsHtml = `<p class="time-limit-expired">Your timed access has expired.</p>`;
+                buttonHtml = `<button class="purchase-btn" onclick="requestAccess('${card.id}', true)"><i class="fas fa-envelope"></i> Request Renewal</button>`;
             } else {
-                detailsHtml = `<p>Access for this module is not configured for your account.</p>`;
-                // The button is disabled because access must be granted by the admin in the code
-                buttonHtml = `<button class="purchase-btn" onclick="requestAccess('${card.id}')" disabled><i class="fas fa-lock"></i> Not Available</button>`;
+                const price = getPriceForUser(card, currentUser);
+                detailsHtml = `<p>Purchase to get access.</p><div class="price">${price}</div>`;
+                buttonHtml = `<button class="purchase-btn" onclick="requestAccess('${card.id}', false)"><i class="fas fa-shopping-cart"></i> Purchase Access</button>`;
             }
         }
         cardElement.innerHTML = `<i class="${card.icon || 'fas fa-file'} card-icon"></i><h3>${card.title}</h3>${detailsHtml}${!hasAccess ? '<div class="lock-icon"><i class="fas fa-lock"></i></div>' : ''}${buttonHtml}`;
@@ -216,6 +227,7 @@ function renderContentCards() {
 
     startCountdownTimers();
 }
+
 
 // --- COUNTDOWN TIMER FUNCTIONS ---
 function startCountdownTimers() {
@@ -236,7 +248,7 @@ function updateCountdowns() {
             el.innerHTML = "Expired";
             if (!el.classList.contains('expired')) {
                 el.classList.add('expired');
-                setTimeout(renderContentCards, 2000); // Re-render to update the card state
+                setTimeout(renderContentCards, 1500);
             }
             return;
         }
@@ -269,15 +281,14 @@ function loginAsGuest() {
         id: 0, 
         username: "guest", 
         name: "Guest User", 
-        image: "ASSETS/TOOL-FILES/USER/USER.png", 
+        image: "ASSETS/TOOL-FILES/USER/USER.png",
+        access: [], 
         timedAccessConfig: {
-
-        "file3": { startDate: "2025-08-18", duration: 365 },  // Access starts Aug 15th for 30 days
-        "file4": { startDate: "2025-08-18", duration: 365 },  // Access starts Aug 10th for 90 days
-        "file5": { startDate: "2025-08-18", duration: 365 }, // Access for all of 2025
-        "file6": { startDate: "2025-08-18", duration: 365 }, // Access for all of 2025
-
-    } };
+            "file3": { startDate: "2025-08-18", duration: 365 },
+            "file4": { startDate: "2025-08-18", duration: 365 },
+            "file6": { startDate: "2025-08-18", duration: 365 },
+        } 
+    };
     redirectToDashboard();
 }
 
@@ -301,19 +312,22 @@ function loginAsUser(username, password) {
 
 function logout() {
     if (confirm("Are you sure you want to logout?")) {
-        clearInterval(countdownInterval); // Stop the countdown timer on logout
-        sessionStorage.removeItem('currentUser');
+        clearInterval(countdownInterval);
+        // --- MODIFIED: Changed to localStorage to clear the permanent login ---
+        localStorage.removeItem('currentUser'); 
         window.location.href = "USER-LOGIN.html";
     }
 }
 
 function redirectToDashboard() {
-    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+    // --- MODIFIED: Changed to localStorage for permanent login ---
+    localStorage.setItem('currentUser', JSON.stringify(currentUser)); 
     window.location.href = "USER-DASHBOARD.html";
 }
 
 function loadDashboard() {
-    const userData = sessionStorage.getItem('currentUser');
+    // --- MODIFIED: Changed to localStorage to check for permanent login ---
+    const userData = localStorage.getItem('currentUser'); 
     if (!userData) {
         window.location.href = "USER-LOGIN.html";
         return;
@@ -384,13 +398,41 @@ function closeModal() {
     document.body.style.overflow = 'auto';
 }
 
-function requestAccess(contentId) {
+// --- FIXED: This function now correctly finds and populates the modal ---
+function requestAccess(contentId, isRenewal) {
     const card = contentCards.find(c => c.id === contentId);
-    if (card) {
-        // The purchase modal is now a contact modal for requesting access
-        document.getElementById('modalTitle').textContent = `Request Access for: ${card.title}`;
-        showModal('contactModal');
+    if (!card) {
+        console.error("Card data not found for ID:", contentId);
+        return;
     }
+
+    const modalTitleEl = document.getElementById('modalTitle');
+    const modalPriceEl = document.getElementById('modalPrice');
+    const facebookLink = document.getElementById('facebookContactLink');
+    const emailLink = document.getElementById('emailContactLink');
+
+    if (!modalTitleEl || !modalPriceEl || !facebookLink || !emailLink) {
+        alert("Error: The contact modal HTML is missing or has incorrect IDs. Please check the dashboard file.");
+        return;
+    }
+
+    const price = getPriceForUser(card, currentUser);
+    let subject = '';
+
+    if (isRenewal) {
+        modalTitleEl.textContent = `Request Renewal: ${card.title}`;
+        modalPriceEl.textContent = `Please contact us to discuss renewal options.`;
+        subject = `Renewal Inquiry for ${card.title} (User: ${currentUser.username})`;
+    } else {
+        modalTitleEl.textContent = `Purchase Access: ${card.title}`;
+        modalPriceEl.textContent = `Price: ${price}`;
+        subject = `Purchase Inquiry for ${card.title} (User: ${currentUser.username})`;
+    }
+
+    facebookLink.href = "https://www.facebook.com/RosanXettri.2004"; 
+    emailLink.href = `mailto:rkc242855@gmail.com?subject=${encodeURIComponent(subject)}`;
+    
+    showModal('purchaseModal');
 }
 
 // --- GLOBAL EVENT LISTENERS ---
