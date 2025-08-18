@@ -6,7 +6,7 @@ const users = [
         password: "RX9826482279",
         name: "ROSAN KC",
         image: "ASSETS/TOOL-FILES/USER/ROSAN-KC.jpg",
-        access: ["file1","file2","file3","file4","file5","file6","file7"] // User access card id
+        access: ["file1","file2","file3","file4","file5","file6","file7"]
     },
     {
         id: 2,
@@ -14,7 +14,7 @@ const users = [
         password: "RX9807483578",
         name: "Rita Rana Magar",
         image: "ASSETS/TOOL-FILES/USER/Rita-Magar.jpg",
-        access: ["file2","file3","file4","file5","file6"] // User access card id
+        access: ["file2","file3","file4","file5","file6"]
     },
     {
         id: 3,
@@ -22,9 +22,8 @@ const users = [
         password: "RX9748780170",
         name: "Keshab Disuwa Magar",
         image: "ASSETS/TOOL-FILES/USER/Keshab-Disuwa-Magar.jpg",
-        access: ["file2","file3","file4","file5","file6"] // User access card id
+        access: ["file2","file3","file4","file5","file6"]
     },
-    
 ];
 
 // Content cards database
@@ -60,14 +59,14 @@ const contentCards = [
     { 
         id: "file5", 
         title: "RX-QR-Scanner/Generator", 
-        description: "You can create personalized messages using a QR code with this app, and the generated QR can also be read directly through this web application. Note: Do not clear your browser data. Doing so will result in the loss of your stored information.", 
+        description: "You can create personalized messages using a QR code with this app...", 
         link: "ASSETS/WEB-SOFTWARE/RX-S-QR.html",
         icon: "fas fa-qrcode"
     },
     { 
         id: "file6", 
         title: "RX-CALENDER", 
-        description: "English Calendar – Allows you to add tasks and notes for future work schedules. Note: This feature works online only. Note: Do not clear your browser data. Doing so will result in the loss of your stored information.", 
+        description: "English Calendar – Allows you to add tasks and notes for future work schedules...", 
         link: "ASSETS/WEB-SOFTWARE/RX-Calendar.html",
         icon: "fas fa-calendar"
     },
@@ -81,11 +80,9 @@ const contentCards = [
 ];
 
 // --- DEVELOPER-MANAGED STORES ---
-// To add, remove, or change the content of stores, edit this array.
-// The `id` should be unique. The `content` array holds the 'id's of items from contentCards.
 const defaultStores = [
     {
-        id: "store_1", // Use a simple, permanent ID
+        id: "store_1",
         name: "LEKHA-PADI",
         content: ["file1","file7"]
     },
@@ -106,23 +103,16 @@ let stores = [];
 let currentStoreId = null;
 
 // --- DYNAMIC STORE MANAGEMENT ---
-
 function initializeStores() {
     const savedStores = JSON.parse(localStorage.getItem('lekhapadi_stores')) || [];
-    
-    // Sync developer-defined stores with saved stores from local storage
-    // This ensures that stores added/removed by the developer are reflected,
-    // while user-renamed stores are preserved.
     stores = defaultStores.map(devStore => {
         const savedStore = savedStores.find(s => s.id === devStore.id);
         return {
-            ...devStore, // Start with the developer's definition (for content)
-            name: savedStore ? savedStore.name : devStore.name, // Use saved name if it exists
+            ...devStore,
+            name: savedStore ? savedStore.name : devStore.name,
         };
     });
-
     localStorage.setItem('lekhapadi_stores', JSON.stringify(stores));
-    
     if (stores.length > 0 && !currentStoreId) {
         currentStoreId = stores[0].id;
     }
@@ -131,9 +121,7 @@ function initializeStores() {
 function renderStoreNavigation() {
     const navContainer = document.getElementById('storeNavigation');
     if (!navContainer) return;
-    
     navContainer.innerHTML = '';
-    
     stores.forEach(store => {
         const button = document.createElement('button');
         button.className = 'store-btn';
@@ -144,7 +132,6 @@ function renderStoreNavigation() {
         }
         navContainer.appendChild(button);
     });
-
     const manageButton = document.createElement('button');
     manageButton.className = 'store-btn manage-btn';
     manageButton.innerHTML = '<i class="fas fa-cog"></i> Manage Stores';
@@ -155,13 +142,12 @@ function renderStoreNavigation() {
 function switchStore(storeId) {
     currentStoreId = storeId;
     const store = stores.find(s => s.id === storeId);
-    
     if (store) {
         const storeTitle = document.getElementById('storeTitle');
         if (storeTitle) {
             storeTitle.innerHTML = `<i class="fas fa-store"></i> ${store.name}`;
         }
-        renderStoreNavigation(); // Re-render to update active class
+        renderStoreNavigation();
         renderContentCards();
     }
 }
@@ -169,30 +155,22 @@ function switchStore(storeId) {
 function renderContentCards() {
     const cardsContainer = document.getElementById('contentCards');
     if (!cardsContainer) return;
-
     cardsContainer.innerHTML = '';
     const store = stores.find(s => s.id === currentStoreId);
-
     if (!store || store.content.length === 0) {
         cardsContainer.innerHTML = '<p class="no-content">No content available in this store.</p>';
         return;
     }
-    
     const storeContent = contentCards.filter(card => store.content.includes(card.id));
-
     if (storeContent.length === 0) {
         cardsContainer.innerHTML = '<p class="no-content">No content defined for this store.</p>';
         return;
     }
-
     storeContent.forEach(card => {
         const hasAccess = currentUser.access.includes(card.id);
         const cardElement = document.createElement('div');
         cardElement.className = `card ${hasAccess ? '' : 'locked'}`;
-        
-        // MODIFIED LOGIC: Show description only if user has access.
         const descriptionHtml = hasAccess ? `<p>${card.description}</p>` : '<p>Purchase to see the details.</p>';
-        
         if (hasAccess) {
             cardElement.innerHTML = `<i class="${card.icon || 'fas fa-file'} card-icon"></i><h3>${card.title}</h3>${descriptionHtml}<a href="${card.link}"><i class="fas fa-external-link-alt"></i> Open</a>`;
         } else {
@@ -202,8 +180,7 @@ function renderContentCards() {
     });
 }
 
-// --- STORE MANAGER MODAL FUNCTIONS (RENAMING ONLY) ---
-
+// --- STORE MANAGER MODAL FUNCTIONS ---
 function openStoreManager() {
     const modal = document.getElementById('storeManagerModal');
     if (modal) {
@@ -224,11 +201,9 @@ function closeStoreManager() {
 function renderStoreManagerList() {
     const listContainer = document.getElementById('storeManagerList');
     if (!listContainer) return;
-
     listContainer.innerHTML = '';
     stores.forEach(store => {
         const li = document.createElement('li');
-        // The input field allows renaming, but there is no delete button.
         li.innerHTML = `<i class="fas fa-store"></i> <input type="text" value="${store.name}" data-id="${store.id}" placeholder="Store Name">`;
         listContainer.appendChild(li);
     });
@@ -244,9 +219,7 @@ function saveStoreChanges() {
             store.name = newName;
         }
     });
-
     localStorage.setItem('lekhapadi_stores', JSON.stringify(stores));
-    
     closeStoreManager();
     renderStoreNavigation();
     if (currentStoreId) {
@@ -255,18 +228,14 @@ function saveStoreChanges() {
 }
 
 // --- CORE APPLICATION FUNCTIONS ---
-
 function setupProfileDropdown() {
     const profileDropdown = document.querySelector('.profile-dropdown');
     if (!profileDropdown) return;
     const profileBtn = profileDropdown.querySelector('.profile-btn');
-    const dropdownContent = profileDropdown.querySelector('.dropdown-content');
-
     profileBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         profileDropdown.classList.toggle('active');
     });
-
     document.addEventListener('click', (e) => {
         if (!profileDropdown.contains(e.target)) {
             profileDropdown.classList.remove('active');
@@ -282,10 +251,8 @@ function loginAsGuest() {
 function loginAsUser(username, password) {
     const button = document.querySelector('#userLoginForm button[type="submit"]');
     const originalText = button.innerHTML;
-    
     button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
     button.disabled = true;
-
     setTimeout(() => {
         const user = users.find(u => u.username === username && u.password === password);
         if (user) {
@@ -301,40 +268,38 @@ function loginAsUser(username, password) {
 
 function logout() {
     if (confirm("Are you sure you want to logout?")) {
-        sessionStorage.removeItem('currentUser');
+        // FIXED: Use localStorage to remove the permanent login
+        localStorage.removeItem('currentUser');
         window.location.href = "USER-LOGIN.html";
     }
 }
 
 function redirectToDashboard() {
-    sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+    // FIXED: Use localStorage to save the login permanently
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
     window.location.href = "USER-DASHBOARD.html";
 }
 
 function loadDashboard() {
-    const userData = sessionStorage.getItem('currentUser');
+    // FIXED: Use localStorage to check for a permanent login
+    const userData = localStorage.getItem('currentUser');
     if (!userData) {
         window.location.href = "USER-LOGIN.html";
         return;
     }
-    
     currentUser = JSON.parse(userData);
-    
     document.getElementById('welcomeMessage').innerHTML = `<i class="fas fa-home"></i> Welcome, ${currentUser.name || currentUser.username}!`;
     document.getElementById('profileName').textContent = currentUser.name || "No name";
     document.getElementById('profileUsername').textContent = `@${currentUser.username}`;
     document.getElementById('profileImg').src = currentUser.image || "https://via.placeholder.com/80";
-    
     initializeStores();
     if (currentStoreId) {
         switchStore(currentStoreId);
     }
-    
     setupProfileDropdown();
 }
 
 // --- GENERAL MODAL FUNCTIONS ---
-
 function showModal(modalId) {
     const modal = document.getElementById(modalId);
     if(modal) modal.style.display = 'block';
