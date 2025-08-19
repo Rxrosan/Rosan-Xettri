@@ -37,8 +37,8 @@ const contentCards = [
     },
     { 
         id: "file2", 
-        title: "QUESTION-MODEL-1", 
-        description: "LESSON A 1 - 10L", 
+        title: "QUESTION-MODEL-Lesson 1 -10", 
+        description: "LESSON A 1 - 10 L", 
         link: "KR-EXAM.html",
         icon: "fas fa-book"
     },
