@@ -152,6 +152,28 @@ function switchStore(storeId) {
     }
 }
 
+
+// --- NEW UPDATE FUNCTION ---
+/**
+ * Saves the selected exam ID to localStorage and then navigates to the exam page.
+ * This is the crucial step that tells EXAM-JS-LINKER.js which question set to load.
+ * @param {string} examId - The ID of the content card (e.g., 'file2').
+ * @param {string} examUrl - The URL of the exam page (e.g., 'KR-EXAM.html').
+ */
+function prepareAndLaunchExam(examId, examUrl) {
+    if (!examId || !examUrl) {
+        console.error("Cannot launch exam: Missing examId or examUrl.");
+        return;
+    }
+    console.log(`Preparing to launch exam. ID: ${examId}`);
+    // This line is the FIX. It saves the ID for the next page to use.
+    localStorage.setItem('selectedExamId', examId);
+    // Now, go to the exam page.
+    window.location.href = examUrl;
+}
+
+
+// --- MODIFIED FUNCTION ---
 function renderContentCards() {
     const cardsContainer = document.getElementById('contentCards');
     if (!cardsContainer) return;
@@ -171,16 +193,26 @@ function renderContentCards() {
         const cardElement = document.createElement('div');
         cardElement.className = `card ${hasAccess ? '' : 'locked'}`;
         const descriptionHtml = hasAccess ? `<p>${card.description}</p>` : '<p>Purchase to see the details.</p>';
+
         if (hasAccess) {
-            cardElement.innerHTML = `<i class="${card.icon || 'fas fa-file'} card-icon"></i><h3>${card.title}</h3>${descriptionHtml}<a href="${card.link}"><i class="fas fa-external-link-alt"></i> Open</a>`;
+            // Check if the link is for the exam page.
+            if (card.link === "KR-EXAM.html") {
+                // If it's an exam, use the special launch function to save the ID.
+                cardElement.innerHTML = `<i class="${card.icon || 'fas fa-file'} card-icon"></i><h3>${card.title}</h3>${descriptionHtml}<a href="#" onclick="prepareAndLaunchExam('${card.id}', '${card.link}')"><i class="fas fa-external-link-alt"></i> Open</a>`;
+            } else {
+                // For all other links, use a normal direct link.
+                cardElement.innerHTML = `<i class="${card.icon || 'fas fa-file'} card-icon"></i><h3>${card.title}</h3>${descriptionHtml}<a href="${card.link}"><i class="fas fa-external-link-alt"></i> Open</a>`;
+            }
         } else {
+            // This part for locked content remains unchanged.
             cardElement.innerHTML = `<i class="${card.icon || 'fas fa-file'} card-icon"></i><h3>${card.title}</h3>${descriptionHtml}<div class="lock-icon"><i class="fas fa-lock"></i></div><button class="purchase-btn" onclick="purchaseContent('${card.id}')"><i class="fas fa-shopping-cart"></i> Purchase Access</button>`;
         }
         cardsContainer.appendChild(cardElement);
     });
 }
 
-// --- STORE MANAGER MODAL FUNCTIONS ---
+
+// --- STORE MANAGER MODAL FUNCTIONS (UNCHANGED) ---
 function openStoreManager() {
     const modal = document.getElementById('storeManagerModal');
     if (modal) {
@@ -227,7 +259,7 @@ function saveStoreChanges() {
     }
 }
 
-// --- CORE APPLICATION FUNCTIONS ---
+// --- CORE APPLICATION FUNCTIONS (UNCHANGED) ---
 function setupProfileDropdown() {
     const profileDropdown = document.querySelector('.profile-dropdown');
     if (!profileDropdown) return;
@@ -299,7 +331,7 @@ function loadDashboard() {
     setupProfileDropdown();
 }
 
-// --- GENERAL MODAL FUNCTIONS ---
+// --- GENERAL MODAL FUNCTIONS (UNCHANGED) ---
 function showModal(modalId) {
     const modal = document.getElementById(modalId);
     if(modal) modal.style.display = 'block';

@@ -173,7 +173,7 @@ function getPriceForUser(card, user) {
     return card.prices.default || "Contact for price";
 }
 
-// --- CONTENT RENDERING AND ACCESS LOGIC ---
+// --- CONTENT RENDERING AND ACCESS LOGIC (MODIFIED) ---
 function renderContentCards() {
     const cardsContainer = document.getElementById('contentCards');
     if (!cardsContainer) return;
@@ -210,7 +210,15 @@ function renderContentCards() {
             if (timedAccessEnd && !permanentAccess) {
                 detailsHtml += `<div class="countdown-container"><p>Time Remaining:</p><p class="countdown" data-expiration="${timedAccessEnd}" id="countdown-${card.id}"></p></div>`;
             }
-            buttonHtml = `<a href="${card.link}"><i class="fas fa-external-link-alt"></i> Open</a>`;
+            
+            // --- NEW LOGIC: Check if the card is an exam and use the special launcher ---
+            if (card.link === "KR-EXAM.html") {
+                buttonHtml = `<a href="#" onclick="prepareAndLaunchExam('${card.id}', '${card.link}')"><i class="fas fa-external-link-alt"></i> Open</a>`;
+            } else {
+                buttonHtml = `<a href="${card.link}"><i class="fas fa-external-link-alt"></i> Open</a>`;
+            }
+            // --- END OF NEW LOGIC ---
+
         } else {
             if (isExpired) {
                 detailsHtml = `<p class="time-limit-expired">Your timed access has expired.</p>`;
@@ -259,6 +267,26 @@ function updateCountdowns() {
         el.innerHTML = `<b>${d}</b>d <b>${h}</b>h <b>${m}</b>m <b>${s}</b>s`;
     });
 }
+
+// --- NEWLY ADDED FUNCTION FOR EXAM LAUNCHING ---
+/**
+ * Saves the selected exam ID to localStorage and then navigates to the exam page.
+ * This is the crucial step that tells EXAM-JS-LINKER.js which question set to load.
+ * @param {string} examId - The ID of the content card (e.g., 'file2').
+ * @param {string} examUrl - The URL of the exam page (e.g., 'KR-EXAM.html').
+ */
+function prepareAndLaunchExam(examId, examUrl) {
+    if (!examId || !examUrl) {
+        console.error("Cannot launch exam: Missing examId or examUrl.");
+        return;
+    }
+    console.log(`Preparing to launch exam. ID: ${examId}`);
+    // This line is the FIX. It saves the ID for the next page to use.
+    localStorage.setItem('selectedExamId', examId);
+    // Now, go to the exam page.
+    window.location.href = examUrl;
+}
+
 
 // --- CORE APPLICATION FUNCTIONS ---
 function setupProfileDropdown() {
@@ -313,20 +341,17 @@ function loginAsUser(username, password) {
 function logout() {
     if (confirm("Are you sure you want to logout?")) {
         clearInterval(countdownInterval);
-        // --- MODIFIED: Changed to localStorage to clear the permanent login ---
         localStorage.removeItem('currentUser'); 
         window.location.href = "USER-LOGIN.html";
     }
 }
 
 function redirectToDashboard() {
-    // --- MODIFIED: Changed to localStorage for permanent login ---
     localStorage.setItem('currentUser', JSON.stringify(currentUser)); 
     window.location.href = "USER-DASHBOARD.html";
 }
 
 function loadDashboard() {
-    // --- MODIFIED: Changed to localStorage to check for permanent login ---
     const userData = localStorage.getItem('currentUser'); 
     if (!userData) {
         window.location.href = "USER-LOGIN.html";
@@ -398,7 +423,6 @@ function closeModal() {
     document.body.style.overflow = 'auto';
 }
 
-// --- FIXED: This function now correctly finds and populates the modal ---
 function requestAccess(contentId, isRenewal) {
     const card = contentCards.find(c => c.id === contentId);
     if (!card) {
