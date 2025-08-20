@@ -39,6 +39,15 @@ const users = [
             "file6": { startDate: "2025-08-18", duration: 365 }
         }
     },
+    {
+        id: 4,
+        username: "ROHIT",
+        password: "RX9821948199",
+        name: "ROHIT KC",
+        image: "ASSETS/TOOL-FILES/USER/ROHIT-KC.jpg",
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7"],
+        timedAccessConfig: { }
+    },
 ];
 
 // --- CONTENT CARDS DATABASE WITH PRICES ---
