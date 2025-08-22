@@ -1,21 +1,32 @@
-// JS_LINKER.js - Dynamic Exam Script Loader
+// EXAM-JS-LINKER.js - Dynamic Exam Question Loader
 
 (function() {
     /**
      * ===================================================================
      *                        CONFIGURATION
      * ===================================================================
-     * This is the only section you need to edit.
-     * Map the 'id' from a contentCard in USER-LOGIN.js to the
-     * correct JavaScript question file path.
+     * 1. Map your HTML filenames to their corresponding exam ID.
+     * 2. Map each exam ID to its specific JavaScript QUESTION file.
+     *
+     * NOTE: This script no longer loads the exam engine (KR-EXAM-BODY.js).
+     * You must include it yourself in your HTML file like this:
+     * <script src="ASSETS/TOOL-FILES/JS/KR-EXAM-BODY.js" defer></script>
      */
-    const examScriptMapping = {
-        //  'Card ID' : 'Path to the Question Script'
-        // ----------------------------------------------------------------
-        'file2': 'ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/QUESTION/KR-EXAM-QM-1.js',
-        // 'file_another_exam': 'path/to/another_exam_questions.js', // Example for a future exam
-        // 'file_advanced_test': 'path/to/advanced_test.js'      // Example for a future exam
+
+    // Mapping 1: HTML page file name to the correct Exam ID
+    const pageToExamIdMapping = {
+        'KR-EXAM.html': 'file2',
+        'KR-EXAM-RX-NEW-FUNCTION.html': 'file8',
+        // 'another-exam-page.html': 'file_another_exam', // Example for a future exam
     };
+
+    // Mapping 2: Exam ID to the Question Script Path
+    const examScriptMapping = {
+        'file2': 'ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/QUESTION/KR-EXAM-QM-1.js',
+        'file8': 'ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/QUESTION/KR-EXAM-QM-2.js',
+        // 'file_another_exam': 'path/to/another_questions.js', // Example for a future exam
+    };
+
 
     /**
      * ===================================================================
@@ -24,64 +35,76 @@
      * ===================================================================
      */
     
-    // Path to the main exam engine script
-    const examBodyScriptPath = 'ASSETS/TOOL-FILES/JS/KR-EXAM-BODY.js';
-
     /**
      * Loads a script dynamically into the document.
      * @param {string} src - The source path of the script to load.
-     * @param {function} [callback] - An optional function to run after the script loads successfully.
+     * @returns {Promise} - A promise that resolves on success and rejects on error.
      */
-    function loadScript(src, callback) {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = () => {
-            if (callback) {
-                callback();
-            }
-        };
-        script.onerror = () => {
-            console.error(`Error: The script at ${src} could not be loaded.`);
-            document.body.innerHTML = `<div style="text-align: center; margin-top: 50px;">
-                                            <h2>Error Loading Exam</h2>
-                                            <p>The required script file could not be found: <strong>${src}</strong></p>
-                                            <p>Please check the file path and your network connection.</p>
-                                       </div>`;
-        };
-        document.body.appendChild(script);
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            script.onload = () => resolve(src);
+            script.onerror = () => reject(new Error(`The script at ${src} could not be loaded.`));
+            document.head.appendChild(script);
+        });
+    }
+
+    /**
+     * Displays a user-friendly error message on the screen.
+     * @param {string} title - The main title for the error message.
+     * @param {string} message - The detailed error description.
+     */
+    function displayError(title, message) {
+        document.body.innerHTML = `<div style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+                                        <h2>${title}</h2>
+                                        <p>${message}</p>
+                                   </div>`;
+    }
+
+    /**
+     * Main asynchronous function to orchestrate the script loading process.
+     */
+    async function main() {
+        // 1. Determine the current HTML page.
+        const path = window.location.pathname;
+        const currentPage = path.split("/").pop();
+
+        // 2. Find the correct exam ID from the page filename.
+        const selectedExamId = pageToExamIdMapping[currentPage];
+
+        if (!selectedExamId) {
+            const errorMessage = `This HTML page ("${currentPage}") is not configured in 'pageToExamIdMapping'.`;
+            console.error(errorMessage);
+            displayError("Exam Configuration Error", `This page is not configured to load an exam.`);
+            return;
+        }
+
+        // 3. Find the corresponding question script path.
+        const questionScriptPath = examScriptMapping[selectedExamId];
+
+        if (!questionScriptPath) {
+            const errorMessage = `No question script is mapped for exam ID: "${selectedExamId}". Check 'examScriptMapping'.`;
+            console.error(errorMessage);
+            displayError("Exam Configuration Error", `The configuration for exam <strong>${selectedExamId}</strong> is missing.`);
+            return;
+        }
+
+        // 4. Load ONLY the question script.
+        try {
+            console.log(`Page: ${currentPage} -> Exam ID: ${selectedExamId}`);
+            console.log(`Loading question set: ${questionScriptPath}`);
+            await loadScript(questionScriptPath);
+            console.log("Question script loaded successfully.");
+
+        } catch (error) {
+            console.error(error);
+            displayError("Error Loading Exam File", `The question script could not be found. Please check the file path.`);
+        }
     }
 
     // --- Main execution ---
-    
-    // 1. Get the ID of the exam the user clicked on the dashboard.
-    const selectedExamId = localStorage.getItem('selectedExamId');
-
-    if (!selectedExamId) {
-        console.error("No exam ID found. Was an exam selected from the dashboard?");
-        document.body.innerHTML = `<div style="text-align: center; margin-top: 50px;">
-                                        <h2>No Exam Selected</h2>
-                                        <p>Please go back to the dashboard and select an exam to begin.</p>
-                                   </div>`;
-        return;
-    }
-
-    // 2. Find the corresponding question script path from the mapping.
-    const questionScriptPath = examScriptMapping[selectedExamId];
-
-    if (!questionScriptPath) {
-        console.error(`No question script is mapped for the exam ID: "${selectedExamId}". Check the mapping in JS_LINKER.js.`);
-        document.body.innerHTML = `<div style="text-align: center; margin-top: 50px;">
-                                        <h2>Exam Configuration Error</h2>
-                                        <p>The selected exam (ID: ${selectedExamId}) is not configured correctly.</p>
-                                   </div>`;
-        return;
-    }
-
-    // 3. Load the scripts in the correct order: Questions first, then the exam engine.
-    console.log(`Loading question set: ${questionScriptPath}`);
-    loadScript(questionScriptPath, () => {
-        console.log(`Loading exam engine: ${examBodyScriptPath}`);
-        loadScript(examBodyScriptPath);
-    });
+    document.addEventListener('DOMContentLoaded', main);
 
 })();

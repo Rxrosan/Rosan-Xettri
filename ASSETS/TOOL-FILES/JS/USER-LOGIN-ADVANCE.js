@@ -6,7 +6,7 @@ const users = [
         password: "RX9826482279",
         name: "ROSAN KC",
         image: "ASSETS/TOOL-FILES/USER/ROSAN-KC.jpg",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7"], // Permanent access
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8"], // Permanent access
         timedAccessConfig: {} // No timed access needed due to permanent access
     },
     {
@@ -21,7 +21,8 @@ const users = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file4": { startDate: "2025-08-18", duration: 365 },
             "file5": { startDate: "2025-08-18", duration: 365 },
-            "file6": { startDate: "2025-08-18", duration: 365 } 
+            "file6": { startDate: "2025-08-18", duration: 365 },
+            "file8": { startDate: "2025-08-22", duration: 365 } 
         }
     },
     {
@@ -36,7 +37,8 @@ const users = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file4": { startDate: "2025-08-18", duration: 365 },
             "file5": { startDate: "2025-08-18", duration: 365 },
-            "file6": { startDate: "2025-08-18", duration: 365 }
+            "file6": { startDate: "2025-08-18", duration: 365 },
+            "file8": { startDate: "2025-08-22", duration: 365 }
         }
     },
     {
@@ -45,7 +47,7 @@ const users = [
         password: "RX9821948199",
         name: "ROHIT KC",
         image: "ASSETS/TOOL-FILES/USER/ROHIT-KC.jpg",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7"],
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8"],
         timedAccessConfig: { }
     },
 ];
@@ -58,7 +60,7 @@ const contentCards = [
         description: "Login Code : RX-2061", 
         link: "ASSETS/WEB-SOFTWARE/RX-STUDIO-KAPALI_TAMSUK_GENERATOR.html", 
         icon: "fas fa-pen",
-        prices: { default: "Rs. 1500", 2: "Rs. 1000", 3: "Rs. 1000" }
+        prices: { default: "Rs. 1500", 2: "Rs. 1000", 3: "Rs. 1000", 4: "Rs. 1000" }
     },
     {   
         id: "file2", 
@@ -106,7 +108,15 @@ const contentCards = [
         description: "Old Version | Login Code: RX-2061", 
         link: "ASSETS/WEB-SOFTWARE/Kapali.html", 
         icon: "fas fa-pencil",
-        prices: { default: "Rs. 1000", 2: "Rs. 500", 3: "Rs. 500" }
+        prices: { default: "Rs. 1000", 2: "Rs. 500", 3: "Rs. 500", 4: "Rs. 500" }
+    },
+    {   
+        id: "file8", 
+        title: "QUESTION MODEL 2", 
+        description: "LESSON A 11 - 20 L", 
+        link: "KR-EXAM-RX-NEW-FUNCTION.html", 
+        icon: "fas fa-pencil",
+        prices: { default: "150", 2: "Rs. 150", 3: "Rs. 150", 4: "Rs. 150" }
     }
 ];
 
@@ -119,7 +129,7 @@ const defaultStores = [
 
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 
-        content: ["file2"] },
+        content: ["file2","file8"] },
 
     {   id: "store_3", 
         name: "WEB-SOFTWARE", 

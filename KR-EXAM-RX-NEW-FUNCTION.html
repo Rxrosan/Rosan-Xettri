@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="ASSETS/TOOL-FILES/JS/DEV-TOOL-PROTECTION-2.js"></script>
+  <link rel="icon" type="image/png" href="ASSETS/MAIN-FILE/IMG/LOGO/RX-3.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>RX | Korean Language Exam</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="ASSETS/TOOL-FILES/CSS/KR-EXAM-BODY.css">
+</head>
+<body>
+
+  <!-- Main Exam Container -->
+  <div class="exam-container">
+    <!-- Left Panel - Question Navigator -->
+    <div class="left-panel">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <h3>Rosan Xettri Studio</h3>
+        </div>
+        <!-- UPDATED: Profile image now acts as a button to open the modal -->
+        <div id="user-profile-display" class="user-profile-display">
+          <img id="user-profile-image" src="" alt="User" class="user-profile-image">
+        </div>
+      </div>
+      
+      <div class="number-grid-container">
+        <div class="section-label"><i class="fas fa-book-open"></i> Reading (1-20)</div>
+        <div class="number-grid" id="reading-questions"></div>
+        <div class="section-label"><i class="fas fa-headphones"></i> Listening (21-40)</div>
+        <div class="number-grid" id="listening-questions"></div>
+      </div>
+    </div>
+
+    <!-- Right Panel (No changes) -->
+    <div class="right-panel">
+      <div id="content-display">
+        <div class="welcome-message">
+          <img src="ASSETS/MAIN-FILE/IMG/LOGO/RX-3.png" alt="RX Logo" class="welcome-logo">
+          <h2 id="welcome-user-name">Welcome!</h2>
+          <p>Select a question number to begin the exam.</p>
+        </div>
+      </div>
+      <div class="navigation-controls">
+        <button onclick="goToPrevious()" class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i> Previous</button>
+        <button onclick="markForReview()" class="nav-btn mark-btn"><i class="far fa-flag"></i> Mark</button>
+        <button onclick="goToNext()" class="nav-btn next-btn">Next <i class="fas fa-chevron-right"></i></button>
+        <button onclick="submitQuiz()" class="nav-btn submit-btn"><i class="fas fa-paper-plane"></i> Submit</button>
+      </div>
+    </div>
+
+    <!-- Timer and Overlays (No changes) -->
+    <div id="floating-timer" class="timer-box">
+        <div class="timer-header"><span><i class="fas fa-clock"></i> Exam Timer</span><div class="timer-controls"><button id="minimize-btn" class="timer-btn"><i class="fas fa-minus"></i></button><button id="close-btn" class="timer-btn"><i class="fas fa-times"></i></button></div></div>
+        <div id="countdown" class="timer-display">50:00</div>
+        <div class="timer-progress"><div id="timer-progress-bar"></div></div>
+    </div>
+    <div id="minimized-timer" class="minimized-timer hidden"><i class="fas fa-clock"></i><span id="minimized-time">50:00</span></div>
+    <div id="lock-overlay" class="time-up-overlay hidden">
+        <div class="time-up-modal"><div class="time-up-icon"><i class="fas fa-hourglass-end"></i></div><h3>Time's Up!</h3><p>Your exam time has ended. Your answers will be submitted automatically.</p><button id="submit-now-btn" class="btn-primary"><i class="fas fa-check-circle"></i> Submit Now</button></div>
+    </div>
+  </div>
+
+  <!-- NEW: User Profile Modal -->
+  <div id="profile-modal-overlay" class="profile-modal-overlay">
+    <div class="profile-modal-content">
+      <button id="profile-modal-close-btn" class="profile-modal-close-btn">&times;</button>
+      <img id="modal-profile-image" src="" alt="User" class="modal-profile-image">
+      <h3 id="modal-profile-name"></h3>
+      <div class="modal-profile-details">
+        <p><i class="fas fa-user"></i> <span id="modal-profile-username"></span></p>
+        <p><i class="fas fa-id-card"></i> <span id="modal-profile-examid"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Loading Order -->
+  <script src="ASSETS/WEB-SOFTWARE/JS/EXAM-JS-LINKER.js"></script>
+  
+  <!-- FIX: Added the main JavaScript file that controls the exam logic. -->
+  <!-- NOTE: The path might need to be adjusted based on your folder structure. -->
+  <script src="ASSETS/TOOL-FILES/JS/KR-EXAM-BODY-ADVANCE.js"></script> 
+  
+</body>
+</html>
