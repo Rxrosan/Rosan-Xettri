@@ -22,7 +22,6 @@ const users = [
             "file4": { startDate: "2025-08-18", duration: 365 },
             "file5": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-08-18", duration: 365 },
-            "file8": { startDate: "2025-08-22", duration: 365 } 
         }
     },
     {
@@ -38,7 +37,7 @@ const users = [
             "file4": { startDate: "2025-08-18", duration: 365 },
             "file5": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-08-18", duration: 365 },
-            "file8": { startDate: "2025-08-22", duration: 365 }
+          
         }
     },
     {
@@ -47,7 +46,7 @@ const users = [
         password: "RX9821948199",
         name: "ROHIT KC",
         image: "ASSETS/TOOL-FILES/USER/ROHIT-KC.jpg",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8"],
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7",],
         timedAccessConfig: { }
     },
 ];
