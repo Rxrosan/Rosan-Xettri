@@ -114,7 +114,7 @@ const contentCards = [
         title: "QUESTION MODEL 2", 
         description: "LESSON A 11 - 20 L", 
         link: "KR-EXAM-RX-NEW-FUNCTION.html", 
-        icon: "fas fa-pencil",
+        icon: "fas fa-book",
         prices: { default: "150", 2: "Rs. 150", 3: "Rs. 150", 4: "Rs. 150" }
     }
 ];
