@@ -53,7 +53,7 @@ const users = [
         id: 5,
         username: "NIRAJ",
         password: "RX9800754535",
-        name: "ROHIT KC",
+        name: "NIRAJ THAPA",
         image: "ASSETS/TOOL-FILES/USER/NIRAJ.jpg",
         access: ["file2", "file8"],
         timedAccessConfig: { }
@@ -121,7 +121,7 @@ const contentCards = [
     {   
         id: "file8", 
         title: "QUESTION MODEL 2", 
-        description: "LESSON A 11 - 20 L", 
+        description: "LESSON A 11 - 20 L | UPDATING IN PROGRESS...", 
         link: "KR-EXAM-RX-NEW-FUNCTION.html", 
         icon: "fas fa-book",
         prices: { default: "150", 2: "Rs. 150", 3: "Rs. 150", 4: "Rs. 150" }
