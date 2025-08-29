@@ -49,6 +49,15 @@ const users = [
         access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7",],
         timedAccessConfig: { }
     },
+    {
+        id: 5,
+        username: "NIRAJ",
+        password: "RX9800754535",
+        name: "ROHIT KC",
+        image: "ASSETS/TOOL-FILES/USER/NIRAJ.jpg",
+        access: ["file2", "file8"],
+        timedAccessConfig: { }
+    }
 ];
 
 // --- CONTENT CARDS DATABASE WITH PRICES ---
