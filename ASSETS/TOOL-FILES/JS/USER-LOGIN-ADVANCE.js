@@ -74,7 +74,7 @@ const contentCards = [
         id: "file2", 
         title: "QUESTION-MODEL-1", 
         description: "LESSON A 1 - 10L", 
-        link: "KR-EXAM.html", 
+        link: "KR-EXAM.html?exam=file2", 
         icon: "fas fa-book",
         prices: { default: "Rs. 150" }
     },
@@ -122,7 +122,7 @@ const contentCards = [
         id: "file8", 
         title: "QUESTION MODEL 2", 
         description: "LESSON A 11 - 20 L | UPDATING IN PROGRESS...", 
-        link: "KR-EXAM-RX-NEW-FUNCTION.html", 
+        link: "KR-EXAM.html?exam=file8", 
         icon: "fas fa-book",
         prices: { default: "150", 2: "Rs. 150", 3: "Rs. 150", 4: "Rs. 150" }
     }

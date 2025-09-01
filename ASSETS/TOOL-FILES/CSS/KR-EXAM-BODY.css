@@ -214,3 +214,94 @@ body {
   color: #856404;
   background-color: #fff3cd;
 }
+/* Exit Confirmation Modal Styles */
+.exit-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.exit-confirm-modal.active {
+  opacity: 1;
+}
+
+.exit-confirm-content {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  padding: 30px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+
+.exit-confirm-modal.active .exit-confirm-content {
+  transform: translateY(0);
+}
+
+.exit-confirm-icon {
+  font-size: 3rem;
+  color: #ff6b6b;
+  margin-bottom: 15px;
+}
+
+.exit-confirm-message {
+  font-size: 1.1rem;
+  color: #495057;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.exit-confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.exit-confirm-btn {
+  padding: 10px 25px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exit-confirm-btn.exit {
+  background-color: #dc3545;
+  color: white;
+}
+
+.exit-confirm-btn.exit:hover {
+  background-color: #c82333;
+  transform: translateY(-2px);
+}
+
+.exit-confirm-btn.stay {
+  background-color: #6c757d;
+  color: white;
+}
+
+.exit-confirm-btn.stay:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+.disabled-control {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+}
+.disabled-control:hover {
+  background-color: var(--button-bg-color); /* Or original color */
+  /* Prevent hover effects */
+}

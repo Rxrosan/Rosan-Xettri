@@ -5,36 +5,40 @@
      * ===================================================================
      *                        CONFIGURATION
      * ===================================================================
-     * 1. Map your HTML filenames to their corresponding exam ID.
-     * 2. Map each exam ID to its specific JavaScript QUESTION file.
+     * 1. Map each exam ID to its specific JavaScript QUESTION file.
+     *    (No longer mapping HTML filenames directly, as one HTML file
+     *     will be used for multiple exams via URL parameters).
      *
      * NOTE: This script no longer loads the exam engine (KR-EXAM-BODY.js).
      * You must include it yourself in your HTML file like this:
      * <script src="ASSETS/TOOL-FILES/JS/KR-EXAM-BODY.js" defer></script>
      */
 
-    // Mapping 1: HTML page file name to the correct Exam ID
-    const pageToExamIdMapping = {
-        'KR-EXAM.html': 'file2',
-        'KR-EXAM-RX-NEW-FUNCTION.html': 'file8',
-        // 'another-exam-page.html': 'file_another_exam', // Example for a future exam
-    };
-
-    // Mapping 2: Exam ID to the Question Script Path
+    // Mapping: Exam ID to the Question Script Path
     const examScriptMapping = {
         'file2': 'ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/QUESTION/KR-EXAM-QM-1.js',
         'file8': 'ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/QUESTION/KR-EXAM-QM-2.js',
-        // 'file_another_exam': 'path/to/another_questions.js', // Example for a future exam
+        // Add more exam IDs and their question script paths here:
+        // 'your_new_exam_id': 'path/to/your/new/exam/questions.js',
     };
 
 
     /**
      * ===================================================================
      *                        LOADER LOGIC
-     *                 (Do not edit below this line)
      * ===================================================================
      */
-    
+
+    /**
+     * Extracts a query parameter from the URL.
+     * @param {string} name - The name of the query parameter to extract (e.g., 'exam').
+     * @returns {string|null} The value of the parameter, or null if not found.
+     */
+    function getQueryParameter(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
     /**
      * Loads a script dynamically into the document.
      * @param {string} src - The source path of the script to load.
@@ -61,46 +65,46 @@
                                         <h2>${title}</h2>
                                         <p>${message}</p>
                                    </div>`;
+        document.body.style.display = 'block'; // Ensure body is visible if it was hidden by other CSS
     }
 
     /**
      * Main asynchronous function to orchestrate the script loading process.
      */
     async function main() {
-        // 1. Determine the current HTML page.
-        const path = window.location.pathname;
-        const currentPage = path.split("/").pop();
-
-        // 2. Find the correct exam ID from the page filename.
-        const selectedExamId = pageToExamIdMapping[currentPage];
+        // 1. Get the exam ID from the URL query parameter (e.g., ?exam=file2)
+        const selectedExamId = getQueryParameter('exam');
 
         if (!selectedExamId) {
-            const errorMessage = `This HTML page ("${currentPage}") is not configured in 'pageToExamIdMapping'.`;
+            const errorMessage = `No 'exam' parameter found in the URL. Please provide an exam ID (e.g., KR-EXAM.html?exam=file2).`;
             console.error(errorMessage);
-            displayError("Exam Configuration Error", `This page is not configured to load an exam.`);
+            displayError("Exam Not Specified", `Please select an exam to start. No exam ID found in the URL.`);
             return;
         }
 
-        // 3. Find the corresponding question script path.
+        // 2. Find the corresponding question script path using the exam ID.
         const questionScriptPath = examScriptMapping[selectedExamId];
 
         if (!questionScriptPath) {
-            const errorMessage = `No question script is mapped for exam ID: "${selectedExamId}". Check 'examScriptMapping'.`;
+            const errorMessage = `No question script is mapped for exam ID: "${selectedExamId}". Check 'examScriptMapping' in EXAM-JS-LINKER.js.`;
             console.error(errorMessage);
-            displayError("Exam Configuration Error", `The configuration for exam <strong>${selectedExamId}</strong> is missing.`);
+            displayError("Exam Configuration Error", `The configuration for exam <strong>${selectedExamId}</strong> is missing or incorrect.`);
             return;
         }
 
-        // 4. Load ONLY the question script.
+        // 3. Load ONLY the question script.
         try {
-            console.log(`Page: ${currentPage} -> Exam ID: ${selectedExamId}`);
-            console.log(`Loading question set: ${questionScriptPath}`);
+            console.log(`Attempting to load Exam ID: ${selectedExamId}`);
+            console.log(`Loading question set from: ${questionScriptPath}`);
             await loadScript(questionScriptPath);
             console.log("Question script loaded successfully.");
 
+            // Optional: You might want to remove a loading spinner or show the exam content here
+            // if your HTML initially hides the exam content.
+
         } catch (error) {
             console.error(error);
-            displayError("Error Loading Exam File", `The question script could not be found. Please check the file path.`);
+            displayError("Error Loading Exam File", `The question script could not be loaded. Please check the file path: <code>${questionScriptPath}</code>.`);
         }
     }
 

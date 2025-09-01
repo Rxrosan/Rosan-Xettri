@@ -1,3 +1,5 @@
+// --- START OF FILE KR-EXAM-BODY.js ---
+
 // ========== GLOBAL VARIABLES & CONFIGURATION ==========
 let currentQuestion = 0;
 const TOTAL_QUESTIONS = 40;
@@ -8,18 +10,23 @@ const reviewedQuestions = new Set();
 const completedQuestions = new Set();
 const userAnswers = {};
 let quizSubmitted = false;
-const disabledAudios = new Set();
+// Renamed disabledAudios to playedAudioCounts to track plays per question
+const playedAudioCounts = {}; // Stores {questionNumber: count}
 
 // Timer variables
 let timerInterval = null;
 let targetTime;
 const examDurationMs = EXAM_DURATION_MINUTES * 60 * 1000;
+let timerPaused = false; // New flag to track timer state
 
 // Student information
 const studentInfo = {
   id: null, name: "", username: "", image: "", serial: "",
   startTime: null, endTime: null
 };
+
+// Audio variables
+let currentAudio = null; // To keep track of the currently playing audio element
 
 // Cached DOM Elements
 const dom = {};
@@ -35,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.selectOption = selectOption;
     window.generateResultPDF = generateResultPDF;
     window.showContent = showContent;
+    window.handleExitChoice = handleExitChoice;
 });
 
 function cacheDOMElements() {
@@ -49,6 +57,13 @@ function cacheDOMElements() {
     dom.listeningGrid = document.getElementById("listening-questions");
     dom.navigationControls = document.querySelector('.navigation-controls');
     dom.questionNavigation = document.querySelector('.question-navigation');
+    dom.exitConfirmModal = document.getElementById("exit-confirm-modal");
+    dom.exitConfirmMessage = document.getElementById("exit-confirm-message");
+    dom.userProfileDisplay = document.getElementById('user-profile-display');
+    dom.profileModalCloseBtn = document.getElementById('profile-modal-close-btn');
+    dom.minimizeBtn = document.getElementById("minimize-btn");
+    dom.closeBtn = document.getElementById("close-btn");
+    dom.submitNowBtn = document.getElementById("submit-now-btn");
 }
 
 function initializeExamPage() {
@@ -109,16 +124,17 @@ function createNumberButton(number) {
 }
 
 function setupEventListeners() {
-    document.getElementById("minimize-btn")?.addEventListener("click", minimizeTimer);
-    document.getElementById("close-btn")?.addEventListener("click", closeTimer);
+    dom.minimizeBtn?.addEventListener("click", minimizeTimer);
+    dom.closeBtn?.addEventListener("click", closeTimer);
     dom.minimizedTimer?.addEventListener("click", restoreTimer);
-    document.getElementById("submit-now-btn")?.addEventListener("click", submitQuiz);
+    dom.submitNowBtn?.addEventListener("click", submitQuiz);
     makeDraggable(dom.timerBox);
     makeDraggable(dom.minimizedTimer);
+    // Add the event listener for beforeunload
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('resize', handleScreenResize);
-    document.getElementById('user-profile-display')?.addEventListener('click', openProfileModal);
-    document.getElementById('profile-modal-close-btn')?.addEventListener('click', closeProfileModal);
+    dom.userProfileDisplay?.addEventListener('click', openProfileModal);
+    dom.profileModalCloseBtn?.addEventListener('click', closeProfileModal);
 }
 
 // ========== 2. PROFILE MODAL & UI CONTROLS ==========
@@ -126,7 +142,17 @@ function openProfileModal() { if (dom.profileModalOverlay) dom.profileModalOverl
 function closeProfileModal() { if (dom.profileModalOverlay) dom.profileModalOverlay.style.display = 'none'; }
 function setExamControlsDisabled(disabled) {
     document.querySelectorAll('.number-btn, .navigation-controls button, .options-list input, #submit-now-btn')
-        .forEach(control => { if (control) control.disabled = disabled; });
+        .forEach(control => { 
+            if (control) {
+                control.disabled = disabled; 
+                // Add/remove a class for visual feedback
+                if (disabled) {
+                    control.classList.add('disabled-control');
+                } else {
+                    control.classList.remove('disabled-control');
+                }
+            }
+        });
 }
 
 // ========== 3. EXAM FLOW & QUESTION DISPLAY ==========
@@ -138,6 +164,9 @@ function startExam() {
 function showContent(questionNumber) {
     if (quizSubmitted || questionNumber < 1 || questionNumber > TOTAL_QUESTIONS) return;
     if (currentQuestion === 0) startExam();
+    
+    // Clear any playing audio when changing questions
+    clearAudio();
     
     currentQuestion = questionNumber;
     
@@ -154,6 +183,13 @@ function showContent(questionNumber) {
     updateQuestionNavigation();
     handleScreenResize();
     dom.contentDisplay.scrollTo(0, 0);
+
+    // After rendering, if there's an audio, ensure its event listeners are correctly set up
+    const audioEl = document.getElementById(`audio-${questionNumber}`);
+    if (audioEl) {
+        // Ensure this is called only once per audio element or its state is managed correctly
+        // We now rely on 'onplay' and 'ended' events attached dynamically.
+    }
 }
 
 function buildQuestionHTML(question, questionNumber) {
@@ -163,10 +199,12 @@ function buildQuestionHTML(question, questionNumber) {
         mediaHTML += `<div class="question-media"><img src="${question.image}" alt="Question media for question ${questionNumber}" class="question-image" onerror="console.error('IMAGE NOT FOUND: Check the path for ${question.image}'); this.alt='Image not found';"></div>`;
     }
     if (question.audio) {
-        if (!disabledAudios.has(questionNumber)) {
+        const currentPlayCount = playedAudioCounts[questionNumber] || 0;
+        const maxPlayCount = 2; // Defined here for clarity, can be a global const
+        if (currentPlayCount < maxPlayCount) {
             mediaHTML += `<div class="question-media"><audio id="audio-${questionNumber}" controls class="question-audio" onplay="setupAudioPlayback(${questionNumber})"><source src="${question.audio}">Your browser does not support the audio element.</audio></div>`;
         } else {
-            mediaHTML += `<p class="warning"><i class="fas fa-info-circle"></i> Audio for this question has already been played.</p>`;
+            mediaHTML += `<p class="warning"><i class="fas fa-info-circle"></i> Audio for this question has been played ${maxPlayCount} times.</p>`;
         }
     }
     const optionsHTML = Object.entries(question.options).map(([key, value]) => {
@@ -193,25 +231,84 @@ function updateQuestionNavigation() {
     });
 }
 
-function setupAudioPlayback(questionNumber) {
-    const audio = document.getElementById(`audio-${questionNumber}`);
-    if (!audio) return;
-    setExamControlsDisabled(true);
-    audio.style.pointerEvents = 'none';
-    const onAudioEnd = () => {
-        disabledAudios.add(questionNumber);
-        setExamControlsDisabled(false);
-        if (currentQuestion === questionNumber) {
-            showContent(questionNumber);
+function clearAudio() {
+    if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentAudio.removeEventListener('ended', handleAudioEndEvent); // Clean up old listener
+        currentAudio = null;
+        // Ensure timer is resumed if it was paused for this audio
+        if (timerPaused) {
+            startTimer(); // Restart timer, it will update targetTime
+            timerPaused = false;
         }
-        audio.removeEventListener('ended', onAudioEnd);
-    };
-    audio.addEventListener('ended', onAudioEnd);
+        setExamControlsDisabled(false); // Re-enable controls if they were disabled by audio
+    }
 }
 
+function setupAudioPlayback(questionNumber) {
+    const audio = document.getElementById(`audio-${questionNumber}`);
+    if (!audio || currentAudio === audio) return; // Prevent re-setting if already playing
+
+    // Stop any currently playing audio
+    clearAudio(); 
+    currentAudio = audio; // Set this as the current audio
+
+    // Pause the exam timer
+    clearInterval(timerInterval);
+    timerPaused = true;
+    
+    // Disable all exam controls
+    setExamControlsDisabled(true);
+    audio.style.pointerEvents = 'none'; // Prevent direct interaction with audio controls during enforced playback
+
+    // Initialize play count for this question
+    playedAudioCounts[questionNumber] = playedAudioCounts[questionNumber] || 0;
+    const maxPlayCount = 2; // Max plays per question
+    
+    // Define the event handler for audio 'ended'
+    const handleAudioEndEvent = () => {
+        playedAudioCounts[questionNumber]++;
+        
+        if (playedAudioCounts[questionNumber] < maxPlayCount) {
+            // Wait for 5 seconds before allowing replay
+            setTimeout(() => {
+                audio.currentTime = 0;
+                audio.play().catch(e => console.error("Error playing audio after delay:", e));
+            }, 5000); // 5 second delay
+        } else {
+            // Final playback completed, re-enable everything
+            currentAudio = null; // Clear current audio reference
+            setExamControlsDisabled(false);
+            
+            // Resume the exam timer
+            startTimer();
+            timerPaused = false;
+            
+            // Refresh the question display to show the disabled audio message
+            if (currentQuestion === questionNumber) {
+                showContent(questionNumber);
+            }
+            
+            // Clean up event listener
+            audio.removeEventListener('ended', handleAudioEndEvent);
+        }
+    };
+    
+    // Attach the event listener
+    audio.addEventListener('ended', handleAudioEndEvent);
+}
+
+
 // ========== 4. NAVIGATION & SUBMISSION ==========
-function goToPrevious() { if (currentQuestion > 1) showContent(currentQuestion - 1); }
-function goToNext() { if (currentQuestion < TOTAL_QUESTIONS) showContent(currentQuestion + 1); }
+function goToPrevious() { 
+    clearAudio(); // Stop audio if active
+    if (currentQuestion > 1) showContent(currentQuestion - 1); 
+}
+function goToNext() { 
+    clearAudio(); // Stop audio if active
+    if (currentQuestion < TOTAL_QUESTIONS) showContent(currentQuestion + 1); 
+}
 
 function markForReview() {
     if (currentQuestion === 0) return;
@@ -223,9 +320,12 @@ function markForReview() {
 
 function submitQuiz() {
     if (quizSubmitted) return;
+    clearAudio(); // Stop any playing audio before submission
     quizSubmitted = true;
     clearInterval(timerInterval);
+    timerPaused = false;
     studentInfo.endTime = new Date();
+    // Remove the event listener to prevent the confirmation from showing after explicit submission
     window.removeEventListener('beforeunload', handleBeforeUnload);
     const results = calculateResults();
     displayResults(results);
@@ -243,6 +343,7 @@ function calculateResults() {
         }
     }
     const score = Math.round((correct / TOTAL_QUESTIONS) * 100);
+    // Ensure duration calculation is robust even if endTime isn't set (shouldn't happen with submitQuiz)
     const duration = Math.floor(((studentInfo.endTime || new Date()) - studentInfo.startTime) / 1000);
     return {
         total: TOTAL_QUESTIONS, attempted, correct, incorrect: attempted - correct,
@@ -255,8 +356,8 @@ function displayResults(results) {
     const summaryHtml = buildResultsSummaryHTML(results);
     const reviewHtml = generateDetailedReviewHTML();
     dom.contentDisplay.innerHTML = summaryHtml + reviewHtml;
-    dom.navigationControls.style.display = 'none';
-    dom.questionNavigation.style.display = 'none';
+    if (dom.navigationControls) dom.navigationControls.style.display = 'none';
+    if (dom.questionNavigation) dom.questionNavigation.style.display = 'none';
     dom.contentDisplay.scrollTo(0, 0);
     closeTimer();
 }
@@ -322,11 +423,57 @@ function handleScreenResize() {
 
 function handleBeforeUnload(e) {
     if (studentInfo.startTime && !quizSubmitted) {
+        // Prevent default browser behavior without setting returnValue
+        // Setting returnValue to an empty string for some browsers.
         e.preventDefault();
-        e.returnValue = 'Are you sure you want to leave? Your exam progress will be lost.';
+        e.returnValue = ''; // Setting to empty string is crucial here
+
+        // Show your custom modal
+        showExitConfirmationModal();
+
+        // This ensures the browser's default dialog is suppressed in most cases,
+        // while still giving us a chance to show our custom modal.
+        // The actual navigation away will be handled by handleExitChoice
+        // if the user confirms.
     }
 }
 
+function showExitConfirmationModal() {
+    if (dom.exitConfirmModal) {
+        dom.exitConfirmMessage.textContent = `Hi ${studentInfo.name}, are you sure you want to leave? Your exam progress will be lost if you exit or refresh.`;
+        dom.exitConfirmModal.style.display = 'flex';
+        setTimeout(() => {
+            dom.exitConfirmModal.classList.add('active');
+        }, 10);
+    }
+}
+
+function handleExitChoice(shouldExit) {
+    if (dom.exitConfirmModal) {
+        dom.exitConfirmModal.classList.remove('active');
+        setTimeout(() => {
+            dom.exitConfirmModal.style.display = 'none';
+        }, 300);
+    }
+    
+    if (shouldExit) {
+        // IMPORTANT: If the user confirms to exit, we must remove the beforeunload listener
+        // IMMEDIATELY before changing location. This tells the browser that the user's
+        // choice has been handled, and it shouldn't show its own prompt.
+        window.removeEventListener('beforeunload', handleBeforeUnload);
+        
+        // Actually leave the page
+        window.location.href = 'about:blank'; // Or your desired exit page
+    } else {
+        // User chose not to exit
+        // Resume timer if it was paused by audio
+        if (timerPaused) {
+            startTimer(); // This will restart the timer with the correct targetTime
+            timerPaused = false;
+        }
+        setExamControlsDisabled(false); // Re-enable controls if they were disabled
+    }
+}
 function makeDraggable(element) {
     if (!element) return;
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -355,12 +502,17 @@ function makeDraggable(element) {
 
 // ========== 7. TIMER FUNCTIONS ==========
 function startTimer() {
-    targetTime = Date.now() + examDurationMs;
-    dom.timerBox.style.display = "block";
+    if (!timerPaused) { // Only update targetTime if timer wasn't paused
+        targetTime = Date.now() + examDurationMs - ((Date.now() - studentInfo.startTime.getTime()) % examDurationMs);
+    }
+    clearInterval(timerInterval); // Clear any existing interval before starting a new one
     timerInterval = setInterval(updateCountdown, 1000);
+    updateCountdown(); // Call immediately to avoid initial delay
 }
 
 function updateCountdown() {
+    if (timerPaused) return; // Do not update if timer is paused
+
     const distance = targetTime - Date.now();
     if (distance <= 0) {
         clearInterval(timerInterval);
@@ -376,9 +528,18 @@ function updateCountdown() {
     dom.timerProgressBar.style.width = `${(distance / examDurationMs) * 100}%`;
     if (distance < 5 * 60 * 1000) {
         dom.countdownEl.style.color = 'var(--danger-color)';
+    } else {
+        dom.countdownEl.style.color = ''; // Reset color if not in danger zone
     }
 }
 
 function minimizeTimer() { dom.timerBox.classList.add("hidden"); dom.minimizedTimer.classList.remove("hidden"); }
 function restoreTimer() { dom.timerBox.classList.remove("hidden"); dom.minimizedTimer.classList.add("hidden"); }
-function closeTimer() { dom.timerBox.style.display = 'none'; dom.minimizedTimer.style.display = 'none'; }
+function closeTimer() { 
+    if (dom.timerBox) dom.timerBox.style.display = 'none'; 
+    if (dom.minimizedTimer) dom.minimizedTimer.style.display = 'none'; 
+    clearInterval(timerInterval);
+    timerPaused = false;
+}
+
+// --- END OF FILE KR-EXAM-BODY.js ---
