@@ -463,7 +463,7 @@ function handleExitChoice(shouldExit) {
         window.removeEventListener('beforeunload', handleBeforeUnload);
         
         // Actually leave the page
-        window.location.href = 'about:blank'; // Or your desired exit page
+        window.location.href = 'USER-DASHBOARD.html'; // Or your desired exit page
     } else {
         // User chose not to exit
         // Resume timer if it was paused by audio

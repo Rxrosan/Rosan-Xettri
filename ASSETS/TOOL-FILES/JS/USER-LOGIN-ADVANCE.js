@@ -55,8 +55,15 @@ const users = [
         password: "RX9800754535",
         name: "NIRAJ THAPA",
         image: "ASSETS/TOOL-FILES/USER/NIRAJ.jpg",
-        access: ["file2", "file8"],
-        timedAccessConfig: { }
+        access: [],
+        timedAccessConfig: {
+            "file2": { startDate: "2025-08-18", duration: 365 },
+            "file3": { startDate: "2025-08-18", duration: 365 },
+            "file4": { startDate: "2025-08-18", duration: 365 },
+            "file5": { startDate: "2025-08-18", duration: 365 },
+            "file6": { startDate: "2025-08-18", duration: 365 },
+            "file8": { startDate: "2025-08-18", duration: 365 },
+        }
     }
 ];
 
@@ -64,7 +71,7 @@ const users = [
 const contentCards = [
     {   
         id: "file1", 
-        title: "KAPALI-TAMSUK", 
+        title: "F1- KAPALI-TAMSUK", 
         description: "Login Code : RX-2061", 
         link: "ASSETS/WEB-SOFTWARE/RX-STUDIO-KAPALI_TAMSUK_GENERATOR.html", 
         icon: "fas fa-pen",
@@ -72,7 +79,7 @@ const contentCards = [
     },
     {   
         id: "file2", 
-        title: "QUESTION-MODEL-1", 
+        title: "F2- QUESTION-MODEL-1", 
         description: "LESSON A 1 - 10L", 
         link: "KR-EXAM.html?exam=file2", 
         icon: "fas fa-book",
@@ -80,7 +87,7 @@ const contentCards = [
     },
     {   
         id: "file3", 
-        title: "LIVE-WEATHER", 
+        title: "F3- LIVE-WEATHER", 
         description: "A platform where you can check the environmental conditions in your area.", 
         link: "ASSETS/WEB-SOFTWARE/RX-Weather.html", 
         icon: "fas fa-cloud",
@@ -88,7 +95,7 @@ const contentCards = [
     },
     {   
         id: "file4", 
-        title: "RX-GALLERY", 
+        title: "F4- RX-GALLERY", 
         description: "Login Code : RX2061", 
         link: "ASSETS/WEB-SOFTWARE/RX-GALLERY.html", 
         icon: "fas fa-image",
@@ -96,7 +103,7 @@ const contentCards = [
     },
     {   
         id: "file5", 
-        title: "RX-QR-Scanner/Generator", 
+        title: "F5- RX-QR-Scanner/Generator", 
         description: "You can create personalized messages using a QR code with this app.", 
         link: "ASSETS/WEB-SOFTWARE/RX-S-QR.html", 
         icon: "fas fa-qrcode",
@@ -104,7 +111,7 @@ const contentCards = [
     },
     {   
         id: "file6", 
-        title: "RX-CALENDER", 
+        title: "F6- RX-CALENDER", 
         description: "English Calendar – Allows you to add tasks and notes for future work schedules.", 
         link: "ASSETS/WEB-SOFTWARE/RX-Calendar.html", 
         icon: "fas fa-calendar",
@@ -112,7 +119,7 @@ const contentCards = [
     },
     {   
         id: "file7", 
-        title: "KAPALI-TAMSUK", 
+        title: "F7- KAPALI-TAMSUK", 
         description: "Old Version | Login Code: RX-2061", 
         link: "ASSETS/WEB-SOFTWARE/Kapali.html", 
         icon: "fas fa-pencil",
@@ -120,7 +127,7 @@ const contentCards = [
     },
     {   
         id: "file8", 
-        title: "QUESTION MODEL 2", 
+        title: "F8- QUESTION MODEL 2", 
         description: "LESSON A 11 - 20 L | UPDATING IN PROGRESS...", 
         link: "KR-EXAM.html?exam=file8", 
         icon: "fas fa-book",
