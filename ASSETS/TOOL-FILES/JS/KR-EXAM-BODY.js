@@ -95,7 +95,7 @@ function initializeExamPage() {
     setupEventListeners();
     handleScreenResize();
 
-    if (dom.timerBox) dom.timerBox.style.display = "none";
+    if (dom.timerBox) dom.timerBox.style.display = "block"; // Changed to block to make it visible
 }
 
 function populateUserProfile() {
@@ -402,12 +402,175 @@ function generateResultPDF() {
     const results = calculateResults();
     const reviewHtml = generateDetailedReviewHTML();
     const printWindow = window.open("", "_blank");
-    const styles = `body{font-family:Arial,sans-serif;margin:20px} .header{text-align:center;margin-bottom:20px} .meta, .summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px;border-bottom:1px solid #ccc;padding-bottom:10px} .summary-item div:first-child{font-size:1.5em;font-weight:bold} .detailed-review-container{margin-top:30px} .review-question-container{border:1px solid #eee;padding:15px;margin-bottom:15px;page-break-inside:avoid} .question-image{max-width:200px;max-height:200px;display:block;margin:10px 0} .options-list{list-style:none;padding:0} .option-item-review{padding:8px;border-radius:5px;margin-bottom:5px} .option-item-review.correct{background-color:#d4edda!important;border:1px solid #c3e6cb!important} .option-item-review.incorrect{background-color:#f8d7da!important;border:1px solid #f5c6cb!important} .option-item-review.correct-answer{background-color:#d1ecf1!important;border:1px solid #bee5eb!important} @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}`;
+    const styles = `
+        @page {
+            size: A4;
+            margin: 0.5cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0.5cm;
+            font-size: 12px;
+            line-height: 1.4;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+        }
+        .meta, .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 8px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .summary-item {
+            text-align: center;
+            padding: 8px;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+        }
+        .summary-item div:first-child {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .summary-item p {
+            margin: 5px 0 0;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+        .detailed-review-container {
+            margin-top: 20px;
+        }
+        .review-question-container {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 12px;
+            page-break-inside: avoid;
+            border-radius: 5px;
+        }
+        .question-header {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .question-text {
+            margin-bottom: 10px;
+        }
+        .question-image {
+            max-width: 200px;
+            max-height: 150px;
+            display: block;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .option-item-review {
+            padding: 6px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            border: 1px solid #eee;
+        }
+        .option-item-review.correct {
+            background-color: #d4edda !important;
+            border: 1px solid #c3e6cb !important;
+        }
+        .option-item-review.incorrect {
+            background-color: #f8d7da !important;
+            border: 1px solid #f5c6cb !important;
+        }
+        .option-item-review.correct-answer {
+            background-color: #d1ecf1 !important;
+            border: 1px solid #bee5eb !important;
+        }
+        .review-status {
+            padding: 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        .review-status.correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .review-status.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .review-status.not-attempted {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        @media print {
+            body {
+                padding: 0.5cm;
+            }
+            .review-question-container {
+                page-break-inside: avoid;
+            }
+        }
+    `;
     const durationStr = `${Math.floor(results.duration/60)}m ${results.duration%60}s`;
-    const summaryHtml = `<div class="meta"><div><strong>Student:</strong> ${studentInfo.name}</div><div><strong>Exam ID:</strong> ${studentInfo.serial}</div><div><strong>Date:</strong> ${results.dateTime.fullDateTime}</div><div><strong>Duration:</strong> ${durationStr}</div></div><div class="summary"><div class="summary-item"><div>${results.score}%</div><p>Score</p></div><div class="summary-item"><div>${results.correct}/${results.total}</div><p>Correct</p></div><div class="summary-item"><div>${results.attempted}</div><p>Attempted</p></div></div>`;
-    printWindow.document.write(`<html><head><title>Exam Result - ${studentInfo.serial}</title><style>${styles}</style></head><body><div class="header"><h1>Rosan Xettri Studio</h1><h2>Korean Language Exam Result</h2></div>${summaryHtml}${reviewHtml}</body></html>`);
+    const summaryHtml = `
+        <div class="meta">
+            <div><strong>Student:</strong> ${studentInfo.name}</div>
+            <div><strong>Exam ID:</strong> ${studentInfo.serial}</div>
+            <div><strong>Date:</strong> ${results.dateTime.fullDateTime}</div>
+            <div><strong>Duration:</strong> ${durationStr}</div>
+        </div>
+        <div class="summary">
+            <div class="summary-item">
+                <div>${results.score}%</div>
+                <p>Score</p>
+            </div>
+            <div class="summary-item">
+                <div>${results.correct}/${results.total}</div>
+                <p>Correct</p>
+            </div>
+            <div class="summary-item">
+                <div>${results.attempted}</div>
+                <p>Attempted</p>
+            </div>
+        </div>
+    `;
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Exam Result - ${studentInfo.serial}</title>
+                <style>${styles}</style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1 style="margin:0;font-size:1.6em;">Rosan Xettri Studio</h1>
+                    <h2 style="margin:5px 0;font-size:1.2em;">Korean Language Exam Result</h2>
+                </div>
+                ${summaryHtml}
+                ${reviewHtml}
+            </body>
+        </html>
+    `);
     printWindow.document.close();
-    setTimeout(() => { printWindow.print(); printWindow.close(); }, 500);
+    setTimeout(() => { 
+        printWindow.print(); 
+        setTimeout(() => { printWindow.close(); }, 500);
+    }, 500);
 }
 
 // ========== 6. UTILITY & HELPER FUNCTIONS ==========
@@ -474,6 +637,7 @@ function handleExitChoice(shouldExit) {
         setExamControlsDisabled(false); // Re-enable controls if they were disabled
     }
 }
+
 function makeDraggable(element) {
     if (!element) return;
     let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -503,11 +667,14 @@ function makeDraggable(element) {
 // ========== 7. TIMER FUNCTIONS ==========
 function startTimer() {
     if (!timerPaused) { // Only update targetTime if timer wasn't paused
-        targetTime = Date.now() + examDurationMs - ((Date.now() - studentInfo.startTime.getTime()) % examDurationMs);
+        targetTime = Date.now() + examDurationMs;
     }
     clearInterval(timerInterval); // Clear any existing interval before starting a new one
     timerInterval = setInterval(updateCountdown, 1000);
     updateCountdown(); // Call immediately to avoid initial delay
+    
+    // Make sure timer is visible
+    if (dom.timerBox) dom.timerBox.style.display = "block";
 }
 
 function updateCountdown() {
@@ -527,14 +694,22 @@ function updateCountdown() {
     dom.minimizedTime.textContent = timeString;
     dom.timerProgressBar.style.width = `${(distance / examDurationMs) * 100}%`;
     if (distance < 5 * 60 * 1000) {
-        dom.countdownEl.style.color = 'var(--danger-color)';
+        dom.countdownEl.style.color = '#e74c3c';
+        dom.timerProgressBar.style.backgroundColor = '#e74c3c';
     } else {
-        dom.countdownEl.style.color = ''; // Reset color if not in danger zone
+        dom.countdownEl.style.color = '#2c3e50';
+        dom.timerProgressBar.style.backgroundColor = '#3498db';
     }
 }
 
-function minimizeTimer() { dom.timerBox.classList.add("hidden"); dom.minimizedTimer.classList.remove("hidden"); }
-function restoreTimer() { dom.timerBox.classList.remove("hidden"); dom.minimizedTimer.classList.add("hidden"); }
+function minimizeTimer() { 
+    if (dom.timerBox) dom.timerBox.classList.add("hidden"); 
+    if (dom.minimizedTimer) dom.minimizedTimer.classList.remove("hidden"); 
+}
+function restoreTimer() { 
+    if (dom.timerBox) dom.timerBox.classList.remove("hidden"); 
+    if (dom.minimizedTimer) dom.minimizedTimer.classList.add("hidden"); 
+}
 function closeTimer() { 
     if (dom.timerBox) dom.timerBox.style.display = 'none'; 
     if (dom.minimizedTimer) dom.minimizedTimer.style.display = 'none'; 
