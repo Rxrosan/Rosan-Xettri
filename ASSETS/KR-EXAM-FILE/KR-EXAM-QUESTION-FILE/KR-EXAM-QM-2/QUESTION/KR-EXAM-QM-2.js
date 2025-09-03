@@ -1,17 +1,17 @@
 window.questions = [
   {
-     question: "[1-2] 그림을 보고 단어나 문장을 고르십시오.",
-     options: { a: "신용카드", b: "지폐", c: "동전", d: "현금" },
+     question: "[1-2] 그림을 보고 단어나 문장을 고르십시오. <br>이 사람은 무엇을 하고 있습니까 ?",
+     options: { a: "옷을 다리고 있습니다.", b: "빨래를 널고 있습니다.", c: "옷을 개고 있습니다.", d: "빨래를 걷고 있습니다." },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-1.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-19.png"
    },
    {
      question: "",
      options: { a: "학교", b: "공장", c: "회사", d: "은행" },
      answer: "a",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-2.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-20.png"
    },
    {
      question: "[3-4] 다음 설명에 알맞은 어휘를 고르십시오.<br>회사 , 공장 , 학고 등 일성한 장소에 근무나 일을 하기 위해 가는 것을 의미합니다.",
@@ -30,7 +30,7 @@ window.questions = [
      options: { a: "귤보다 감이 더 많이 발립니다.", b: "바나나 가장 작은 사람이 좋아핮니다.", c: "바나나는 두 번째로 많이 팔맂니다.", d: "포도를 좋아하는 사람이 가장 많습니다." },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-3.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-21.png"
    },
    {
      question: "다음 밑줄 친 부분이 맞는 문장을 고르십시오.",
@@ -91,28 +91,28 @@ window.questions = [
      options: { a: "우유 입니다.", b: "우체국 입니다.", c: "우산 입니다.", d: "유산 입니다." },
      answer: "c",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-4.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-22.png"
    },
    {
      question: "이 사람의 주소는 어디입니까?",
      options: { a: "서울특별시 구로구청장 입니다.", b: "서울특별시 구로구 입니다.", c: "서울특별시 구로구청장 입니다.", d: "2022년 2월 8일 입니다." },
      answer: "b",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-5.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-23.png"
    },
    {
      question: "이것은 무엇입니까?",
      options: { a: "칼 입니다.", b: "창문 입니다.", c: " 의자 입니다.", d: "책 입니다." },
      answer: "a",
      explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-6.png"
+    image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-24.png"
    },
    {
      question: "다음 그래프에 대한 설명으로 알맞은 것을 고르십시오.",
      options: { a: "김치찌개 음식은 가장 많이 있습니다.", b: "기타은 가장 많습니다.", c: "비빔밥은 가장 적습니다.", d: "불고기 보다 김치찌개가 더 많습니다." },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-7.png"
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-25.png"
    },
    {
      question: "[19-20] 다음 글을 읽고 무엇에 대한 글인지 고르십시오.<br>  <br> 오늘은 토요일입니다. 학교에 가지 않아도 되니까 늦게까지 잤습니다. 오후에는 집안일을 정리하고 나서 장을 보려고 합니다.",
@@ -131,7 +131,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-8.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-26.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-1.mp3"
    },
    {
@@ -139,7 +139,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "c",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-9.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-27.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-2.mp3"
    },
    {
@@ -147,7 +147,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-10.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-28.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-3.mp3"
    },
    {
@@ -155,7 +155,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "c",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-11.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-29.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-4.mp3"
    },
    {
@@ -163,7 +163,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "a",
      explanation: "Review not Aviable.",
-    image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-12.png",
+    image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-30.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-5.mp3"
    },
    {
@@ -171,7 +171,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "b",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-13.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-31.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-6.mp3"
    },
    {
@@ -179,7 +179,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-14.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-32.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-7.mp3"
    },
    {
@@ -187,7 +187,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "c",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-15.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-33.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-8.mp3"
    },
    {
@@ -195,7 +195,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "a",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-16.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-34.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-9.mp3"
    },
    {
@@ -245,7 +245,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "a",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-17.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-35.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-16.mp3"
    },
    {
@@ -253,7 +253,7 @@ window.questions = [
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-18.png",
+     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-36.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-17.mp3"
    },
    {
