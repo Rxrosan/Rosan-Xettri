@@ -14,14 +14,14 @@ window.questions = [
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-20.png"
    },
    {
-     question: "[3-4] 다음 설명에 알맞은 어휘를 고르십시오.<br>회사 , 공장 , 학고 등 일성한 장소에 근무나 일을 하기 위해 가는 것을 의미합니다.",
-     options: { a: "퇴근 ", b: "참석", c: "출근", d: "경험" },
+     question: "[3-4] 빈칸에 들어갈 가장 알맞은 것을 고르십시오.<br> 요즘 회사 일이 바빠서 청소를 하지 못했습니다. 오늘 청소도 하고 쓰레기도 _____. ",
+     options: { a: "바꿀 겁니다.", b: "만들 겁니다.", c: "버릴 겁니다.", d: "보낼 겁니다." },
      answer: "c",
      explanation: "Review not Aviable."
    },
    {
-     question: "아픈 사람들을 의사와 간호사가 치료하고 돌보는 장소입니다.",
-     options: { a: "극장", b: "병원", c: "은행", d: "식당" },
+     question: "회사가 집애서 아주 _____. 그래서 저는 매일 걸어서 출근합니다.",
+     options: { a: "괜찮습니다.", b: "가깝습니다.", c: "멋있습니다.", d: "바쁩니다." },
      answer: "b",
      explanation: "Review not Aviable."
    },
@@ -34,13 +34,13 @@ window.questions = [
    },
    {
      question: "다음 밑줄 친 부분이 맞는 문장을 고르십시오.",
-     options: { a: "할머니깨서 음식을 <u>만들십니다</u>.", b: "<u>책이</u> 읽어요.", c: "다라 씨는 <u>회사에</U> 있어요.", d: "학교에 <u>가아요</u>." },
+     options: { a: "제가 이때가 휴게실을 <u>청소핼게요</u>.", b: "오늘은 날씨가 정말 <u>추우네요</u>.", c: "기속사애서 음악을 <u>들을 거애요</U>.", d: "어머니깨서 음식을 <u>안들십니다</u>." },
      answer: "c",
      explanation: "Review not Aviable."
    },
    {
-     question: "[7-8] 다음 질문에 답하십시오.<br>다음 단어와 관계 있는 무엇입니까?<br>  <br>분뉴사",
-     options: { a: "마리", b: "빵", c: "두", d: "명사" },
+     question: "[7-8] 다음 질문에 답하십시오.<br>오늘도 바빠요?",
+     options: { a: "네, 일이 많아요.", b: "아니요, 일이 재미있어요.", c: "네, 일을 잘해요.", d: "아니요, 일을 하고 싶어요." },
      answer: "a",
      explanation: "Review not Aviable."
    },
@@ -94,22 +94,22 @@ window.questions = [
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-22.png"
    },
    {
-     question: "이 사람의 주소는 어디입니까?",
-     options: { a: "서울특별시 구로구청장 입니다.", b: "서울특별시 구로구 입니다.", c: "서울특별시 구로구청장 입니다.", d: "2022년 2월 8일 입니다." },
+     question: "이 사람은 무엇을 하고 있습니까 ?",
+     options: { a: "볼링 하고 있습니다.", b: "야구 하고 있습니다.", c: "볼링 치고 있습니다.", d: "야구 치고 있습니다." },
      answer: "b",
      explanation: "Review not Aviable.",
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-23.png"
    },
    {
-     question: "이것은 무엇입니까?",
-     options: { a: "칼 입니다.", b: "창문 입니다.", c: " 의자 입니다.", d: "책 입니다." },
+     question: "이 사람은 무엇을 하고 있습니까 ?",
+     options: { a: "스키를 타고 있습니다.", b: "겨울 스포츠 입니다.", c: " 스케이트를 타고 있습니다.", d: "스키를 하고 있습니다." },
      answer: "a",
      explanation: "Review not Aviable.",
     image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-24.png"
    },
    {
-     question: "다음 그래프에 대한 설명으로 알맞은 것을 고르십시오.",
-     options: { a: "김치찌개 음식은 가장 많이 있습니다.", b: "기타은 가장 많습니다.", c: "비빔밥은 가장 적습니다.", d: "불고기 보다 김치찌개가 더 많습니다." },
+     question: "이 사람은 무엇을 하고 있습니까 ?",
+     options: { a: "골프를 하고 있습니다.", b: "농구를 하고 있습니다.", c: "농구를 치고 있습니다.", d: "골프를 치고 있습니다." },
      answer: "d",
      explanation: "Review not Aviable.",
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-25.png"
