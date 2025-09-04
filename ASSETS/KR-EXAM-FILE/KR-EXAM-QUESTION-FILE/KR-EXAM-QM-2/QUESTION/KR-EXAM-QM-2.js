@@ -7,8 +7,8 @@ window.questions = [
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-19.png"
    },
    {
-     question: "",
-     options: { a: "학교", b: "공장", c: "회사", d: "은행" },
+     question: "이 사람은 무엇을 하고 있습니까 ?",
+     options: { a: "내려 가고 있습니다", b: "올라 오고 있습니다", c: "올라 가고 있습니다", d: "내려 오고 있습니다" },
      answer: "a",
      explanation: "Review not Aviable.",
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-20.png"
@@ -26,8 +26,8 @@ window.questions = [
      explanation: "Review not Aviable."
    },
    {
-     question: "[5-6]다음 질문에 답하십시오.<br>다음 파이 차트에 대한 설명으로 가장 알맞은 갓을 고르십시오.",
-     options: { a: "귤보다 감이 더 많이 발립니다.", b: "바나나 가장 작은 사람이 좋아핮니다.", c: "바나나는 두 번째로 많이 팔맂니다.", d: "포도를 좋아하는 사람이 가장 많습니다." },
+     question: "[5-6]다음 질문에 답하십시오.<br>이 사람은 무엇을 하고 있습니까 ?",
+     options: { a: "짐을 싸고 있습니다.", b: "짐을 팔고 있습니다.", c: "짐을 버리고 있습니다.", d: "짐을 플고 있습니다." },
      answer: "d",
      explanation: "Review not Aviable.",
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-21.png"
@@ -87,8 +87,8 @@ window.questions = [
      explanation: "Review not Aviable."
    },
    {
-     question: "[15-18] 다음 질문에 답하십시오.<br>  <br> 이것은 무엇입니까?",
-     options: { a: "우유 입니다.", b: "우체국 입니다.", c: "우산 입니다.", d: "유산 입니다." },
+     question: "[15-18] 다음 질문에 답하십시오.<br> 이 사람은 무엇을 하고 있습니까 ?",
+     options: { a: "콘서트를 보고 있습니다.", b: "등산 하고 있습니다.", c: "운동 경기를 보고 있습니다.", d: "관람 하고 있습니다." },
      answer: "c",
      explanation: "Review not Aviable.",
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-22.png"
