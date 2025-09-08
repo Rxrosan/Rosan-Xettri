@@ -129,7 +129,7 @@ window.questions = [
    {
      question: "[21-24] 들은 것을 고르십시오.",
      options: { a: "", b: "", c: "", d: "" },
-     answer: "b",
+     answer: "d",
      explanation: "Review not Aviable.",
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-26.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-1.mp3"
@@ -137,7 +137,7 @@ window.questions = [
    {
      question: "",
      options: { a: "", b: "", c: "", d: "" },
-     answer: "a",
+     answer: "c",
      explanation: "Review not Aviable.",
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-27.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-2.mp3"
@@ -153,7 +153,7 @@ window.questions = [
    {
      question: "",
      options: { a: "", b: "", c: "", d: "" },
-     answer: "d",
+     answer: "c",
      explanation: "Review not Aviable.",
      image: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-29.png",
      audio: "ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/AUDIO/AUDIO-4.mp3"

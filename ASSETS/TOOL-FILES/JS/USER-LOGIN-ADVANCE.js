@@ -6,7 +6,7 @@ const users = [
         password: "RX9826482279",
         name: "ROSAN KC",
         image: "ASSETS/TOOL-FILES/USER/ROSAN-KC.jpg",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8"], // Permanent access
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file9"], // Permanent access
         timedAccessConfig: {} // No timed access needed due to permanent access
     },
     {
@@ -22,6 +22,8 @@ const users = [
             "file4": { startDate: "2025-08-18", duration: 365 },
             "file5": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-08-18", duration: 365 },
+            "file80": { startDate: "2025-08-18", duration: 365 },
+            "file90": { startDate: "2025-09-08", duration: 365 },
         }
     },
     {
@@ -37,6 +39,8 @@ const users = [
             "file4": { startDate: "2025-08-18", duration: 365 },
             "file5": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-08-18", duration: 365 },
+            "file80": { startDate: "2025-08-18", duration: 365 },
+            "file90": { startDate: "2025-09-08", duration: 365 },
           
         }
     },
@@ -46,7 +50,7 @@ const users = [
         password: "RX9821948199",
         name: "ROHIT KC",
         image: "ASSETS/TOOL-FILES/USER/ROHIT-KC.jpg",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7",],
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file9",],
         timedAccessConfig: { }
     },
     {
@@ -62,7 +66,8 @@ const users = [
             "file4": { startDate: "2025-08-18", duration: 365 },
             "file5": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-08-18", duration: 365 },
-            "file8": { startDate: "2025-08-18", duration: 365 },
+            "file80": { startDate: "2025-08-18", duration: 365 },
+            "file90": { startDate: "2025-09-08", duration: 365 },
         }
     }
 ];
@@ -75,7 +80,7 @@ const contentCards = [
         description: "Login Code : RX-2061", 
         link: "ASSETS/WEB-SOFTWARE/RX-STUDIO-KAPALI_TAMSUK_GENERATOR.html", 
         icon: "fas fa-pen",
-        prices: { default: "Rs. 1500", 2: "Rs. 1000", 3: "Rs. 1000", 4: "Rs. 1000" }
+        prices: { default: "Rs. 1500", 2: "Rs. 1000", 3: "Rs. 1000", 4: "Rs. 1000", 5: "Rs. 1000" }
     },
     {   
         id: "file2", 
@@ -123,7 +128,7 @@ const contentCards = [
         description: "Old Version | Login Code: RX-2061", 
         link: "ASSETS/WEB-SOFTWARE/Kapali.html", 
         icon: "fas fa-pencil",
-        prices: { default: "Rs. 1000", 2: "Rs. 500", 3: "Rs. 500", 4: "Rs. 500" }
+        prices: { default: "Rs. 1000", 2: "Rs. 500", 3: "Rs. 500", 4: "Rs. 500", 5: "Rs. 500" }
     },
     {   
         id: "file8", 
@@ -131,7 +136,15 @@ const contentCards = [
         description: "LESSON A 11 - 20 L | UPDATING IN PROGRESS...", 
         link: "KR-EXAM.html?exam=file8", 
         icon: "fas fa-book",
-        prices: { default: "150", 2: "Rs. 150", 3: "Rs. 150", 4: "Rs. 150" }
+        prices: { default: "150", 2: "Rs. 150", 3: "Rs. 150", 4: "Rs. 150", 5: "Rs. 150" }
+    },
+    {   
+        id: "file9", 
+        title: "F9- QUESTION MODEL 3", 
+        description: "ALL OVER BOOK RESOURCE | UPDATING IN PROGRESS...", 
+        link: "KR-EXAM.html?exam=file9", 
+        icon: "fas fa-book",
+        prices: { default: "150", 2: "Rs. 150", 3: "Rs. 150", 4: "Rs. 150", 5: "Rs. 150" }
     }
 ];
 
@@ -144,7 +157,7 @@ const defaultStores = [
 
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 
-        content: ["file2","file8"] },
+        content: ["file2","file8","file9"] },
 
     {   id: "store_3", 
         name: "WEB-SOFTWARE", 

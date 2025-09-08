@@ -17,6 +17,7 @@
     const examScriptMapping = {
         'file2': 'ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/QUESTION/KR-EXAM-QM-1.js',
         'file8': 'ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/QUESTION/KR-EXAM-QM-2.js',
+        'file9': 'ASSETS/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/QUESTION/KR-EXAM-QM-3.js',
         // Add more exam IDs and their question script paths here:
         // 'your_new_exam_id': 'path/to/your/new/exam/questions.js',
     };
