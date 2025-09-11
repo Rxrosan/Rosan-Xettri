@@ -1,86 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <script src="ASSETS/TOOL-FILES/JS/DEV-TOOL-PROTECTION-2.js"></script>
-     <script src="ASSETS/TOOL-FILES/JS/POP-UP-WINDOW-ADVANCE-02.js"></script>
     <meta charset="UTF-8">
+    <script src="ASSET/WEB-SOFTWARE/JS/DEV-TOOL-PROTECTION-1.js"></script>
+    <script src="ASSET/WEB-SOFTWARE/JS/DEV-TOOL-PROTECTION-2.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RX | Rosan Khattri Chettri </title>
-    <link rel="icon" type="image/png" href="ASSETS/MAIN-FILE/IMG/LOGO/RX-3.png">
+    <link rel="icon" type="image/png" href="ASSET/MAIN/IMG/LOGO/RX-3.png">
+    <title>ROSAN KHATTRI CHETTRI</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="ASSETS/MAIN-FILE/CSS/MAIN-BODY.css">
-
-    <link rel="stylesheet" href="ASSETS/MAIN-FILE/CSS/REVIEW-STYLE.css">
-    <link rel="stylesheet" href="ASSETS/MAIN-FILE/CSS/TEAM-SLIDER.css">
-     <link rel="stylesheet" href="ASSETS/MAIN-FILE/CSS/AUTO-WRITING-ANIMATION.css">
-     <link rel="stylesheet" href="ASSETS/MAIN-FILE/CSS/POP-UP-NAV-BAR-MORE.css">
-    
+    <link rel="stylesheet" href="ASSET/MAIN/CSS/main.css">
+    <link rel="stylesheet" href="ASSET/USER/CSS/user.css">
+    <link rel="stylesheet" href="ASSET/MAIN/CSS/AUTO-WRITING-ANIMATION.css">
+    <link rel="stylesheet" href="ASSET/MAIN/CSS/TEAM-SLIDER.css">
+    <link rel="stylesheet" href="ASSET/MAIN/CSS/REVIEW-STYLE.css">
 </head>
 <body>
-    <!-- Header - Cyber Style -->
+    <!-- Guest Notification -->
+    <div id="guest-notification">
+        <i class="fas fa-info-circle"></i>
+        <div class="content">
+            <h3 id="notification-title">You are logged in as Guest</h3>
+            <p id="notification-message">To access your real account, please login</p>
+        </div>
+        <button id="login-btn">Login Now</button>
+    </div>
+
+    <!-- Header with Navigation -->
     <header>
-        <div class="header-container">
-            <a href="index.html" class="logo">
-                <img src="ASSETS/MAIN-FILE/IMG/LOGO/RX-2.png" alt="RX Logo">
-                Rosan Xettri
-            </a>
-            <div class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="index.html" class="active">HOME</a></li>
-                <li><a href="About.html">ABOUT</a></li>
-                 <li><a href="Service.html">SERVICES</a></li>
-                <li><a href="Contact.html" >CONTACT</a></li>
-                <li><a id="RX-SMART-BUTTON-toggle">◉</a></li>
-            </ul>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <span class="glow">RX STUDIO</span>
+                </div>
+
+                <div class="hamburger" id="hamburger" >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="nav-links" id="nav-links" >
+                    <a href="index.html" class="glow"> HOME</a>
+                    <a href="About.html"> ABOUT</a>
+                    <a href="Service.html"> SERVICE</a>
+                    <a href="Contact.html"> CONTACT</a>
+                    <a href="News.html"></i> NEWS</a>
+  
+                    <div class="profile-container">
+                        <button class="profile-button">
+                            <img id="profile-img" src="#" alt="Profile">
+                            <span id="username">GUEST</span>
+                        </button>
+                        <div class="profile-dropdown" id="profile-dropdown">
+                            <div class="profile-header">
+                                <img id="dropdown-img" src="#" alt="Profile">
+                                <div class="profile-info">
+                                    <h4 id="dropdown-name">Guest User</h4>
+                                    <p id="dropdown-account-type">Guest Account</p>
+                                </div>
+                            </div>
+                            <div class="profile-details">
+                                <div>
+                                    <i class="fas fa-id-badge"></i>
+                                    <span id="dropdown-user-id">N/A</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-envelope"></i>
+                                    <span id="dropdown-email">guest@example.com</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-phone"></i>
+                                    <span id="dropdown-phone">Not provided</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span id="dropdown-address">Not provided</span>
+                                </div>
+                            </div>
+                            <button class="logout-btn" id="logout-btn">Logout</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Admin Super Settings Link (Dynamically shown) -->
+                    <a href="#" id="admin-settings-link" style="display: none;"><i class="fas fa-users-cog"></i> USERS</a>
+                </div>
+            </nav>
         </div>
     </header>
 
-    <!-- Hero Section - Futuristic -->
-    <section class="hero" style="background-image: url('ASSETS/MAIN-FILE/IMG/BANNER/GIF-BANNER/GIF-BANNER-1.gif'); background-size: cover; background-position: center;">
-        <div class="hero-content">
-            <h1>Rosan Khattri Chettri</h1>
-            <p id="auto-writer" class="auto-writer"></p>
-            <a href="Service.html" class="btn">Our Services</a>
-        </div>
-    </section>
-
-    <!-- Contact Section - Holographic UI -->
-    <section class="contact-section" id="services">
+    <!-- Main Content -->
+    <main>
         <div class="container">
-            <div class="section-title">
-                <h2> Our Services </h2>
-            </div>
-            <div class="contact-grid">
-                <div class="contact-card">
-                    <h3><i><img src="ASSETS/MAIN-FILE/IMG/SERVICE-ICON/L-D-I.png" alt=""></i> Logo Creation </h3>
-                    <p>Our logo creation service is designed to give your brand a unique and professional identity. A well-designed logo is crucial for making a strong first impression and establishing brand recognition.</p>
-             </div>
+            <section class="hero" id="home" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-2.jpg'); background-size: cover; background-position: center;">
+                <h1>ROSAN KHATTRI CHETTRI</h1>
+                <p id="auto-writer" class="auto-writer"></p>
+                <a  class="cta-button">HOME</a>
+            </section>
 
-             <div class="contact-card">
-                    <h3><i><img src="ASSETS/MAIN-FILE/IMG/SERVICE-ICON/W-D-I.png" alt=""></i> Website Designing </h3>
-                   <p>Our website designing service is focused on creating beautiful, user-friendly, and responsive websites that elevate your online presence. Whether you need a personal portfolio, business website, or e-commerce platform, we’ve got you covered.</p>
-             </div>
+            <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-feather-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>LOGO CREATION</h3>
+                        <p>Our logo creation service is designed to give your brand a unique and professional identity. A well-designed logo is crucial for making a strong first impression and establishing brand recognition.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                       <i class="fas fa-laptop-code"></i> 
+                    </div>
+                    <div class="feature-content">
+                        <h3>WEBSITE DESIGNING</h3>
+                        <p>Our website designing service is focused on creating beautiful, user-friendly, and responsive websites that elevate your online presence. Whether you need a personal portfolio, business website, or e-commerce platform, we’ve got you covered.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-camera-retro"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>PHOTO  EDITING </h3>
+                        <p>Our photo editing service provides high-quality, professional image enhancement to make your photos stand out. From basic touch-ups to advanced retouching, we ensure your photos look polished and perfect for any purpose.</p>
+                    </div>
+                </div>
+                <a href="#" class="cta-button">SEE MORE SERVICES</a>
+            </section>
 
-             <div class="contact-card">
-                    <h3><i><img src="ASSETS/MAIN-FILE/IMG/SERVICE-ICON/P-E-I.png" alt=""></i> Photo Editing </h3>
-                    <p>Our photo editing service provides high-quality, professional image enhancement to make your photos stand out. From basic touch-ups to advanced retouching, we ensure your photos look polished and perfect for any purpose.</p>
-             </div>
-             <a href="Service.html" class="btn" style="margin-top: auto; display: align-self">See More Services</a>
-             </div>
-    </section>
-
-<section class="contact-section" class="team" id="team" >
-     <div class="container">
-        <div class="section-title">
-                <h2> Our Team </h2>
-            </div>
-            <div class="team-slider-container">
+             <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                    <h3>Our Team</h3>
+                    </div>
+                    <div class="feature-content"style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-5.jpg'); background-size: cover; background-position: center;">
+                       
+            <div class="team-slider-container" >
             <div class="team-slider">
                 <div class="team-slide">
                     <div class="team-member">
-                        <img src="ASSETS/MAIN-FILE/IMG/TEAM-IMG/T-2.png" alt="Puja Acharya Shrestha">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-2.png" alt="Puja Acharya Shrestha">
                         <h3>Puja Acharya Shrestha</h3>
                         <p class="position">Palpa, Nepal</p>
                         <p>Designer</p>
@@ -92,7 +151,7 @@
                 </div>
                 <div class="team-slide">
                     <div class="team-member">
-                        <img src="ASSETS/MAIN-FILE/IMG/TEAM-IMG/T-5.png" alt="Michael Chen">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-5.png" alt="Michael Chen">
                         <h3>Keshab Disuwa Magar </h3>
                         <p class="position">Kapilvastu</p>
                         <p>Reviewer</p>
@@ -104,7 +163,7 @@
                 </div>
                 <div class="team-slide">
                     <div class="team-member">
-                        <img src="ASSETS/MAIN-FILE/IMG/TEAM-IMG/T-3.png" alt="Michael Chen">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-3.png" alt="Michael Chen">
                         <h3>Leela Bhudha Magar</h3>
                         <p class="position">Banganga-10, Kapilvastu</p>
                         <p>Video Editor</p>
@@ -116,7 +175,7 @@
                 </div>
                 <div class="team-slide">
                     <div class="team-member">
-                        <img src="ASSETS/MAIN-FILE/IMG/TEAM-IMG/T-4.png" alt="Emma Rodriguez">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-4.png" alt="Emma Rodriguez">
                         <h3>कुस्मा तरामु मगर</h3>
                         <p class="position">Gulmi-Lumpek</p>
                         <p>Reviewer</p>
@@ -128,7 +187,7 @@
                 </div>
                 <div class="team-slide">
                     <div class="team-member">
-                        <img src="ASSETS/MAIN-FILE/IMG/TEAM-IMG/T-1.png" alt="David Kim">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-1.png" alt="David Kim">
                         <h3>Prasamsha Khanal</h3>
                         <p class="position">Butwal</p>
                         <p>Web Developer</p>
@@ -137,23 +196,25 @@
                             <a href="#" aria-label="Prasamsha Khanal's Instagram"><i class="fab fa-instagram"></i></a>
                         </div>
                 </div>
-            </div>
-         </div>     
-    </div>
-</section>
+                </div>
+                </div>
+                </div>
+            </section>
 
-    <section class="contact-section" id="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2> Client Reviews </h2>
-            </div>
-             <div class="reviews-container">
+                <section class="features" >
+                <div class="feature-card">
+                <div class="feature-icon">
+                         <h3>Client Reviews</h3>
+                </div>
+                <div class="feature-content" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-3.jpg'); background-size: cover; background-position: center;">
+                       
+                     <div class="reviews-container">
                 <div class="review-card" onclick="toggleReviewImage(this)" 
-                data-image="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Rohit.jpg">
+                data-image="ASSET/MAIN/IMG/REVIWER-IMG/Rohit.jpg">
                <div class="quote-icon">"</div>
                <p class="review-text">"Rosan Khattri Chettri is a highly skilled graphic designer with an amazing eye for detail. His logo and branding designs stand out with creativity and professionalism. A true expert in his field!"</p>
                <div class="reviewer">
-                   <img src="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Rohit.jpg" alt="Reviewer" class="reviewer-img">
+                   <img src="ASSET/MAIN/IMG/REVIWER-IMG/Rohit.jpg" alt="Reviewer" class="reviewer-img">
                    <div class="reviewer-info">
                        <h4>Rohit Xettri</h4>
                        <p>Banganga-10, Kapilvastu</p>
@@ -161,11 +222,11 @@
                </div>
            </div>
              <div class="review-card" onclick="toggleReviewImage(this)" 
-                 data-image="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Mahesh.jpg">
+                 data-image="ASSET/MAIN/IMG/REVIWER-IMG/Mahesh.jpg">
                 <div class="quote-icon">"</div>
                 <p class="review-text">Rosan Khattri Chettri is a talented and reliable graphic designer with a strong eye for detail. He specializes in logos, business cards, and branding, always delivering creative and high-quality work. Highly recommended!</p>
                 <div class="reviewer">
-                    <img src="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Mahesh.jpg" alt="Reviewer" class="reviewer-img">
+                    <img src="ASSET/MAIN/IMG/REVIWER-IMG/Mahesh.jpg" alt="Reviewer" class="reviewer-img">
                     <div class="reviewer-info">
                         <h4>महेश आचार्य</h4>
                         <p>Arghakhachi</p>
@@ -173,11 +234,11 @@
                 </div>
             </div>
             <div class="review-card" onclick="toggleReviewImage(this)" 
-                 data-image="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Kusum.jpg">
+                 data-image="ASSET/MAIN/IMG/REVIWER-IMG/Kusum.jpg">
                 <div class="quote-icon">"</div>
                 <p class="review-text">Rosan Khattri Chettri is a talented graphic designer with  experience, specializing in logos, business cards, and more. He delivers creative and professional work. Highly recommended!.</p>
                 <div class="reviewer">
-                    <img src="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Kusum.jpg" alt="Reviewer" class="reviewer-img">
+                    <img src="ASSET/MAIN/IMG/REVIWER-IMG/Kusum.jpg" alt="Reviewer" class="reviewer-img">
                     <div class="reviewer-info">
                         <h4>कुस्मा तरामु मगर</h4>
                         <p>Gulmi-Lumpek</p>
@@ -185,11 +246,11 @@
                 </div>
             </div>
             <div class="review-card" onclick="toggleReviewImage(this)" 
-                 data-image="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Leela.jpg">
+                 data-image="ASSET/MAIN/IMG/REVIWER-IMG/Leela.jpg">
                 <div class="quote-icon">"</div>
                 <p class="review-text">Rosan Xettri is known for his dedication to excellence in graphic design and gaming. His innovative mindset, coupled with his refined skills, allows him to create visually stunning designs and achieve remarkable success in the gaming world.</p>
                 <div class="reviewer">
-                    <img src="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Leela.jpg" alt="Reviewer" class="reviewer-img">
+                    <img src="ASSET/MAIN/IMG/REVIWER-IMG/Leela.jpg" alt="Reviewer" class="reviewer-img">
                     <div class="reviewer-info">
                         <h4>Leela Bhudha Magar</h4>
                         <p>Banganga-10, Kapilvastu</p>
@@ -197,92 +258,153 @@
                 </div>
             </div>
             <div class="review-card" onclick="toggleReviewImage(this)" 
-                 data-image="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Prasamsha.jpg">
+                 data-image="ASSET/MAIN/IMG/REVIWER-IMG/Prasamsha.jpg">
                 <div class="quote-icon">"</div>
                 <p class="review-text">Rosan Xettri is a talented graphic designer and gamer who seamlessly blends creativity with technical expertise. His innovative approach and attention to detail make his work stand out, consistently delivering high-quality results.</p>
                 <div class="reviewer">
-                    <img src="ASSETS/MAIN-FILE/IMG/REVIWER-IMG/Prasamsha.jpg" alt="Reviewer" class="reviewer-img">
+                    <img src="ASSET/MAIN/IMG/REVIWER-IMG/Prasamsha.jpg" alt="Reviewer" class="reviewer-img">
                     <div class="reviewer-info">
                         <h4>Prasamsha Khanal</h4>
                         <p>Butwal</p>
                     </div>
                 </div>
             </div>
+             </div>  
              </div>
-             </div>
-    </section>
-
-     <section class="contact-section" id="contact">
-        <div class="container">
-            <div class="section-title">
-                <h2> Some Awesome Line ! </h2>
+                </div>
+            </section>
             </div>
-            <div class="contact-grid">
-                           <div class="container">
-                   <p>"Not all who wander are lost—some are just searching for the piece of themselves the world hasn’t shown them yet."</p> <br>
-                   <a href="https://www.facebook.com/RosanXettri.2004"class="btn" style="display: inline-block; margin: 0 auto; padding: 8px 16px; text-align: center;">JOIN US!</a>
-             </div>
-             </div>
-    </section>
-    
+         </main>
 
-    <!-- Footer - Cyber Lines -->
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3>About Rosan </h3>
-                    <a>Rosan Xettri is a multidimensional creator merging design, technology, and gaming into unique digital experiences.</a>
-                    <a href="About.html" class="btn" style="margin-top: 1rem; display: inline-block;">More About Rosan</a>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>RX STUDIO</h3>
+                    <p>We create digital experiences that inspire and engage. Our solutions are tailored to meet your unique business needs.</p>
+                    <div class="social-icons">
+                       <a href="https://www.facebook.com/RosanXettri.2004"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://x.com/Rx_Rosan"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/Rosan.2061"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@rosankc2061"><i class="fab fa-tiktok"></i></a>
+                    </div>
                 </div>
-                
-                <div class="footer-col">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="About.html">About Rosan</a></li>
-                        <li><a href="Service.html">Services</a></li>
-                        <li><a href="Contact.html">Contact</a></li>
+                <div class="footer-section">
+                    <h3>Important Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="About.html"><i class="fas fa-chevron-right"></i> ABOUT</a></li>
+                        <li><a href="Service.html"><i class="fas fa-chevron-right"></i> SERVICE</a></li>
+                        <li><a href="Contact.html"><i class="fas fa-chevron-right"></i> CONTACT</a></li>
+                        <li><a href="News.html"><i class="fas fa-chevron-right"></i> NEWS</a></li>
+                        
                     </ul>
                 </div>
-                
-                <div class="footer-col">
+                <div class="footer-section">
                     <h3>Resources</h3>
-                    <ul>
-                        <li class="dropdown"><a  onclick="toggleDropdown(event)">Open Collection</a></li>
+                    <ul class="footer-links">
+                        <!--<li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Support Center</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> FAQs</a></li>-->
+                        <li><a href="USER-DASHBOARD.html"><i class="fas fa-chevron-right"></i>RESOURCE LOG-IN  </a></li>
                     </ul>
                 </div>
-                
-                <div class="footer-col">
-                    <h3>Contact Detail</h3>
-                    <ul>
-                        <li><a href="tel:9826482279">+977 9826482279</a></li>
-                        <li><a href="mailto:rkc242855@gmail.com">rkc242855@gmail.com</a></li>
-                        <li>Kapilvastu, Nepal</li>
-                        <li><a id="current-time">Syncing...</a></li>
+                <div class="footer-section">
+                    <h3>Other Links</h3>
+                    <ul class="footer-links">
+                        <!--<li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>-->
+                        
                     </ul>
                 </div>
             </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; <script>document.write(new Date().getFullYear())</script> Rosan Xettri. All rights reserved.</p>
+            <div class="copyright">
+                <p>&copy; <script>document.write(new Date().getFullYear())</script> ROSAN KHATTRI CHETTRI. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- The popup/modal -->
-<div class="modal-overlay" id="moreModal">
-  <div class="modal-content">
-    <a href="USER-LOGIN.html">RESOURCES-LOG-IN</a>
-    <button class="close-btn" onclick="closeModal()">×</button>
-  </div>
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-2.jpg'); background-size: cover; background-position: center;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>RX STUDIO</h2>
+                <button class="close-modal-btn" data-target="login-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                <button class="login-btn" id="modal-login-btn">Login</button>
+            </div>
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="Contact.html">Contact the admin.</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+<div class="modal" id="admin-panel-modal" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-2.jpg'); background-size: cover; background-position: center;">
+    <div class="modal-content admin-modal-content">
+        <div class="modal-header">
+            <h2>RX STUDIO MEMBER INFORMATION</h2>
+            <button class="close-modal-btn" data-target="admin-panel-modal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body admin-panel-body">
+            <div class="user-list-sidebar">
+                <h3>RX STUDIO MEMBER'S</h3>
+                <ul id="member-list">
+                    <!-- Member list will be populated here -->
+                </ul>
+            </div>
+            <div class="user-details-display">
+                <h3 id="selected-user-header">Select a Member to View Details</h3>
+                <div id="selected-user-details">
+                    <!-- User details will be displayed here -->
+                    <div class="detail-item">
+                        <strong>User ID:</strong> <span id="admin-user-id"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Full Name:</strong> <span id="admin-full-name"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Email:</strong> <span id="admin-email"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Phone:</strong> <span id="admin-phone"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Address:</strong> <span id="admin-address"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Account Type:</strong> <span id="admin-account-type"></span>
+                    </div>
+                    <div class="detail-item profile-avatar-admin">
+                        <strong>Profile Image:</strong> <img id="admin-profile-img" src="" alt="Profile Image">
+                    </div>
+                    <!-- Add access details container -->
+                    <div id="admin-access-details" class="access-details-container">
+                        <!-- Access details will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- The popup/modal End -->
-</body>
-        <script src="ASSETS/MAIN-FILE/JS/SMART-BTN-ADVANCE-DESIGN-L.js"></script>
-        <script src="ASSETS/MAIN-FILE/JS/MAIN-BODY.js"></script>
-         <script src="ASSETS/MAIN-FILE/JS/REVIEW-STYLE.js"></script>
-         <script src="ASSETS/MAIN-FILE/JS/TEAM-SLIDER.js"></script>
-        <script src="ASSETS/MAIN-FILE/JS/AUTO-WRITING-ANIMATION.js"></script>
-        <script src="ASSETS/MAIN-FILE/JS/POP-UP-NAV-BAR-MORE.js"></script>
+
+    <script src="ASSET/MAIN/JS/main.js"></script>
+    <script src="ASSET/USER/JS/user.js"></script>
+    <script src="ASSET/MAIN/JS/AUTO-WRITING-ANIMATION.js"></script>
+    <script src="ASSET/MAIN/JS/SMART-BTN-ADVANCE-DESIGN-L.js"></script>
+    <script src="ASSET/MAIN/JS/POP-UP-WINDOW-ADVANCE-02.js"></script>
+    <script src="ASSET/MAIN/JS/TEAM-SLIDER.js"></script>
+    <script src="ASSET/MAIN/JS/REVIEW-STYLE.js"></script>
 </body>
 </html>

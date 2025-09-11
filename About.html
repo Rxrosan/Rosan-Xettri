@@ -1,123 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="ASSETS/TOOL-FILES/JS/DEV-TOOL-PROTECTION-2.js"></script>
     <meta charset="UTF-8">
+    <script src="ASSET/WEB-SOFTWARE/JS/DEV-TOOL-PROTECTION-1.js"></script>
+    <script src="ASSET/WEB-SOFTWARE/JS/DEV-TOOL-PROTECTION-2.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RX | About</title>
-    <link rel="icon" type="image/png" href="ASSETS/MAIN-FILE/IMG/LOGO/RX-3.png">
+    <link rel="icon" type="image/png" href="ASSET/MAIN/IMG/LOGO/RX-3.png">
+    <title>RX| ABOUT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="ASSETS/MAIN-FILE/CSS/MAIN-BODY.css">
-     <link rel="stylesheet" href="ASSETS/MAIN-FILE/CSS/AUTO-WRITING-ANIMATION.css">
-     <link rel="stylesheet" href="ASSETS/MAIN-FILE/CSS/POP-UP-NAV-BAR-MORE.css">
+    <link rel="stylesheet" href="ASSET/MAIN/CSS/main.css">
+    <link rel="stylesheet" href="ASSET/USER/CSS/user.css">
+    <link rel="stylesheet" href="ASSET/MAIN/CSS/AUTO-WRITING-ANIMATION.css">
     
 </head>
 <body>
-    <!-- Header - Cyber Style -->
+    <!-- Guest Notification -->
+    <div id="guest-notification">
+        <i class="fas fa-info-circle"></i>
+        <div class="content">
+            <h3 id="notification-title">You are logged in as Guest</h3>
+            <p id="notification-message">To access your real account, please login</p>
+        </div>
+        <button id="login-btn">Login Now</button>
+    </div>
+
+    <!-- Header with Navigation -->
     <header>
-        <div class="header-container">
-            <a href="index.html" class="logo">
-                <img src="ASSETS/MAIN-FILE/IMG/LOGO/RX-2.png" alt="RX Logo">
-                Rosan Xettri
-            </a>
-            <div class="menu-toggle" id="menuToggle">
-                <i class="fas fa-bars"></i>
-            </div>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="index.html">HOME</a></li>
-                <li><a href="About.html" class="active">ABOUT</a></li>
-                <li><a href="Service.html">SERVICES</a></li>
-                <li><a href="Contact.html">CONTACT</a></li>
-                <li><a id="RX-SMART-BUTTON-toggle">◉</a></li>
-            </ul>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <span class="glow">RX STUDIO</span>
+                </div>
+
+                <div class="hamburger" id="hamburger" >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="nav-links" id="nav-links" >
+                    <a href="index.html"> HOME</a>
+                    <a href="About.html" class="glow"> ABOUT</a>
+                    <a href="Service.html"> SERVICE</a>
+                    <a href="Contact.html"> CONTACT</a>
+                    <a href="News.html"></i> NEWS</a>
+  
+                    <div class="profile-container">
+                        <button class="profile-button">
+                            <img id="profile-img" src="#" alt="Profile">
+                            <span id="username">GUEST</span>
+                        </button>
+                        <div class="profile-dropdown" id="profile-dropdown">
+                            <div class="profile-header">
+                                <img id="dropdown-img" src="#" alt="Profile">
+                                <div class="profile-info">
+                                    <h4 id="dropdown-name">Guest User</h4>
+                                    <p id="dropdown-account-type">Guest Account</p>
+                                </div>
+                            </div>
+                            <div class="profile-details">
+                                <div>
+                                    <i class="fas fa-id-badge"></i>
+                                    <span id="dropdown-user-id">N/A</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-envelope"></i>
+                                    <span id="dropdown-email">guest@example.com</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-phone"></i>
+                                    <span id="dropdown-phone">Not provided</span>
+                                </div>
+                                <div>
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span id="dropdown-address">Not provided</span>
+                                </div>
+                            </div>
+                            <button class="logout-btn" id="logout-btn">Logout</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Admin Super Settings Link (Dynamically shown) -->
+                    <a href="#" id="admin-settings-link" style="display: none;"><i class="fas fa-users-cog"></i> USERS</a>
+                </div>
+            </nav>
         </div>
     </header>
 
-    <!-- Hero Section - Futuristic -->
-    <section class="hero" style="background-image: url('ASSETS/MAIN-FILE/IMG/BANNER/GIF-BANNER/GIF-BANNER-1.gif'); background-size: cover; background-position: center;">
-        <div class="hero-content">
-            <h1>Rosan Khattri Chettri</h1>
-            <p id="auto-writer" class="auto-writer"></p>
-            <a href="Contact.html" class="btn"> Contact Us </a>
-        </div>
-    </section>
-
-    <!-- Contact Section - Holographic UI -->
-    <section class="contact-section" id="contact">
+    <!-- Main Content -->
+    <main>
         <div class="container">
-            <div class="section-title">
-                <h2> ABOUT ROSAN KHATTRI CHETTRI </h2>
-            </div>
-            <div class="contact-grid">
-                <div class="contact-card">
-                    <h3><i class="fas fa-info-circle"></i> ABOUT </h3>
-                    <img src="ASSETS/MAIN-FILE/IMG/WELCOME-PERSON-IMAGE/R-M.jpg" alt="Rosan" style="max-width: 150px; height: auto;">
-                    <h3> ROSAN KHATTRI CHETTRI </h3>
-                    <p>I am Rosan Khattri Chettri, a 22-year-old passionate and driven individual from Banganga-10, Kapilvastu. Currently pursuing my BBS 3rd year, I have always been deeply fascinated by the world of creativity and technology. With a strong skill set in designing, web development, and e-sports gaming, I continuously push myself to learn, evolve, and stay ahead in the digital realm.
+            <section class="hero" id="home" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-3.jpg'); background-size: cover; background-position: center;">
+                <h1>ROSAN KHATTRI CHETTRI</h1>
+                <p id="auto-writer" class="auto-writer"></p>
+                <a  class="cta-button">ABOUT</a>
+            </section>
 
+            <section class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>ROSAN KHATTRI CHETTRI</h3>
+                       <p> LAST UPDATE : WEDNESDAY, SEPTEMBER 10, 2025 </p>
+                        I am Rosan Khattri Chettri, a 22-year-old passionate and driven individual from Banganga-10, Kapilvastu. Currently pursuing my BBS 3rd year, I have always been deeply fascinated by the world of creativity and technology. With a strong skill set in designing, web development, and e-sports gaming, I continuously push myself to learn, evolve, and stay ahead in the digital realm.
                                 Designing allows me to bring my imagination to life, creating visually compelling and meaningful graphics that leave an impact. Web development fuels my technical curiosity, enabling me to craft functional, user-friendly, and aesthetically pleasing websites. On the other hand, my passion for e-sports gaming challenges my strategic thinking, reflexes, and competitive spirit, making me thrive in high-intensity environments.
-                                
-                                I believe in continuous growth and innovation, always seeking new ways to enhance my skills and contribute meaningfully to the digital space. Whether it's crafting designs, coding dynamic websites, or competing in the gaming world, I am dedicated to pushing boundaries, learning from experiences, and making a mark with my work.</p>
-                </div>     
+                                I believe in continuous growth and innovation, always seeking new ways to enhance my skills and contribute meaningfully to the digital space. Whether it's crafting designs, coding dynamic websites, or competing in the gaming world, I am dedicated to pushing boundaries, learning from experiences, and making a mark with my work.
+                    </div>
+                </div>
+            </section>
+            <a href="Service.html" class="cta-button">SEE OUR SERVICES</a>
             </div>
-        </div>
-    </section>
+         </main>
 
-    <!-- Footer - Cyber Lines -->
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <h3>About Rosan</h3>
-                    <p>Rosan Xettri is a multidimensional creator merging design, technology, and gaming into unique digital experiences.</p>
-                    <a href="About.html" class="btn" style="margin-top: 1rem; display: inline-block;">More About Rosan!</a>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>RX STUDIO</h3>
+                    <p>We create digital experiences that inspire and engage. Our solutions are tailored to meet your unique business needs.</p>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/RosanXettri.2004"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://x.com/Rx_Rosan"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/Rosan.2061"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@rosankc2061"><i class="fab fa-tiktok"></i></a>
+                    </div>
                 </div>
-                
-                <div class="footer-col">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="Service.html">Services</a></li>
-                        <li><a href="Contact.html">Contact</a></li>
+                <div class="footer-section">
+                    <h3>Important Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> HOME</a></li>
+                        <li><a href="Service.html"><i class="fas fa-chevron-right"></i> SERVICE</a></li>
+                        <li><a href="Contact.html"><i class="fas fa-chevron-right"></i> CONTACT</a></li>
+                        <li><a href="News.html"><i class="fas fa-chevron-right"></i> NEWS</a></li>
+                        
                     </ul>
                 </div>
-                
-                <div class="footer-col">
+                <div class="footer-section">
                     <h3>Resources</h3>
-                    <ul>
-                        <li class="dropdown"><a  onclick="toggleDropdown(event)">Open Collection</a></li>
+                    <ul class="footer-links">
+                        <!--<li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Support Center</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> FAQs</a></li>-->
+                        <li><a href="USER-DASHBOARD.html"><i class="fas fa-chevron-right"></i>RESOURCE LOG-IN  </a></li>
                     </ul>
                 </div>
-                
-                <div class="footer-col">
-                    <h3>Contact Detail</h3>
-                    <ul>
-                        <li><a href="tel:9826482279">+977 9826482279</a></li>
-                        <li><a href="mailto:rkc242855@gmail.com">rkc242855@gmail.com</a></li>
-                        <li>Kapilvastu, Nepal</li>
-                        <li><p id="current-time">Syncing...</p></li>
+                <div class="footer-section">
+                    <h3>Other Links</h3>
+                    <ul class="footer-links">
+                        <!--<li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>-->
+                        
                     </ul>
                 </div>
             </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; <script>document.write(new Date().getFullYear())</script> Rosan Xettri. All rights reserved.</p>
+            <div class="copyright">
+                <p>&copy; <script>document.write(new Date().getFullYear())</script> ROSAN KHATTRI CHETTRI. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- The popup/modal -->
-<div class="modal-overlay" id="moreModal">
-  <div class="modal-content">
-     <a href="USER-LOGIN.html">RESOURCES-LOG-IN</a>
-    <button class="close-btn" onclick="closeModal()">×</button>
-  </div>
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-3.jpg'); background-size: cover; background-position: center;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>RX STUDIO</h2>
+                <button class="close-modal-btn" data-target="login-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                <button class="login-btn" id="modal-login-btn">Login</button>
+            </div>
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="Contact.html">Contact the admin.</a></p>
+            </div>
+        </div>
+    </div>
+
+      <!-- Admin Panel Modal -->
+<div class="modal" id="admin-panel-modal" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-2.jpg'); background-size: cover; background-position: center;">
+    <div class="modal-content admin-modal-content">
+        <div class="modal-header">
+            <h2>RX STUDIO MEMBER INFORMATION</h2>
+            <button class="close-modal-btn" data-target="admin-panel-modal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body admin-panel-body">
+            <div class="user-list-sidebar">
+                <h3>RX STUDIO MEMBER'S</h3>
+                <ul id="member-list">
+                    <!-- Member list will be populated here -->
+                </ul>
+            </div>
+            <div class="user-details-display">
+                <h3 id="selected-user-header">Select a Member to View Details</h3>
+                <div id="selected-user-details">
+                    <!-- User details will be displayed here -->
+                    <div class="detail-item">
+                        <strong>User ID:</strong> <span id="admin-user-id"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Full Name:</strong> <span id="admin-full-name"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Email:</strong> <span id="admin-email"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Phone:</strong> <span id="admin-phone"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Address:</strong> <span id="admin-address"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Account Type:</strong> <span id="admin-account-type"></span>
+                    </div>
+                    <div class="detail-item profile-avatar-admin">
+                        <strong>Profile Image:</strong> <img id="admin-profile-img" src="" alt="Profile Image">
+                    </div>
+                    <!-- Add access details container -->
+                    <div id="admin-access-details" class="access-details-container">
+                        <!-- Access details will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- The popup/modal End -->
-</body>
-        <script src="ASSETS/MAIN-FILE/JS/SMART-BTN-ADVANCE-DESIGN-L.js"></script>
-        <script src="ASSETS/MAIN-FILE/JS/MAIN-BODY.js"></script>
-        <script src="ASSETS/MAIN-FILE/JS/AUTO-WRITING-ANIMATION.js"></script>
-        <script src="ASSETS/MAIN-FILE/JS/POP-UP-NAV-BAR-MORE.js"></script>
+    <script src="ASSET/MAIN/JS/main.js"></script>
+    <script src="ASSET/USER/JS/user.js"></script>
+    <script src="ASSET/MAIN/JS/AUTO-WRITING-ANIMATION.js"></script>
+    <script src="ASSET/MAIN/JS/SMART-BTN-ADVANCE-DESIGN-L.js"></script>
+   
 </body>
 </html>
