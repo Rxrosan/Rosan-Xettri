@@ -20,7 +20,7 @@ const allUsers = [
         email: "rita24839@gmail.com",
         image: "ASSET/USER/IMG/Rita-Magar.jpg",
         phone: "9807483578",
-        address: "BANGANGA-5 ,KAPILVAST",
+        address: "BANGANGA-5 ,KAPILVASTU",
         accountType: "MEMBER",
         password: "RX9807483578",
         access: ["file2","file3",],

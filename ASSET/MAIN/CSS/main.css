@@ -314,20 +314,19 @@ footer {
 }
 
 .profile-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
+    position: fixed;
+    top: 30%;
+    left: 40%;
+    transform: translate(-50%, -50%); /* Perfectly center */
     background: white;
     width: 250px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    z-index: 100;
-    margin-top: 10px;
+    z-index: 1000;
     padding: 20px;
     color: var(--dark);
     display: none;
     opacity: 0;
-    transform: translateY(-10px);
     transition: var(--transition);
 }
 
