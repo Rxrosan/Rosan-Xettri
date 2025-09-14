@@ -116,7 +116,7 @@ const contentCards = [
         description: "LESSON A 11 - 20 L | UPDATING IN PROGRESS...", 
         link: "KR-EXAM.html?exam=file5", 
         icon: "fas fa-book",
-        prices: { default: "100",}
+        prices: { default: "Rs. 100",}
     },
     {   
         id: "file6", 
@@ -124,7 +124,7 @@ const contentCards = [
         description: "ALL OVER BOOK RESOURCE | UPDATING IN PROGRESS...", 
         link: "KR-EXAM.html?exam=file6", 
         icon: "fas fa-book",
-        prices: { default: "100",}
+        prices: { default: "Rs. 100",}
     }
 ];
 
