@@ -16,7 +16,7 @@ const allUsers = [
     {
         id: "U002",
         userName: "RITA",
-        fullName: "RITA RANA MAGAR",
+        fullName: "Rita Rana Magar",
         email: "rita24839@gmail.com",
         image: "ASSET/USER/IMG/Rita-Magar.jpg",
         phone: "9807483578",
@@ -45,7 +45,7 @@ const allUsers = [
     {
         id: "U004",
         userName: "ROHIT",
-        fullName: "ROHIT KC",
+        fullName: "Rohit kc",
         email: "rohitchattri71@gmail.com",
         image: "ASSET/USER/IMG/ROHIT-KC.jpg",
         phone: "9821948199",
@@ -58,7 +58,7 @@ const allUsers = [
     {
         id: "U005",
         userName: "NIRAJ",
-        fullName: "NIRAJ THAPA",
+        fullName: "Niraj Thapa",
         email: "nirajthapa54535@gmail.com",
         image: "ASSET/USER/IMG/Niraj.jpg",
         phone: "9800754535",
