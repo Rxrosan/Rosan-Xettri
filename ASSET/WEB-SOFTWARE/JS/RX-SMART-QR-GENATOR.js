@@ -1,499 +1,614 @@
-// Global variables
-let currentQrSize = 200;
-let currentQrColor = '#000000';
-let qrHistory = [];
-let isGenerating = false;
+    // Global variables
+    let currentTab = 'encrypt';
+    let qrSize = 200;
+    let qrColor = '#6366f1';
+    let stream = null;
+    let scanInterval = null;
+    let encryptedData = null;
 
-// DOM Ready
-document.addEventListener('DOMContentLoaded', function() {
-  // Initialize from local storage
-  loadHistory();
-  
-  // Set up file input change listener
-  document.getElementById('qrFileInput').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-      document.getElementById('fileName').textContent = file.name;
-      document.getElementById('fileInfo').classList.remove('hidden');
-    }
-  });
-  
-  // Set up QR color picker
-  const colorPicker = document.getElementById('qrColor');
-  colorPicker.addEventListener('input', function(e) {
-    currentQrColor = e.target.value;
-    document.getElementById('colorHex').textContent = currentQrColor.toUpperCase();
-  });
-  
-  // Character counter for message input
-  const messageInput = document.getElementById('messageInput');
-  messageInput.addEventListener('input', function() {
-    const charCount = messageInput.value.length;
-    document.getElementById('charCount').textContent = charCount;
-  });
-  
-  // Drag and drop for file upload
-  const fileUploadLabel = document.querySelector('.file-upload-label');
-  fileUploadLabel.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    fileUploadLabel.style.borderColor = 'var(--primary)';
-    fileUploadLabel.style.backgroundColor = 'rgba(99, 102, 241, 0.1)';
-  });
-  
-  fileUploadLabel.addEventListener('dragleave', () => {
-    fileUploadLabel.style.borderColor = '#e2e8f0';
-    fileUploadLabel.style.backgroundColor = 'transparent';
-  });
-  
-  fileUploadLabel.addEventListener('drop', (e) => {
-    e.preventDefault();
-    fileUploadLabel.style.borderColor = '#e2e8f0';
-    fileUploadLabel.style.backgroundColor = 'transparent';
-    
-    if (e.dataTransfer.files.length) {
-      document.getElementById('qrFileInput').files = e.dataTransfer.files;
-      const event = new Event('change');
-      document.getElementById('qrFileInput').dispatchEvent(event);
-    }
-  });
-});
-
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
-  document.getElementById(tab).classList.remove('hidden');
-  event.target.classList.add('active');
-  
-  // Reset results when switching tabs
-  if (tab === 'generate') {
-    resetGenerateTab();
-  } else if (tab === 'read') {
-    resetReadTab();
-  }
-}
-
-function resetGenerateTab() {
-  document.getElementById('qrCanvas').classList.add('hidden');
-  document.getElementById('qrSuccess').classList.add('hidden');
-  document.getElementById('downloadSection').classList.add('hidden');
-  document.getElementById('encryptedOutputContainer').classList.add('hidden');
-  document.getElementById('qrPreviewContainer').classList.add('hidden');
-}
-
-function resetReadTab() {
-  document.getElementById('resultContainer').classList.add('hidden');
-}
-
-function setQrSize(size) {
-  currentQrSize = size;
-  document.querySelectorAll('.qr-size-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-}
-
-function togglePassword(inputId, icon) {
-  const input = document.getElementById(inputId);
-  if (input.type === 'password') {
-    input.type = 'text';
-    icon.classList.remove('fa-eye');
-    icon.classList.add('fa-eye-slash');
-  } else {
-    input.type = 'password';
-    icon.classList.remove('fa-eye-slash');
-    icon.classList.add('fa-eye');
-  }
-}
-
-function checkPasswordStrength() {
-  const password = document.getElementById('encryptPassword').value;
-  const strengthBar = document.getElementById('strengthBar');
-  const strengthText = document.getElementById('strengthText');
-  
-  if (!password) {
-    strengthBar.style.width = '0%';
-    strengthBar.style.backgroundColor = 'transparent';
-    strengthText.textContent = 'Password strength';
-    return;
-  }
-  
-  // Calculate strength (simple version)
-  let strength = 0;
-  if (password.length >= 8) strength += 1;
-  if (password.length >= 12) strength += 1;
-  if (/[A-Z]/.test(password)) strength += 1;
-  if (/[0-9]/.test(password)) strength += 1;
-  if (/[^A-Za-z0-9]/.test(password)) strength += 1;
-  
-  // Update UI
-  const width = strength * 20;
-  strengthBar.style.width = width + '%';
-  
-  if (width < 40) {
-    strengthBar.style.backgroundColor = 'var(--danger)';
-    strengthText.textContent = 'Weak';
-  } else if (width < 70) {
-    strengthBar.style.backgroundColor = 'var(--warning)';
-    strengthText.textContent = 'Moderate';
-  } else {
-    strengthBar.style.backgroundColor = 'var(--success)';
-    strengthText.textContent = 'Strong';
-  }
-}
-
-function encryptAndGenerateQR() {
-  if (isGenerating) return;
-  
-  const msg = document.getElementById("messageInput").value.trim();
-  const pass = document.getElementById("encryptPassword").value;
-  const canvas = document.getElementById("qrCanvas");
-  const output = document.getElementById("encryptedOutput");
-  const downloadBtn = document.getElementById("downloadBtn");
-  const encryptedOutputContainer = document.getElementById("encryptedOutputContainer");
-  const qrSuccess = document.getElementById("qrSuccess");
-  const downloadSection = document.getElementById("downloadSection");
-  const generateBtn = document.getElementById("generateBtn");
-  const qrPreviewContainer = document.getElementById("qrPreviewContainer");
-
-  if (!msg) {
-    showAlert("Please enter a message to encrypt.", "error");
-    return;
-  }
-  
-  if (!pass || pass.length < 8) {
-    showAlert("Please enter a password with at least 8 characters.", "error");
-    return;
-  }
-
-  // Disable button during generation
-  isGenerating = true;
-  generateBtn.disabled = true;
-  generateBtn.innerHTML = '<i class="fas fa-spinner spin"></i> Generating...';
-
-  try {
-    // Encrypt with AES-256
-    const encrypted = CryptoJS.AES.encrypt(msg, pass).toString();
-    
-    // Generate QR code with custom color
-    QRCode.toCanvas(canvas, encrypted, {
-      width: currentQrSize,
-      color: {
-        dark: currentQrColor,
-        light: '#ffffff'
-      },
-      margin: 2
-    }, function(err) {
-      isGenerating = false;
-      generateBtn.disabled = false;
-      generateBtn.innerHTML = '<i class="fas fa-lock"></i> Generate Secure QR Code';
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up event listeners
+      document.getElementById('encryptPassword').addEventListener('input', checkPasswordStrength);
+      document.getElementById('qrColor').addEventListener('input', updateQRColorValue);
       
-      if (err) {
-        showAlert("Error generating QR code. Please try again.", "error");
-        console.error(err);
-      } else {
-        qrPreviewContainer.classList.remove("hidden");
-        canvas.classList.remove("hidden");
-        qrSuccess.classList.remove("hidden");
-        downloadSection.classList.remove("hidden");
-        encryptedOutputContainer.classList.remove("hidden");
-        
-        output.textContent = encrypted;
-        
-        // Prepare download
-        const dataURL = canvas.toDataURL("image/png");
-        downloadBtn.href = dataURL;
-        
-        // Scroll to results
-        canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      // Load history
+      loadHistory();
+      
+      // Check for camera support
+      checkCameraSupport();
     });
-  } catch (error) {
-    isGenerating = false;
-    generateBtn.disabled = false;
-    generateBtn.innerHTML = '<i class="fas fa-lock"></i> Generate Secure QR Code';
-    showAlert("Encryption failed. Please try again.", "error");
-    console.error(error);
-  }
-}
 
-function refreshQR() {
-  encryptAndGenerateQR();
-}
+    // Switch between tabs
+    function switchTab(tabName) {
+      // Hide all cards
+      document.getElementById('encryptCard').classList.add('hidden');
+      document.getElementById('decryptCard').classList.add('hidden');
+      document.getElementById('scanCard').classList.add('hidden');
+      document.getElementById('historyCard').classList.add('hidden');
+      
+      // Deactivate all tabs
+      document.getElementById('tabEncrypt').classList.remove('active');
+      document.getElementById('tabDecrypt').classList.remove('active');
+      document.getElementById('tabScan').classList.remove('active');
+      document.getElementById('tabHistory').classList.remove('active');
+      
+      // Show selected card and activate tab
+      document.getElementById(tabName + 'Card').classList.remove('hidden');
+      document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).classList.add('active');
+      
+      // Stop camera if leaving scan tab
+      if (currentTab === 'scan' && tabName !== 'scan') {
+        stopCamera();
+      }
+      
+      currentTab = tabName;
+    }
 
-function scanAndDecrypt() {
-  const fileInput = document.getElementById("qrFileInput");
-  const pass = document.getElementById("decryptPassword").value;
-  const output = document.getElementById("result");
-  const resultContainer = document.getElementById("resultContainer");
-  const decryptBtn = document.getElementById("decryptBtn");
+    // Update character count
+    function updateCharCount() {
+      const message = document.getElementById('messageInput').value;
+      document.getElementById('charCount').textContent = message.length;
+    }
 
-  if (!fileInput.files[0]) {
-    showAlert("Please upload a QR code image first.", "error");
-    return;
-  }
+    // Check password strength
+    function checkPasswordStrength() {
+      const password = document.getElementById('encryptPassword').value;
+      const strengthBar = document.getElementById('passwordStrengthBar');
+      const strengthText = document.getElementById('passwordStrengthText');
+      
+      if (password.length === 0) {
+        strengthBar.style.width = '0%';
+        strengthBar.style.backgroundColor = '';
+        strengthText.textContent = 'Password strength';
+        return;
+      }
+      
+      // Simple password strength algorithm
+      let strength = 0;
+      
+      // Length check
+      if (password.length > 5) strength += 1;
+      if (password.length > 8) strength += 1;
+      
+      // Character variety checks
+      if (/[A-Z]/.test(password)) strength += 1;
+      if (/[0-9]/.test(password)) strength += 1;
+      if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+      
+      // Update strength bar
+      let width = 0;
+      let color = '';
+      let text = '';
+      
+      switch(strength) {
+        case 0:
+        case 1:
+          width = 25;
+          color = '#ef4444';
+          text = 'Weak';
+          break;
+        case 2:
+        case 3:
+          width = 50;
+          color = '#f59e0b';
+          text = 'Fair';
+          break;
+        case 4:
+          width = 75;
+          color = '#3b82f6';
+          text = 'Good';
+          break;
+        case 5:
+          width = 100;
+          color = '#10b981';
+          text = 'Strong';
+          break;
+      }
+      
+      strengthBar.style.width = width + '%';
+      strengthBar.style.backgroundColor = color;
+      strengthText.textContent = text;
+      strengthText.style.color = color;
+    }
 
-  if (!pass) {
-    showAlert("Please enter the decryption password.", "error");
-    return;
-  }
+    // Toggle password visibility
+    function togglePassword(inputId) {
+      const input = document.getElementById(inputId);
+      const icon = input.nextElementSibling.querySelector('i');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
 
-  // Show loading state
-  decryptBtn.disabled = true;
-  decryptBtn.innerHTML = '<i class="fas fa-spinner spin"></i> Decrypting...';
-
-  const reader = new FileReader();
-  reader.onload = function() {
-    const img = new Image();
-    img.onload = function() {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    // Encrypt message and generate QR code
+    function encryptMessage() {
+      const message = document.getElementById('messageInput').value.trim();
+      const password = document.getElementById('encryptPassword').value;
+      
+      if (!message) {
+        showAlert('Error', 'Please enter a message to encrypt.', 'error');
+        return;
+      }
+      
+      if (!password) {
+        showAlert('Error', 'Please enter an encryption password.', 'error');
+        return;
+      }
+      
+      if (message.length > 1000) {
+        showAlert('Error', 'Message is too long. Maximum 1000 characters allowed.', 'error');
+        return;
+      }
       
       try {
-        const code = jsQR(imageData.data, canvas.width, canvas.height);
+        // Encrypt the message using AES
+        const encrypted = CryptoJS.AES.encrypt(message, password).toString();
+        encryptedData = encrypted;
         
-        if (code) {
-          try {
-            const bytes = CryptoJS.AES.decrypt(code.data, pass);
-            const originalText = bytes.toString(CryptoJS.enc.Utf8);
-            
-            // Reset button state
-            decryptBtn.disabled = false;
-            decryptBtn.innerHTML = '<i class="fas fa-unlock"></i> Decrypt Message';
-            
-            if (originalText) {
-              output.textContent = originalText;
-              resultContainer.classList.remove("hidden");
-              resultContainer.classList.add("success");
-              resultContainer.querySelector('.result-title i').className = 'fas fa-check-circle';
-              resultContainer.querySelector('.result-title').innerHTML = `<i class="fas fa-check-circle"></i> Message Decrypted Successfully`;
-              
-              // Scroll to result
-              resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } else {
-              showAlert("Wrong password or invalid QR code.", "error");
-            }
-          } catch (e) {
-            decryptBtn.disabled = false;
-            decryptBtn.innerHTML = '<i class="fas fa-unlock"></i> Decrypt Message';
-            showAlert("Decryption failed. Please check the password.", "error");
-            console.error(e);
-          }
-        } else {
-          decryptBtn.disabled = false;
-          decryptBtn.innerHTML = '<i class="fas fa-unlock"></i> Decrypt Message';
-          showAlert("No QR code found in the image.", "error");
-        }
+        // Format the encrypted data with a prefix to identify it as encrypted
+        const formattedData = 'RXSECURE:' + encrypted;
+        
+        // Generate QR code
+        generateQRCode(formattedData);
+        
+        // Show the QR code container
+        document.getElementById('qrPreviewContainer').classList.remove('hidden');
+        
+        // Add to history
+        addToHistory({
+          type: 'encrypt',
+          timestamp: new Date().toISOString(),
+          message: message.substring(0, 50) + (message.length > 50 ? '...' : '')
+        });
+        
+        showAlert('Success', 'Message encrypted and QR code generated successfully.', 'success');
       } catch (error) {
-        decryptBtn.disabled = false;
-        decryptBtn.innerHTML = '<i class="fas fa-unlock"></i> Decrypt Message';
-        showAlert("Error processing QR code. Please try another image.", "error");
-        console.error(error);
+        console.error('Encryption error:', error);
+        showAlert('Error', 'Failed to encrypt message. Please try again.', 'error');
       }
-    };
-    img.src = reader.result;
-  };
-  reader.readAsDataURL(fileInput.files[0]);
-}
+    }
 
-function copyToClipboard(elementId) {
-  const element = document.getElementById(elementId);
-  const text = element.textContent || element.innerText;
-  
-  navigator.clipboard.writeText(text).then(function() {
-    showAlert("Copied to clipboard!", "success");
-  }).catch(function(err) {
-    console.error('Could not copy text: ', err);
-    showAlert("Failed to copy text", "error");
-  });
-}
+    // Generate QR code
+    function generateQRCode(data) {
+      const canvas = document.getElementById('qrCanvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Set canvas size
+      canvas.width = qrSize;
+      canvas.height = qrSize;
+      
+      try {
+        // Generate QR code
+        QRCode.toCanvas(canvas, data, {
+          width: qrSize,
+          height: qrSize,
+          color: {
+            dark: qrColor,
+            light: '#ffffff'
+          },
+          margin: 1
+        }, function(error) {
+          if (error) {
+            console.error('QR generation error:', error);
+            showAlert('Error', 'Failed to generate QR code. Please try again.', 'error');
+          }
+        });
+      } catch (error) {
+        console.error('QR generation error:', error);
+        showAlert('Error', 'Failed to generate QR code. Please try again.', 'error');
+      }
+    }
 
-function clearFileInput() {
-  document.getElementById('qrFileInput').value = '';
-  document.getElementById('fileInfo').classList.add('hidden');
-  document.getElementById('resultContainer').classList.add('hidden');
-}
+    // Change QR code size
+    function changeQRSize(size) {
+      qrSize = size;
+      
+      // Update active button
+      const buttons = document.querySelectorAll('.qr-size-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Regenerate QR code if there's data
+      if (encryptedData) {
+        const formattedData = 'RXSECURE:' + encryptedData;
+        generateQRCode(formattedData);
+      }
+    }
 
-function showAlert(message, type) {
-  const alertDiv = document.createElement('div');
-  alertDiv.className = `alert-${type}`;
-  alertDiv.style.position = 'fixed';
-  alertDiv.style.bottom = '20px';
-  alertDiv.style.right = '20px';
-  alertDiv.style.padding = '12px 24px';
-  alertDiv.style.borderRadius = '8px';
-  alertDiv.style.color = 'white';
-  alertDiv.style.fontWeight = '500';
-  alertDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-  alertDiv.style.zIndex = '1000';
-  alertDiv.style.animation = 'fadeIn 0.3s ease-in-out';
-  
-  if (type === 'success') {
-    alertDiv.style.backgroundColor = 'var(--success)';
-  } else if (type === 'error') {
-    alertDiv.style.backgroundColor = 'var(--danger)';
-  } else {
-    alertDiv.style.backgroundColor = 'var(--primary)';
-  }
-  
-  alertDiv.textContent = message;
-  document.body.appendChild(alertDiv);
-  
-  setTimeout(function() {
-    alertDiv.style.animation = 'fadeOut 0.3s ease-in-out';
-    setTimeout(function() {
-      document.body.removeChild(alertDiv);
-    }, 300);
-  }, 3000);
-}
+    // Update QR color value display
+    function updateQRColorValue() {
+      const color = document.getElementById('qrColor').value;
+      document.getElementById('qrColorValue').textContent = color;
+      updateQRColor();
+    }
 
-// History functions
-function saveToHistory() {
-  const msg = document.getElementById("messageInput").value.trim();
-  const pass = document.getElementById("encryptPassword").value;
-  const encrypted = document.getElementById("encryptedOutput").textContent;
-  const canvas = document.getElementById("qrCanvas");
-  
-  if (!msg || !encrypted) return;
-  
-  const historyItem = {
-    id: Date.now(),
-    message: msg,
-    encrypted: encrypted,
-    passwordHint: pass ? pass.substring(0, 2) + '*'.repeat(pass.length - 2) : '',
-    date: new Date().toLocaleString(),
-    qrData: canvas.toDataURL("image/png")
-  };
-  
-  qrHistory.unshift(historyItem);
-  saveHistory();
-  renderHistory();
-  showAlert("QR code saved to history", "success");
-}
+    // Update QR code color
+    function updateQRColor() {
+      qrColor = document.getElementById('qrColor').value;
+      
+      // Regenerate QR code if there's data
+      if (encryptedData) {
+        const formattedData = 'RXSECURE:' + encryptedData;
+        generateQRCode(formattedData);
+      }
+    }
 
-function loadHistory() {
-  const savedHistory = localStorage.getItem('qrHistory');
-  if (savedHistory) {
-    qrHistory = JSON.parse(savedHistory);
-    renderHistory();
-  }
-}
+    // Download QR code
+    function downloadQR() {
+      const canvas = document.getElementById('qrCanvas');
+      const link = document.createElement('a');
+      link.download = 'secure-qr-code.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      
+      showAlert('Success', 'QR code downloaded successfully.', 'success');
+    }
 
-function saveHistory() {
-  localStorage.setItem('qrHistory', JSON.stringify(qrHistory));
-}
+    // Share QR code
+    function shareQR() {
+      const canvas = document.getElementById('qrCanvas');
+      
+      canvas.toBlob(function(blob) {
+        if (navigator.share) {
+          const file = new File([blob], 'secure-qr-code.png', { type: 'image/png' });
+          
+          navigator.share({
+            title: 'Secure QR Code',
+            text: 'Check out this secure QR code generated with RX Secure QR Tool',
+            files: [file]
+          })
+          .then(() => showAlert('Success', 'QR code shared successfully.', 'success'))
+          .catch(error => {
+            if (error.name !== 'AbortError') {
+              showAlert('Error', 'Failed to share QR code. You can download it instead.', 'error');
+            }
+          });
+        } else {
+          showAlert('Info', 'Web Share API not supported in your browser. You can download the QR code instead.', 'error');
+        }
+      });
+    }
 
-function renderHistory() {
-  const historyList = document.getElementById('historyList');
-  
-  if (qrHistory.length === 0) {
-    historyList.innerHTML = `
-      <div class="empty-state">
-        <i class="fas fa-qrcode"></i>
-        <p>No QR codes saved yet</p>
-        <p>Generate QR codes and save them to view here</p>
-      </div>
-    `;
-    return;
-  }
-  
-  historyList.innerHTML = '';
-  
-  qrHistory.forEach(item => {
-    const historyItem = document.createElement('div');
-    historyItem.className = 'history-item';
-    historyItem.innerHTML = `
-      <div class="history-item-preview">
-        <img src="${item.qrData}" alt="QR Code Preview">
-      </div>
-      <div class="history-item-content">
-        <div class="history-item-title">${item.message.substring(0, 30)}${item.message.length > 30 ? '...' : ''}</div>
-        <div class="history-item-date">${item.date}</div>
-        <div class="history-item-password">Password: ${item.passwordHint}</div>
-      </div>
-      <div class="history-item-actions">
-        <button class="btn btn-text" onclick="downloadHistoryItem(${item.id})" aria-label="Download">
-          <i class="fas fa-download"></i>
-        </button>
-        <button class="btn btn-text" onclick="copyHistoryItem(${item.id})" aria-label="Copy">
-          <i class="fas fa-copy"></i>
-        </button>
-        <button class="btn btn-text" onclick="deleteHistoryItem(${item.id})" aria-label="Delete">
-          <i class="fas fa-trash"></i>
-        </button>
-      </div>
-    `;
-    historyList.appendChild(historyItem);
-  });
-}
+    // Handle file selection for decryption
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      const fileInfo = document.getElementById('fileInfo');
+      const decryptBtn = document.getElementById('decryptBtn');
+      
+      if (file) {
+        fileInfo.classList.remove('hidden');
+        fileInfo.querySelector('span').textContent = file.name;
+        decryptBtn.disabled = false;
+      } else {
+        fileInfo.classList.add('hidden');
+        decryptBtn.disabled = true;
+      }
+    }
 
-function downloadHistoryItem(id) {
-  const item = qrHistory.find(i => i.id === id);
-  if (item) {
-    const link = document.createElement('a');
-    link.href = item.qrData;
-    link.download = `secure-qr-${id}.png`;
-    link.click();
-    showAlert("QR code downloaded", "success");
-  }
-}
+    // Decrypt message from QR code
+    function decryptMessage() {
+      const fileInput = document.getElementById('qrFileInput');
+      const password = document.getElementById('decryptPassword').value;
+      const resultContainer = document.getElementById('decryptResult');
+      
+      if (!fileInput.files || fileInput.files.length === 0) {
+        showAlert('Error', 'Please select a QR code image to decrypt.', 'error');
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      const img = new Image();
+      
+      img.onload = function() {
+        try {
+          // Create a canvas to process the image
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0, img.width, img.height);
+          
+          // Get image data for QR decoding
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          
+          // Decode QR code
+          const code = jsQR(imageData.data, imageData.width, imageData.height, {
+            inversionAttempts: 'dontInvert',
+          });
+          
+          if (code) {
+            const data = code.data;
+            
+            // Check if it's an encrypted QR code from our system
+            if (data.startsWith('RXSECURE:')) {
+              if (!password) {
+                showAlert('Error', 'This QR code is encrypted. Please enter the decryption password.', 'error');
+                return;
+              }
+              
+              try {
+                // Extract the encrypted part
+                const encrypted = data.substring(9);
+                
+                // Decrypt the message
+                const bytes = CryptoJS.AES.decrypt(encrypted, password);
+                const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                
+                if (!decrypted) {
+                  showAlert('Error', 'Failed to decrypt. Incorrect password or corrupted data.', 'error');
+                  return;
+                }
+                
+                // Show the decrypted message
+                document.getElementById('result').textContent = decrypted;
+                resultContainer.classList.remove('hidden');
+                resultContainer.classList.add('success');
+                resultContainer.classList.remove('error');
+                
+                // Add to history
+                addToHistory({
+                  type: 'decrypt',
+                  timestamp: new Date().toISOString(),
+                  message: decrypted.substring(0, 50) + (decrypted.length > 50 ? '...' : '')
+                });
+                
+                showAlert('Success', 'Message decrypted successfully.', 'success');
+              } catch (error) {
+                console.error('Decryption error:', error);
+                showAlert('Error', 'Failed to decrypt message. Incorrect password or corrupted data.', 'error');
+              }
+            } else {
+              // Not encrypted with our system, just show the data
+              document.getElementById('result').textContent = data;
+              resultContainer.classList.remove('hidden');
+              resultContainer.classList.add('success');
+              resultContainer.classList.remove('error');
+              
+              showAlert('Info', 'QR code scanned successfully. This QR code is not encrypted.', 'success');
+            }
+          } else {
+            showAlert('Error', 'No QR code found in the image. Please try another image.', 'error');
+          }
+        } catch (error) {
+          console.error('QR decoding error:', error);
+          showAlert('Error', 'Failed to decode QR code. Please try another image.', 'error');
+        }
+      };
+      
+      img.onerror = function() {
+        showAlert('Error', 'Failed to load image. Please try another file.', 'error');
+      };
+      
+      // Read the file as data URL
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
 
-function copyHistoryItem(id) {
-  const item = qrHistory.find(i => i.id === id);
-  if (item) {
-    navigator.clipboard.writeText(item.encrypted).then(function() {
-      showAlert("Encrypted data copied to clipboard!", "success");
-    }).catch(function(err) {
-      console.error('Could not copy text: ', err);
-      showAlert("Failed to copy text", "error");
-    });
-  }
-}
+    // Check camera support
+    function checkCameraSupport() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        document.getElementById('startCameraBtn').disabled = true;
+        showAlert('Info', 'Camera access is not supported by your browser.', 'error');
+      }
+    }
 
-function deleteHistoryItem(id) {
-  qrHistory = qrHistory.filter(i => i.id !== id);
-  saveHistory();
-  renderHistory();
-  showAlert("QR code removed from history", "success");
-}
+    // Start camera for scanning
+    function startCamera() {
+      const video = document.getElementById('cameraPreview');
+      const startBtn = document.getElementById('startCameraBtn');
+      const stopBtn = document.getElementById('stopCameraBtn');
+      
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+      
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(function(mediaStream) {
+          stream = mediaStream;
+          video.srcObject = stream;
+          
+          // Start scanning for QR codes
+          scanInterval = setInterval(() => {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+              const canvas = document.createElement('canvas');
+              const ctx = canvas.getContext('2d');
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              
+              const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: 'dontInvert',
+              });
+              
+              if (code) {
+                const data = code.data;
+                const password = document.getElementById('scanPassword').value;
+                const resultContainer = document.getElementById('scanResult');
+                
+                // Check if it's an encrypted QR code from our system
+                if (data.startsWith('RXSECURE:')) {
+                  if (!password) {
+                    showAlert('Error', 'This QR code is encrypted. Please enter the decryption password.', 'error');
+                    return;
+                  }
+                  
+                  try {
+                    // Extract the encrypted part
+                    const encrypted = data.substring(9);
+                    
+                    // Decrypt the message
+                    const bytes = CryptoJS.AES.decrypt(encrypted, password);
+                    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+                    
+                    if (!decrypted) {
+                      showAlert('Error', 'Failed to decrypt. Incorrect password or corrupted data.', 'error');
+                      return;
+                    }
+                    
+                    // Show the decrypted message
+                    document.getElementById('scanResultContent').textContent = decrypted;
+                    resultContainer.classList.remove('hidden');
+                    resultContainer.classList.add('success');
+                    resultContainer.classList.remove('error');
+                    
+                    // Add to history
+                    addToHistory({
+                      type: 'scan',
+                      timestamp: new Date().toISOString(),
+                      message: decrypted.substring(0, 50) + (decrypted.length > 50 ? '...' : '')
+                    });
+                    
+                    showAlert('Success', 'Message decrypted successfully.', 'success');
+                    stopCamera();
+                  } catch (error) {
+                    console.error('Decryption error:', error);
+                    showAlert('Error', 'Failed to decrypt message. Incorrect password or corrupted data.', 'error');
+                  }
+                } else {
+                  // Not encrypted with our system, just show the data
+                  document.getElementById('scanResultContent').textContent = data;
+                  resultContainer.classList.remove('hidden');
+                  resultContainer.classList.add('success');
+                  resultContainer.classList.remove('error');
+                  
+                  // Add to history
+                  addToHistory({
+                    type: 'scan',
+                    timestamp: new Date().toISOString(),
+                    message: data.substring(0, 50) + (data.length > 50 ? '...' : '')
+                  });
+                  
+                  showAlert('Info', 'QR code scanned successfully.', 'success');
+                  stopCamera();
+                }
+              }
+            }
+          }, 500);
+        })
+        .catch(function(error) {
+          console.error('Camera error:', error);
+          showAlert('Error', 'Failed to access camera. Please check permissions.', 'error');
+          startBtn.disabled = false;
+          stopBtn.disabled = true;
+        });
+    }
 
-function clearHistory() {
-  if (confirm("Are you sure you want to clear your QR code history?")) {
-    qrHistory = [];
-    saveHistory();
-    renderHistory();
-    showAlert("History cleared", "success");
-  }
-}
+    // Stop camera
+    function stopCamera() {
+      const startBtn = document.getElementById('startCameraBtn');
+      const stopBtn = document.getElementById('stopCameraBtn');
+      
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+      }
+      
+      if (scanInterval) {
+        clearInterval(scanInterval);
+        scanInterval = null;
+      }
+    }
 
-function exportHistory() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(qrHistory, null, 2));
-  const downloadAnchorNode = document.createElement('a');
-  downloadAnchorNode.setAttribute("href", dataStr);
-  downloadAnchorNode.setAttribute("download", "qr-history.json");
-  document.body.appendChild(downloadAnchorNode);
-  downloadAnchorNode.click();
-  downloadAnchorNode.remove();
-  showAlert("History exported", "success");
-}
+    // Copy to clipboard
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          showAlert('Success', 'Copied to clipboard!', 'success');
+        })
+        .catch(err => {
+          console.error('Failed to copy: ', err);
+          showAlert('Error', 'Failed to copy to clipboard.', 'error');
+        });
+    }
 
-// Modal functions
-function showPrivacyModal() {
-  document.getElementById('privacyModal').classList.add('show');
-}
+    // Add to history
+    function addToHistory(item) {
+      let history = JSON.parse(localStorage.getItem('qrHistory')) || [];
+      history.unshift(item);
+      
+      // Keep only the last 20 items
+      if (history.length > 20) {
+        history = history.slice(0, 20);
+      }
+      
+      localStorage.setItem('qrHistory', JSON.stringify(history));
+      loadHistory();
+    }
 
-function showTermsModal() {
-  document.getElementById('termsModal').classList.add('show');
-}
+    // Load history
+    function loadHistory() {
+      const historyContainer = document.getElementById('historyItems');
+      const history = JSON.parse(localStorage.getItem('qrHistory')) || [];
+      
+      if (history.length === 0) {
+        historyContainer.innerHTML = `
+          <div class="empty-history">
+            <i class="fas fa-history"></i>
+            <p>No history yet. Your encrypted and decrypted messages will appear here.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      let html = '';
+      
+      history.forEach(item => {
+        const date = new Date(item.timestamp);
+        const typeIcon = item.type === 'encrypt' ? 'fa-lock' : (item.type === 'decrypt' ? 'fa-unlock' : 'fa-camera');
+        const typeText = item.type === 'encrypt' ? 'Encrypted' : (item.type === 'decrypt' ? 'Decrypted' : 'Scanned');
+        
+        html += `
+          <div class="history-item">
+            <div class="history-header">
+              <div><i class="fas ${typeIcon}"></i> ${typeText}</div>
+              <div class="history-date">${date.toLocaleString()}</div>
+            </div>
+            <div class="history-content">${item.message}</div>
+          </div>
+        `;
+      });
+      
+      historyContainer.innerHTML = html;
+    }
 
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
-}
-
-// Close modals when clicking outside
-window.addEventListener('click', function(event) {
-  if (event.target.classList.contains('modal')) {
-    event.target.classList.remove('show');
-  }
-});
+    // Show alert
+    function showAlert(title, message, type) {
+      const alert = document.getElementById('alert');
+      const alertTitle = document.getElementById('alertTitle');
+      const alertMessage = document.getElementById('alertMessage');
+      const alertIcon = document.getElementById('alertIcon');
+      
+      alertTitle.textContent = title;
+      alertMessage.textContent = message;
+      
+      alert.className = 'alert';
+      alert.classList.add('alert-' + (type === 'success' ? 'success' : 'error'));
+      
+      alertIcon.className = 'fas ' + (type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle');
+      
+      alert.classList.add('show');
+      
+      // Hide alert after 5 seconds
+      setTimeout(() => {
+        alert.classList.remove('show');
+      }, 5000);
+    }

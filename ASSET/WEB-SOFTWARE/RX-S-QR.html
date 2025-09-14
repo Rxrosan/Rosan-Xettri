@@ -1,347 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="JS/DEV-TOOL-PROTECTION-2.js"></script>
-  <script src="JS/RX-Protect.js"></script>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="IMG/LOGO/RX-3.png">
+  <script src="ASSET/WEB-SOFTWARE/JS/DEV-TOOL-PROTECTION-1.js"></script>
+    <script src="ASSET/WEB-SOFTWARE/JS/DEV-TOOL-PROTECTION-2.js"></script>
+  <link rel="icon" type="image/png" href="IMG/RX-3.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>RX | Secure Encrypt & Decrypt QR Tool</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="CSS/RX-SMART-QR-GENATOR.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   <link rel="stylesheet" href="CSS/RX-SMART-QR-GENATOR.css">
   <meta name="description" content="Securely encrypt messages into QR codes with password protection. Decrypt with the password for confidential access.">
+
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>
-        <i class="fas fa-qrcode"></i>
-        RX Secure QR Tool
-      </h1>
-      <p class="subtitle">Encrypt sensitive data into password-protected QR codes. Share securely knowing only authorized recipients can access the content.</p>
+      <h1><i class="fas fa-qrcode"></i> RX Secure QR Tool</h1>
+      <p class="subtitle">Securely encrypt messages into QR codes with password protection. Decrypt with the password for confidential access.</p>
     </header>
 
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('generate')" aria-label="Generate QR Code">
-        <i class="fas fa-qrcode"></i>
-        Generate
+      <button class="tab active" id="tabEncrypt" onclick="switchTab('encrypt')">
+        <i class="fas fa-lock"></i> Encrypt
       </button>
-      <button class="tab" onclick="switchTab('read')" aria-label="Read QR Code">
-        <i class="fas fa-camera"></i>
-        Read
+      <button class="tab" id="tabDecrypt" onclick="switchTab('decrypt')">
+        <i class="fas fa-unlock"></i> Decrypt
       </button>
-      <button class="tab" onclick="switchTab('history')" aria-label="QR History">
-        <i class="fas fa-history"></i>
-        History
+      <button class="tab" id="tabScan" onclick="switchTab('scan')">
+        <i class="fas fa-camera"></i> Scan
       </button>
-      <button class="tab" onclick="switchTab('features')" aria-label="Features">
-        <i class="fas fa-star"></i>
-        Features
-      </button>
-      <button class="tab" onclick="location.href='https://www.rosankc.com.np'" aria-label="Go to Home">
-        <i class="fas fa-home"></i>
-        Home
+      <button class="tab" id="tabHistory" onclick="switchTab('history')">
+        <i class="fas fa-history"></i> History
       </button>
     </div>
 
-    <!-- Generate Section -->
-    <div id="generate" class="card">
+    <!-- Encrypt Section -->
+    <div class="card" id="encryptCard">
       <div class="card-header">
-        <i class="fas fa-qrcode"></i>
-        <h3>Create Encrypted QR Code</h3>
+        <i class="fas fa-lock"></i>
+        <h3>Encrypt Message</h3>
       </div>
       
       <div class="form-group">
-        <label for="messageInput">Secret Message</label>
-        <textarea id="messageInput" rows="4" placeholder="Type your confidential message here..." aria-label="Enter secret message"></textarea>
+        <label for="messageInput">Message to encrypt</label>
+        <textarea id="messageInput" placeholder="Enter your confidential message here..." oninput="updateCharCount()"></textarea>
         <div class="char-counter"><span id="charCount">0</span>/1000 characters</div>
       </div>
       
       <div class="form-group">
         <label for="encryptPassword">Encryption Password</label>
         <div class="password-container">
-          <input type="password" id="encryptPassword" placeholder="Create a strong password (min 8 characters)" 
-                 aria-label="Enter encryption password" oninput="checkPasswordStrength()"/>
-          <i class="fas fa-eye toggle-password" onclick="togglePassword('encryptPassword', this)" 
-             aria-label="Toggle password visibility"></i>
+          <input type="password" id="encryptPassword" placeholder="Enter a strong password...">
+          <button type="button" class="toggle-password" onclick="togglePassword('encryptPassword')">
+            <i class="fas fa-eye"></i>
+          </button>
         </div>
         <div class="password-strength">
           <div class="strength-meter">
-            <div class="strength-bar" id="strengthBar"></div>
+            <div class="strength-bar" id="passwordStrengthBar"></div>
           </div>
-          <span id="strengthText">Password strength</span>
+          <div class="strengthText" id="passwordStrengthText">Password strength</div>
         </div>
       </div>
       
-      <div class="settings-group">
-        <div class="settings-title">
-          <i class="fas fa-cog"></i>
-          QR Code Settings
-        </div>
-        
-        <div class="form-group">
-          <label for="qrColor">QR Color</label>
-          <div class="color-picker-container">
-            <input type="color" id="qrColor" value="#000000" aria-label="Select QR code color">
-            <span id="colorHex">#000000</span>
-          </div>
-        </div>
-        
-        <label>QR Size</label>
-        <div class="qr-size-controls">
-          <div class="qr-size-btn active" onclick="setQrSize(200)" data-size="200" aria-label="Small QR size">Small (200px)</div>
-          <div class="qr-size-btn" onclick="setQrSize(300)" data-size="300" aria-label="Medium QR size">Medium (300px)</div>
-          <div class="qr-size-btn" onclick="setQrSize(400)" data-size="400" aria-label="Large QR size">Large (400px)</div>
-          <div class="qr-size-btn" onclick="setQrSize(500)" data-size="500" aria-label="Extra large QR size">XL (500px)</div>
-        </div>
-        
-        <div class="form-group">
-          <label>
-            <input type="checkbox" id="addLogo" checked>
-            RX | QR CODE
-          </label>
-        </div>
-      </div>
-      
-      <button class="btn btn-primary" onclick="encryptAndGenerateQR()" id="generateBtn" aria-label="Generate secure QR code">
-        <i class="fas fa-lock"></i>
-        Generate Secure QR Code
+      <button class="btn btn-primary" onclick="encryptMessage()">
+        <i class="fas fa-key"></i> Encrypt & Generate QR
       </button>
       
       <div class="qr-preview-container hidden" id="qrPreviewContainer">
-        <canvas id="qrCanvas"></canvas>
+        <h4>Your Secure QR Code</h4>
+        <canvas id="qrCanvas" width="200" height="200"></canvas>
+        
         <div class="qr-preview-actions">
-          <button class="btn btn-secondary" onclick="refreshQR()" aria-label="Refresh QR code">
-            <i class="fas fa-sync-alt"></i>
-            Refresh
+          <button class="btn btn-secondary" onclick="downloadQR()">
+            <i class="fas fa-download"></i> Download
+          </button>
+          <button class="btn btn-secondary" onclick="shareQR()">
+            <i class="fas fa-share-alt"></i> Share
           </button>
         </div>
       </div>
       
-      <div id="qrSuccess" class="result-container success hidden">
-        <div class="result-title">
-          <i class="fas fa-check-circle"></i>
-          QR Code Generated Successfully!
+      <div class="settings-group">
+        <h4 class="settings-title"><i class="fas fa-sliders-h"></i> QR Code Settings</h4>
+        
+        <div class="form-group">
+          <label for="qrSize">QR Code Size</label>
+          <div class="qr-size-controls">
+            <button class="qr-size-btn active" onclick="changeQRSize(200)">Small</button>
+            <button class="qr-size-btn" onclick="changeQRSize(300)">Medium</button>
+            <button class="qr-size-btn" onclick="changeQRSize(400)">Large</button>
+          </div>
         </div>
-        <p>Your encrypted message has been converted to a secure QR code.</p>
-      </div>
-      
-      <div class="btn-group hidden" id="downloadSection">
-        <a id="downloadBtn" download="secure-qr.png" class="btn btn-success" aria-label="Download QR code">
-          <i class="fas fa-download"></i>
-          Download QR Code
-        </a>
-        <button class="btn btn-secondary" onclick="copyToClipboard('encryptedOutput')" aria-label="Copy encrypted text">
-          <i class="fas fa-copy"></i>
-          Copy Encrypted Text
-        </button>
-        <button class="btn btn-secondary" onclick="saveToHistory()" aria-label="Save to history">
-          <i class="fas fa-save"></i>
-          Save to History
-        </button>
-      </div>
-      
-      <div class="result-container hidden" id="encryptedOutputContainer">
-        <div class="result-title">
-          <i class="fas fa-key"></i>
-          Encrypted Data
+        
+        <div class="form-group">
+          <label for="qrColor">QR Code Color</label>
+          <div class="color-picker-container">
+            <input type="color" id="qrColor" value="#6366f1" onchange="updateQRColor()">
+            <span id="qrColorValue">#6366f1</span>
+          </div>
         </div>
-        <pre id="encryptedOutput"></pre>
-        <button class="copy-btn" onclick="copyToClipboard('encryptedOutput')" aria-label="Copy encrypted data">
-          <i class="fas fa-copy"></i>
-        </button>
       </div>
     </div>
 
-    <!-- Read Section -->
-    <div id="read" class="card hidden">
+    <!-- Decrypt Section -->
+    <div class="card hidden" id="decryptCard">
       <div class="card-header">
-        <i class="fas fa-camera"></i>
-        <h3>Scan & Decrypt QR Code</h3>
+        <i class="fas fa-unlock"></i>
+        <h3>Decrypt Message</h3>
       </div>
       
       <div class="file-upload-wrapper">
-        <label class="file-upload-label" for="qrFileInput" id="fileUploadLabel">
+        <label class="file-upload-label" id="fileUploadLabel">
           <i class="fas fa-cloud-upload-alt"></i>
           <p>Upload QR Code Image</p>
           <span>Click to browse or drag & drop</span>
         </label>
-        <input type="file" id="qrFileInput" accept="image/*" aria-labelledby="fileUploadLabel" />
+        <input type="file" id="qrFileInput" accept="image/*" onchange="handleFileSelect(event)">
       </div>
       
       <div id="fileInfo" class="file-info hidden">
         <i class="fas fa-file-image"></i>
-        <span id="fileName"></span>
-        <button class="btn btn-text" onclick="clearFileInput()" aria-label="Clear file">
-          <i class="fas fa-times"></i>
-        </button>
+        <span>No file selected</span>
       </div>
       
       <div class="form-group">
         <label for="decryptPassword">Decryption Password</label>
         <div class="password-container">
-          <input type="password" id="decryptPassword" placeholder="Enter the password used to encrypt" 
-                 aria-label="Enter decryption password"/>
-          <i class="fas fa-eye toggle-password" onclick="togglePassword('decryptPassword', this)" 
-             aria-label="Toggle password visibility"></i>
+          <input type="password" id="decryptPassword" placeholder="Enter the password used for encryption...">
+          <button type="button" class="toggle-password" onclick="togglePassword('decryptPassword')">
+            <i class="fas fa-eye"></i>
+          </button>
         </div>
       </div>
       
-      <button class="btn btn-primary" onclick="scanAndDecrypt()" id="decryptBtn" aria-label="Decrypt message">
-        <i class="fas fa-unlock"></i>
-        Decrypt Message
+      <button class="btn btn-primary" onclick="decryptMessage()" id="decryptBtn" disabled>
+        <i class="fas fa-unlock-alt"></i> Decrypt Message
       </button>
       
-      <div id="resultContainer" class="result-container hidden">
-        <div class="result-title">
-          <i class="fas fa-lock-open"></i>
-          Decrypted Message
-        </div>
-        <pre id="result"></pre>
-        <button class="copy-btn" onclick="copyToClipboard('result')" aria-label="Copy decrypted message">
-          <i class="fas fa-copy"></i>
+      <div class="result-container hidden" id="decryptResult">
+        <button class="copy-btn" onclick="copyToClipboard('result')">
+          <i class="fas fa-copy"></i> Copy
         </button>
+        <div class="result-title">
+          <i class="fas fa-check-circle"></i>
+          <span>Decrypted Message</span>
+        </div>
+        <div id="result"></div>
+      </div>
+    </div>
+
+    <!-- Scan Section -->
+    <div class="card hidden" id="scanCard">
+      <div class="card-header">
+        <i class="fas fa-camera"></i>
+        <h3>Scan QR Code</h3>
+      </div>
+      
+      <div class="camera-container">
+        <video id="cameraPreview" autoplay playsinline></video>
+      </div>
+      
+      <div class="camera-controls">
+        <button class="btn btn-primary" id="startCameraBtn" onclick="startCamera()">
+          <i class="fas fa-play"></i> Start Camera
+        </button>
+        <button class="btn btn-secondary" id="stopCameraBtn" onclick="stopCamera()" disabled>
+          <i class="fas fa-stop"></i> Stop Camera
+        </button>
+      </div>
+      
+      <div class="form-group">
+        <label for="scanPassword">Decryption Password (if encrypted)</label>
+        <div class="password-container">
+          <input type="password" id="scanPassword" placeholder="Enter password if QR is encrypted...">
+          <button type="button" class="toggle-password" onclick="togglePassword('scanPassword')">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="result-container hidden" id="scanResult">
+        <button class="copy-btn" onclick="copyToClipboard('scanResultContent')">
+          <i class="fas fa-copy"></i> Copy
+        </button>
+        <div class="result-title">
+          <i class="fas fa-check-circle"></i>
+          <span>Scanned Content</span>
+        </div>
+        <div id="scanResultContent"></div>
       </div>
     </div>
 
     <!-- History Section -->
-    <div id="history" class="card hidden">
+    <div class="card hidden" id="historyCard">
       <div class="card-header">
         <i class="fas fa-history"></i>
-        <h3>Your QR Code History</h3>
+        <h3>History</h3>
       </div>
       
-      <div class="history-controls">
-        <button class="btn btn-secondary" onclick="clearHistory()" aria-label="Clear history">
-          <i class="fas fa-trash"></i>
-          Clear History
-        </button>
-        <button class="btn btn-secondary" onclick="exportHistory()" aria-label="Export history">
-          <i class="fas fa-file-export"></i>
-          Export
-        </button>
-      </div>
-      
-      <div id="historyList" class="history-list">
-        <div class="empty-state">
-          <i class="fas fa-qrcode"></i>
-          <p>No QR codes saved yet</p>
-          <p>Generate QR codes and save them to view here</p>
+      <div class="history-container" id="historyItems">
+        <div class="empty-history">
+          <i class="fas fa-history"></i>
+          <p>No history yet. Your encrypted and decrypted messages will appear here.</p>
         </div>
       </div>
     </div>
 
-    <!-- Features Section -->
-    <div id="features" class="card hidden">
-      <div class="card-header">
-        <i class="fas fa-star"></i>
-        <h3>Key Features</h3>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <h4 class="feature-title">Military-Grade Encryption</h4>
+        <p class="feature-description">Your messages are secured with AES-256 encryption, ensuring maximum protection for your sensitive data.</p>
       </div>
       
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-lock"></i>
-          </div>
-          <h4 class="feature-title">Military-Grade Encryption</h4>
-          <p class="feature-desc">Uses AES-256 encryption to protect your messages with industry-standard security.</p>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-bolt"></i>
         </div>
-        
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-shield-alt"></i>
-          </div>
-          <h4 class="feature-title">Password Protection</h4>
-          <p class="feature-desc">Your QR codes are secured with passwords - only those with the key can decrypt them.</p>
-        </div>
-        
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-mobile-alt"></i>
-          </div>
-          <h4 class="feature-title">Cross-Platform</h4>
-          <p class="feature-desc">Works on any device - desktop, tablet, or smartphone. No app installation needed.</p>
-        </div>
-        
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-bolt"></i>
-          </div>
-          <h4 class="feature-title">Client-Side Processing</h4>
-          <p class="feature-desc">All encryption/decryption happens in your browser - your secrets never leave your device.</p>
-        </div>
-        
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-palette"></i>
-          </div>
-          <h4 class="feature-title">Customizable QR</h4>
-          <p class="feature-desc">Choose different sizes and colors for your QR codes to match your needs.</p>
-        </div>
-        
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="fas fa-history"></i>
-          </div>
-          <h4 class="feature-title">QR History</h4>
-          <p class="feature-desc">Save your generated QR codes for quick access later (stored locally in your browser).</p>
-        </div>
+        <h4 class="feature-title">Lightning Fast</h4>
+        <p class="feature-description">Generate and decrypt QR codes in milliseconds, even with large amounts of text or complex encryption.</p>
       </div>
-    </div>
-
-    <footer>
-      <p>RX Secure QR Tool &copy; 2023 All rights reserved.</p>
-      <p class="footer-links">
-        <a href="#" onclick="showPrivacyModal()">Privacy Policy</a>
-        <span>•</span>
-        <a href="#" onclick="showTermsModal()">Terms of Service</a>
-      </p>
-    </footer>
-  </div>
-
-  <!-- Modals -->
-  <div id="privacyModal" class="modal hidden">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Privacy Policy</h3>
-        <button class="modal-close" onclick="closeModal('privacyModal')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <li>This application processes all data locally in your browser. No information is sent to or stored on any servers.</li>
-        <li>QR codes you generate and save are stored only in your browser's local storage and can be cleared at any time.</li>
-        <li>For your privacy and security, encrypted messages can only be decrypted using this tool.</li>
-        <li>We do not collect any personal information or usage data.</li>
-        <li>USE OF SIZES ARE :</li>
-        <li>Small (200 px) → best for 1 – 80 characters, hard limit 100 characters</li>
-        <li>Medium (300 px) → best for 81 – 200 characters, hard limit 250 characters</li>
-        <li>Large (400 px) → best for 201 – 400 characters, hard limit 500 characters</li>
-        <li>XL (500 px) → best for 401 – 999 characters, hard limit 999 characters</li>
+      
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h4 class="feature-title">Mobile Friendly</h4>
+        <p class="feature-description">Works seamlessly on all devices - smartphones, tablets, and desktops with a responsive interface.</p>
       </div>
     </div>
   </div>
 
-  <div id="termsModal" class="modal hidden">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Terms of Service</h3>
-        <button class="modal-close" onclick="closeModal('termsModal')">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p>By using this tool, you agree that:</p>
-        <ul>
-          <li>You are responsible for keeping your encryption passwords secure</li>
-          <li>The tool is provided as-is without warranties</li>
-          <li>You will not use this tool for illegal purposes</li>
-        </ul>
-      </div>
+  <div class="alert" id="alert">
+    <div class="alert-icon">
+      <i class="fas fa-check-circle" id="alertIcon"></i>
+    </div>
+    <div class="alert-content">
+      <h4 id="alertTitle">Success</h4>
+      <p id="alertMessage">Operation completed successfully.</p>
     </div>
   </div>
 
-  <!-- JS Libraries -->
-  <script src="JS/RX-SMART-QR-GENATOR.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <footer>
+    <p>&copy; <script>document.write(new Date().getFullYear())</script> ROSAN KHATTRI CHETTRI. All rights reserved. | Made with <i class="fas fa-heart" style="color: #ef4444;"></i> for secure communications</p>
+  </footer>
+
+  <!-- Include required libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <script src="JS/RX-SMART-QR-GENATOR.js"></script>
+
+
 </body>
 </html>
