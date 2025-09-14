@@ -77,11 +77,11 @@ const allUsers = [
 const contentCards = [
     {   
         id: "file1", 
-        title: "F1- KAPALI-TAMSUK", 
+        title: "F1- KAPALI-TAMSUK UPDATED VERSION", 
         description: "Login Code : RX-2061", 
         link: "ASSET/WEB-SOFTWARE/RX-STUDIO-KAPALI_TAMSUK_GENERATOR.html", 
         icon: "fas fa-pen",
-        prices: { default: "Rs. 1500",}
+        prices: { default: "Rs. 600",}
        //prices: { default: "Rs. 1500", 2: "Rs. 1000", 3: "Rs. 1000", 4: "Rs. 1000", 5: "Rs. 1000" }
     },
     {   
@@ -90,7 +90,7 @@ const contentCards = [
         description: "LESSON A 1 - 10L", 
         link: "KR-EXAM.html?exam=file2", 
         icon: "fas fa-book",
-        prices: { default: "Rs. 150" }
+        prices: { default: "Rs. 100" }
     },
     
     {   
@@ -99,16 +99,16 @@ const contentCards = [
         description: "You can create personalized messages using a QR code with this app.", 
         link: "ASSET/WEB-SOFTWARE/RX-S-QR.html", 
         icon: "fas fa-qrcode",
-        prices: { default: "Rs. 500" }
+        prices: { default: "Rs. 100" }
     },
     
     {   
         id: "file4", 
-        title: "F4- KAPALI-TAMSUK", 
+        title: "F4- KAPALI-TAMSUK OLD VERSION", 
         description: "Old Version | Login Code: RX-2061", 
         link: "ASSET/WEB-SOFTWARE/Kapali.html", 
         icon: "fas fa-pencil",
-        prices: { default: "Rs. 1000",}
+        prices: { default: "Rs. 500",}
     },
     {   
         id: "file5", 
@@ -116,7 +116,7 @@ const contentCards = [
         description: "LESSON A 11 - 20 L | UPDATING IN PROGRESS...", 
         link: "KR-EXAM.html?exam=file5", 
         icon: "fas fa-book",
-        prices: { default: "150",}
+        prices: { default: "100",}
     },
     {   
         id: "file6", 
@@ -124,7 +124,7 @@ const contentCards = [
         description: "ALL OVER BOOK RESOURCE | UPDATING IN PROGRESS...", 
         link: "KR-EXAM.html?exam=file6", 
         icon: "fas fa-book",
-        prices: { default: "150",}
+        prices: { default: "100",}
     }
 ];
 
