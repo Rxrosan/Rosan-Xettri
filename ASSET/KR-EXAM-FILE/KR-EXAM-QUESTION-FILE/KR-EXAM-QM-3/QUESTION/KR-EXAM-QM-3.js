@@ -134,14 +134,14 @@ window.questions = [
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-1.mp3"
    },
    {
-     question: "[23~28] 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+     question: "저는 ______ 채팅을 하고 있습니다.",
      options: { a: "책상", b: "화장", c: "화상", d: "축산" },
      answer: "c",
      explanation: "Review not Aviable.",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-2.mp3"
    },
    {
-     question: "",
+     question: "[23~28] 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
@@ -151,126 +151,127 @@ window.questions = [
    {
      question: "",
      options: { a: "", b: "", c: "", d: "" },
-     answer: "c",
+     answer: "b",
      explanation: "Review not Aviable.",
-     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-29.png",
+     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-38.png",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-4.mp3"
    },
    {
-     question: "[25-29] 그림을 보고 알맞은 대답을 고르십시오.<br>  <br> 이것은 무엇입니까?",
-     options: { a: "", b: "", c: "", d: "" },
-     answer: "a",
-     explanation: "Review not Aviable.",
-    image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-30.png",
-     audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-5.mp3"
-   },
-   {
-     question: "여기는 어디 입니까?",
+     question: "",
      options: { a: "", b: "", c: "", d: "" },
      answer: "b",
      explanation: "Review not Aviable.",
-     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-31.png",
+    image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-39.png",
+     audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-5.mp3"
+   },
+   {
+     question: "",
+     options: { a: "", b: "", c: "", d: "" },
+     answer: "b",
+     explanation: "Review not Aviable.",
+     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-40.png",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-6.mp3"
    },
    {
-     question: "이 사람은 무엇을 하고 있습니까?",
+     question: "",
      options: { a: "", b: "", c: "", d: "" },
      answer: "d",
      explanation: "Review not Aviable.",
-     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-32.png",
+     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-41.png",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-7.mp3"
    },
    {
-     question: "맥주가 얼마나 있습니까?",
+     question: "",
      options: { a: "", b: "", c: "", d: "" },
-     answer: "c",
+     answer: "b",
      explanation: "Review not Aviable.",
-     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-33.png",
+     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-42.png",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-8.mp3"
    },
    {
-     question: "이것은 무엇입니까?",
-     options: { a: "", b: "", c: "", d: "" },
+     question: "[29~33] 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
+     options: { a: "아버지세요.", b: "두명 있어요.", c: "회사예요.", d: "십분 남아요." },
      answer: "a",
      explanation: "Review not Aviable.",
-     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-34.png",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-9.mp3"
    },
    {
-     question: "[30-33] 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
-     options: { a: "네, 컴퓨터가 있어요.", b: "아니요, 컴퓨터예요.", c: "아니요, 컴퓨터가 아니예요.", d: "네, 컴퓨터가 없어요." },
-     answer: "a",
+     question: "",
+     options: { a: "네, 신분증이 있어요.", b: "네, 신분증이에요.", c: "아니요, 지갑에 들어 있어요.", d: "아니요, 가방에 없어요." },
+     answer: "c",
      explanation: "Review not Aviable.",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-10.mp3"
    },
    {
      question: "",
-     options: { a: "네, 회사원이 있습니다.", b: "네, 회사원 입니다.", c: "아니요, 회사원 많습니다.", d: "아니요, 회사원이 좋습니다." },
-     answer: "b",
+     options: { a: "아니요, 가본적이 있어요.", b: "네, 제주도에서 먹어봤어요", c: "아니요, 제주도는 멀어요.", d: "아니요, 가본적이 없어요." },
+     answer: "d",
      explanation: "Review not Aviable.",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-11.mp3"
    },
    {
      question: "",
-     options: { a: "서른 살 입니다", b: "기술자 입니다.", c: "네팔 사람 입니다.", d: "남자 입니다" },
-     answer: "c",
+     options: { a: "네, 기침을 해요.", b: "아니요, 좋아하지 않아요.", c: "네, 미여국이 아주 맛있어요.", d: "아니요, 김치가 많아요." },
+     answer: "b",
      explanation: "Review not Aviable.",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-12.mp3"
    },
    {
      question: "",
-     options: { a: "네, 시장에서 과일을 살 거예요.", b: "아니요, 채소는 시장에서 사는 게 좋아요.", c: "네, 저는 시장에서 자주 가요.", d: "아니요, 시장은 없고 마트는 있어요." },
-     answer: "d",
+     options: { a: "다음 주에 가려고 했어요.", b: "어제 방문을 했어요.", c: "일년 쫌 댔어요.", d: "지난 주에 갔어요." },
+     answer: "a",
      explanation: "Review not Aviable.",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-13.mp3"
    },
    {
-     question: "[34-35] 다음을 듣고 이어지는 말을 고르십시오.",
-     options: { a: "어서 오세요.", b: "안녕히 계세요.", c: "괜찮아요.", d: "반가워요." },
-     answer: "b",
+     question: "[34~36] 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+     options: { a: "", b: "", c: "", d: "" },
+     answer: "a",
      explanation: "Review not Aviable.",
+     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-43.png",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-14.mp3"
    },
    {
      question: "",
-     options: { a: "반갑습니다.", b: "죽하합니다.", c: "감사합니다.", d: "괜찮습니다." },
-     answer: "c",
-     explanation: "Review not Aviable.",
-     audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-15.mp3"
-   },
-   {
-     question: "[36-37] 잘 듣고 들은 내용과 관계있는 그림을 고르십시오.",
      options: { a: "", b: "", c: "", d: "" },
      answer: "a",
      explanation: "Review not Aviable.",
-     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-35.png",
-     audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-16.mp3"
+     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-44.png",
+     audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-15.mp3"
    },
    {
      question: "",
      options: { a: "", b: "", c: "", d: "" },
-     answer: "d",
+     answer: "a",
      explanation: "Review not Aviable.",
-     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-36.png",
+     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-45.png",
+     audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-16.mp3"
+   },
+   {
+     question: "[37~40] 다음을 듣고 질문에 알맞은 대답을 고르십시오.<br>미용실은 어디에 있습니까 ?",
+     options: { a: "", b: "", c: "", d: "" },
+     answer: "c",
+     explanation: "Review not Aviable.",
+     image: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-ALL-IMG/IMG-46.png",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-17.mp3"
    },
    {
-     question: "[38-40] 이야기를 듣고 질문에 알맞은 대답을 고르십시오.",
-     options: { a: "규칙을 정하랴고", b: "예약을 정하랴고", c: "약속을 정하려고", d: "주문을 하려고" },
+     question: "다음을 잘 듣고 내용과 같은 것을 고르십시오.",
+     options: { a: "작업자이 위험하니까 안전모를 써야 합니다.", b: "작업장이 위험하니까 보호복을 착용해야 합니다.", c: "작업장이 소음이 심하니까 청력보호구를 착용해야 합니다.", d: "작업장이 소음이 심하니까 귀를 보호하지 않아도 됩니다." },
      answer: "c",
      explanation: "Review not Aviable.",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-18.mp3"
    },
    {
-     question: "",
-     options: { a: "로선 씨는 저녁 8 시에 공부해요.", b: "로선 씨는 아침 8 시에 공부해요.", c: "여자는 저녁 8 시에 공부해요.", d: "여자는 밤 8 시에 공부해요." },
+     question: " 내일부터 연장 근무를 하는 이유가 무엇입니까?",
+     options: { a: "주문이 밀려서", b: "두시간이 걸려서", c: "일이 밀려서", d: "주문이 취소해서" },
      answer: "a",
      explanation: "Review not Aviable.",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-19.mp3"
    },
    {
-     question: "",
-     options: { a: "남자가 점심 12 시에 먹어요.", b: "리따 씨가 점심 12 시에 먹어요.", c: "리따 씨가 저녁 11 시에 먹어요.", d: "남자가 저녁 11 시에 먹어요." },
+     question: "제주도에 대한 알맞은 것을 고르십시오.",
+     options: { a: "제주도는 한국의 제일 작은 섬입니다.", b: "제주도는 동쪽에 있습니다.", c: "제주도는 하와이보다 큽니다.", d: "제주도는 한국의 큰 섬입니다." },
      answer: "b",
      explanation: "Review not Aviable.",
      audio: "ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/AUDIO/AUDIO-20.mp3"

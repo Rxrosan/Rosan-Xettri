@@ -23,7 +23,7 @@ const allUsers = [
         address: "BANGANGA-5 ,KAPILVASTU",
         accountType: "MEMBER",
         password: "RX9807483578",
-        access: ["file2","file3",],
+        access: ["file2","file3","file6",],
         timedAccessConfig: { }
     },
     {
@@ -40,6 +40,7 @@ const allUsers = [
         timedAccessConfig: {
             "file2": { startDate: "2025-08-18", duration: 365 },
             "file3": { startDate: "2025-08-18", duration: 365 },
+            "file6": { startDate: "2025-09-16", duration: 365 },
         }
     },
     {
@@ -52,7 +53,7 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "MEMBER",
         password: "RX9821948199",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6",],
+        access: ["file1", "file2", "file3", "file4", "file6",],
         timedAccessConfig: { }
     },
     {
@@ -69,6 +70,24 @@ const allUsers = [
         timedAccessConfig: {
             "file2": { startDate: "2025-08-18", duration: 365 },
             "file3": { startDate: "2025-08-18", duration: 365 },
+            "file6": { startDate: "2025-09-16", duration: 365 },
+        }
+    },
+    {
+        id: "U006",
+        userName: "SAGAR",
+        fullName: "Sagar Giri",
+        email: "girisagar745@gmail.com",
+        image: "ASSET/USER/IMG/SAGAR.jpg",
+        phone: "9701300086",
+        address: "JITPUR, KAPILVASTU",
+        accountType: "MEMBER",
+        password: "RX9701300086",
+        access: [],
+        timedAccessConfig: {
+            "file2": { startDate: "2025-09-16", duration: 365 },
+            "file3": { startDate: "2025-09-16", duration: 365 },
+            "file6": { startDate: "2025-09-16", duration: 365 },
         }
     }
 ];
@@ -121,7 +140,7 @@ const contentCards = [
     {   
         id: "file6", 
         title: "F6- QUESTION MODEL 3", 
-        description: "ALL OVER BOOK RESOURCE | UPDATING IN PROGRESS...", 
+        description: "ALL OVER BOOK RESOURCE", 
         link: "KR-EXAM.html?exam=file6", 
         icon: "fas fa-book",
         prices: { default: "Rs. 100",}
