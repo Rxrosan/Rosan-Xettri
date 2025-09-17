@@ -13,6 +13,51 @@
    <link rel="stylesheet" href="CSS/RX-SMART-QR-GENATOR.css">
   <meta name="description" content="Securely encrypt messages into QR codes with password protection. Decrypt with the password for confidential access.">
 
+  <style>
+    /* Additions for History QR Thumbnail and Details */
+    .history-qr-thumbnail {
+      width: 50px; /* Smaller thumbnail size */
+      height: 50px;
+      object-fit: contain;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      margin-right: 1rem;
+      cursor: pointer;
+      vertical-align: middle; /* Align with text */
+    }
+    .history-item .history-content {
+      display: flex;
+      align-items: center; /* Align QR thumbnail and text */
+      margin-bottom: 0.5rem;
+    }
+    .history-details {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed #e2e8f0;
+      font-size: 0.9em;
+      color: var(--gray-dark);
+    }
+    .history-details pre {
+      background-color: #eef2ff;
+      padding: 0.5rem;
+      border-radius: 6px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      margin-top: 0.5rem;
+    }
+    .watermark-option {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+    .watermark-option input[type="checkbox"] {
+        width: auto;
+    }
+    .watermark-file-upload {
+        margin-top: 0.5rem;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -34,7 +79,7 @@
       <button class="tab" id="tabHistory" onclick="switchTab('history')">
         <i class="fas fa-history"></i> History
       </button>
-    <button class="tab" id="tabHistory" onclick="window.location.href='https://rosankc.com.np/'">
+    <button class="tab" id="tabHome" onclick="window.location.href='https://rosankc.com.np/'">
       <i class="fas fa-home"></i> Home
     </button>
 
@@ -104,6 +149,20 @@
           <div class="color-picker-container">
             <input type="color" id="qrColor" value="#6366f1" onchange="updateQRColor()">
             <span id="qrColorValue">#6366f1</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Watermark Options</label>
+          <div class="watermark-option">
+            <input type="checkbox" id="defaultWatermark" onchange="toggleDefaultWatermark()">
+            <label for="defaultWatermark">Use RX LOGO</label>
+          </div>
+          <div class="watermark-file-upload">
+            <label for="watermarkImageInput" class="btn btn-secondary btn-text">
+                <i class="fas fa-image"></i> Upload Your custom LOGO
+            </label>
+            <input type="file" id="watermarkImageInput" accept="image/*" class="hidden">
           </div>
         </div>
       </div>
@@ -206,6 +265,7 @@
       </div>
       
       <div class="history-container" id="historyItems">
+        <!-- History items will be loaded here by JavaScript -->
         <div class="empty-history">
           <i class="fas fa-history"></i>
           <p>No history yet. Your encrypted and decrypted messages will appear here.</p>
