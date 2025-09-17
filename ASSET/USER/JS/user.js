@@ -95,7 +95,7 @@ const allUsers = [
         id: "U007",
         userName: "MANISHA",
         fullName: "Manisha Tharu",
-        email: "manishatharu388@gmail.come",
+        email: "manishatharu388@gmail.com",
         image: "ASSET/USER/IMG/MANISHA.jpg",
         phone: "9745397210",
         address: "SALJHANDI, RUPANDEHI",
