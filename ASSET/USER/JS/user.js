@@ -90,6 +90,24 @@ const allUsers = [
             "file6": { startDate: "2025-09-16", duration: 365 },
         }
     }
+    ,
+    {
+        id: "U007",
+        userName: "MANISHA",
+        fullName: "Manisha Tharu",
+        email: "manishatharu388@gmail.come",
+        image: "ASSET/USER/IMG/MANISHA.jpg",
+        phone: "9745397210",
+        address: "SALJHANDI, RUPANDEHI",
+        accountType: "MEMBER",
+        password: "RX9745397210",
+        access: [],
+        timedAccessConfig: {
+            "file2": { startDate: "2025-09-17", duration: 365 },
+            "file3": { startDate: "2025-09-17", duration: 365 },
+            "file6": { startDate: "2025-09-17", duration: 365 },
+        }
+    }
 ];
 
 // Content Cards Database
