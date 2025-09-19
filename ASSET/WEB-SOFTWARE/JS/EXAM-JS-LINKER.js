@@ -1,33 +1,53 @@
-// EXAM-JS-LINKER.js - Dynamic Exam Question Loader with Persistence
+// EXAM-JS-LINKER.js - Dynamic Content Loader with Persistence
 
 (function() {
     /**
      * ===================================================================
      *                        CONFIGURATION
      * ===================================================================
-     * 1. Map each exam ID to its specific JavaScript QUESTION file.
-     * 2. Define the key for localStorage to store the active exam ID.
+     * 1. Map each content ID to its specific file (JS or HTML).
+     * 2. Define the key for localStorage to store the active content ID.
      *
-     * NOTE: This script no longer loads the exam engine (KR-EXAM-BODY.js).
-     * You must include it yourself in your HTML file like this:
-     * <script src="ASSETS/TOOL-FILES/JS/KR-EXAM-BODY.js" defer></script>
+     * NOTE: This script can load both exam questions (JS) and HTML content.
      */
 
-    // Mapping: Exam ID to the Question Script Path
-    const examScriptMapping = {
-        'file2': 'ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/QUESTION/KR-EXAM-QM-1.js',
-        'file5': 'ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/QUESTION/KR-EXAM-QM-2.js',
-        'file6': 'ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/QUESTION/KR-EXAM-QM-3.js',
-        // Add more exam IDs and their question script paths here:
-        // 'your_new_exam_id': 'path/to/your/new/exam/questions.js',
+    // Mapping: Content ID to the File Path and Type
+    const contentMapping = {
+        // Exam question files (JS)
+        'file2': {
+            path: 'ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/QUESTION/KR-EXAM-QM-1.js',
+            type: 'js'
+        },
+        'file5': {
+            path: 'ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/QUESTION/KR-EXAM-QM-2.js',
+            type: 'js'
+        },
+        'file6': {
+            path: 'ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/QUESTION/KR-EXAM-QM-3.js',
+            type: 'js'
+        },
+        'file1': {
+            path: 'ASSET/WEB-SOFTWARE/JS/KAPALI-TAMSUK-2.js',
+            type: 'js'
+        },
+        'file4': {
+            path: 'ASSET/WEB-SOFTWARE/JS/KAPALI-TAMSUK-1.js',
+            type: 'js'
+        },
+        // HTML content files - add your HTML content mappings here
+        // 'html-content-1': {
+        //     path: 'path/to/your/content.html',
+        //     type: 'html',
+        //     target: 'content-container' // ID of element to insert HTML into
+        // },
+        // Add more content IDs and their file paths here
     };
 
-    // Key for storing the active exam ID in localStorage
-    const LOCAL_STORAGE_EXAM_KEY = 'activeExamId';
+    // Key for storing the active content ID in localStorage
+    const LOCAL_STORAGE_CONTENT_KEY = 'activeContentId';
 
     // Key for storing user data
     const LOCAL_STORAGE_USER_KEY = 'currentUser';
-
 
     /**
      * ===================================================================
@@ -62,6 +82,34 @@
     }
 
     /**
+     * Loads HTML content dynamically into a target element.
+     * @param {string} src - The source path of the HTML to load.
+     * @param {string} target - The ID of the element to insert HTML into.
+     * @returns {Promise} - A promise that resolves on success and rejects on error.
+     */
+    function loadHTML(src, target) {
+        return new Promise((resolve, reject) => {
+            fetch(src)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(html => {
+                    const container = document.getElementById(target);
+                    if (container) {
+                        container.innerHTML = html;
+                        resolve(src);
+                    } else {
+                        reject(new Error(`Target element with ID '${target}' not found.`));
+                    }
+                })
+                .catch(error => reject(new Error(`Failed to load HTML from ${src}: ${error.message}`)));
+        });
+    }
+
+    /**
      * Displays a user-friendly error message on the screen.
      * @param {string} title - The main title for the error message.
      * @param {string} message - The detailed error description.
@@ -72,7 +120,7 @@
                                         <p style="font-size: 1.1em; line-height: 1.6;">${message}</p>
                                         <p style="font-size: 0.9em; color: #666; margin-top: 20px;">If you continue to experience issues, please contact support.</p>
                                    </div>`;
-        document.body.style.display = 'block'; // Ensure body is visible if it was hidden by other CSS
+        document.body.style.display = 'block';
         document.body.style.margin = '0';
         document.body.style.height = '100vh';
         document.body.style.display = 'flex';
@@ -92,36 +140,34 @@
     }
 
     /**
-     * Attempts to get the exam ID, preferring URL parameter, then localStorage.
-     * @returns {string|null} The determined exam ID.
+     * Attempts to get the content ID, preferring URL parameter, then localStorage.
+     * @returns {string|null} The determined content ID.
      */
-    function getPersistentExamId() {
-        const urlExamId = getQueryParameter('exam');
-        const storedExamId = localStorage.getItem(LOCAL_STORAGE_EXAM_KEY);
+    function getPersistentContentId() {
+        const urlContentId = getQueryParameter('content') || getQueryParameter('exam'); // Support both 'content' and 'exam' parameters
+        const storedContentId = localStorage.getItem(LOCAL_STORAGE_CONTENT_KEY);
 
-        if (urlExamId) {
+        if (urlContentId) {
             // If URL parameter exists, it overrides localStorage
-            console.log(`Exam ID from URL: ${urlExamId}. Storing for persistence.`);
-            localStorage.setItem(LOCAL_STORAGE_EXAM_KEY, urlExamId);
-            return urlExamId;
-        } else if (storedExamId) {
+            console.log(`Content ID from URL: ${urlContentId}. Storing for persistence.`);
+            localStorage.setItem(LOCAL_STORAGE_CONTENT_KEY, urlContentId);
+            return urlContentId;
+        } else if (storedContentId) {
             // If no URL parameter, use the stored one
-            console.log(`Exam ID from localStorage: ${storedExamId}.`);
-            return storedExamId;
+            console.log(`Content ID from localStorage: ${storedContentId}.`);
+            return storedContentId;
         }
-        // No exam ID found anywhere
+        // No content ID found anywhere
         return null;
     }
 
     /**
-     * Removes the stored exam ID from localStorage.
-     * This function should be called when the user explicitly "closes" the exam.
+     * Removes the stored content ID from localStorage.
+     * This function should be called when the user explicitly "closes" the content.
      */
-    function clearPersistentExamId() {
-        localStorage.removeItem(LOCAL_STORAGE_EXAM_KEY);
-        console.log("Active exam ID cleared from localStorage.");
-        // Optionally redirect to a generic page or show an exam selection screen
-        // window.location.href = 'index.html'; // Example redirect
+    function clearPersistentContentId() {
+        localStorage.removeItem(LOCAL_STORAGE_CONTENT_KEY);
+        console.log("Active content ID cleared from localStorage.");
     }
 
     /**
@@ -134,7 +180,7 @@
     }
 
     /**
-     * Checks if a user has access to a specific exam file
+     * Checks if a user has access to a specific content file
      * @param {Object} user - The user object
      * @param {string} fileId - The file ID to check access for
      * @returns {boolean} True if user has access, false otherwise
@@ -183,10 +229,8 @@
         return "";
     }
 
-    // Expose the clearPersistentExamId function globally if you need to call it from other scripts or UI.
-    // Be cautious with global variables. A better approach might be to dispatch a custom event.
-    window.clearActiveExam = clearPersistentExamId;
-
+    // Expose the clear function globally
+    window.clearActiveContent = clearPersistentContentId;
 
     /**
      * ===================================================================
@@ -198,56 +242,56 @@
         // 1. Get the current user
         const currentUser = getCurrentUser();
         
-        // 2. Determine the exam ID to load, prioritizing URL then localStorage.
-        const selectedExamId = getPersistentExamId();
+        // 2. Determine the content ID to load, prioritizing URL then localStorage.
+        const selectedContentId = getPersistentContentId();
 
-        if (!selectedExamId) {
-            const errorMessage = `No 'exam' parameter found in the URL and no active exam found in storage. Please provide an exam ID (e.g., KR-EXAM.html?exam=file2) or select an exam.`;
+        if (!selectedContentId) {
+            const errorMessage = `No 'content' or 'exam' parameter found in the URL and no active content found in storage. Please provide a content ID (e.g., index.html?content=file2) or select content.`;
             console.error(errorMessage);
-            displayError("Exam Not Specified", `Please select an exam to start. No exam ID found.`);
+            displayError("Content Not Specified", `Please select content to start. No content ID found.`);
             return;
         }
 
-        // 3. Check if user has access to this exam
-        if (currentUser && !hasAccessToFile(currentUser, selectedExamId)) {
-            const remainingTime = getRemainingTimeFormatted(currentUser, selectedExamId);
-            let errorMessage = `You do not have access to this exam.`;
+        // 3. Find the corresponding content configuration
+        const contentConfig = contentMapping[selectedContentId];
+
+        if (!contentConfig) {
+            const errorMessage = `No content is mapped for ID: "${selectedContentId}". Check 'contentMapping' in EXAM-JS-LINKER.js.`;
+            console.error(errorMessage);
+            displayError("Content Configuration Error", `The configuration for content <strong>${selectedContentId}</strong> is missing or incorrect.<br>Please check the linker script's configuration.`);
+            // Clear the invalid ID from storage to prevent infinite error on refresh
+            clearPersistentContentId();
+            return;
+        }
+
+        // 4. Check if user has access to this content
+        if (currentUser && !hasAccessToFile(currentUser, selectedContentId)) {
+            const remainingTime = getRemainingTimeFormatted(currentUser, selectedContentId);
+            let errorMessage = `You do not have access to this content.`;
             
             if (remainingTime) {
-                errorMessage = `Your access to this exam has expired.`;
+                errorMessage = `Your access to this content has expired.`;
             }
             
-            console.error(`Access denied for user ${currentUser.userName} to exam ${selectedExamId}`);
+            console.error(`Access denied for user ${currentUser.userName} to content ${selectedContentId}`);
             displayError("Access Denied", errorMessage);
             
-            // Clear the exam ID from storage
-            clearPersistentExamId();
+            // Clear the content ID from storage
+            clearPersistentContentId();
             return;
         }
 
-        // 4. Find the corresponding question script path using the exam ID.
-        const questionScriptPath = examScriptMapping[selectedExamId];
-
-        if (!questionScriptPath) {
-            const errorMessage = `No question script is mapped for exam ID: "${selectedExamId}". Check 'examScriptMapping' in EXAM-JS-LINKER.js.`;
-            console.error(errorMessage);
-            displayError("Exam Configuration Error", `The configuration for exam <strong>${selectedExamId}</strong> is missing or incorrect.<br>Please check the linker script's configuration.`);
-            // Also clear the invalid ID from storage to prevent infinite error on refresh
-            clearPersistentExamId();
-            return;
-        }
-
-        // 5. Load ONLY the question script.
+        // 5. Load the content based on its type
         try {
-            console.log(`Loading exam questions for Exam ID: ${selectedExamId} from: ${questionScriptPath}`);
+            console.log(`Loading content for ID: ${selectedContentId} from: ${contentConfig.path}`);
             if (currentUser) {
                 console.log(`User: ${currentUser.userName} (${currentUser.id})`);
                 
                 // Log access type
-                if (currentUser.access && currentUser.access.includes(selectedExamId)) {
+                if (currentUser.access && currentUser.access.includes(selectedContentId)) {
                     console.log("Access type: Permanent");
                 } else {
-                    const remainingTime = getRemainingTimeFormatted(currentUser, selectedExamId);
+                    const remainingTime = getRemainingTimeFormatted(currentUser, selectedContentId);
                     if (remainingTime) {
                         console.log(`Access type: Timed (Remaining: ${remainingTime})`);
                     }
@@ -256,20 +300,28 @@
                 console.log("User: Guest (no user data found)");
             }
             
-            await loadScript(questionScriptPath);
-            console.log("Question script loaded successfully.");
+            // Load based on content type
+            if (contentConfig.type === 'js') {
+                await loadScript(contentConfig.path);
+                console.log("Script loaded successfully.");
+            } else if (contentConfig.type === 'html') {
+                if (!contentConfig.target) {
+                    throw new Error("No target specified for HTML content");
+                }
+                await loadHTML(contentConfig.path, contentConfig.target);
+                console.log("HTML content loaded successfully.");
+            } else {
+                throw new Error(`Unsupported content type: ${contentConfig.type}`);
+            }
 
-            // 6. Clean up the URL for aesthetics, *after* the ID has been processed and stored.
+            // 6. Clean up the URL for aesthetics
             cleanUrl();
-
-            // Optional: If you have a loading spinner, hide it here.
-            // If your HTML initially hides the exam content, make it visible here.
 
         } catch (error) {
             console.error(error);
-            displayError("Error Loading Exam File", `The question script could not be loaded. Please check the file path: <code>${questionScriptPath}</code>.<br>Details: ${error.message}`);
-            // Clear the exam ID from localStorage if the script fails to load
-            clearPersistentExamId();
+            displayError("Error Loading File", `The content could not be loaded. Please check the file path: <code>${contentConfig.path}</code>.<br>Details: ${error.message}`);
+            // Clear the content ID from localStorage if the content fails to load
+            clearPersistentContentId();
         }
     }
 

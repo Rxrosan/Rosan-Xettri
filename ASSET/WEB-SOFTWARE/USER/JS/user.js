@@ -116,7 +116,7 @@ const contentCards = [
         id: "file1", 
         title: "F1- KAPALI-TAMSUK UPDATED VERSION", 
         description: "Login Code : RX-2061", 
-        link: "ASSET/WEB-SOFTWARE/RX-STUDIO-KAPALI_TAMSUK_GENERATOR.html", 
+        link: "Kapali-tamsuk.html?exam=file1", 
         icon: "fas fa-pen",
         prices: { default: "Rs. 600",}
        //prices: { default: "Rs. 1500", 2: "Rs. 1000", 3: "Rs. 1000", 4: "Rs. 1000", 5: "Rs. 1000" }
@@ -143,7 +143,7 @@ const contentCards = [
         id: "file4", 
         title: "F4- KAPALI-TAMSUK OLD VERSION", 
         description: "Old Version | Login Code: RX-2061", 
-        link: "ASSET/WEB-SOFTWARE/Kapali.html", 
+        link: "Kapali-tamsuk.html?exam=file4", 
         icon: "fas fa-pencil",
         prices: { default: "Rs. 500",}
     },
