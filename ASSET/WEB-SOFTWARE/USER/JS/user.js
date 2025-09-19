@@ -114,7 +114,7 @@ const allUsers = [
 const contentCards = [
     {   
         id: "file1", 
-        title: "F1- KAPALI-TAMSUK UPDATED VERSION", 
+        title: "F1- KAPALI-TAMSUK OLD VERSION", 
         description: "Login Code : RX-2061", 
         link: "Kapali-tamsuk.html?exam=file1", 
         icon: "fas fa-pen",
@@ -141,7 +141,7 @@ const contentCards = [
     
     {   
         id: "file4", 
-        title: "F4- KAPALI-TAMSUK OLD VERSION", 
+        title: "F4- KAPALI-TAMSUK UPDATED VERSION", 
         description: "Old Version | Login Code: RX-2061", 
         link: "Kapali-tamsuk.html?exam=file4", 
         icon: "fas fa-pencil",
