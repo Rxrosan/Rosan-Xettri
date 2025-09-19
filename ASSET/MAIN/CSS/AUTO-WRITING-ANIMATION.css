@@ -1,0 +1,21 @@
+    .auto-writer {
+        min-height: 60px; /* Adjust based on your needs */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .auto-writer-cursor {
+        display: inline-block;
+        width: 8px;
+        height: 20px;
+        background: #ffffff;
+        margin-left: 4px;
+        animation: blink 0.7s infinite;
+    }
+    
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }

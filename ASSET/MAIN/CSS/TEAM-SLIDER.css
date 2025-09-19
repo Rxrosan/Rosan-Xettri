@@ -1,0 +1,50 @@
+.team-slider-container {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    margin: 0 auto;
+    max-width: 300px;
+}
+
+.team-slider {
+    height: 100%;
+    transition: transform 0.8s ease-in-out;
+}
+
+.team-slide {
+    height: 400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.team-member {
+    text-align: center;
+    padding: 20px;
+}
+
+.team-member img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    font-size: 18px;
+}
+
+.social-links a {
+    color: #555;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #000;
+    transform: translateY(-3px);
+}
