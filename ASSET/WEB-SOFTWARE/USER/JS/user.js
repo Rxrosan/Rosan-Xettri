@@ -118,7 +118,7 @@ const contentCards = [
         description: "Login Code : RX-2061", 
         link: "LEKA-PADI.html?exam=file1", 
         icon: "fas fa-pen",
-        prices: { default: "Rs. 600",}
+        prices: { default: "Rs. 500",}
        //prices: { default: "Rs. 1500", 2: "Rs. 1000", 3: "Rs. 1000", 4: "Rs. 1000", 5: "Rs. 1000" }
     },
     {   
@@ -145,7 +145,7 @@ const contentCards = [
         description: "Old Version | Login Code: RX-2061", 
         link: "LEKA-PADI.html?exam=file4", 
         icon: "fas fa-pencil",
-        prices: { default: "Rs. 500",}
+        prices: { default: "Rs. 600",}
     },
     {   
         id: "file5", 
