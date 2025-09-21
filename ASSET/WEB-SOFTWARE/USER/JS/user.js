@@ -10,7 +10,7 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "ADMIN",
         password: "Ro&@n2061", // In real app, this would be hashed
-        access: ["file1", "file2", "file3", "file4", "file5", "file6",], // Permanent access
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7",], // Permanent access
         timedAccessConfig: {} // No timed access needed due to permanent access
     },
     {
@@ -115,7 +115,7 @@ const contentCards = [
     {   
         id: "file1", 
         title: "F1- KAPALI-TAMSUK OLD VERSION", 
-        description: "Login Code : RX-2061", 
+        description: "Login Code: RX-2061", 
         link: "LEKA-PADI.html?exam=file1", 
         icon: "fas fa-pen",
         prices: { default: "Rs. 500",}
@@ -141,8 +141,8 @@ const contentCards = [
     
     {   
         id: "file4", 
-        title: "F4- KAPALI-TAMSUK UPDATED VERSION", 
-        description: "Old Version | Login Code: RX-2061", 
+        title: "F4- कपाली तमसुक", 
+        description: "Login Code: RX-2061", 
         link: "LEKA-PADI.html?exam=file4", 
         icon: "fas fa-pencil",
         prices: { default: "Rs. 600",}
@@ -162,6 +162,14 @@ const contentCards = [
         link: "KR-EXAM.html?exam=file6", 
         icon: "fas fa-book",
         prices: { default: "Rs. 100",}
+    },
+    {   
+        id: "file7", 
+        title: "F7- राजीनामा ", 
+        description: "Login Code: RX-2061", 
+        link: "LEKA-PADI.html?exam=file7", 
+        icon: "fas fa-pen",
+        prices: { default: "Rs. 600",}
     }
 ];
 
@@ -169,7 +177,7 @@ const contentCards = [
 const defaultStores = [
     {   id: "store_1", 
         name: "LEKHA-PADI", 
-        content: ["file1", "file4"] },
+        content: ["file1", "file4", "file7"] },
 
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 

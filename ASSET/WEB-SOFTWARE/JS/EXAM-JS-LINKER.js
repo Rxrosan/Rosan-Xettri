@@ -34,6 +34,10 @@
             path: 'ASSET/WEB-SOFTWARE/JS/KAPALI-TAMSUK-1.js',
             type: 'js'
         },
+         'file7': {
+            path: 'ASSET/WEB-SOFTWARE/JS/RAJINAMA.js',
+            type: 'js'
+        },
         // HTML content files - add your HTML content mappings here
         // 'html-content-1': {
         //     path: 'path/to/your/content.html',
