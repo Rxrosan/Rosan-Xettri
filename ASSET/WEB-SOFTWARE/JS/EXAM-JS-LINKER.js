@@ -38,6 +38,10 @@
             path: 'ASSET/WEB-SOFTWARE/JS/RAJINAMA.js',
             type: 'js'
         },
+         'file8': {
+            path: 'ASSET/WEB-SOFTWARE/JS/RE-RAJINAMA.js',
+            type: 'js'
+        },
         // HTML content files - add your HTML content mappings here
         // 'html-content-1': {
         //     path: 'path/to/your/content.html',

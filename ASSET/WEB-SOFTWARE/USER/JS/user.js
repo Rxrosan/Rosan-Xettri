@@ -10,7 +10,7 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "ADMIN",
         password: "Ro&@n2061", // In real app, this would be hashed
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7",], // Permanent access
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7", "file8",], // Permanent access
         timedAccessConfig: {} // No timed access needed due to permanent access
     },
     {
@@ -170,6 +170,14 @@ const contentCards = [
         link: "LEKA-PADI.html?exam=file7", 
         icon: "fas fa-pen",
         prices: { default: "Rs. 600",}
+    },
+    {   
+        id: "file8", 
+        title: "F8- राजीनामा हराएमा व्यहाेरा जनाई गरिदिएकाे राजीनामा ", 
+        description: "Login Code: RX-2061", 
+        link: "LEKA-PADI.html?exam=file8", 
+        icon: "fas fa-pencil",
+        prices: { default: "Rs. 600",}
     }
 ];
 
@@ -177,7 +185,7 @@ const contentCards = [
 const defaultStores = [
     {   id: "store_1", 
         name: "LEKHA-PADI", 
-        content: ["file1", "file4", "file7"] },
+        content: ["file1", "file4", "file7", "file8"] },
 
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 
