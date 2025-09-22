@@ -10,7 +10,7 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "ADMIN",
         password: "Ro&@n2061", // In real app, this would be hashed
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7", "file8",], // Permanent access
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7", "file8","file9","file10","file11",], // Permanent access
         timedAccessConfig: {} // No timed access needed due to permanent access
     },
     {
@@ -142,7 +142,7 @@ const contentCards = [
     {   
         id: "file4", 
         title: "F4- कपाली तमसुक", 
-        description: "Login Code: RX-2061", 
+        description: "कुनै सम्पत्ति धिताे, बन्धक नराखी ब्याज र प्रतिशतकाे हिसाब गरी बुझाउने मिति ताेकिएकाे नबुझाइ भाका नाघे साहुकाे थैलि मेराे घर घरना बाट असुल गरी लिनु भनी असामिकाे विश्वासमा लेखी दिएकाे तमसुक  <br>Login Code: RX-2061", 
         link: "LEKA-PADI.html?exam=file4", 
         icon: "fas fa-pencil",
         prices: { default: "Rs. 600",}
@@ -166,7 +166,7 @@ const contentCards = [
     {   
         id: "file7", 
         title: "F7- राजीनामा ", 
-        description: "Login Code: RX-2061", 
+        description: "साहुबाट असामीले कर्जा लिएकाे रूपैँया बापत आफ्नाे हक अधिकार सदाकाे निमित्त समाप्त हुने गरी साहुले भाेग गर्न पाउने गरी कुनै सम्पत्तिकाे हक छाडी गरी दिएकाे लिखित<br>Login Code: RX-2061", 
         link: "LEKA-PADI.html?exam=file7", 
         icon: "fas fa-pen",
         prices: { default: "Rs. 600",}
@@ -178,6 +178,30 @@ const contentCards = [
         link: "LEKA-PADI.html?exam=file8", 
         icon: "fas fa-pencil",
         prices: { default: "Rs. 600",}
+    },
+    {   
+        id: "file9", 
+        title: "F9- दृष्टिबन्धक तमसुक ", 
+        description: "साहुकाे रूपैयाँ धिताे नराखी यति ब्याज याे मितिमा बुझाउने, नभए साँवा ब्याज नबुझाएसम्म फलानाे सम्पत्ति भाेग चलन गर्ने र कच्चा ठहरे साहुले मेराे घर घरानाबाट असुल गर्ने भनेर लेखिएकाे तमसुक<br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
+        link: "LEKA-PADI.html?exam=file9", 
+        icon: "fas fa-pen",
+        prices: { default: "Rs. 600",}
+    },
+    {   
+        id: "file10", 
+        title: "F10- लखबन्धक तमसुक ", 
+        description: "चल अचल भाेगबन्धक वा दृष्टिबन्धक लिइ राख्नेले तमसुक बमाेजिम वम त्यसभन्दा घटी लिइ अर्काे साहुलाइ भाेगबन्धक वा दृष्टिबन्धक लेखी दिएकाे लिखत पछि लिनेले अघिकाे भन्दा बढ्ता थैलि लिएकाे र करार लेखेकाे सदर हुदैन <br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
+        link: "LEKA-PADI.html?exam=file10", 
+        icon: "fas fa-pencil",
+        prices: { default: "Rs. 600",}
+    },
+    {   
+        id: "file11", 
+        title: "F11- भाेगबन्धक तमसुक ", 
+        description: "साहुकाे थैली वापत रूपैयाँ नबुझाएसम्म सकहुलाइ आसामीले कुनै सम्पत्ति भाेग गर्न नपाइने गरी लेखी दिएकाे लिखित<br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
+        link: "LEKA-PADI.html?exam=file11", 
+        icon: "fas fa-pen",
+        prices: { default: "Rs. 600",}
     }
 ];
 
@@ -185,7 +209,7 @@ const contentCards = [
 const defaultStores = [
     {   id: "store_1", 
         name: "LEKHA-PADI", 
-        content: ["file1", "file4", "file7", "file8"] },
+        content: ["file1", "file4", "file7", "file8", "file9", "file10","file11"] },
 
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 

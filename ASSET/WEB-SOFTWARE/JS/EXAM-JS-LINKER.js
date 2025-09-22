@@ -42,6 +42,18 @@
             path: 'ASSET/WEB-SOFTWARE/JS/RE-RAJINAMA.js',
             type: 'js'
         },
+        'file9': {
+            path: 'ASSET/WEB-SOFTWARE/JS/DRISTI-BANDHAK.js',
+            type: 'js'
+        },
+        'file10': {
+            path: 'ASSET/WEB-SOFTWARE/JS/LAKHA-BANDHAK.js',
+            type: 'js'
+        },
+        'file11': {
+            path: 'ASSET/WEB-SOFTWARE/JS/VOG-BANDHAK.js',
+            type: 'js'
+        },
         // HTML content files - add your HTML content mappings here
         // 'html-content-1': {
         //     path: 'path/to/your/content.html',
