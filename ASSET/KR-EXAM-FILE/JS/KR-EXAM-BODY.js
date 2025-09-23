@@ -43,6 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
     window.generateResultPDF = generateResultPDF;
     window.showContent = showContent;
     window.handleExitChoice = handleExitChoice;
+    window.confirmSubmitExam = confirmSubmitExam;
+    window.cancelSubmitExam = cancelSubmitExam;
 });
 
 function cacheDOMElements() {
@@ -64,6 +66,8 @@ function cacheDOMElements() {
     dom.minimizeBtn = document.getElementById("minimize-btn");
     dom.closeBtn = document.getElementById("close-btn");
     dom.submitNowBtn = document.getElementById("submit-now-btn");
+    dom.submitConfirmModal = document.getElementById("submit-confirm-modal");
+    dom.submitConfirmMessage = document.getElementById("submit-confirm-message");
 }
 
 function initializeExamPage() {
@@ -97,6 +101,35 @@ function initializeExamPage() {
     handleScreenResize();
 
     if (dom.timerBox) dom.timerBox.style.display = "block"; // Changed to block to make it visible
+    
+    // Add submit confirmation modal HTML if it doesn't exist
+    if (!dom.submitConfirmModal) {
+        createSubmitConfirmationModal();
+    }
+}
+
+function createSubmitConfirmationModal() {
+    const modalHTML = `
+        <div id="submit-confirm-modal" class="modal-overlay">
+            <div class="modal-content confirm-modal">
+                <div class="modal-header">
+                    <h3>Submit Exam</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="submit-confirm-message">Are you sure you want to submit your exam? Once submitted, you cannot make any changes.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" onclick="cancelSubmitExam()">Cancel</button>
+                    <button class="btn-primary" onclick="confirmSubmitExam()">Yes, Submit</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Re-cache the modal element
+    dom.submitConfirmModal = document.getElementById("submit-confirm-modal");
+    dom.submitConfirmMessage = document.getElementById("submit-confirm-message");
 }
 
 function populateUserProfile() {
@@ -128,15 +161,25 @@ function setupEventListeners() {
     dom.minimizeBtn?.addEventListener("click", minimizeTimer);
     dom.closeBtn?.addEventListener("click", closeTimer);
     dom.minimizedTimer?.addEventListener("click", restoreTimer);
-    dom.submitNowBtn?.addEventListener("click", submitQuiz);
+
+    // FIX: universal submit button handler
+    document.addEventListener("click", (e) => {
+        if (e.target.closest(".submit-btn")) {
+            e.preventDefault();
+            showSubmitConfirmation();
+        }
+    });
+
     makeDraggable(dom.timerBox);
     makeDraggable(dom.minimizedTimer);
+
     // Add the event listener for beforeunload
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('resize', handleScreenResize);
     dom.userProfileDisplay?.addEventListener('click', openProfileModal);
     dom.profileModalCloseBtn?.addEventListener('click', closeProfileModal);
 }
+
 
 // ========== 2. PROFILE MODAL & UI CONTROLS ==========
 function openProfileModal() { if (dom.profileModalOverlay) dom.profileModalOverlay.style.display = 'flex'; }
@@ -317,6 +360,53 @@ function markForReview() {
     completedQuestions.delete(currentQuestion);
     updateQuestionNavigation();
     goToNext();
+}
+
+function showSubmitConfirmation() {
+    if (quizSubmitted) return;
+    
+    // Update the confirmation message with student name
+    if (dom.submitConfirmMessage) {
+        dom.submitConfirmMessage.textContent = `Hi ${studentInfo.name}, are you sure you want to submit your exam? Once submitted, you cannot make any changes.`;
+    }
+    
+    // Show the confirmation modal
+    if (dom.submitConfirmModal) {
+        dom.submitConfirmModal.style.display = 'flex';
+        setTimeout(() => {
+            dom.submitConfirmModal.classList.add('active');
+        }, 10);
+    }
+}
+
+function confirmSubmitExam() {
+    // Close the confirmation modal
+    if (dom.submitConfirmModal) {
+        dom.submitConfirmModal.classList.remove('active');
+        setTimeout(() => {
+            dom.submitConfirmModal.style.display = 'none';
+        }, 300);
+    }
+    
+    // Proceed with actual submission
+    submitQuiz();
+}
+
+function cancelSubmitExam() {
+    // Close the confirmation modal
+    if (dom.submitConfirmModal) {
+        dom.submitConfirmModal.classList.remove('active');
+        setTimeout(() => {
+            dom.submitConfirmModal.style.display = 'none';
+        }, 300);
+    }
+    
+    // Resume timer if it was paused by audio
+    if (timerPaused) {
+        startTimer();
+        timerPaused = false;
+    }
+    setExamControlsDisabled(false); // Re-enable controls if they were disabled
 }
 
 function submitQuiz() {
@@ -594,23 +684,21 @@ function handleBeforeUnload(e) {
 
         // Show your custom modal
         showExitConfirmationModal();
-
-        // This ensures the browser's default dialog is suppressed in most cases,
-        // while still giving us a chance to show our custom modal.
-        // The actual navigation away will be handled by handleExitChoice
-        // if the user confirms.
     }
 }
 
+
 function showExitConfirmationModal() {
     if (dom.exitConfirmModal) {
-        dom.exitConfirmMessage.textContent = `Hi ${studentInfo.name}, are you sure you want to leave? Your exam progress will be lost if you exit or refresh.`;
+        dom.exitConfirmMessage.textContent =
+          `Hi ${studentInfo.name}, are you sure you want to leave? Your exam progress will be lost if you exit or refresh.`;
         dom.exitConfirmModal.style.display = 'flex';
         setTimeout(() => {
             dom.exitConfirmModal.classList.add('active');
         }, 10);
     }
 }
+
 
 function handleExitChoice(shouldExit) {
     if (dom.exitConfirmModal) {
