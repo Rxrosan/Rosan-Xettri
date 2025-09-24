@@ -64,7 +64,6 @@ function cacheDOMElements() {
     dom.userProfileDisplay = document.getElementById('user-profile-display');
     dom.profileModalCloseBtn = document.getElementById('profile-modal-close-btn');
     dom.minimizeBtn = document.getElementById("minimize-btn");
-    dom.closeBtn = document.getElementById("close-btn");
     dom.submitNowBtn = document.getElementById("submit-now-btn");
     dom.submitConfirmModal = document.getElementById("submit-confirm-modal");
     dom.submitConfirmMessage = document.getElementById("submit-confirm-message");
