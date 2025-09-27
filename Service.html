@@ -46,39 +46,45 @@
                     <a href="News.html"></i> NEWS</a>
   
                     <div class="profile-container">
-                        <button class="profile-button">
-                            <img id="profile-img" src="#" alt="Profile">
-                            <span id="username">GUEST</span>
-                        </button>
-                        <div class="profile-dropdown" id="profile-dropdown" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-3.jpg'); background-size: cover; background-position: center;">
-                            <div class="profile-header">
-                                <img id="dropdown-img" src="#" alt="Profile">
-                                <div class="profile-info">
-                                    <h4 id="dropdown-name">Guest User</h4>
-                                    <p id="dropdown-account-type">Guest Account</p>
-                                </div>
-                            </div>
-                            <div class="profile-details">
-                                <div>
-                                    <i class="fas fa-id-badge"></i>
-                                    <span id="dropdown-user-id">N/A</span>
-                                </div>
-                                <div>
-                                    <i class="fas fa-envelope"></i>
-                                    <span id="dropdown-email">guest@example.com</span>
-                                </div>
-                                <div>
-                                    <i class="fas fa-phone"></i>
-                                    <span id="dropdown-phone">Not provided</span>
-                                </div>
-                                <div>
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span id="dropdown-address">Not provided</span>
-                                </div>
-                            </div>
-                            <button class="logout-btn" id="logout-btn">Logout</button>
-                        </div>
-                    </div>
+    <button class="profile-button">
+        <div class="profile-img-container">
+            <img id="profile-img" src="#" alt="Profile">
+            <div id="profile-badge" class="profile-badge"></div>
+        </div>
+        <span id="username">GUEST</span>
+    </button>
+    <div class="profile-dropdown" id="profile-dropdown" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-5.jpg'); background-size: cover; background-position: center;">
+        <div class="profile-header">
+            <div class="dropdown-img-container">
+                <img id="dropdown-img" src="#" alt="Profile">
+                <div id="dropdown-badge" class="profile-badge"></div>
+            </div>
+            <div class="profile-info">
+                <h4 id="dropdown-name">Guest User</h4>
+                <p id="dropdown-account-type">Guest Account</p>
+            </div>
+        </div>
+        <div class="profile-details">
+            <div>
+                <i class="fas fa-id-badge"></i>
+                <span id="dropdown-user-id">N/A</span>
+            </div>
+            <div>
+                <i class="fas fa-envelope"></i>
+                <span id="dropdown-email">guest@example.com</span>
+            </div>
+            <div>
+                <i class="fas fa-phone"></i>
+                <span id="dropdown-phone">Not provided</span>
+            </div>
+            <div>
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="dropdown-address">Not provided</span>
+            </div>
+        </div>
+        <button class="logout-btn" id="logout-btn">Logout</button>
+    </div>
+</div>
                     
                     <!-- Admin Super Settings Link (Dynamically shown) -->
                     <a href="#" id="admin-settings-link" style="display: none;"><i class="fas fa-users-cog"></i> USERS</a>

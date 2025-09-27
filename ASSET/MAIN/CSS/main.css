@@ -300,7 +300,12 @@ footer {
     color: var(--accent);
 }
 
-.profile-button img {
+.profile-img-container, .dropdown-img-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-button img, .profile-header img {
     width: 35px;
     height: 35px;
     border-radius: 50%;
@@ -309,8 +314,57 @@ footer {
     transition: var(--transition);
 }
 
+.profile-header img {
+    width: 50px;
+    height: 50px;
+}
+
 .profile-button:hover img {
     border-color: white;
+}
+
+/* Verification Badge */
+.profile-badge {
+    position: absolute;
+    bottom: 7px;
+    right: 4px;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    background: #ddd;
+    border: 1px solid rgb(3, 34, 63);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6px;
+    color: rgba(241, 6, 18, 0.959);
+    transition: var(--transition);
+}
+
+.profile-badge.verified {
+    background: var(--success);
+}
+
+.profile-badge.admin {
+    background: white;
+}
+
+.profile-badge.member {
+    background: var(--accent);
+}
+
+.profile-badge.guest {
+    background: var(--gray);
+}
+
+.profile-badge i {
+    margin: 0;
+}
+
+.dropdown-img-container .profile-badge {
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
 }
 
 .profile-dropdown {
@@ -343,13 +397,6 @@ footer {
     margin-bottom: 15px;
     padding-bottom: 15px;
     border-bottom: 1px solid #eee;
-}
-
-.profile-header img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
 }
 
 .profile-info h4 {

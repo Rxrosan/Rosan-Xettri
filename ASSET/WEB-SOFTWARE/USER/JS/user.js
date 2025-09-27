@@ -9,9 +9,10 @@ const allUsers = [
         phone: "9826482279",
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "ADMIN",
-        password: "Ro&@n2061", // In real app, this would be hashed
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7", "file8","file9","file10","file11",], // Permanent access
-        timedAccessConfig: {} // No timed access needed due to permanent access
+        password: "Ro&@n2061",
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7", "file8","file9","file10","file11",],
+        timedAccessConfig: {},
+        badgeAccess: true // ROSAN will have badge
     },
     {
         id: "U002",
@@ -21,10 +22,11 @@ const allUsers = [
         image: "ASSET/WEB-SOFTWARE/USER/IMG/Rita-Magar.jpg",
         phone: "9807483578",
         address: "BANGANGA-5 ,KAPILVASTU",
-        accountType: "MEMBER",
+        accountType: "PARTNER",
         password: "RX9807483578",
         access: ["file2","file3","file6",],
-        timedAccessConfig: { }
+        timedAccessConfig: { },
+        badgeAccess: true // RITA will have badge
     },
     {
         id: "U003",
@@ -41,7 +43,8 @@ const allUsers = [
             "file2": { startDate: "2025-08-18", duration: 365 },
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
-        }
+        },
+        badgeAccess: false // KESHAB will NOT have badge
     },
     {
         id: "U004",
@@ -54,7 +57,8 @@ const allUsers = [
         accountType: "MEMBER",
         password: "RX9821948199",
         access: ["file1", "file2", "file3", "file4", "file6",],
-        timedAccessConfig: { }
+        timedAccessConfig: { },
+        badgeAccess: true // ROHIT will have badge
     },
     {
         id: "U005",
@@ -71,7 +75,8 @@ const allUsers = [
             "file2": { startDate: "2025-08-18", duration: 365 },
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
-        }
+        },
+        badgeAccess: false // NIRAJ will NOT have badge
     },
     {
         id: "U006",
@@ -88,9 +93,9 @@ const allUsers = [
             "file2": { startDate: "2025-09-16", duration: 365 },
             "file3": { startDate: "2025-09-16", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
-        }
-    }
-    ,
+        },
+        badgeAccess: true // SAGAR will have badge
+    },
     {
         id: "U007",
         userName: "MANISHA",
@@ -106,7 +111,8 @@ const allUsers = [
             "file2": { startDate: "2025-09-17", duration: 365 },
             "file3": { startDate: "2025-09-17", duration: 365 },
             "file6": { startDate: "2025-09-17", duration: 365 },
-        }
+        },
+        badgeAccess: false // MANISHA will NOT have badge
     }
 ];
 
@@ -267,27 +273,77 @@ const UserManager = (() => {
     const getCurrentUser = () => {
         return getUserData();
     };
-
-    // Update UI with user data
-    const updateUIWithUserData = (user) => {
-        document.getElementById('username').textContent = user.isGuest ? 'GUEST' : user.userName;
-        document.getElementById('profile-img').src = user.image;
-        document.getElementById('dropdown-img').src = user.image;
-        document.getElementById('dropdown-name').textContent = user.fullName;
-        document.getElementById('dropdown-email').textContent = user.email;
-        document.getElementById('dropdown-phone').textContent = user.phone;
-        document.getElementById('dropdown-address').textContent = user.address;
-        document.getElementById('dropdown-user-id').textContent = user.id;
-        document.getElementById('dropdown-account-type').textContent = user.accountType;
-
-        // Show/hide admin settings link
-        const adminSettingsLink = document.getElementById('admin-settings-link');
-        if (user.accountType === "ADMIN") {
-            adminSettingsLink.style.display = 'flex'; // Use flex to match other nav links
-        } else {
-            adminSettingsLink.style.display = 'none';
+    // Update verification badges based on account type
+const updateVerificationBadges = (user) => {
+    const profileBadge = document.getElementById('profile-badge');
+    const dropdownBadge = document.getElementById('dropdown-badge');
+    
+    // Remove all badge classes
+    [profileBadge, dropdownBadge].forEach(badge => {
+        if (badge) {
+            badge.className = 'profile-badge';
+            badge.innerHTML = '';
         }
-    };
+    });
+    
+    
+    // Add appropriate badge based on account type
+    if (user.accountType === "ADMIN") {
+        [profileBadge, dropdownBadge].forEach(badge => {
+            if (badge) {
+                badge.classList.add('admin');
+                badge.innerHTML = '<i class="fas fa-crown"></i>';
+            }
+        });
+    } else if (user.accountType === "MEMBER") {
+        [profileBadge, dropdownBadge].forEach(badge => {
+            if (badge) {
+                badge.classList.add('verified');
+                badge.innerHTML = '<i class="fas fa-check"></i>';
+            }
+        });
+        } else if (user.accountType === "PARTNER") {
+        [profileBadge, dropdownBadge].forEach(badge => {
+            if (badge) {
+                badge.classList.add('admin');
+                badge.innerHTML = '<i class="fas fa-crown"></i>';
+            }
+        });
+    } else if (user.isGuest) {
+        [profileBadge, dropdownBadge].forEach(badge => {
+            if (badge) {
+                badge.classList.add('guest');
+                badge.innerHTML = '<i class="fa-solid fa-people-group"></i>';
+            }
+        });
+    }
+};
+
+
+
+// Update UI with user data
+const updateUIWithUserData = (user) => {
+    document.getElementById('username').textContent = user.isGuest ? 'GUEST' : user.userName;
+    document.getElementById('profile-img').src = user.image;
+    document.getElementById('dropdown-img').src = user.image;
+    document.getElementById('dropdown-name').textContent = user.fullName;
+    document.getElementById('dropdown-email').textContent = user.email;
+    document.getElementById('dropdown-phone').textContent = user.phone;
+    document.getElementById('dropdown-address').textContent = user.address;
+    document.getElementById('dropdown-user-id').textContent = user.id;
+    document.getElementById('dropdown-account-type').textContent = user.accountType;
+
+    // Update verification badges
+    updateVerificationBadges(user);
+
+    // Show/hide admin settings link
+    const adminSettingsLink = document.getElementById('admin-settings-link');
+    if (user.accountType === "ADMIN") {
+        adminSettingsLink.style.display = 'flex'; // Use flex to match other nav links
+    } else {
+        adminSettingsLink.style.display = 'none';
+    }
+};
 
     // Login user with credentials
     const loginUser = (email, password) => {
