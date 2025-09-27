@@ -44,7 +44,7 @@ const allUsers = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
-        badgeAccess: false // KESHAB will NOT have badge
+        badgeAccess: true // KESHAB will NOT have badge
     },
     {
         id: "U004",
@@ -54,7 +54,7 @@ const allUsers = [
         image: "ASSET/WEB-SOFTWARE/USER/IMG/ROHIT-KC.jpg",
         phone: "9821948199",
         address: "BANGANGA-10, KAPILVASTU",
-        accountType: "MEMBER",
+        accountType: "PARTNER",
         password: "RX9821948199",
         access: ["file1", "file2", "file3", "file4", "file6",],
         timedAccessConfig: { },
@@ -76,7 +76,8 @@ const allUsers = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
-        badgeAccess: false // NIRAJ will NOT have badge
+        badgeAccess: true // NIRAJ will NOT have badge
+        //badgeAccess: false // NIRAJ will NOT have badge
     },
     {
         id: "U006",
@@ -112,7 +113,7 @@ const allUsers = [
             "file3": { startDate: "2025-09-17", duration: 365 },
             "file6": { startDate: "2025-09-17", duration: 365 },
         },
-        badgeAccess: false // MANISHA will NOT have badge
+        badgeAccess: true // MANISHA will NOT have badge
     }
 ];
 
@@ -292,7 +293,7 @@ const updateVerificationBadges = (user) => {
         [profileBadge, dropdownBadge].forEach(badge => {
             if (badge) {
                 badge.classList.add('admin');
-                badge.innerHTML = '<i class="fas fa-crown"></i>';
+                badge.innerHTML = '<i class="fas fa-crown" style="color: gold;"></i>';
             }
         });
     } else if (user.accountType === "MEMBER") {
@@ -305,8 +306,8 @@ const updateVerificationBadges = (user) => {
         } else if (user.accountType === "PARTNER") {
         [profileBadge, dropdownBadge].forEach(badge => {
             if (badge) {
-                badge.classList.add('admin');
-                badge.innerHTML = '<i class="fas fa-crown"></i>';
+                badge.classList.add('PARTNER');
+                badge.innerHTML = '<i class="fas fa-handshake" style="color: gold;"></i>';
             }
         });
     } else if (user.isGuest) {
