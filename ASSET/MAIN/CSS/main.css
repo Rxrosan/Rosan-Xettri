@@ -310,7 +310,7 @@ footer {
     height: 35px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid var(--accent);
+    border: 2px transparent;
     transition: var(--transition);
 }
 
@@ -323,52 +323,46 @@ footer {
     border-color: white;
 }
 
-/* Verification Badge */
+/* Base badge container styles */
 .profile-badge {
     position: absolute;
-    bottom: 7px;
-    right: 4px;
-    width: 10px;
-    height: 10px;
-    border-radius: 100%;
-    background: #ddd;
-    border: 1px solid rgb(3, 34, 63);
-    display: flex;
+    bottom: 1px;
+    right: -6px;
+    width: 20px;   /* Increased size to better fit an image */
+    height: 20px;  /* Increased size to better fit an image */
+    border-radius: 50%; /* Still for round shape */
+    background: transparent; /* No background color for the container */
+    border:transparent; /* Keep border if desired */
+    display: flex; /* Use flex to center the image */
     align-items: center;
     justify-content: center;
-    font-size: 6px;
-    color: rgba(241, 6, 18, 0.959);
-    transition: var(--transition);
+    overflow: hidden; /* Crucial: Hides parts of the image that might overflow */
+    transition: var(--transition); /* Keep transition */
+    padding: 2px; /* Add a little padding inside the border if desired */
 }
 
-.profile-badge.verified {
-    background: var(--success);
+/* Style for the image INSIDE the badge container */
+.profile-badge .badge-image {
+    max-width: 100%; /* Image will not exceed container width */
+    max-height: 100%; /* Image will not exceed container height */
+    width: auto;     /* Allow width to adjust proportionally */
+    height: auto;    /* Allow height to adjust proportionally */
+    display: block;  /* Remove extra space below image */
+    object-fit: contain; /* Ensures the image fits within the bounds without cropping,
+                            maintaining its aspect ratio */
+    border-radius: 50%; /* If your image itself is square, this makes it round within the container */
 }
 
-.profile-badge.admin {
-    background: white;
-}
 
-.profile-badge.member {
-    background: var(--accent);
-}
-
-.profile-badge.guest {
-    background: var(--gray);
-}
-
-.profile-badge i {
-    margin: 0;
-}
-
+/* Adjust dropdown badge size */
 .dropdown-img-container .profile-badge {
-    width: 18px;
-    height: 18px;
-    font-size: 10px;
+    width: 30px; /* Larger badge for dropdown */
+    height: 30px; /* Larger badge for dropdown */
+    bottom: 2px; /* Adjust position for larger size */
+    right: -8px; /* Adjust position for larger size */
 }
-
 .profile-dropdown {
-    position: fixed;
+    position: center;
     top: 30%;
     left: 40%;
     transform: translate(-50%, -50%); /* Perfectly center */
@@ -684,7 +678,7 @@ footer {
 }
 
 .glow:hover {
-  color: #fff;
+  color: #ffffff;
   text-shadow: 0 0 10px red, 0 0 20px red,
                0 0 40px darkred, 0 0 60px crimson;
 }

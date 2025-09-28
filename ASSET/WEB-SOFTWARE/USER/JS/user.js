@@ -1,3 +1,12 @@
+// --- NEW: Define available custom badge designs and their image paths ---
+const badgeDesigns = {
+    "ADMIN":  "ASSET/MAIN/IMG/BADGE/ADMIN.png",
+    "PARTNER":"ASSET/MAIN/IMG/BADGE/PARTNER.png",
+    "MEMBER": "ASSET/MAIN/IMG/BADGE/MEMBER.png",
+    "GUEST":  "ASSET/MAIN/IMG/BADGE/GUEST.png" // You might want a specific guest badge image
+    // Add more badge types here as needed
+};
+
 // Sample user data (for demonstration purposes)
 const allUsers = [
     {
@@ -8,11 +17,12 @@ const allUsers = [
         image: "ASSET/WEB-SOFTWARE/USER/IMG/ROSAN-KC.jpg",
         phone: "9826482279",
         address: "BANGANGA-10, KAPILVASTU",
-        accountType: "ADMIN",
+        accountType: "ADMIN", // accountType is still useful for other logic
+        badgeAccess: true,    // Controls if a badge is shown at all
+        badgeType: "ADMIN",   // Specifies which badge image to use
         password: "Ro&@n2061",
         access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7", "file8","file9","file10","file11",],
         timedAccessConfig: {},
-        badgeAccess: true // ROSAN will have badge
     },
     {
         id: "U002",
@@ -23,10 +33,11 @@ const allUsers = [
         phone: "9807483578",
         address: "BANGANGA-5 ,KAPILVASTU",
         accountType: "PARTNER",
+        badgeAccess: true,
+        badgeType: "PARTNER",
         password: "RX9807483578",
         access: ["file2","file3","file6",],
         timedAccessConfig: { },
-        badgeAccess: true // RITA will have badge
     },
     {
         id: "U003",
@@ -37,6 +48,8 @@ const allUsers = [
         phone: "9748780170",
         address: "BANGANGA-11 ,KAPILVASTU",
         accountType: "MEMBER",
+        badgeAccess: false, // No badge for Keshab
+        badgeType: "MEMBER", // Even if no badge, can have a type
         password: "RX9748780170",
         access: [],
         timedAccessConfig: {
@@ -44,7 +57,6 @@ const allUsers = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
-        badgeAccess: true // KESHAB will NOT have badge
     },
     {
         id: "U004",
@@ -55,10 +67,11 @@ const allUsers = [
         phone: "9821948199",
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "PARTNER",
+        badgeAccess: true,
+        badgeType: "PARTNER",
         password: "RX9821948199",
         access: ["file1", "file2", "file3", "file4", "file6",],
         timedAccessConfig: { },
-        badgeAccess: true // ROHIT will have badge
     },
     {
         id: "U005",
@@ -69,6 +82,8 @@ const allUsers = [
         phone: "9800754535",
         address: "BANGANGA-4, GAJEHADA",
         accountType: "MEMBER",
+        badgeAccess: false, // No badge for Niraj
+        badgeType: "MEMBER",
         password: "RX9800754535",
         access: [],
         timedAccessConfig: {
@@ -76,8 +91,6 @@ const allUsers = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
-        badgeAccess: true // NIRAJ will NOT have badge
-        //badgeAccess: false // NIRAJ will NOT have badge
     },
     {
         id: "U006",
@@ -88,6 +101,8 @@ const allUsers = [
         phone: "9701300086",
         address: "JITPUR, KAPILVASTU",
         accountType: "MEMBER",
+        badgeAccess: true,
+        badgeType: "MEMBER",
         password: "RX9701300086",
         access: [],
         timedAccessConfig: {
@@ -95,7 +110,6 @@ const allUsers = [
             "file3": { startDate: "2025-09-16", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
-        badgeAccess: true // SAGAR will have badge
     },
     {
         id: "U007",
@@ -106,6 +120,8 @@ const allUsers = [
         phone: "9745397210",
         address: "SALJHANDI, RUPANDEHI",
         accountType: "MEMBER",
+        badgeAccess: false, // No badge for Manisha
+        badgeType: "MEMBER",
         password: "RX9745397210",
         access: [],
         timedAccessConfig: {
@@ -113,10 +129,8 @@ const allUsers = [
             "file3": { startDate: "2025-09-17", duration: 365 },
             "file6": { startDate: "2025-09-17", duration: 365 },
         },
-        badgeAccess: true // MANISHA will NOT have badge
     }
 ];
-
 // Content Cards Database
 const contentCards = [
     {   
@@ -230,26 +244,23 @@ const defaultStores = [
 // ===== USER MANAGEMENT MODULE =====
 const UserManager = (() => {
     // Create a guest user
-    const createGuestUser = () => {
-        return {
-            id: "UNKNOWN",
-            isGuest: true,
-            userName: "GUEST",
-            fullName: "RX STUDIO",
-            email: "UNKNOWN",
-            image: "ASSET/WEB-SOFTWARE/USER/IMG/USER.png",
-            phone: "UNKNOWN",
-            address: "UNKNOWN",
-            accountType: "GUEST",
-            access: ["file3",],
-            timedAccessConfig: {
-                //"file3": { startDate: "2025-08-18", duration: 365 },
-                //"file4": { startDate: "2025-08-18", duration: 365 },
-                //"file6": { startDate: "2025-08-18", duration: 365 },
-            }
-        };
+   const createGuestUser = () => {
+    return {
+        id: "UNKNOWN",
+        isGuest: true,
+        userName: "GUEST",
+        fullName: "RX STUDIO",
+        email: "UNKNOWN",
+        image: "ASSET/WEB-SOFTWARE/USER/IMG/USER.png",
+        phone: "UNKNOWN",
+        address: "UNKNOWN",
+        accountType: "GUEST",
+        access: ["file3",],
+        timedAccessConfig: {},
+        badgeAccess: true, // Decide if guests should show a badge
+        badgeType: "GUEST" // Assign a badge type for guests
     };
-
+};
     // Save user data to localStorage
     const saveUserData = (user) => {
         localStorage.setItem('currentUser', JSON.stringify(user));
@@ -274,53 +285,40 @@ const UserManager = (() => {
     const getCurrentUser = () => {
         return getUserData();
     };
-    // Update verification badges based on account type
+    
+// Update verification badges based on badgeAccess and badgeType
 const updateVerificationBadges = (user) => {
     const profileBadge = document.getElementById('profile-badge');
     const dropdownBadge = document.getElementById('dropdown-badge');
-    
-    // Remove all badge classes
+
+    // Reset badges: clear content and hide by default
     [profileBadge, dropdownBadge].forEach(badge => {
         if (badge) {
-            badge.className = 'profile-badge';
-            badge.innerHTML = '';
+            badge.innerHTML = ''; // Clear any existing img
+            badge.style.display = 'none'; // Hide by default
         }
     });
-    
-    
-    // Add appropriate badge based on account type
-    if (user.accountType === "ADMIN") {
-        [profileBadge, dropdownBadge].forEach(badge => {
-            if (badge) {
-                badge.classList.add('admin');
-                badge.innerHTML = '<i class="fas fa-crown" style="color: gold;"></i>';
-            }
-        });
-    } else if (user.accountType === "MEMBER") {
-        [profileBadge, dropdownBadge].forEach(badge => {
-            if (badge) {
-                badge.classList.add('verified');
-                badge.innerHTML = '<i class="fas fa-check"></i>';
-            }
-        });
-        } else if (user.accountType === "PARTNER") {
-        [profileBadge, dropdownBadge].forEach(badge => {
-            if (badge) {
-                badge.classList.add('PARTNER');
-                badge.innerHTML = '<i class="fas fa-handshake" style="color: gold;"></i>';
-            }
-        });
-    } else if (user.isGuest) {
-        [profileBadge, dropdownBadge].forEach(badge => {
-            if (badge) {
-                badge.classList.add('guest');
-                badge.innerHTML = '<i class="fa-solid fa-people-group"></i>';
-            }
-        });
+
+    // Only proceed if badgeAccess is explicitly true for the user
+    if (user.badgeAccess && user.badgeType) {
+        const badgeImageUrl = badgeDesigns[user.badgeType];
+
+        if (badgeImageUrl) {
+            [profileBadge, dropdownBadge].forEach(badge => {
+                if (badge) {
+                    badge.style.display = 'flex'; // Show the badge container
+
+                    const badgeImg = document.createElement('img');
+                    badgeImg.src = badgeImageUrl;
+                    badgeImg.alt = `${user.badgeType} Badge`;
+                    badgeImg.classList.add('badge-image'); // Add a class for CSS styling
+
+                    badge.appendChild(badgeImg);
+                }
+            });
+        }
     }
 };
-
-
 
 // Update UI with user data
 const updateUIWithUserData = (user) => {
