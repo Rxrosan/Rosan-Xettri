@@ -257,8 +257,8 @@ const UserManager = (() => {
         accountType: "GUEST",
         access: ["file3",],
         timedAccessConfig: {},
-        badgeAccess: true, // Decide if guests should show a badge
-        badgeType: "GUEST" // Assign a badge type for guests
+        //badgeAccess: true, // Decide if guests should show a badge
+        //badgeType: "GUEST" // Assign a badge type for guests
     };
 };
     // Save user data to localStorage
