@@ -48,7 +48,7 @@ const allUsers = [
         phone: "9748780170",
         address: "BANGANGA-11 ,KAPILVASTU",
         accountType: "MEMBER",
-        badgeAccess: false, // No badge for Keshab
+        badgeAccess: true, // No badge for Keshab like , badgeAccess: false
         badgeType: "MEMBER", // Even if no badge, can have a type
         password: "RX9748780170",
         access: [],
@@ -82,7 +82,7 @@ const allUsers = [
         phone: "9800754535",
         address: "BANGANGA-4, GAJEHADA",
         accountType: "MEMBER",
-        badgeAccess: false, // No badge for Niraj
+        badgeAccess: true, // No badge for Niraj like , badgeAccess: false
         badgeType: "MEMBER",
         password: "RX9800754535",
         access: [],
@@ -120,7 +120,7 @@ const allUsers = [
         phone: "9745397210",
         address: "SALJHANDI, RUPANDEHI",
         accountType: "MEMBER",
-        badgeAccess: false, // No badge for Manisha
+        badgeAccess: true, // No badge for Manisha like , badgeAccess: false
         badgeType: "MEMBER",
         password: "RX9745397210",
         access: [],
