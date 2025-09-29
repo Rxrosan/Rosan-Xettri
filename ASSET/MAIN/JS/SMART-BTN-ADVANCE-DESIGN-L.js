@@ -1,442 +1,710 @@
-// RX-SMART-BUTTON System with Liquid Glass Theme
-(function() {
-  // Color Themes
+// SMART-BTN-ADVANCE-DESIGN-L.js
+// RX-SMART-BUTTON — Rewritten, responsive, fully functional
+(function () {
+  'use strict';
+
+  /**
+   * ===============================
+   * Configuration / Themes
+   * ===============================
+   */
   const themes = {
     blue: {
-      name: "blue",
-      centerGradient: "radial-gradient(circle at 30% 30%, rgba(173, 216, 230, 0.9) 0%, rgba(70, 130, 180, 0.7) 100%)",
-      glow: "0 0 15px rgba(173, 216, 230, 0.6)",
-      border: "1px solid rgba(173, 216, 230, 0.4)",
-      iconHighlight: "rgba(173, 216, 230, 0.7)"
+      name: 'blue',
+      centerGradient:
+        'radial-gradient(circle at 30% 30%, rgba(173,216,230,0.9) 0%, rgba(70,130,180,0.7) 100%)',
+      glow: '0 0 15px rgba(173,216,230,0.6)',
+      border: '1px solid rgba(173,216,230,0.4)',
+      iconHighlight: 'rgba(173,216,230,0.7)',
     },
     silver: {
-      name: "silver",
-      centerGradient: "radial-gradient(circle at 30% 30%, rgba(220, 220, 220, 0.9) 0%, rgba(169, 169, 169, 0.7) 100%)",
-      glow: "0 0 15px rgba(220, 220, 220, 0.6)",
-      border: "1px solid rgba(220, 220, 220, 0.4)",
-      iconHighlight: "rgba(220, 220, 220, 0.7)"
+      name: 'silver',
+      centerGradient:
+        'radial-gradient(circle at 30% 30%, rgba(220,220,220,0.9) 0%, rgba(169,169,169,0.7) 100%)',
+      glow: '0 0 15px rgba(220,220,220,0.6)',
+      border: '1px solid rgba(220,220,220,0.4)',
+      iconHighlight: 'rgba(220,220,220,0.7)',
     },
   };
 
+  let themeKeys = Object.keys(themes);
   let currentThemeIndex = 0;
-  const themeKeys = Object.keys(themes);
-  
-  // 1. Inject Liquid Glass Theme CSS
-  const liquidGlassCSS = `
-  /* RX-SMART-BUTTON Liquid Glass Theme */
-  :root {
-    --RX-circle-size: 2.2cm;
-    --RX-menu-item-size: 1.6cm;
-    --RX-center-size: 0.9cm;
-    --RX-menu-item-distance: 4.2cm;
-    --RX-glass-blur: 4px;
-    --RX-glass-border: 1px solid rgba(255, 255, 255, 0.2);
-    --RX-glass-highlight: 0 0 15px rgba(173, 216, 230, 0.6);
-    --RX-center-gradient: radial-gradient(circle at 30% 30%, rgba(173, 216, 230, 0.9) 0%, rgba(70, 130, 180, 0.7) 100%);
-    --RX-icon-highlight: rgba(173, 216, 230, 0.7);
+
+  // Hide timer state
+  let hideTimer = null;
+  let hideUntil = null;
+
+  /**
+   * ===============================
+   * CSS Injection (responsive & liquid glass)
+   * ===============================
+   */
+  const css = `
+  :root{
+    --rx-circle-size:2.2cm;
+    --rx-menu-item-size:1.6cm;
+    --rx-center-size:0.9cm;
+    --rx-menu-distance:4.2cm;
+    --rx-glass-blur:4px;
+    --rx-glass-border:1px solid rgba(255,255,255,0.15);
+    --rx-glass-highlight: 0 0 15px rgba(173,216,230,0.6);
+    --rx-center-gradient: ${themes.blue.centerGradient};
+    --rx-icon-highlight: ${themes.blue.iconHighlight};
   }
 
   .RX-SMART-BUTTON-container {
     position: fixed;
-    bottom: 45%;
-    right: 25%;
-    z-index: 1000;
-    display: none;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100000;
+    display: block;
     touch-action: none;
-    filter: drop-shadow(0 0 10px rgba(135, 206, 250, 0.7));
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .RX-SMART-BUTTON-circle {
-    width: var(--RX-circle-size);
-    height: var(--RX-circle-size);
+    width: var(--rx-circle-size);
+    height: var(--rx-circle-size);
     border-radius: 50%;
     position: relative;
-    transition: all 0.5s cubic-bezier(0.17, 0.67, 0.32, 1.5);
-    background: radial-gradient(
-      circle at 65% 35%,
-      rgba(255, 255, 255, 0.25) 0%,
-      rgba(255, 255, 255, 0.15) 30%,
-      rgba(255, 255, 255, 0.1) 70%
-    );
-    backdrop-filter: blur(var(--RX-glass-blur));
-    -webkit-backdrop-filter: blur(var(--RX-glass-blur));
-    border: var(--RX-glass-border);
-    box-shadow: 
-      var(--RX-glass-highlight),
-      inset 0 0 20px rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    user-select: none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    background: radial-gradient(circle at 65% 35%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 30%, rgba(255,255,255,0.1) 70%);
+    box-shadow: var(--rx-glass-highlight), inset 0 0 14px rgba(255,255,255,0.06);
+    border: var(--rx-glass-border);
+    backdrop-filter: blur(var(--rx-glass-blur));
+    -webkit-backdrop-filter: blur(var(--rx-glass-blur));
   }
 
+  .RX-SMART-BUTTON-circle:active { transform: scale(0.98); }
+
   .RX-SMART-BUTTON-center-point {
-    width: var(--RX-center-size);
-    height: var(--RX-center-size);
-    background: var(--RX-center-gradient);
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 1;
-    transition: opacity 0.5s ease-in-out, background 0.5s ease;
-    box-shadow: 
-      inset 0 0 10px rgba(255, 255, 255, 0.4),
-      var(--RX-glass-highlight);
-    border: var(--RX-glass-border);
+    width: var(--rx-center-size);
+    height: var(--rx-center-size);
+    border-radius:50%;
+    background: var(--rx-center-gradient);
+    box-shadow: inset 0 0 10px rgba(255,255,255,0.45);
+    border: var(--rx-glass-border);
+    transition: background 0.3s ease, opacity 0.25s ease;
   }
 
   .RX-SMART-BUTTON-menu-item {
     position: absolute;
-    width: var(--RX-menu-item-size);
-    height: var(--RX-menu-item-size);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    overflow: hidden;
-    opacity: 0;
-    transform: scale(0);
-    transition: all 0.6s cubic-bezier(0.17, 0.67, 0.32, 1.3);
-    cursor: pointer;
-    background: rgba(255, 255, 255, 0.15);
+    width: var(--rx-menu-item-size);
+    height: var(--rx-menu-item-size);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background: rgba(255,255,255,0.12);
+    border: var(--rx-glass-border);
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
-    border: var(--RX-glass-border);
-    box-shadow: 
-      0 0 10px rgba(255, 255, 255, 0.4),
-      inset 0 0 10px rgba(255, 255, 255, 0.1);
-    transform-origin: center;
+    opacity:0;
+    transform: scale(0) rotate(0deg);
+    transition: transform 0.55s cubic-bezier(0.17,0.67,0.32,1.3), opacity 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(255,255,255,0.12), inset 0 0 8px rgba(255,255,255,0.06);
   }
 
   .RX-SMART-BUTTON-menu-item img {
-    width: 55%;
-    height: 55%;
-    object-fit: contain;
-    transition: all 0.3s ease;
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+    width: 56%;
+    height: 56%;
+    object-fit:contain;
+    transition: transform 0.16s ease, filter 0.16s ease;
   }
 
   .RX-SMART-BUTTON-circle.expanded .RX-SMART-BUTTON-menu-item {
-    opacity: 1;
+    opacity:1;
     transform: scale(1);
     pointer-events: auto;
   }
 
-  .RX-SMART-BUTTON-circle.expanded .RX-SMART-BUTTON-menu-item[style] {
-    transform: rotate(calc(30deg * var(--index))) 
-               translateX(var(--RX-menu-item-distance)) 
-               rotate(calc(-30deg * var(--index)));
-  }
+  /* positions for up to 12 items */
+  .RX-SMART-BUTTON-circle.expanded .RX-item-1  { transform: rotate(30deg) translateX(var(--rx-menu-distance)) rotate(-30deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-2  { transform: rotate(60deg) translateX(var(--rx-menu-distance)) rotate(-60deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-3  { transform: rotate(90deg) translateX(var(--rx-menu-distance)) rotate(-90deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-4  { transform: rotate(120deg) translateX(var(--rx-menu-distance)) rotate(-120deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-5  { transform: rotate(150deg) translateX(var(--rx-menu-distance)) rotate(-150deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-6  { transform: rotate(180deg) translateX(var(--rx-menu-distance)) rotate(-180deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-7  { transform: rotate(210deg) translateX(var(--rx-menu-distance)) rotate(-210deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-8  { transform: rotate(240deg) translateX(var(--rx-menu-distance)) rotate(-240deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-9  { transform: rotate(270deg) translateX(var(--rx-menu-distance)) rotate(-270deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-10 { transform: rotate(300deg) translateX(var(--rx-menu-distance)) rotate(-300deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-11 { transform: rotate(330deg) translateX(var(--rx-menu-distance)) rotate(-330deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-12 { transform: rotate(360deg) translateX(var(--rx-menu-distance)) rotate(-360deg) scale(1); }
 
-  .RX-SMART-BUTTON-circle.expanded .RX-SMART-BUTTON-menu-item:hover {
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 
-      0 0 15px var(--RX-glass-highlight),
-      inset 0 0 15px rgba(255, 255, 255, 0.2);
+  .RX-SMART-BUTTON-menu-item:hover {
+    background: rgba(255,255,255,0.22);
+    box-shadow: 0 0 18px var(--rx-glass-highlight), inset 0 0 12px rgba(255,255,255,0.12);
   }
+  .RX-SMART-BUTTON-menu-item:hover img { transform: scale(1.08); filter: brightness(1.05); }
 
-  .RX-SMART-BUTTON-circle.expanded .RX-SMART-BUTTON-menu-item:hover img {
-    filter: brightness(1.1) drop-shadow(0 0 8px var(--RX-icon-highlight));
-    transform: scale(1.1);
-  }
-
-  #RX-SMART-BUTTON-toggle {
+  /* Popup overlay and popup (note: overlay click will not close popup per user request) */
+  .RX-popup-overlay {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 1001;
-    background: rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.9);
-    border: var(--RX-glass-border);
-    border-radius: 50%;
-    width: 42px;
-    height: 42px;
-    font-size: 22px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
-    box-shadow: 
-      0 0 10px rgba(255, 255, 255, 0.4),
-      inset 0 0 10px rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-    text-decoration: none;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0,0,0,0.45);
+    display:none;
+    justify-content:center;
+    align-items:center;
   }
 
-  #RX-SMART-BUTTON-toggle:hover {
-    background: rgba(255, 255, 255, 0.3);
-    box-shadow: 
-      0 0 15px var(--RX-glass-highlight),
-      inset 0 0 15px rgba(255, 255, 255, 0.2);
+  .RX-popup-overlay.show { display:flex; }
+
+  .RX-hide-settings-popup {
+    min-width: 280px;
+    max-width: 92%;
+    padding: 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: var(--rx-glass-border);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+    color: white;
+    z-index: 100002;
   }
 
+  .RX-hide-settings-popup h3 {
+    margin:0 0 12px 0;
+    font-size:18px;
+    text-align:center;
+  }
+  .RX-time-inputs { display:flex; gap:10px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+  .RX-time-input { display:flex; flex-direction:column; align-items:center; min-width:60px; }
+  .RX-time-input label { font-size:12px; margin-bottom:6px; color:#fff; opacity:0.95; }
+  .RX-time-input input {
+    width:68px; padding:8px; border-radius:8px; border:var(--rx-glass-border);
+    background: rgba(255,255,255,0.07); color:white; text-align:center;
+  }
+  .RX-popup-buttons { display:flex; gap:10px; justify-content:center; margin-top:6px; }
+  .RX-popup-btn {
+    padding:8px 12px; border-radius:8px; border:var(--rx-glass-border);
+    background: rgba(255,255,255,0.12); color:white; cursor:pointer;
+  }
+  .RX-popup-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+
+  /* Small screens */
   @media (max-width: 768px) {
-    :root {
-      --RX-circle-size: 2cm;
-      --RX-menu-item-size: 1.4cm;
-      --RX-center-size: 0.8cm;
-      --RX-menu-item-distance: 3.8cm;
-      --RX-glass-blur: 3px;
-    }
-    
-    .RX-SMART-BUTTON-container {
-      bottom: 5vh;
-      right: 5vw;
-    }
+    :root { --rx-circle-size:2cm; --rx-menu-item-size:1.4cm; --rx-center-size:0.8cm; --rx-menu-distance:3.8cm; --rx-glass-blur:3px; }
+    .RX-popup-btn { padding:7px 10px; }
   }
-
   @media (max-width: 480px) {
-    :root {
-      --RX-circle-size: 1.8cm;
-      --RX-menu-item-size: 1.2cm;
-      --RX-center-size: 0.7cm;
-      --RX-menu-item-distance: 3.2cm;
-    }
-    
-    #RX-SMART-BUTTON-toggle {
-      width: 38px;
-      height: 38px;
-      font-size: 20px;
-    }
+    :root { --rx-circle-size:1.8cm; --rx-menu-item-size:1.2cm; --rx-center-size:0.7cm; --rx-menu-distance:3.2cm; }
   }
   `;
 
-  // Create style element and inject CSS
-  const styleElement = document.createElement('style');
-  styleElement.textContent = liquidGlassCSS;
-  document.head.appendChild(styleElement);
-
-  // Function to update theme
-  function updateTheme() {
-    const themeName = themeKeys[currentThemeIndex];
-    const theme = themes[themeName];
-    
-    document.documentElement.style.setProperty('--RX-glass-highlight', theme.glow);
-    document.documentElement.style.setProperty('--RX-glass-border', theme.border);
-    document.documentElement.style.setProperty('--RX-center-gradient', theme.centerGradient);
-    document.documentElement.style.setProperty('--RX-icon-highlight', theme.iconHighlight);
-    
-    // Save theme to localStorage
-    localStorage.setItem('RX-SMART-BUTTON-theme', themeName);
-    
-    // Cycle to next theme
-    currentThemeIndex = (currentThemeIndex + 1) % themeKeys.length;
+  function injectCSS() {
+    const style = document.createElement('style');
+    style.id = 'rx-smart-button-styles';
+    style.textContent = css;
+    document.head.appendChild(style);
   }
 
-  // 2. HTML Injection Function
-  function injectSmartButton() {
-    const smartButtonHTML = `
-    <div class="RX-SMART-BUTTON-container">
-      <div class="RX-SMART-BUTTON-circle">
-        <div class="RX-SMART-BUTTON-center-point"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="RX-Weather.html" style="--index: 1;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/weather.png" alt="weather"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="RX-Calendar.html" style="--index: 2;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/calender.png" alt="Calander"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="RX-GALLERY" style="--index: 3;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/gallery.png" alt="gallery"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="RX-S-QR" style="--index: 4;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/qrsc.png" alt="QR Code"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="index.html" style="--index: 5;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/home.png" alt="home"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="USER-LOGIN.html" style="--index: 6;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/other.png" alt="other"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="About.html" style="--index: 7;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/about.png" alt="about"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="https://x.com/Rx_Rosan" style="--index: 8;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/xcorp.png" alt="xcorp"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="https://www.youtube.com/@RX_E-SPORTS" style="--index: 9;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/youtube.png" alt="YouTube"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="https://www.facebook.com/RosanXettri.2004" style="--index: 10;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/facebook.png" alt="Facebook"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="mailto:rkc242855@gmail.com" style="--index: 11;"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/email.png" alt="email"></div>
-        <div class="RX-SMART-BUTTON-menu-item" data-link="#" style="--index: 12;"><img src="ASSET/MAIN/IMG/LOGO/RX-3.png" alt="Logo"></div>
+  /**
+   * ===============================
+   * HTML Injection
+   * ===============================
+   */
+  const injectedHTML = `
+  <div class="RX-SMART-BUTTON-container" aria-hidden="false">
+    <div class="RX-SMART-BUTTON-circle" role="button" aria-label="Smart button">
+      <div class="RX-SMART-BUTTON-center-point" aria-hidden="true"></div>
+
+      <!-- Menu items -->
+      <div class="RX-SMART-BUTTON-menu-item RX-item-1" data-link="#"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/weather.png" alt="weather"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-2" data-link="#"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/calender.png" alt="calendar"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-3" data-link="#"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/gallery.png" alt="gallery"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-4" data-link="#"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/qrsc.png" alt="qr"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-5" data-link="https://rosankc.com.np/"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/home.png" alt="home"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-6" data-link="USER-DASHBOARD.html"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/other.png" alt="other"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-7" data-link="About.html"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/about.png" alt="about"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-8" data-link="https://x.com/Rx_Rosan"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/xcorp.png" alt="xcorp"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-9" data-link="https://www.youtube.com/@RX_E-SPORTS"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/youtube.png" alt="youtube"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-10" data-link="https://www.facebook.com/RosanXettri.2004"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/facebook.png" alt="facebook"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-11" data-link="mailto:rkc242855@gmail.com"><img src="ASSET/MAIN/IMG/FUNCTION-ICON/email.png" alt="email"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-12" data-link="#"><img src="ASSET/MAIN/IMG/LOGO/RX-3.png" alt="logo"></div>
+    </div>
+  </div>
+
+  <div class="RX-popup-overlay" id="RX-popup-overlay" aria-hidden="true">
+    <div class="RX-hide-settings-popup" id="RX-hide-settings-popup" role="dialog" aria-modal="true" aria-labelledby="RX-hide-title">
+      <h3 id="RX-hide-title">Hide Floating Button</h3>
+      <div class="RX-time-inputs">
+        <div class="RX-time-input">
+          <label for="RX-hide-hours">Hours</label>
+          <input type="number" id="RX-hide-hours" min="0" max="24" placeholder="0" value="0" />
+        </div>
+        <div class="RX-time-input">
+          <label for="RX-hide-minutes">Minutes</label>
+          <input type="number" id="RX-hide-minutes" min="0" max="59" placeholder="0" value="0" />
+        </div>
+        <div class="RX-time-input">
+          <label for="RX-hide-seconds">Seconds</label>
+          <input type="number" id="RX-hide-seconds" min="0" max="59" placeholder="30" value="30" />
+        </div>
+      </div>
+      <div class="RX-popup-buttons">
+        <button class="RX-popup-btn" id="RX-save-hide">Save & Hide</button>
+        <button class="RX-popup-btn" id="RX-cancel-hide">Cancel</button>
       </div>
     </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', smartButtonHTML);
-    
-    if (!document.getElementById('RX-SMART-BUTTON-toggle')) {
-      const toggleBtn = document.createElement('a');
-      toggleBtn.id = 'RX-SMART-BUTTON-toggle';
-      toggleBtn.href = 'javascript:void(0)';
-      toggleBtn.textContent = '◉';
-      document.body.appendChild(toggleBtn);
+  </div>
+  `;
+
+  function injectHTML() {
+    if (!document.querySelector('.RX-SMART-BUTTON-container')) {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = injectedHTML;
+      document.body.appendChild(wrapper);
     }
   }
 
-  // 3. State Management Functions
-  function loadState() {
-    // Load saved theme
+  /**
+   * ===============================
+   * Theme functions
+   * - applyTheme(themeName) - applies and saves
+   * - cycleTheme() - cycles to next theme
+   * ===============================
+   */
+  function applyTheme(themeName) {
+    const theme = themes[themeName];
+    if (!theme) return;
+    document.documentElement.style.setProperty('--rx-glass-highlight', theme.glow);
+    document.documentElement.style.setProperty('--rx-glass-border', theme.border);
+    document.documentElement.style.setProperty('--rx-center-gradient', theme.centerGradient);
+    document.documentElement.style.setProperty('--rx-icon-highlight', theme.iconHighlight);
+
+    localStorage.setItem('RX-SMART-BUTTON-theme', themeName);
+    currentThemeIndex = themeKeys.indexOf(themeName);
+    if (currentThemeIndex === -1) currentThemeIndex = 0;
+  }
+
+  function cycleTheme() {
+    currentThemeIndex = (currentThemeIndex + 1) % themeKeys.length;
+    const newTheme = themeKeys[currentThemeIndex];
+    applyTheme(newTheme);
+  }
+
+  /**
+   * ===============================
+   * State persistence (position, expanded, theme, hide-until)
+   * ===============================
+   */
+  function saveState() {
+    const container = document.querySelector('.RX-SMART-BUTTON-container');
+    const circle = document.querySelector('.RX-SMART-BUTTON-circle');
+    if (!container || !circle) return;
+    const state = {
+      left: container.style.left || null,
+      top: container.style.top || null,
+      expanded: circle.classList.contains('expanded'),
+      theme: localStorage.getItem('RX-SMART-BUTTON-theme') || themeKeys[currentThemeIndex],
+    };
+    localStorage.setItem('RX-SMART-BUTTON-state', JSON.stringify(state));
+  }
+
+  function loadStateAndApply() {
+    // Theme
     const savedTheme = localStorage.getItem('RX-SMART-BUTTON-theme');
-    if (savedTheme) {
-      currentThemeIndex = themeKeys.indexOf(savedTheme);
-      if (currentThemeIndex === -1) currentThemeIndex = 0;
-      else currentThemeIndex = (currentThemeIndex + 1) % themeKeys.length;
-      updateTheme();
+    if (savedTheme && themes[savedTheme]) {
+      applyTheme(savedTheme);
+    } else {
+      applyTheme(themeKeys[currentThemeIndex]);
     }
 
+    // Hide timer
+    const hideItem = localStorage.getItem('RX-SMART-BUTTON-hide-until');
+    if (hideItem) {
+      const timeVal = parseInt(hideItem, 10);
+      if (!Number.isNaN(timeVal)) {
+        hideUntil = timeVal;
+        startHideTimer(); // this will hide if needed
+      } else {
+        localStorage.removeItem('RX-SMART-BUTTON-hide-until');
+      }
+    }
+
+    // Position & expanded
     const savedState = localStorage.getItem('RX-SMART-BUTTON-state');
     if (savedState) {
       try {
-        const { display, left, top, expanded } = JSON.parse(savedState);
-        const circleContainer = document.querySelector('.RX-SMART-BUTTON-container');
+        const parsed = JSON.parse(savedState);
+        const container = document.querySelector('.RX-SMART-BUTTON-container');
         const circle = document.querySelector('.RX-SMART-BUTTON-circle');
-        
-        if (circleContainer) {
-          circleContainer.style.display = display || 'none';
-          if (left && top) {
-            circleContainer.style.left = left;
-            circleContainer.style.top = top;
-            circleContainer.style.transform = 'none';
-          }
+        if (parsed.theme) applyTheme(parsed.theme);
+        if (container && parsed.left && parsed.top) {
+          container.style.left = parsed.left;
+          container.style.top = parsed.top;
+          container.style.right = 'auto';
+          container.style.bottom = 'auto';
         }
-        
-        const toggleBtn = document.getElementById('RX-SMART-BUTTON-toggle');
-        if (toggleBtn && display === 'block') {
-          toggleBtn.textContent = "◎";
+        if (circle && parsed.expanded) {
+          setTimeout(() => circle.classList.add('expanded'), 80);
         }
-        
-        if (circle && expanded) {
-          circle.classList.add('expanded');
-        }
-      } catch (e) {
-        console.error('Error loading smart button state:', e);
+      } catch (err) {
+        console.error('Failed to parse RX saved state:', err);
       }
     }
   }
 
-  function saveState() {
-    const circleContainer = document.querySelector('.RX-SMART-BUTTON-container');
+  /**
+   * ===============================
+   * Show/Hide Smart Button and Timer
+   * ===============================
+   */
+  function hideSmartButton() {
+    const container = document.querySelector('.RX-SMART-BUTTON-container');
     const circle = document.querySelector('.RX-SMART-BUTTON-circle');
-    
-    if (circleContainer && circle) {
-      const state = {
-        display: circleContainer.style.display || 'none',
-        left: circleContainer.style.left,
-        top: circleContainer.style.top,
-        expanded: circle.classList.contains('expanded')
-      };
-      localStorage.setItem('RX-SMART-BUTTON-state', JSON.stringify(state));
+    if (container) container.style.display = 'none';
+    if (circle) circle.classList.remove('expanded');
+  }
+
+  function showSmartButton() {
+    const container = document.querySelector('.RX-SMART-BUTTON-container');
+    if (container) container.style.display = 'block';
+    saveState();
+  }
+
+  function startHideTimer() {
+    // Clear any existing timer
+    if (hideTimer) {
+      clearTimeout(hideTimer);
+      hideTimer = null;
+    }
+
+    if (!hideUntil) return;
+    const now = Date.now();
+    const left = hideUntil - now;
+
+    if (left > 0) {
+      // Immediately hide
+      hideSmartButton();
+      hideTimer = setTimeout(() => {
+        showSmartButton();
+        localStorage.removeItem('RX-SMART-BUTTON-hide-until');
+        hideUntil = null;
+        hideTimer = null;
+      }, left);
+    } else {
+      // Time already passed
+      localStorage.removeItem('RX-SMART-BUTTON-hide-until');
+      hideUntil = null;
+      showSmartButton();
     }
   }
 
-  // 4. Event Handlers
-  function setupToggleButton() {
-    const toggleBtn = document.getElementById('RX-SMART-BUTTON-toggle');
-    const circleContainer = document.querySelector('.RX-SMART-BUTTON-container');
-    const circle = document.querySelector('.RX-SMART-BUTTON-circle');
-    
-    if (toggleBtn && circleContainer && circle) {
-      toggleBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const visible = circleContainer.style.display === 'block';
-        circleContainer.style.display = visible ? 'none' : 'block';
-        toggleBtn.textContent = visible ? '◉' : '◎';
-        
-        // Change theme when opening (not when closing)
-        if (!visible) {
-          updateTheme();
-        }
-        
-        saveState();
-      });
-    }
+  /**
+   * ===============================
+   * Popup controls (show/hide)
+   * NOTE: overlay click will NOT close popup (per user request)
+   * Popup only closed via Cancel or Save
+   * While circle is expanded, long-press will NOT open popup (per user request)
+   * ===============================
+   */
+  function showHidePopup() {
+    const overlay = document.getElementById('RX-popup-overlay');
+    const popup = document.getElementById('RX-hide-settings-popup');
+    if (!overlay || !popup) return;
+
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+    // prevent background scrolling while popup open
+    document.body.style.overflow = 'hidden';
   }
 
-  function setupCircleInteractions() {
-    const circle = document.querySelector('.RX-SMART-BUTTON-circle');
-    if (circle) {
-      // Click to expand/collapse
-      circle.addEventListener('click', function(e) {
-        if (e.target.classList.contains('RX-SMART-BUTTON-menu-item') || e.target.tagName === 'IMG') return;
-        this.classList.toggle('expanded');
-        saveState();
-      });
-      
-      // Menu item clicks
-      document.querySelectorAll('.RX-SMART-BUTTON-menu-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-          e.stopPropagation();
-          const link = this.getAttribute('data-link');
-          if (link) {
-            if (link.startsWith('http') || link.startsWith('mailto')) {
-              window.open(link, '_blank');
-            } else {
-              window.location.href = link;
-            }
-          }
-        });
-      });
-    }
+  function closeHidePopup() {
+    const overlay = document.getElementById('RX-popup-overlay');
+    const popup = document.getElementById('RX-hide-settings-popup');
+    if (!overlay || !popup) return;
+    overlay.classList.remove('show');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
   }
 
-  // 5. Drag and Drop Functions
-  function setupDragAndDrop() {
-    const circleContainer = document.querySelector('.RX-SMART-BUTTON-container');
-    if (!circleContainer) return;
-    
-    let isDragging = false, offsetX = 0, offsetY = 0;
+  /**
+   * ===============================
+   * Interaction setup (click, long-press, drag, menu items)
+   * ===============================
+   */
+  function setupInteractions() {
+    const circle = document.querySelector('.RX-SMART-BUTTON-circle');
+    const container = document.querySelector('.RX-SMART-BUTTON-container');
 
-    const startDrag = (x, y) => {
-      const rect = circleContainer.getBoundingClientRect();
-      offsetX = x - rect.left;
-      offsetY = y - rect.top;
-      isDragging = true;
-      circleContainer.style.cursor = 'move';
-    };
+    if (!circle || !container) return;
 
-    const moveDrag = (x, y) => {
-      if (!isDragging) return;
-      circleContainer.style.left = `${x - offsetX}px`;
-      circleContainer.style.top = `${y - offsetY}px`;
-      circleContainer.style.transform = 'none';
+    // Prevent click vs drag conflict
+    let isDragging = false;
+    let wasDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // Long-press detection
+    let longPressTimer = null;
+    const LONG_PRESS_MS = 3000;
+
+    // Helper to cancel long press
+    function clearLongPressTimer() {
+      if (longPressTimer) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+      }
+    }
+
+    // Click (toggle expand) — avoid if we were dragging or long-press triggered
+    circle.addEventListener('click', function (e) {
+      // if dragging just happened, ignore this click
+      if (wasDragging) {
+        wasDragging = false;
+        return;
+      }
+
+      // Only toggle when clicking on main circle or center (not on menu item)
+      if (e.target.classList.contains('RX-SMART-BUTTON-menu-item') || e.target.closest('.RX-SMART-BUTTON-menu-item')) {
+        // menu item click handled separately
+        return;
+      }
+
+      this.classList.toggle('expanded');
       saveState();
-    };
+    });
 
-    const stopDrag = () => {
+    // Double-click center to cycle theme (non-intrusive)
+    const centerPoint = circle.querySelector('.RX-SMART-BUTTON-center-point');
+    if (centerPoint) {
+      centerPoint.addEventListener('dblclick', (e) => {
+        cycleTheme();
+      });
+    }
+
+    // Long press to open hide popup — but only if NOT expanded
+    function startLongPress() {
+      clearLongPressTimer();
+      longPressTimer = setTimeout(() => {
+        // If currently expanded, do NOT open popup (per new requirement)
+        if (circle.classList.contains('expanded')) return;
+        showHidePopup();
+      }, LONG_PRESS_MS);
+    }
+
+    // Desktop mouse events for long press + drag
+    circle.addEventListener('mousedown', function (e) {
+      // start drag preparation
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      const rect = container.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+
       isDragging = false;
-      circleContainer.style.cursor = 'pointer';
-      saveState();
-    };
+      wasDragging = false;
 
-    // Mouse events
-    circleContainer.addEventListener('mousedown', e => startDrag(e.clientX, e.clientY));
-    window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
-    window.addEventListener('mouseup', stopDrag);
+      // Start long press (only if not expanded)
+      if (!circle.classList.contains('expanded')) startLongPress();
 
-    // Touch events
-    circleContainer.addEventListener('touchstart', e => {
-      const touch = e.touches[0];
-      startDrag(touch.clientX, touch.clientY);
+      function onMouseMove(ev) {
+        const dx = ev.clientX - dragStartX;
+        const dy = ev.clientY - dragStartY;
+        const moveThreshold = 6; // px
+        if (!isDragging && Math.hypot(dx, dy) > moveThreshold) {
+          isDragging = true;
+          wasDragging = true;
+          clearLongPressTimer();
+        }
+        if (isDragging) {
+          ev.preventDefault();
+          const left = ev.clientX - offsetX;
+          const top = ev.clientY - offsetY;
+          container.style.left = Math.max(6, Math.min(window.innerWidth - container.offsetWidth - 6, left)) + 'px';
+          container.style.top = Math.max(6, Math.min(window.innerHeight - container.offsetHeight - 6, top)) + 'px';
+          container.style.right = 'auto';
+          container.style.bottom = 'auto';
+        }
+      }
+
+      function onMouseUp() {
+        clearLongPressTimer();
+        window.removeEventListener('mousemove', onMouseMove);
+        window.removeEventListener('mouseup', onMouseUp);
+        // mark we were dragging briefly to suppress next click
+        if (wasDragging) {
+          setTimeout(() => { wasDragging = false; }, 120);
+        }
+        saveState();
+      }
+
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
     });
-    window.addEventListener('touchmove', e => {
-      const touch = e.touches[0];
-      moveDrag(touch.clientX, touch.clientY);
-    }, { passive: false });
-    window.addEventListener('touchend', stopDrag);
-  }
 
-  // 6. Initialization Function
-  function initSmartButton() {
-    injectSmartButton();
-    loadState();
-    setupToggleButton();
-    setupCircleInteractions();
-    setupDragAndDrop();
-    
-    // Save state before page unload
-    window.addEventListener('beforeunload', saveState);
-    
-    // Handle potential dynamic content changes
-    const observer = new MutationObserver(() => {
-      if (!document.querySelector('.RX-SMART-BUTTON-container')) {
-        initSmartButton();
+    // Touch events for drag + long-press
+    circle.addEventListener('touchstart', function (e) {
+      if (!e.touches || e.touches.length === 0) return;
+      const touch = e.touches[0];
+      dragStartX = touch.clientX;
+      dragStartY = touch.clientY;
+      const rect = container.getBoundingClientRect();
+      offsetX = touch.clientX - rect.left;
+      offsetY = touch.clientY - rect.top;
+
+      isDragging = false;
+      wasDragging = false;
+
+      if (!circle.classList.contains('expanded')) startLongPress();
+
+      function onTouchMove(ev) {
+        if (!ev.touches || ev.touches.length === 0) return;
+        const t = ev.touches[0];
+        const dx = t.clientX - dragStartX;
+        const dy = t.clientY - dragStartY;
+        const moveThreshold = 6;
+        if (!isDragging && Math.hypot(dx, dy) > moveThreshold) {
+          isDragging = true;
+          wasDragging = true;
+          clearLongPressTimer();
+        }
+        if (isDragging) {
+          ev.preventDefault();
+          const left = t.clientX - offsetX;
+          const top = t.clientY - offsetY;
+          container.style.left = Math.max(6, Math.min(window.innerWidth - container.offsetWidth - 6, left)) + 'px';
+          container.style.top = Math.max(6, Math.min(window.innerHeight - container.offsetHeight - 6, top)) + 'px';
+          container.style.right = 'auto';
+          container.style.bottom = 'auto';
+        }
+      }
+
+      function onTouchEnd() {
+        clearLongPressTimer();
+        window.removeEventListener('touchmove', onTouchMove);
+        window.removeEventListener('touchend', onTouchEnd);
+        if (wasDragging) {
+          setTimeout(() => { wasDragging = false; }, 120);
+        }
+        saveState();
+      }
+
+      window.addEventListener('touchmove', onTouchMove, { passive: false });
+      window.addEventListener('touchend', onTouchEnd);
+    }, { passive: false });
+
+    // Menu items click handling (open links)
+    document.querySelectorAll('.RX-SMART-BUTTON-menu-item').forEach((item) => {
+      item.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const link = this.getAttribute('data-link');
+        if (!link || link === '#') return;
+        if (link.startsWith('http') || link.startsWith('mailto')) {
+          window.open(link, '_blank', 'noopener');
+        } else {
+          window.location.href = link;
+        }
+      });
+    });
+
+    // Accessibility: keyboard toggle (space/enter)
+    circle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        circle.classList.toggle('expanded');
+        saveState();
       }
     });
-    observer.observe(document.body, { childList: true, subtree: true });
   }
 
-  // Start the smart button system when DOM is ready
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSmartButton);
-  } else {
-    initSmartButton();
+  /**
+   * ===============================
+   * Popup button wiring (Save & Cancel)
+   * - overlay click will be swallowed (no close)
+   * - only Cancel or Save closes the popup
+   * ===============================
+   */
+  function setupPopupControls() {
+    const saveBtn = document.getElementById('RX-save-hide');
+    const cancelBtn = document.getElementById('RX-cancel-hide');
+    const overlay = document.getElementById('RX-popup-overlay');
+
+    if (!saveBtn || !cancelBtn || !overlay) return;
+
+    // overlay should NOT close popup on click (per requirement)
+    overlay.addEventListener('click', (e) => {
+      // Do nothing intentionally — prevents accidental closing
+      e.stopPropagation();
+    });
+
+    // Save & Hide
+    saveBtn.addEventListener('click', () => {
+      const hours = parseInt(document.getElementById('RX-hide-hours').value || '0', 10) || 0;
+      const minutes = parseInt(document.getElementById('RX-hide-minutes').value || '0', 10) || 0;
+      const seconds = parseInt(document.getElementById('RX-hide-seconds').value || '0', 10) || 0;
+      const ms = (hours * 3600 + minutes * 60 + seconds) * 1000;
+
+      if (ms > 0) {
+        hideUntil = Date.now() + ms;
+        localStorage.setItem('RX-SMART-BUTTON-hide-until', hideUntil.toString());
+        startHideTimer();
+      } else {
+        // if zero, we don't hide — just close popup
+      }
+      closeHidePopup();
+    });
+
+    // Cancel only closes popup and does NOT change hide timer
+    cancelBtn.addEventListener('click', () => {
+      closeHidePopup();
+    });
+
+    // Prevent keyboard ESC from closing popup to satisfy "only Cancel closes"
+    window.addEventListener('keydown', (e) => {
+      const overlayVisible = overlay.classList.contains('show');
+      if (overlayVisible && e.key === 'Escape') {
+        e.preventDefault();
+        // do nothing — require Cancel button
+      }
+    });
   }
+
+  /**
+   * ===============================
+   * Initialization
+   * ===============================
+   */
+  function init() {
+    // Avoid double-init
+    if (window.__RX_SMART_BUTTON_INITIALIZED__) return;
+    window.__RX_SMART_BUTTON_INITIALIZED__ = true;
+
+    injectCSS();
+    injectHTML();
+
+    // Small delay so elements exist
+    setTimeout(() => {
+      loadStateAndApply();
+      setupInteractions();
+      setupPopupControls();
+
+      // Ensure save on unload
+      window.addEventListener('beforeunload', saveState);
+    }, 40);
+  }
+
+  // DOM Ready or fallback
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // Extra safety: run once more shortly after load (no duplication thanks to flag)
+  setTimeout(init, 600);
 })();
