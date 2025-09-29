@@ -23,6 +23,7 @@ const allUsers = [
         password: "Ro&@n2061",
         access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7", "file8","file9","file10","file11",],
         timedAccessConfig: {},
+        dateOfBirth: "2004-07-25", //yyyy mm dd
     },
     {
         id: "U002",
@@ -38,6 +39,7 @@ const allUsers = [
         password: "RX9807483578",
         access: ["file2","file3","file6",],
         timedAccessConfig: { },
+        dateOfBirth: "0000-00-00", //yyyy mm dd
     },
     {
         id: "U003",
@@ -57,6 +59,7 @@ const allUsers = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
+        dateOfBirth: "0000-00-00", //yyyy mm dd
     },
     {
         id: "U004",
@@ -72,6 +75,7 @@ const allUsers = [
         password: "RX9821948199",
         access: ["file1", "file2", "file3", "file4", "file6",],
         timedAccessConfig: { },
+        dateOfBirth: "2005-11-17", //yyyy mm dd  NEPALI : Thursday, 2062/8/2
     },
     {
         id: "U005",
@@ -91,6 +95,7 @@ const allUsers = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
+        dateOfBirth: "0000-00-00", //yyyy mm dd
     },
     {
         id: "U006",
@@ -110,6 +115,7 @@ const allUsers = [
             "file3": { startDate: "2025-09-16", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
+        dateOfBirth: "0000-00-00", //yyyy mm dd
     },
     {
         id: "U007",
@@ -129,6 +135,7 @@ const allUsers = [
             "file3": { startDate: "2025-09-17", duration: 365 },
             "file6": { startDate: "2025-09-17", duration: 365 },
         },
+        dateOfBirth: "0000-00-00", //yyyy mm dd
     }
 ];
 // Content Cards Database
@@ -345,12 +352,14 @@ const updateUIWithUserData = (user) => {
 };
 
     // Login user with credentials
-    const loginUser = (email, password) => {
-        const foundUser = allUsers.find(user => user.email === email && user.password === password);
-
-        if (foundUser) {
-            saveUserData(foundUser);
-            updateUIWithUserData(foundUser);
+const loginUser = (email, password) => {
+    const foundUser = allUsers.find(user => user.email === email && user.password === password);
+    if (foundUser) {
+        saveUserData(foundUser);
+        updateUIWithUserData(foundUser);
+        
+        // Add birthday system initialization
+        BirthdayManager.initBirthdaySystem(foundUser);
 
             ModalManager.hideModal('login-modal'); // Assuming ModalManager is accessible
             NotificationManager.hideNotification(); // Assuming NotificationManager is accessible
@@ -910,6 +919,11 @@ let countdownInterval = null;
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize user state
     UserManager.initUser();
+     // Initialize birthday system
+    const currentUser = UserManager.getCurrentUser();
+    if (currentUser) {
+        BirthdayManager.initBirthdaySystem(currentUser);
+    }
 
     // Initialize stores if on dashboard
     if (document.getElementById('storeNavigation')) {
@@ -1028,3 +1042,746 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// ===== BIRTHDAY SYSTEM WITH FLOATING CAKE ICON =====
+const BirthdayManager = (() => {
+    const birthdayCardStorageKey = 'birthdayCardShown';
+    const cakePositionKey = 'birthdayCakePosition';
+    let currentCakeElement = null;
+
+    // Check if today is user's birthday
+    const isBirthdayToday = (birthDate) => {
+        if (!birthDate) return false;
+        
+        const today = new Date();
+        const birth = new Date(birthDate);
+        
+        return today.getMonth() === birth.getMonth() && 
+               today.getDate() === birth.getDate();
+    };
+
+    // Calculate age from birth date
+    const calculateAge = (birthDate) => {
+        if (!birthDate) return 0;
+        
+        const today = new Date();
+        const birth = new Date(birthDate);
+        let age = today.getFullYear() - birth.getFullYear();
+        
+        const monthDiff = today.getMonth() - birth.getMonth();
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+            age--;
+        }
+        
+        return age;
+    };
+
+    // Format date to "YEAR MONTH DATE" format
+    const formatBirthDate = (birthDate) => {
+        if (!birthDate) return '';
+        
+        const date = new Date(birthDate);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    };
+
+    // Create floating cake icon
+    const createFloatingCake = (user) => {
+        // Remove existing cake if any
+        removeFloatingCake();
+
+        const cakeHTML = `
+            <div id="floating-birthday-cake" class="floating-cake">
+                <div class="cake-icon">🎂</div>
+                <div class="cake-sparkle"></div>
+                <div class="cake-sparkle"></div>
+                <div class="cake-sparkle"></div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', cakeHTML);
+        
+        currentCakeElement = document.getElementById('floating-birthday-cake');
+        
+        // Load saved position or set default
+        const savedPosition = localStorage.getItem(cakePositionKey);
+        if (savedPosition) {
+            const { x, y } = JSON.parse(savedPosition);
+            currentCakeElement.style.left = x;
+            currentCakeElement.style.top = y;
+        } else {
+            // Default position (bottom right)
+            currentCakeElement.style.right = '20px';
+            currentCakeElement.style.bottom = '20px';
+        }
+
+        // Add event listeners
+        currentCakeElement.addEventListener('click', () => showBirthdayCard(user));
+        makeElementDraggable(currentCakeElement);
+        
+        // Add cake styles
+        addCakeStyles();
+    };
+
+    // Make element draggable
+    const makeElementDraggable = (element) => {
+        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        
+        element.onmousedown = dragMouseDown;
+        element.ontouchstart = dragTouchStart;
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            document.onmousemove = elementDrag;
+        }
+
+        function dragTouchStart(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            pos3 = touch.clientX;
+            pos4 = touch.clientY;
+            document.ontouchend = closeDragElement;
+            document.ontouchmove = elementDragTouch;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            
+            const newTop = (element.offsetTop - pos2) + "px";
+            const newLeft = (element.offsetLeft - pos1) + "px";
+            
+            element.style.top = newTop;
+            element.style.left = newLeft;
+            element.style.right = 'auto';
+            element.style.bottom = 'auto';
+        }
+
+        function elementDragTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            pos1 = pos3 - touch.clientX;
+            pos2 = pos4 - touch.clientY;
+            pos3 = touch.clientX;
+            pos4 = touch.clientY;
+            
+            const newTop = (element.offsetTop - pos2) + "px";
+            const newLeft = (element.offsetLeft - pos1) + "px";
+            
+            element.style.top = newTop;
+            element.style.left = newLeft;
+            element.style.right = 'auto';
+            element.style.bottom = 'auto';
+        }
+
+        function closeDragElement() {
+            // Save position
+            const position = {
+                x: element.style.left,
+                y: element.style.top
+            };
+            localStorage.setItem(cakePositionKey, JSON.stringify(position));
+            
+            document.onmouseup = null;
+            document.onmousemove = null;
+            document.ontouchend = null;
+            document.ontouchmove = null;
+        }
+    };
+
+    // Remove floating cake
+    const removeFloatingCake = () => {
+        if (currentCakeElement) {
+            currentCakeElement.remove();
+            currentCakeElement = null;
+        }
+    };
+
+    // Check and manage cake visibility
+    const manageCakeVisibility = (user) => {
+        if (user && user.dateOfBirth && !user.isGuest) {
+            if (isBirthdayToday(user.dateOfBirth)) {
+                createFloatingCake(user);
+            } else {
+                removeFloatingCake();
+            }
+        } else {
+            removeFloatingCake();
+        }
+    };
+
+    // Create birthday card HTML
+    const createBirthdayCard = (user) => {
+        const age = calculateAge(user.dateOfBirth);
+        const formattedDate = formatBirthDate(user.dateOfBirth);
+        
+        const cardHTML = `
+            <div id="birthday-card-overlay" class="birthday-overlay">
+                <div class="birthday-card">
+                    <div class="birthday-header">
+                        <div class="birthday-balloons">
+                            <div class="balloon balloon1">🎈</div>
+                            <div class="balloon balloon2">🎈</div>
+                            <div class="balloon balloon3">🎈</div>
+                        </div>
+                        <h1>🎉 Happy Birthday! 🎉</h1>
+                        <div class="birthday-confetti">
+                            <div class="confetti"></div>
+                            <div class="confetti"></div>
+                            <div class="confetti"></div>
+                            <div class="confetti"></div>
+                            <div class="confetti"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="birthday-content">
+                        <div class="birthday-message">
+                            <p class="greeting">RX STUDIO BEST WISHES FOR YOU!</p>
+                            <p class="main-message">HAPPY BIRTHDAY DEAR, <span class="user-name">${user.fullName}</span></p>
+                            <p class="wish-message">WE HOPE YOUR DAYS GOING BETTER ALSO IN FUTURE!</p>
+                        </div>
+                        
+                        <div class="birthday-details">
+                            <div class="detail-item">
+                                <span class="label">Your Current Age:</span>
+                                <span class="value age">${age} Years Old</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="label">Birth Date:</span>
+                                <span class="value date">${formattedDate}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="birthday-footer">
+                        <button id="download-birthday-card" class="btn-download">
+                            <i class="fas fa-download"></i> Download Birthday Card
+                        </button>
+                        <button id="close-birthday-card" class="btn-close">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        return cardHTML;
+    };
+
+    // Show birthday card
+    const showBirthdayCard = (user) => {
+        // Remove existing card if any
+        closeBirthdayCard();
+        
+        // Always show the card when cake is clicked
+        const cardHTML = createBirthdayCard(user);
+        document.body.insertAdjacentHTML('beforeend', cardHTML);
+        setupCardEventListeners(user);
+        
+        // Add CSS styles if not already added
+        addBirthdayStyles();
+    };
+
+    // Setup card event listeners
+    const setupCardEventListeners = (user) => {
+        const closeBtn = document.getElementById('close-birthday-card');
+        const downloadBtn = document.getElementById('download-birthday-card');
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeBirthdayCard);
+        }
+        
+        if (downloadBtn) {
+            downloadBtn.addEventListener('click', () => downloadBirthdayCard(user));
+        }
+    };
+
+    // Close birthday card
+    const closeBirthdayCard = () => {
+        const overlay = document.getElementById('birthday-card-overlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    };
+
+    // Download birthday card as image - OPTIMIZED VERSION
+    const downloadBirthdayCard = (user) => {
+        const card = document.querySelector('.birthday-card');
+        
+        if (!card) {
+            alert('Birthday card not found!');
+            return;
+        }
+
+        // Create canvas immediately without html2canvas
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Set canvas size
+        canvas.width = card.offsetWidth * 2;
+        canvas.height = card.offsetHeight * 2;
+        
+        // Scale context for high DPI
+        ctx.scale(2, 2);
+        
+        // Create gradient background
+        const gradient = ctx.createLinearGradient(0, 0, card.offsetWidth, card.offsetHeight);
+        gradient.addColorStop(0, '#667eea');
+        gradient.addColorStop(1, '#764ba2');
+        
+        // Draw card background
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, card.offsetWidth, card.offsetHeight);
+        
+        // Draw content area
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+        ctx.fillRect(20, 120, card.offsetWidth - 40, card.offsetHeight - 200);
+        
+        // Draw text content
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('🎉 Happy Birthday! 🎉', card.offsetWidth / 2, 60);
+        
+        ctx.font = 'bold 18px Arial';
+        ctx.fillText('RX STUDIO BEST WISHES FOR YOU!', card.offsetWidth / 2, 160);
+        
+        ctx.font = 'bold 22px Arial';
+        ctx.fillText(`HAPPY BIRTHDAY DEAR, ${user.fullName}`, card.offsetWidth / 2, 200);
+        
+        ctx.font = 'italic 16px Arial';
+        ctx.fillText('WE HOPE YOUR DAYS GOING BETTER ALSO IN FUTURE!', card.offsetWidth / 2, 230);
+        
+        // Draw user details
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillText('Your Current Age:', 40, 280);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#ffeb3b';
+        ctx.fillText(`${calculateAge(user.dateOfBirth)} Years Old`, card.offsetWidth - 40, 280);
+        
+        ctx.textAlign = 'left';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Birth Date:', 40, 310);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#4caf50';
+        ctx.fillText(formatBirthDate(user.dateOfBirth), card.offsetWidth - 40, 310);
+        
+        // Download immediately
+        try {
+            const link = document.createElement('a');
+            link.download = `Happy-Birthday-${user.fullName.replace(/\s+/g, '-')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        } catch (error) {
+            console.error('Error downloading birthday card:', error);
+            alert('Error downloading birthday card. Please try again.');
+        }
+    };
+
+    // Add cake styles
+    const addCakeStyles = () => {
+        if (document.getElementById('cake-styles')) return;
+        
+        const styles = `
+            <style id="cake-styles">
+                .floating-cake {
+                    position: fixed;
+                    z-index: 9999;
+                    cursor: pointer;
+                    user-select: none;
+                    touch-action: none;
+                    transition: transform 0.3s ease;
+                }
+
+                .floating-cake:hover {
+                    transform: scale(1.1);
+                }
+
+                .cake-icon {
+                    font-size: 3rem;
+                    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+                    animation: cakeBounce 2s ease-in-out infinite;
+                }
+
+                .cake-sparkle {
+                    position: absolute;
+                    width: 8px;
+                    height: 8px;
+                    background: gold;
+                    border-radius: 50%;
+                    animation: sparkle 1.5s linear infinite;
+                }
+
+                .cake-sparkle:nth-child(2) {
+                    top: 10px;
+                    left: 15px;
+                    animation-delay: 0.5s;
+                }
+
+                .cake-sparkle:nth-child(3) {
+                    top: 5px;
+                    right: 10px;
+                    animation-delay: 1s;
+                }
+
+                .cake-sparkle:nth-child(4) {
+                    bottom: 15px;
+                    left: 20px;
+                    animation-delay: 0.7s;
+                }
+
+                @keyframes cakeBounce {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-10px); }
+                }
+
+                @keyframes sparkle {
+                    0%, 100% { opacity: 0; transform: scale(0); }
+                    50% { opacity: 1; transform: scale(1); }
+                }
+
+                @media (max-width: 768px) {
+                    .cake-icon {
+                        font-size: 2.5rem;
+                    }
+                }
+            </style>
+        `;
+        
+        document.head.insertAdjacentHTML('beforeend', styles);
+    };
+
+    // Add birthday styles
+    const addBirthdayStyles = () => {
+        if (document.getElementById('birthday-styles')) return;
+        
+        const styles = `
+            <style id="birthday-styles">
+                .birthday-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10000;
+                    animation: fadeIn 0.5s ease-in-out;
+                }
+
+                .birthday-card {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    border-radius: 20px;
+                    padding: 30px;
+                    max-width: 500px;
+                    width: 90%;
+                    color: white;
+                    text-align: center;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                    position: relative;
+                    overflow: hidden;
+                    animation: slideUp 0.5s ease-out;
+                }
+
+                .birthday-card::before {
+                    content: '';
+                    position: absolute;
+                    top: -50%;
+                    left: -50%;
+                    width: 200%;
+                    height: 200%;
+                    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+                    transform: rotate(45deg);
+                    animation: shine 3s infinite;
+                }
+
+                .birthday-header {
+                    position: relative;
+                    margin-bottom: 20px;
+                }
+
+                .birthday-header h1 {
+                    margin: 0;
+                    font-size: 2em;
+                    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                    animation: bounce 2s infinite;
+                }
+
+                .birthday-balloons {
+                    position: absolute;
+                    top: -80px;
+                    left: 0;
+                    right: 0;
+                    display: flex;
+                    justify-content: space-around;
+                }
+
+                .balloon {
+                    font-size: 2em;
+                    animation: float 3s ease-in-out infinite;
+                }
+
+                .balloon1 { animation-delay: 0s; }
+                .balloon2 { animation-delay: 0.5s; }
+                .balloon3 { animation-delay: 1s; }
+
+                .birthday-confetti {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    pointer-events: none;
+                }
+
+                .confetti {
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+                    background: #ffeb3b;
+                    animation: confettiFall 5s linear infinite;
+                }
+
+                .confetti:nth-child(1) { left: 10%; animation-delay: 0s; }
+                .confetti:nth-child(2) { left: 30%; animation-delay: 1s; background: #f44336; }
+                .confetti:nth-child(3) { left: 50%; animation-delay: 2s; background: #4caf50; }
+                .confetti:nth-child(4) { left: 70%; animation-delay: 3s; background: #2196f3; }
+                .confetti:nth-child(5) { left: 90%; animation-delay: 4s; background: #9c27b0; }
+
+                .birthday-content {
+                    background: rgba(255, 255, 255, 0.1);
+                    backdrop-filter: blur(10px);
+                    border-radius: 15px;
+                    padding: 20px;
+                    margin: 20px 0;
+                }
+
+                .birthday-message {
+                    margin-bottom: 20px;
+                }
+
+                .greeting {
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    margin: 10px 0;
+                    color: #ffeb3b;
+                }
+
+                .main-message {
+                    font-size: 1.4em;
+                    font-weight: bold;
+                    margin: 15px 0;
+                }
+
+                .user-name {
+                    color: #ffeb3b;
+                    text-decoration: underline;
+                }
+
+                .wish-message {
+                    font-size: 1.1em;
+                    margin: 10px 0;
+                    font-style: italic;
+                }
+
+                .birthday-details {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                .detail-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 0;
+                    border-bottom: 1px solid rgba(255,255,255,0.2);
+                }
+
+                .label {
+                    font-weight: bold;
+                    color: #e3f2fd;
+                }
+
+                .value {
+                    font-weight: bold;
+                }
+
+                .value.age {
+                    color: #ffeb3b;
+                }
+
+                .value.date {
+                    color: #4caf50;
+                }
+
+                .birthday-footer {
+                    display: flex;
+                    gap: 10px;
+                    justify-content: center;
+                }
+
+                .btn-download, .btn-close {
+                    padding: 12px 20px;
+                    border: none;
+                    border-radius: 25px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+
+                .btn-download {
+                    background: linear-gradient(45deg, #4caf50, #45a049);
+                    color: white;
+                }
+
+                .btn-download:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+                }
+
+                .btn-download:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
+                    transform: none;
+                }
+
+                .btn-close {
+                    background: linear-gradient(45deg, #f44336, #d32f2f);
+                    color: white;
+                }
+
+                .btn-close:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+                }
+
+                /* Animations */
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+
+                @keyframes slideUp {
+                    from { 
+                        opacity: 0;
+                        transform: translateY(50px) scale(0.9);
+                    }
+                    to { 
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                }
+
+                @keyframes bounce {
+                    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+                    40% { transform: translateY(-10px); }
+                    60% { transform: translateY(-5px); }
+                }
+
+                @keyframes float {
+                    0%, 100% { transform: translateY(0px); }
+                    50% { transform: translateY(-20px); }
+                }
+
+                @keyframes confettiFall {
+                    0% { 
+                        transform: translateY(-100px) rotate(0deg);
+                        opacity: 1;
+                    }
+                    100% { 
+                        transform: translateY(100vh) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+
+                @keyframes shine {
+                    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+                    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+                }
+
+                @media (max-width: 600px) {
+                    .birthday-card {
+                        padding: 20px;
+                    }
+                    
+                    .birthday-header h1 {
+                        font-size: 1.5em;
+                    }
+                    
+                    .birthday-footer {
+                        flex-direction: column;
+                    }
+                    
+                    .btn-download, .btn-close {
+                        width: 100%;
+                        justify-content: center;
+                    }
+                }
+            </style>
+        `;
+        
+        document.head.insertAdjacentHTML('beforeend', styles);
+    };
+
+    // Initialize birthday system for user
+    const initBirthdaySystem = (user) => {
+        if (user && user.dateOfBirth && !user.isGuest) {
+            // Wait a bit for the page to load completely
+            setTimeout(() => {
+                manageCakeVisibility(user);
+                
+                // Show birthday card only on first login if it's user's birthday
+                if (isBirthdayToday(user.dateOfBirth)) {
+                    const lastShownDate = localStorage.getItem(birthdayCardStorageKey);
+                    const today = new Date().toDateString();
+                    
+                    if (lastShownDate !== today) {
+                        showBirthdayCard(user);
+                        // Mark as shown for today
+                        localStorage.setItem(birthdayCardStorageKey, today);
+                    }
+                }
+            }, 1000);
+        } else {
+            removeFloatingCake();
+        }
+    };
+
+    return {
+        initBirthdaySystem,
+        isBirthdayToday,
+        calculateAge,
+        formatBirthDate,
+        manageCakeVisibility,
+        removeFloatingCake
+    };
+})();
+
+// Add missing ModalManager if not defined
+if (typeof ModalManager === 'undefined') {
+    const ModalManager = {
+        showModal: (id) => {
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'block';
+        },
+        hideModal: (id) => {
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'none';
+        }
+    };
+}
