@@ -237,7 +237,7 @@
 
   <div class="RX-popup-overlay" id="RX-popup-overlay" aria-hidden="true">
     <div class="RX-hide-settings-popup" id="RX-hide-settings-popup" role="dialog" aria-modal="true" aria-labelledby="RX-hide-title">
-      <h3 id="RX-hide-title">Hide Floating Button</h3>
+      <h3 id="RX-hide-title">Hide RX Smart Button</h3>
       <div class="RX-time-inputs">
         <div class="RX-time-input">
           <label for="RX-hide-hours">Hours</label>
