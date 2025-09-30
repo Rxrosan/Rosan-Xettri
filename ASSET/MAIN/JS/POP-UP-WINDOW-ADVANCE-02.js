@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // The text for the typing animation.
                 text: "Hi, I'm Rosan Xettri, a passionate web designer dedicated to creating stunning and user-friendly websites. Let's build something amazing together!",
                 // Add image paths to this gallery.
-                galleryImages: ["ASSET/MAIN/IMG/WELCOME-PERSON-IMAGE/R-M.jpg"
+                galleryImages: ["ASSET/MAIN/IMG/WELCOME-PERSON-IMAGE/INTRO.jpg"
                     // Example: "path/to/your/image2.jpg",
                     // Example: "path/to/your/image3.jpg"
                     ]
