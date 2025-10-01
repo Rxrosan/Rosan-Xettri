@@ -972,74 +972,265 @@ function closeModal() {
 // Add CSS for admin panel enhancements
 const style = document.createElement('style');
 style.textContent = `
+.detail-section {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.detail-section h4 {
+    margin-top: 0;
+    color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 8px;
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+}
+
+.access-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.access-table table {
+    width: 100%;
+    min-width: 500px;
+}
+
+.access-table th, .access-table td {
+    padding: clamp(6px, 2vw, 12px) clamp(8px, 2vw, 12px);
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+.access-table th {
+    background-color: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+}
+
+.access-table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.access-table .active {
+    color: #4ade80;
+    font-weight: bold;
+}
+
+.access-table .expired {
+    color: #f87171;
+    font-weight: bold;
+}
+
+.countdown-container {
+    margin-top: 10px;
+    padding: clamp(8px, 2vw, 12px);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.countdown {
+    font-family: monospace;
+    font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+    color: rgba(255, 255, 255, 0.8);
+    word-break: break-all;
+}
+
+.countdown.expired {
+    color: #f87171;
+    font-weight: bold;
+}
+
+.time-limit-expired {
+    color: #f87171;
+    font-weight: bold;
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
+}
+
+/* Mobile First Responsive Design */
+@media (max-width: 768px) {
     .detail-section {
-        margin-top: 20px;
-        padding: 15px;
-        background: #f9f9f9;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
-    
-    .detail-section h4 {
-        margin-top: 0;
-        color: #333;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 8px;
+        margin-top: 15px;
+        padding: 12px;
+        border-radius: 6px;
     }
     
     .access-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 10px;
-    }
-    
-    .access-table th, .access-table td {
-        padding: 8px 12px;
-        text-align: left;
-        border: 1px solid #ddd;
-    }
-    
-    .access-table th {
-        background-color: #f2f2f2;
-        font-weight: bold;
-    }
-    
-    .access-table tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-    
-    .access-table .active {
-        color: green;
-        font-weight: bold;
-    }
-    
-    .access-table .expired {
-        color: red;
-        font-weight: bold;
-    }
-    
-    .countdown-container {
-        margin-top: 10px;
-        padding: 5px;
-        background: rgba(0,0,0,0.05);
+        margin-top: 8px;
         border-radius: 4px;
     }
     
-    .countdown {
-        font-family: monospace;
-        font-size: 0.9em;
-        color: #555;
+    .access-table th, .access-table td {
+        padding: 6px 8px;
+        font-size: 0.8rem;
     }
     
-    .countdown.expired {
-        color: red;
-        font-weight: bold;
+    .access-table th {
+        font-size: 0.82rem;
+    }
+    
+    .countdown-container {
+        margin-top: 8px;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .detail-section {
+        margin-top: 12px;
+        padding: 10px;
+        border-radius: 4px;
+    }
+    
+    .detail-section h4 {
+        font-size: 1rem;
+        padding-bottom: 6px;
+    }
+    
+    .access-table th, .access-table td {
+        padding: 4px 6px;
+        font-size: 0.75rem;
+    }
+    
+    .access-table th {
+        font-size: 0.77rem;
+    }
+    
+    .countdown {
+        font-size: 0.75rem;
     }
     
     .time-limit-expired {
-        color: red;
-        font-weight: bold;
+        font-size: 0.8rem;
     }
+}
+
+/* Tablet and Small Desktop */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .detail-section {
+        padding: 18px;
+    }
+    
+    .access-table th, .access-table td {
+        padding: 10px 14px;
+    }
+}
+
+/* Large Desktop */
+@media (min-width: 1025px) {
+    .detail-section {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .access-table {
+        max-width: 100%;
+    }
+}
+
+/* Extra Small Devices */
+@media (max-width: 360px) {
+    .detail-section {
+        padding: 8px;
+        margin-top: 10px;
+    }
+    
+    .detail-section h4 {
+        font-size: 0.9rem;
+    }
+    
+    .access-table th, .access-table td {
+        padding: 3px 4px;
+        font-size: 0.7rem;
+    }
+    
+    .countdown {
+        font-size: 0.7rem;
+    }
+}
+
+/* High DPI Screens */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .detail-section {
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    
+    .access-table th {
+        backdrop-filter: blur(15px);
+    }
+    
+    .countdown-container {
+        backdrop-filter: blur(15px);
+    }
+}
+
+/* Landscape Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .detail-section {
+        padding: 10px;
+    }
+    
+    .access-table {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    
+    .access-table th, .access-table td {
+        padding: 4px 6px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .detail-section {
+        background: white;
+        border: 1px solid #000;
+        color: #000;
+    }
+    
+    .detail-section h4 {
+        color: #000;
+        border-bottom-color: #000;
+    }
+    
+    .access-table th, .access-table td {
+        color: #000;
+        border-color: #000;
+    }
+    
+    .access-table th {
+        background-color: #f0f0f0;
+    }
+    
+    .countdown-container {
+        background-color: #f0f0f0;
+        border-color: #000;
+    }
+    
+    .countdown {
+        color: #000;
+    }
+}
 `;
 document.head.appendChild(style);
 
