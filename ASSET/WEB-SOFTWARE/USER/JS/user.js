@@ -39,7 +39,7 @@ const allUsers = [
         password: "RX9807483578",
         access: ["file2","file3","file6",],
         timedAccessConfig: { },
-        dateOfBirth: "0000-00-00", //yyyy mm dd
+        dateOfBirth: "null", //yyyy mm dd
     },
     {
         id: "U003",
@@ -59,7 +59,7 @@ const allUsers = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
-        dateOfBirth: "0000-00-00", //yyyy mm dd
+        dateOfBirth: "null", //yyyy mm dd
     },
     {
         id: "U004",
@@ -95,7 +95,7 @@ const allUsers = [
             "file3": { startDate: "2025-08-18", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
-        dateOfBirth: "0000-00-00", //yyyy mm dd
+        dateOfBirth: "null", //yyyy mm dd
     },
     {
         id: "U006",
@@ -115,7 +115,7 @@ const allUsers = [
             "file3": { startDate: "2025-09-16", duration: 365 },
             "file6": { startDate: "2025-09-16", duration: 365 },
         },
-        dateOfBirth: "0000-00-00", //yyyy mm dd
+        dateOfBirth: "null", //yyyy mm dd
     },
     {
         id: "U007",
@@ -135,7 +135,7 @@ const allUsers = [
             "file3": { startDate: "2025-09-17", duration: 365 },
             "file6": { startDate: "2025-09-17", duration: 365 },
         },
-        dateOfBirth: "0000-00-00", //yyyy mm dd
+        dateOfBirth: "null", //yyyy mm dd
     }
 ];
 // Content Cards Database
