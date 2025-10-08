@@ -7,7 +7,7 @@ let downloadDecoded, decodeStats, textFileInput, tabs, tabContents;
 
 // Login codes
 const NORMAL_LOGIN = 'RX2061';
-const SUPER_LOGIN = 'RX2004';
+const SUPER_LOGIN = 'Ro&@n2061';
 
 // User state
 let currentUserType = null;
