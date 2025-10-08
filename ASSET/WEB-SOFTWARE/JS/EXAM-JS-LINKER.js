@@ -54,6 +54,10 @@
             path: 'ASSET/WEB-SOFTWARE/JS/VOG-BANDHAK.js',
             type: 'js'
         },
+        'file12': {
+            path: 'ASSET/WEB-SOFTWARE/JS/RX-IMG-CONVERTER.js',
+            type: 'js'
+        },
         // HTML content files - add your HTML content mappings here
         // 'html-content-1': {
         //     path: 'path/to/your/content.html',

@@ -21,7 +21,7 @@ const allUsers = [
         badgeAccess: true,    // Controls if a badge is shown at all
         badgeType: "ADMIN",   // Specifies which badge image to use
         password: "Ro&@n2061",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7", "file8","file9","file10","file11",],
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7", "file8","file9","file10","file11","file12",],
         timedAccessConfig: {},
         dateOfBirth: "2004-07-25", //yyyy mm dd
     },
@@ -37,7 +37,7 @@ const allUsers = [
         badgeAccess: true,
         badgeType: "PARTNER",
         password: "RX9807483578",
-        access: ["file2","file3","file6",],
+        access: ["file2","file3","file6","file12",],
         timedAccessConfig: { },
         dateOfBirth: "null", //yyyy mm dd
     },
@@ -53,7 +53,7 @@ const allUsers = [
         badgeAccess: true, // No badge for Keshab like , badgeAccess: false
         badgeType: "MEMBER", // Even if no badge, can have a type
         password: "RX9748780170",
-        access: [],
+        access: ["file12",],
         timedAccessConfig: {
             "file2": { startDate: "2025-08-18", duration: 365 },
             "file3": { startDate: "2025-08-18", duration: 365 },
@@ -73,7 +73,7 @@ const allUsers = [
         badgeAccess: true,
         badgeType: "PARTNER",
         password: "RX9821948199",
-        access: ["file1", "file2", "file3", "file4", "file6",],
+        access: ["file1", "file2", "file3", "file4", "file6","file12",],
         timedAccessConfig: { },
         dateOfBirth: "2005-11-17", //yyyy mm dd  NEPALI : Thursday, 2062/8/2
     },
@@ -230,6 +230,14 @@ const contentCards = [
         link: "LEKA-PADI.html?exam=file11", 
         icon: "fas fa-pen",
         prices: { default: "Rs. 600",}
+    },
+    {   
+        id: "file12", 
+        title: "F12- RX IMG CONVERTER ", 
+        description: "Easily encode images to text and decode back to images", 
+        link: "RX-IMG-CONVERTER.html?exam=file12", 
+        icon: "fas fa-tools",
+        prices: { default: "Rs. 600",}
     }
 ];
 
@@ -245,7 +253,7 @@ const defaultStores = [
 
     {   id: "store_3", 
         name: "WEB-SOFTWARE", 
-        content: ["file3",] },
+        content: ["file3","file12",] },
 ];
 
 // ===== USER MANAGEMENT MODULE =====
