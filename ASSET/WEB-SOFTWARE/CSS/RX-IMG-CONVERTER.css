@@ -308,3 +308,146 @@
         flex-direction: column;
       }
     }
+    /* Login Modal Styles */
+    .login-modal {
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .login-content, .mode-switch-content {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    
+    .login-title, .mode-switch-title {
+      color: var(--primary);
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+    
+    .login-input, .mode-switch-input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 2px;
+    }
+    
+    .login-input:focus, .mode-switch-input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .login-btn, .mode-switch-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background 0.3s;
+    }
+    
+    .login-btn:hover, .mode-switch-btn:hover {
+      background: var(--primary-dark);
+    }
+    
+    .login-error, .mode-switch-error {
+      color: #dc3545;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      display: none;
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+    
+    /* Mode Switch Button */
+    .mode-switch-btn-top {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .mode-switch-btn-top:hover {
+      background: #5a08a0;
+      transform: translateY(-2px);
+    }
+    
+    /* Mode Switch Modal */
+    .mode-switch-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1001;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .btn-group-mode {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .btn-mode {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    
+    .btn-mode-primary {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .btn-mode-secondary {
+      background: var(--light);
+      color: var(--dark);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-mode-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-mode-secondary:hover {
+      background: #e9ecef;
+    }

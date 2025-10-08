@@ -1,121 +1,292 @@
-// DOM Elements
-    const fileInput = document.getElementById('fileInput');
-    const encodeBtn = document.getElementById('encodeBtn');
-    const encodedText = document.getElementById('encodedText');
-    const copyEncoded = document.getElementById('copyEncoded');
-    const maxSizeInput = document.getElementById('maxSize');
-    const downloadEncoded = document.getElementById('downloadEncoded');
-    const previewContainer = document.getElementById('previewContainer');
-    const fileInfo = document.getElementById('fileInfo');
-    const encodedStats = document.getElementById('encodedStats');
+// Login System and Application
+let loginModal, mainContent, loginCode, loginBtn, loginError, loginStatus;
+let modeSwitchBtn, modeSwitchModal, modeSwitchCode, saveModeBtn, cancelModeBtn, modeSwitchError;
+let fileInput, encodeBtn, encodedText, copyEncoded, maxSizeInput, downloadEncoded;
+let previewContainer, fileInfo, encodedStats, decodeText, decodeBtn, decodedContainer;
+let downloadDecoded, decodeStats, textFileInput, tabs, tabContents;
 
-    const decodeText = document.getElementById('decodeText');
-    const decodeBtn = document.getElementById('decodeBtn');
-    const decodedContainer = document.getElementById('decodedContainer');
-    const downloadDecoded = document.getElementById('downloadDecoded');
-    const decodeStats = document.getElementById('decodeStats');
-    const textFileInput = document.getElementById('textFileInput');
+// Login codes
+const NORMAL_LOGIN = 'RX2061';
+const SUPER_LOGIN = 'RX2004';
 
-    // Tab Elements
-    const tabs = document.querySelectorAll('.tab');
-    const tabContents = document.querySelectorAll('.tab-content');
+// User state
+let currentUserType = null;
+let lastDataUrl = null;
+let lastDecodedBlob = null;
 
-    // State
-    let lastDataUrl = null;
-    let lastDecodedBlob = null;
+// Initialize all DOM elements
+function initializeDOMElements() {
+    // Login elements
+    loginModal = document.getElementById('loginModal');
+    mainContent = document.getElementById('mainContent');
+    loginCode = document.getElementById('loginCode');
+    loginBtn = document.getElementById('loginBtn');
+    loginError = document.getElementById('loginError');
+    loginStatus = document.getElementById('loginStatus');
+    modeSwitchBtn = document.getElementById('modeSwitchBtn');
+    modeSwitchModal = document.getElementById('modeSwitchModal');
+    modeSwitchCode = document.getElementById('modeSwitchCode');
+    saveModeBtn = document.getElementById('saveModeBtn');
+    cancelModeBtn = document.getElementById('cancelModeBtn');
+    modeSwitchError = document.getElementById('modeSwitchError');
 
-    // Utility Functions
-    const readFileAsDataURL = file => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onerror = () => reject(reader.error);
-      reader.onload = () => resolve(reader.result);
-      reader.readAsDataURL(file);
-    });
+    // Application elements
+    fileInput = document.getElementById('fileInput');
+    encodeBtn = document.getElementById('encodeBtn');
+    encodedText = document.getElementById('encodedText');
+    copyEncoded = document.getElementById('copyEncoded');
+    maxSizeInput = document.getElementById('maxSize');
+    downloadEncoded = document.getElementById('downloadEncoded');
+    previewContainer = document.getElementById('previewContainer');
+    fileInfo = document.getElementById('fileInfo');
+    encodedStats = document.getElementById('encodedStats');
+    decodeText = document.getElementById('decodeText');
+    decodeBtn = document.getElementById('decodeBtn');
+    decodedContainer = document.getElementById('decodedContainer');
+    downloadDecoded = document.getElementById('downloadDecoded');
+    decodeStats = document.getElementById('decodeStats');
+    textFileInput = document.getElementById('textFileInput');
+    tabs = document.querySelectorAll('.tab');
+    tabContents = document.querySelectorAll('.tab-content');
+}
 
-    const readFileAsText = file => new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onerror = () => reject(reader.error);
-      reader.onload = () => resolve(reader.result);
-      reader.readAsText(file);
-    });
+// Check existing login
+function checkExistingLogin() {
+    const savedLogin = localStorage.getItem('rxStudioLogin');
+    if (savedLogin === 'normal' || savedLogin === 'super') {
+        currentUserType = savedLogin;
+        showMainContent();
+        return true;
+    }
+    return false;
+}
 
-    const updateStats = (element, text, size) => {
-      element.textContent = `${text} • ${formatBytes(size)}`;
-    };
+// Show main content
+function showMainContent() {
+    if (loginModal) loginModal.classList.add('hidden');
+    if (mainContent) mainContent.classList.remove('hidden');
+    updateLoginStatus();
+}
 
-    const formatBytes = (bytes, decimals = 2) => {
-      if (bytes === 0) return '0 Bytes';
-      const k = 1024;
-      const dm = decimals < 0 ? 0 : decimals;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-    };
+// Update login status
+function updateLoginStatus() {
+    if (!loginStatus || !modeSwitchBtn) return;
+    
+    if (currentUserType === 'super') {
+        loginStatus.textContent = '🔓 Super Access';
+        loginStatus.style.color = 'var(--success)';
+        modeSwitchBtn.textContent = 'Normal Mode';
+        modeSwitchBtn.style.background = 'var(--success)';
+    } else {
+        loginStatus.textContent = '🔒 Normal Access';
+        loginStatus.style.color = 'var(--primary)';
+        modeSwitchBtn.textContent = 'Super Mode';
+        modeSwitchBtn.style.background = 'var(--secondary)';
+    }
+}
 
-    const createPreview = (container, src, alt) => {
-      container.innerHTML = '';
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = alt;
-      img.className = 'preview-img';
-      container.appendChild(img);
-    };
+// Handle login
+function handleLogin() {
+    const code = loginCode.value.trim().toUpperCase();
+    
+    if (code === NORMAL_LOGIN) {
+        currentUserType = 'normal';
+        localStorage.setItem('rxStudioLogin', 'normal');
+        showMainContent();
+    } else if (code === SUPER_LOGIN) {
+        currentUserType = 'super';
+        localStorage.setItem('rxStudioLogin', 'super');
+        showMainContent();
+    } else {
+        loginError.style.display = 'block';
+        loginCode.value = '';
+        setTimeout(() => {
+            loginError.style.display = 'none';
+        }, 3000);
+    }
+}
 
-// Add watermark to image
-const addWatermark = (imageDataUrl) => {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      
-      // Draw original image
-      ctx.drawImage(img, 0, 0);
-      
-      // Add watermark - CHANGED TO RED COLOR
-      ctx.font = 'bold 16px Arial';
-      ctx.fillStyle = 'red'; // Red color with  transparency
-      ctx.textAlign = 'right';
-      ctx.textBaseline = 'bottom';
-      ctx.fillText('RX STUDIO', img.width - 2, img.height - 2);
-      
-      resolve(canvas.toDataURL());
-    };
-    img.src = imageDataUrl;
-  });
-};
+// Mode switch functions
+function openModeSwitch() {
+    if (!modeSwitchModal) return;
+    
+    modeSwitchModal.style.display = 'flex';
+    modeSwitchCode.value = '';
+    modeSwitchError.style.display = 'none';
+    
+    if (currentUserType === 'super') {
+        document.querySelector('.mode-switch-title').textContent = 'Normal Mode';
+        document.querySelector('.mode-switch-content p').textContent = 'Click Save to switch to normal mode';
+        modeSwitchCode.style.display = 'none';
+    } else {
+        document.querySelector('.mode-switch-title').textContent = 'RX STUDIO - SUPER MODE';
+        document.querySelector('.mode-switch-content p').textContent = 'Enter super access code to acess super mode';
+        modeSwitchCode.style.display = 'block';
+    }
+}
 
-    // Tab Switching
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        const tabId = tab.getAttribute('data-tab');
-        
-        // Update tabs
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        
-        // Update tab contents
-        tabContents.forEach(content => {
-          content.classList.remove('active');
+function saveMode() {
+    if (currentUserType === 'super') {
+        currentUserType = 'normal';
+        localStorage.setItem('rxStudioLogin', 'normal');
+    } else {
+        const code = modeSwitchCode.value.trim().toUpperCase();
+        if (code !== SUPER_LOGIN) {
+            modeSwitchError.style.display = 'block';
+            modeSwitchCode.value = '';
+            setTimeout(() => {
+                modeSwitchError.style.display = 'none';
+            }, 3000);
+            return;
+        }
+        currentUserType = 'super';
+        localStorage.setItem('rxStudioLogin', 'super');
+    }
+    
+    modeSwitchModal.style.display = 'none';
+    updateLoginStatus();
+}
+
+function cancelModeSwitch() {
+    if (modeSwitchModal) modeSwitchModal.style.display = 'none';
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Login events
+    if (loginBtn) {
+        loginBtn.addEventListener('click', handleLogin);
+    }
+    if (loginCode) {
+        loginCode.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleLogin();
         });
-        document.getElementById(`${tabId}-tab`).classList.add('active');
-      });
-    });
+    }
 
-    // Encode Functions
-    const encodeImage = async () => {
-      const file = fileInput.files[0];
-      if (!file) {
+    // Mode switch events
+    if (modeSwitchBtn) modeSwitchBtn.addEventListener('click', openModeSwitch);
+    if (saveModeBtn) saveModeBtn.addEventListener('click', saveMode);
+    if (cancelModeBtn) cancelModeBtn.addEventListener('click', cancelModeSwitch);
+    
+    if (modeSwitchModal) {
+        modeSwitchModal.addEventListener('click', (e) => {
+            if (e.target === modeSwitchModal) cancelModeSwitch();
+        });
+    }
+
+    // Tab switching
+    if (tabs) {
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+    }
+
+    // Encode functionality
+    if (encodeBtn) encodeBtn.addEventListener('click', encodeImage);
+    if (copyEncoded) copyEncoded.addEventListener('click', copyEncodedText);
+    if (downloadEncoded) downloadEncoded.addEventListener('click', downloadEncodedFile);
+
+    // Decode functionality
+    if (decodeBtn) decodeBtn.addEventListener('click', decodeImage);
+    if (downloadDecoded) downloadDecoded.addEventListener('click', downloadDecodedImage);
+
+    // File handling
+    if (fileInput) {
+        fileInput.addEventListener('change', handleFileInput);
+        fileInput.addEventListener('dragover', handleDragOver);
+        fileInput.addEventListener('dragleave', handleDragLeave);
+        fileInput.addEventListener('drop', handleDrop);
+    }
+    
+    if (textFileInput) {
+        textFileInput.addEventListener('change', handleTextFileInput);
+    }
+}
+
+// Utility Functions
+function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(reader.error);
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+    });
+}
+
+function readFileAsText(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(reader.error);
+        reader.onload = () => resolve(reader.result);
+        reader.readAsText(file);
+    });
+}
+
+function updateStats(element, text, size) {
+    if (element) element.textContent = `${text} • ${formatBytes(size)}`;
+}
+
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+function createPreview(container, src, alt) {
+    if (!container) return;
+    container.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = alt;
+    img.className = 'preview-img';
+    container.appendChild(img);
+}
+
+// Watermark function
+function addWatermark(imageDataUrl) {
+    if (currentUserType === 'super') {
+        return Promise.resolve(imageDataUrl);
+    }
+    
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            ctx.font = 'bold 16px Arial';
+            ctx.fillStyle = 'red';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText('RX STUDIO', img.width - 2, img.height - 2);
+            resolve(canvas.toDataURL());
+        };
+        img.src = imageDataUrl;
+    });
+}
+
+// Encode Functions
+async function encodeImage() {
+    const file = fileInput?.files[0];
+    if (!file) {
         alert('Please select an image file first.');
         return;
-      }
+    }
 
-      const maxSize = parseInt(maxSizeInput.value) || 0;
-      
-      if (!maxSize) {
-        // Simple encoding without resizing
+    const maxSize = parseInt(maxSizeInput?.value) || 0;
+    
+    if (!maxSize) {
         const dataUrl = await readFileAsDataURL(file);
         encodedText.value = dataUrl;
         createPreview(previewContainer, dataUrl, 'Encoded preview');
@@ -123,194 +294,190 @@ const addWatermark = (imageDataUrl) => {
         downloadEncoded.disabled = false;
         updateStats(encodedStats, 'Encoded data', dataUrl.length);
         return;
-      }
+    }
 
-      // Resize before encoding
-      const dataUrl = await readFileAsDataURL(file);
-      const img = new Image();
-      img.src = dataUrl;
-      await new Promise((resolve, reject) => {
+    const dataUrl = await readFileAsDataURL(file);
+    const img = new Image();
+    img.src = dataUrl;
+    await new Promise((resolve, reject) => {
         img.onload = resolve;
         img.onerror = reject;
-      });
+    });
 
-      let { width, height } = img;
-      const ratio = Math.min(1, maxSize / Math.max(width, height));
-      
-      if (ratio < 1) {
+    let { width, height } = img;
+    const ratio = Math.min(1, maxSize / Math.max(width, height));
+    
+    if (ratio < 1) {
         width = Math.round(width * ratio);
         height = Math.round(height * ratio);
-      }
-      
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, width, height);
-      
-      const outDataUrl = canvas.toDataURL('image/png');
-      encodedText.value = outDataUrl;
-      createPreview(previewContainer, outDataUrl, 'Resized preview');
-      lastDataUrl = outDataUrl;
-      downloadEncoded.disabled = false;
-      updateStats(encodedStats, 'Encoded data', outDataUrl.length);
-    };
+    }
+    
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, width, height);
+    
+    const outDataUrl = canvas.toDataURL('image/png');
+    encodedText.value = outDataUrl;
+    createPreview(previewContainer, outDataUrl, 'Resized preview');
+    lastDataUrl = outDataUrl;
+    downloadEncoded.disabled = false;
+    updateStats(encodedStats, 'Encoded data', outDataUrl.length);
+}
 
-    // Decode Functions
-    const ensureDataUrl = text => {
-      if (!text) return null;
-      text = text.trim();
-      if (text.startsWith('data:')) return text;
-      
-      // If it's only base64 (no mime), assume PNG
-      if (/^[A-Za-z0-9+/=\s]+$/.test(text)) {
-        return 'data:image/png;base64,' + text.replace(/\s+/g, '');
-      }
-      
-      // If it looks like base64 with prefix removed but contains commas
-      const commaIndex = text.indexOf(',');
-      if (commaIndex >= 0 && /^[A-Za-z0-9+/=\s]+$/.test(text.slice(commaIndex + 1))) {
-        const maybe = text.slice(commaIndex + 1).replace(/\s+/g, '');
-        return 'data:image/png;base64,' + maybe;
-      }
-      
-      return null;
-    };
-
-    const decodeImage = async () => {
-      const txt = decodeText.value;
-      const dataUrl = ensureDataUrl(txt);
-      
-      if (!dataUrl) {
-        alert('Unable to detect valid Base64 content. Please check your input.');
-        return;
-      }
-
-      const img = new Image();
-      img.onload = () => {
-        createPreview(decodedContainer, dataUrl, 'Decoded image');
-        fetch(dataUrl)
-          .then(r => r.blob())
-          .then(b => {
-            lastDecodedBlob = b;
-            downloadDecoded.disabled = false;
-            updateStats(decodeStats, 'Decoded image', b.size);
-          });
-      };
-      img.onerror = () => alert('Decoding failed. The data may be corrupted or incomplete.');
-      img.src = dataUrl;
-    };
-
-    // Event Listeners
-    encodeBtn.addEventListener('click', encodeImage);
-
-    copyEncoded.addEventListener('click', async () => {
-      if (!encodedText.value) {
+// Copy encoded text
+async function copyEncodedText() {
+    if (!encodedText.value) {
         alert('No encoded text to copy.');
         return;
-      }
-      
-      try {
+    }
+    
+    try {
         await navigator.clipboard.writeText(encodedText.value);
-        // Visual feedback
         const originalText = copyEncoded.innerHTML;
         copyEncoded.innerHTML = '<span class="icon">✅</span> Copied!';
         setTimeout(() => {
-          copyEncoded.innerHTML = originalText;
+            copyEncoded.innerHTML = originalText;
         }, 2000);
-      } catch (e) {
+    } catch (e) {
         alert('Clipboard access denied. Please copy manually.');
-      }
-    });
+    }
+}
 
-    downloadEncoded.addEventListener('click', () => {
-      if (!encodedText.value) return;
-      const blob = new Blob([encodedText.value], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'RX STUDIO | image-base64.txt';
-      a.click();
-      URL.revokeObjectURL(url);
-    });
+// Download encoded file
+function downloadEncodedFile() {
+    if (!encodedText.value) return;
+    const blob = new Blob([encodedText.value], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'RX STUDIO | image-base64.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+}
 
-    decodeBtn.addEventListener('click', decodeImage);
+// Decode Functions
+function ensureDataUrl(text) {
+    if (!text) return null;
+    text = text.trim();
+    if (text.startsWith('data:')) return text;
+    
+    if (/^[A-Za-z0-9+/=\s]+$/.test(text)) {
+        return 'data:image/png;base64,' + text.replace(/\s+/g, '');
+    }
+    
+    const commaIndex = text.indexOf(',');
+    if (commaIndex >= 0 && /^[A-Za-z0-9+/=\s]+$/.test(text.slice(commaIndex + 1))) {
+        const maybe = text.slice(commaIndex + 1).replace(/\s+/g, '');
+        return 'data:image/png;base64,' + maybe;
+    }
+    
+    return null;
+}
 
-    downloadDecoded.addEventListener('click', async () => {
-      if (!lastDecodedBlob) return;
-      
-      // Convert blob to data URL
-      const dataUrl = await new Promise(resolve => {
+async function decodeImage() {
+    const txt = decodeText.value;
+    const dataUrl = ensureDataUrl(txt);
+    
+    if (!dataUrl) {
+        alert('Unable to detect valid Base64 content. Please check your input.');
+        return;
+    }
+
+    const img = new Image();
+    img.onload = () => {
+        createPreview(decodedContainer, dataUrl, 'Decoded image');
+        fetch(dataUrl)
+            .then(r => r.blob())
+            .then(b => {
+                lastDecodedBlob = b;
+                downloadDecoded.disabled = false;
+                updateStats(decodeStats, 'Decoded image', b.size);
+            });
+    };
+    img.onerror = () => alert('Decoding failed. The data may be corrupted or incomplete.');
+    img.src = dataUrl;
+}
+
+// Download decoded image
+async function downloadDecodedImage() {
+    if (!lastDecodedBlob) return;
+    
+    const dataUrl = await new Promise(resolve => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.readAsDataURL(lastDecodedBlob);
-      });
-      
-      // Add watermark
-      const watermarkedDataUrl = await addWatermark(dataUrl);
-      
-      // Convert back to blob
-      const response = await fetch(watermarkedDataUrl);
-      const watermarkedBlob = await response.blob();
-      
-      // Download
-      const url = URL.createObjectURL(watermarkedBlob);
-      const a = document.createElement('a');
-      const ext = lastDecodedBlob.type.split('/')[1] || 'png';
-      a.href = url;
-      a.download = `RX STUDIO | decoded-image.${ext}`;
-      a.click();
-      URL.revokeObjectURL(url);
     });
+    
+    const watermarkedDataUrl = await addWatermark(dataUrl);
+    const response = await fetch(watermarkedDataUrl);
+    const watermarkedBlob = await response.blob();
+    
+    const url = URL.createObjectURL(watermarkedBlob);
+    const a = document.createElement('a');
+    const ext = lastDecodedBlob.type.split('/')[1] || 'png';
+    a.href = url;
+    a.download = `RX STUDIO | decoded-image.${ext}`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
 
-    // Text file upload for decoding
-    textFileInput.addEventListener('change', async () => {
-      const file = textFileInput.files[0];
-      if (!file) {
-        return;
-      }
-      
-      try {
-        const text = await readFileAsText(file);
-        decodeText.value = text;
-        updateStats(decodeStats, 'Loaded from file', file.size);
-      } catch (e) {
-        alert('Error reading text file: ' + e.message);
-      }
-    });
-
-    // File input handling
-    fileInput.addEventListener('change', async () => {
-      const file = fileInput.files[0];
-      if (!file) {
+// File input handlers
+async function handleFileInput() {
+    const file = fileInput.files[0];
+    if (!file) {
         previewContainer.innerHTML = '<div class="empty-preview">No image selected</div>';
         fileInfo.textContent = '';
         return;
-      }
+    }
 
-      updateStats(fileInfo, file.name, file.size);
-      
-      const dataUrl = await readFileAsDataURL(file);
-      createPreview(previewContainer, dataUrl, 'Original image');
-    });
+    updateStats(fileInfo, file.name, file.size);
+    const dataUrl = await readFileAsDataURL(file);
+    createPreview(previewContainer, dataUrl, 'Original image');
+}
 
-    // Drag and drop functionality
-    fileInput.addEventListener('dragover', e => {
-      e.preventDefault();
-      fileInput.classList.add('drag-over');
-    });
+async function handleTextFileInput() {
+    const file = textFileInput.files[0];
+    if (!file) return;
+    
+    try {
+        const text = await readFileAsText(file);
+        decodeText.value = text;
+        updateStats(decodeStats, 'Loaded from file', file.size);
+    } catch (e) {
+        alert('Error reading text file: ' + e.message);
+    }
+}
 
-    fileInput.addEventListener('dragleave', () => {
-      fileInput.classList.remove('drag-over');
-    });
+// Drag and drop handlers
+function handleDragOver(e) {
+    e.preventDefault();
+    fileInput.classList.add('drag-over');
+}
 
-    fileInput.addEventListener('drop', e => {
-      e.preventDefault();
-      fileInput.classList.remove('drag-over');
-      
-      if (e.dataTransfer.files.length) {
+function handleDragLeave() {
+    fileInput.classList.remove('drag-over');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    fileInput.classList.remove('drag-over');
+    
+    if (e.dataTransfer.files.length) {
         fileInput.files = e.dataTransfer.files;
         const event = new Event('change', { bubbles: true });
         fileInput.dispatchEvent(event);
-      }
-    });
+    }
+}
+
+// Initialize application
+document.addEventListener('DOMContentLoaded', function() {
+    initializeDOMElements();
+    setupEventListeners();
+    
+    if (!checkExistingLogin()) {
+        if (loginModal) loginModal.classList.remove('hidden');
+        if (mainContent) mainContent.classList.add('hidden');
+    }
+});

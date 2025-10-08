@@ -2,24 +2,55 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script src="ASSET/WEB-SOFTWARE/JS/DEV-TOOL-PROTECTION-ALL.js"></script>
+  <script src="JS/DEV-TOOL-PROTECTION-ALL.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="ASSET/MAIN/IMG/LOGO/RX-3.png">
+  <link rel="icon" type="image/png" href="IMG/RX-3.png">
   <title>RX STUDIO | IMAGE GENERATOR / CONVERTER </title>
-  <link rel="stylesheet" href="ASSET/WEB-SOFTWARE/CSS/RX-IMG-CONVERTER.css">
+  <link rel="stylesheet" href="CSS/RX-IMG-CONVERTER.css">
+
 </head>
 <body>
-  <div class="container">
+  <!-- Login Modal -->
+  <div id="loginModal" class="login-modal">
+    <div class="login-content">
+      <h2 class="login-title">RX STUDIO Login</h2>
+      <p>Enter your access code to continue</p>
+      <input type="password" id="loginCode" class="login-input" placeholder="Enter access code" maxlength="6">
+      <button id="loginBtn" class="login-btn">Login</button>
+      <div id="loginError" class="login-error">Invalid code. Please try again.</div>
+    </div>
+  </div>
+
+ 
+  <div class="container hidden" id="mainContent">
     <header>
       <h1><a href="USER-DASHBOARD.html"><span>RX STUDIO</span></a></h1>
       <p class="subtitle">Easily encode images to text and decode back to images</p>
+      <div class="stats" id="loginStatus"></div>
+      <button id="modeSwitchBtn" class="mode-switch-btn-top">Change Mode</button>
     </header>
+
+     <!-- Mode Switch Modal -->
+  <div id="modeSwitchModal" class="mode-switch-modal">
+    <div class="mode-switch-content">
+      <h2 class="mode-switch-title">Access Mode</h2>
+      <p>Enter super access code to switch to super mode</p>
+      <input type="password" id="modeSwitchCode" class="mode-switch-input" placeholder="Enter super access code" maxlength="6">
+      <div class="btn-group-mode">
+        <button id="saveModeBtn" class="btn-mode btn-mode-primary">Save & Close</button>
+        <button id="cancelModeBtn" class="btn-mode btn-mode-secondary">Cancel</button>
+      </div>
+      <div id="modeSwitchError" class="mode-switch-error">Invalid super access code.</div>
+    </div>
+  </div>
+
 
     <div class="tabs">
       <button class="tab active" data-tab="encode">🖼️ Encode Image | convert to text </button>
       <button class="tab" data-tab="decode">🔍 Decode Text | convert to image</button>
     </div>
 
+    <!-- Rest of your existing HTML content remains the same -->
     <!-- Encode Tab -->
     <div class="tab-content active" id="encode-tab">
       <div class="feature-grid">
@@ -131,5 +162,5 @@
     </div>
   </div>
 </body>
-<script src="ASSET/WEB-SOFTWARE/JS/EXAM-JS-LINKER.js"></script>
+<script src="JS/RX-IMG-CONVERTER.js"></script>
 </html>

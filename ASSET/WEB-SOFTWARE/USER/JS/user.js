@@ -234,8 +234,8 @@ const contentCards = [
     {   
         id: "file12", 
         title: "F12- RX IMG CONVERTER ", 
-        description: "Easily encode images to text and decode back to images", 
-        link: "RX-IMG-CONVERTER.html?exam=file12", 
+        description: "LOGIN CODE : RX2061 <br>Easily encode images to text and decode back to images", 
+        link: "ASSET/WEB-SOFTWARE/RX-IMG-CONVERTER.html", 
         icon: "fas fa-tools",
         prices: { default: "Rs. 600",}
     }
