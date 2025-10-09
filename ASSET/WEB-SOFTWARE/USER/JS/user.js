@@ -89,7 +89,7 @@ const allUsers = [
         badgeAccess: true, // No badge for Niraj like , badgeAccess: false
         badgeType: "MEMBER",
         password: "RX9800754535",
-        access: [],
+        access: ["file12",],
         timedAccessConfig: {
             "file2": { startDate: "2025-08-18", duration: 365 },
             "file3": { startDate: "2025-08-18", duration: 365 },
@@ -109,7 +109,7 @@ const allUsers = [
         badgeAccess: true,
         badgeType: "MEMBER",
         password: "RX9701300086",
-        access: [],
+        access: ["file12",],
         timedAccessConfig: {
             "file2": { startDate: "2025-09-16", duration: 365 },
             "file3": { startDate: "2025-09-16", duration: 365 },
@@ -129,7 +129,7 @@ const allUsers = [
         badgeAccess: true, // No badge for Manisha like , badgeAccess: false
         badgeType: "MEMBER",
         password: "RX9745397210",
-        access: [],
+        access: ["file12",],
         timedAccessConfig: {
             "file2": { startDate: "2025-09-17", duration: 365 },
             "file3": { startDate: "2025-09-17", duration: 365 },
@@ -270,7 +270,7 @@ const UserManager = (() => {
         phone: "UNKNOWN",
         address: "UNKNOWN",
         accountType: "GUEST",
-        access: ["file3",],
+        access: ["file3","file12",],
         timedAccessConfig: {},
         //badgeAccess: true, // Decide if guests should show a badge
         //badgeType: "GUEST" // Assign a badge type for guests
