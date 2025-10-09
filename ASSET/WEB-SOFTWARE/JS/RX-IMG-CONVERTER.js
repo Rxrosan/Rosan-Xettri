@@ -7,12 +7,14 @@ let downloadDecoded, decodeStats, textFileInput, tabs, tabContents;
 
 // Login codes
 const NORMAL_LOGIN = 'RX2061';
-const SUPER_LOGIN = 'Ro&@n';
+const SUPER_LOGIN = 'RX2004';
 
 // User state
 let currentUserType = null;
 let lastDataUrl = null;
 let lastDecodedBlob = null;
+let lastRXFileContent = null;
+let lastRXFileBlob = null;
 
 // Initialize all DOM elements
 function initializeDOMElements() {
@@ -73,12 +75,12 @@ function updateLoginStatus() {
     if (!loginStatus || !modeSwitchBtn) return;
     
     if (currentUserType === 'super') {
-        loginStatus.textContent = '🔓 Super Access';
+        loginStatus.textContent = ' Super Access';
         loginStatus.style.color = 'var(--success)';
         modeSwitchBtn.textContent = 'Normal Mode';
         modeSwitchBtn.style.background = 'var(--success)';
     } else {
-        loginStatus.textContent = '🔒 Normal Access';
+        loginStatus.textContent = ' Normal Access';
         loginStatus.style.color = 'var(--primary)';
         modeSwitchBtn.textContent = 'Super Mode';
         modeSwitchBtn.style.background = 'var(--secondary)';
@@ -190,7 +192,7 @@ function setupEventListeners() {
     // Encode functionality
     if (encodeBtn) encodeBtn.addEventListener('click', encodeImage);
     if (copyEncoded) copyEncoded.addEventListener('click', copyEncodedText);
-    if (downloadEncoded) downloadEncoded.addEventListener('click', downloadEncodedFile);
+    if (downloadEncoded) downloadEncoded.addEventListener('click', downloadRXFile);
 
     // Decode functionality
     if (decodeBtn) decodeBtn.addEventListener('click', decodeImage);
@@ -205,7 +207,7 @@ function setupEventListeners() {
     }
     
     if (textFileInput) {
-        textFileInput.addEventListener('change', handleTextFileInput);
+        textFileInput.addEventListener('change', handleRXFileInput);
     }
 }
 
@@ -251,7 +253,60 @@ function createPreview(container, src, alt) {
     container.appendChild(img);
 }
 
-// Watermark function
+// Generate compressed image code with RXSTUDIO tag
+function generateRXImageCode(imageDataUrl) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            
+            // Get compressed base64 (quality 0.8 for smaller size)
+            const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            
+            // Extract base64 data only (remove data:image/jpeg;base64, prefix)
+            const base64Data = compressedDataUrl.split(',')[1];
+            
+            // Create RX file format with tag
+            const rxFileData = {
+                header: "RXSTUDIO_IMAGE_V1",
+                timestamp: Date.now(),
+                data: base64Data,
+                signature: "RXSTUDIO_PROPRIETARY"
+            };
+            
+            // Convert to string and compress
+            const jsonString = JSON.stringify(rxFileData);
+            const compressedString = btoa(jsonString); // Simple base64 encoding
+            resolve(compressedString);
+        };
+        img.src = imageDataUrl;
+    });
+}
+
+// Decode RX file format
+function decodeRXFile(rxFileContent) {
+    try {
+        // Decode from base64
+        const jsonString = atob(rxFileContent);
+        const rxData = JSON.parse(jsonString);
+        
+        // Verify RXSTUDIO tag
+        if (rxData.header !== "RXSTUDIO_IMAGE_V1" || rxData.signature !== "RXSTUDIO_PROPRIETARY") {
+            throw new Error("Invalid RX file format");
+        }
+        
+        // Reconstruct data URL
+        return `data:image/jpeg;base64,${rxData.data}`;
+    } catch (error) {
+        throw new Error("This file is not a valid RX STUDIO image file");
+    }
+}
+
+// Watermark function (only for normal mode downloads)
 function addWatermark(imageDataUrl) {
     if (currentUserType === 'super') {
         return Promise.resolve(imageDataUrl);
@@ -276,6 +331,90 @@ function addWatermark(imageDataUrl) {
     });
 }
 
+// Create and download file temporarily, then share
+async function downloadAndShareFile(blob, filename, fileType, shareTitle, shareText) {
+    try {
+        // First, download the file
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        // Wait a moment for download to start
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Create file object for sharing
+        const file = new File([blob], filename, { type: fileType });
+        
+        // Try to share using Web Share API
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: shareTitle,
+                text: shareText,
+                files: [file]
+            });
+        } else {
+            // If sharing not supported, just show success message for download
+            alert(`${filename} downloaded successfully! but sharing is fialed, You can now share it from your downloads.`);
+        }
+        
+        // Clean up URL
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        
+    } catch (error) {
+        console.log('Download and share failed:', error);
+        // If sharing fails, at least the file is downloaded
+        alert(`${filename} downloaded successfully! but sharing is fialed, You can now share it from your downloads.`);
+    }
+}
+
+// Share RX File - Download first, then share
+async function shareRXFile() {
+    if (!lastRXFileBlob) {
+        alert('No RX file to share. Please encode an image first.');
+        return;
+    }
+    
+    await downloadAndShareFile(
+        lastRXFileBlob,
+        'RXSTUDIO_IMAGE.rx',
+        'application/octet-stream',
+        'RX STUDIO Image File',
+        'Check out this RX STUDIO image file! Use RX STUDIO to decode it.'
+    );
+}
+
+// Share Decoded Image - Download first, then share
+async function shareDecodedImage() {
+    if (!lastDecodedBlob) {
+        alert('No decoded image to share.');
+        return;
+    }
+    
+    // Add watermark if needed before sharing
+    const dataUrl = await new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(lastDecodedBlob);
+    });
+    
+    const watermarkedDataUrl = await addWatermark(dataUrl);
+    const response = await fetch(watermarkedDataUrl);
+    const watermarkedBlob = await response.blob();
+    
+    await downloadAndShareFile(
+        watermarkedBlob,
+        'RX_STUDIO_image.png',
+        'image/png',
+        'RX STUDIO Image',
+        'Check out this image decoded with RX STUDIO!'
+    );
+}
+
 // Encode Functions
 async function encodeImage() {
     const file = fileInput?.files[0];
@@ -286,44 +425,60 @@ async function encodeImage() {
 
     const maxSize = parseInt(maxSizeInput?.value) || 0;
     
-    if (!maxSize) {
-        const dataUrl = await readFileAsDataURL(file);
-        encodedText.value = dataUrl;
-        createPreview(previewContainer, dataUrl, 'Encoded preview');
-        lastDataUrl = dataUrl;
-        downloadEncoded.disabled = false;
-        updateStats(encodedStats, 'Encoded data', dataUrl.length);
-        return;
-    }
+    // Read original file
+    const originalDataUrl = await readFileAsDataURL(file);
+    
+    let processedDataUrl = originalDataUrl;
+    
+    // Resize if needed
+    if (maxSize > 0) {
+        const img = new Image();
+        img.src = originalDataUrl;
+        await new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = reject;
+        });
 
-    const dataUrl = await readFileAsDataURL(file);
-    const img = new Image();
-    img.src = dataUrl;
-    await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-    });
-
-    let { width, height } = img;
-    const ratio = Math.min(1, maxSize / Math.max(width, height));
-    
-    if (ratio < 1) {
-        width = Math.round(width * ratio);
-        height = Math.round(height * ratio);
+        let { width, height } = img;
+        const ratio = Math.min(1, maxSize / Math.max(width, height));
+        
+        if (ratio < 1) {
+            width = Math.round(width * ratio);
+            height = Math.round(height * ratio);
+        }
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        processedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
     }
     
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0, width, height);
+    // Generate RX image code (compressed with RXSTUDIO tag)
+    const rxCode = await generateRXImageCode(processedDataUrl);
+    encodedText.value = rxCode;
+    lastRXFileContent = rxCode;
     
-    const outDataUrl = canvas.toDataURL('image/png');
-    encodedText.value = outDataUrl;
-    createPreview(previewContainer, outDataUrl, 'Resized preview');
-    lastDataUrl = outDataUrl;
+    // Create blob for sharing
+    lastRXFileBlob = new Blob([rxCode], { type: 'application/octet-stream' });
+    
+    // Show preview of original processed image
+    createPreview(previewContainer, processedDataUrl, 'Processed preview');
+    lastDataUrl = processedDataUrl;
     downloadEncoded.disabled = false;
-    updateStats(encodedStats, 'Encoded data', outDataUrl.length);
+    updateStats(encodedStats, 'RX Compressed data', rxCode.length);
+    
+    // Create and add share button if not exists
+    if (!document.getElementById('shareEncoded')) {
+        const downloadSection = document.querySelector('.download-section');
+        const shareBtn = document.createElement('button');
+        shareBtn.id = 'shareEncoded';
+        shareBtn.className = 'btn btn-secondary';
+        shareBtn.innerHTML = '<span class="icon">📤</span> Download & Share .rx File';
+        shareBtn.onclick = shareRXFile;
+        downloadSection.appendChild(shareBtn);
+    }
 }
 
 // Copy encoded text
@@ -345,14 +500,15 @@ async function copyEncodedText() {
     }
 }
 
-// Download encoded file
-function downloadEncodedFile() {
+// Download .RX file
+function downloadRXFile() {
     if (!encodedText.value) return;
-    const blob = new Blob([encodedText.value], { type: 'text/plain' });
+    
+    const blob = new Blob([encodedText.value], { type: 'application/octet-stream' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'RX STUDIO | image-base64.txt';
+    a.download = 'RXSTUDIO_IMAGE.rx';
     a.click();
     URL.revokeObjectURL(url);
 }
@@ -361,16 +517,24 @@ function downloadEncodedFile() {
 function ensureDataUrl(text) {
     if (!text) return null;
     text = text.trim();
+    
+    // Check if it's a regular data URL
     if (text.startsWith('data:')) return text;
     
-    if (/^[A-Za-z0-9+/=\s]+$/.test(text)) {
-        return 'data:image/png;base64,' + text.replace(/\s+/g, '');
-    }
-    
-    const commaIndex = text.indexOf(',');
-    if (commaIndex >= 0 && /^[A-Za-z0-9+/=\s]+$/.test(text.slice(commaIndex + 1))) {
-        const maybe = text.slice(commaIndex + 1).replace(/\s+/g, '');
-        return 'data:image/png;base64,' + maybe;
+    // Check if it's an RX file format
+    try {
+        return decodeRXFile(text);
+    } catch (e) {
+        // If not RX format, try traditional base64
+        if (/^[A-Za-z0-9+/=\s]+$/.test(text)) {
+            return 'data:image/png;base64,' + text.replace(/\s+/g, '');
+        }
+        
+        const commaIndex = text.indexOf(',');
+        if (commaIndex >= 0 && /^[A-Za-z0-9+/=\s]+$/.test(text.slice(commaIndex + 1))) {
+            const maybe = text.slice(commaIndex + 1).replace(/\s+/g, '');
+            return 'data:image/png;base64,' + maybe;
+        }
     }
     
     return null;
@@ -381,7 +545,7 @@ async function decodeImage() {
     const dataUrl = ensureDataUrl(txt);
     
     if (!dataUrl) {
-        alert('Unable to detect valid Base64 content. Please check your input.');
+        alert('Unable to detect valid image content. Please check your input.');
         return;
     }
 
@@ -394,6 +558,17 @@ async function decodeImage() {
                 lastDecodedBlob = b;
                 downloadDecoded.disabled = false;
                 updateStats(decodeStats, 'Decoded image', b.size);
+                
+                // Create and add share button if not exists
+                if (!document.getElementById('shareDecoded')) {
+                    const downloadSection = document.querySelector('#decode-tab .download-section');
+                    const shareBtn = document.createElement('button');
+                    shareBtn.id = 'shareDecoded';
+                    shareBtn.className = 'btn btn-secondary';
+                    shareBtn.innerHTML = '<span class="icon">📤</span> Download & Share Image';
+                    shareBtn.onclick = shareDecodedImage;
+                    downloadSection.appendChild(shareBtn);
+                }
             });
     };
     img.onerror = () => alert('Decoding failed. The data may be corrupted or incomplete.');
@@ -418,7 +593,7 @@ async function downloadDecodedImage() {
     const a = document.createElement('a');
     const ext = lastDecodedBlob.type.split('/')[1] || 'png';
     a.href = url;
-    a.download = `RX STUDIO | decoded-image.${ext}`;
+    a.download = `RX_STUDIO_image.${ext}`;
     a.click();
     URL.revokeObjectURL(url);
 }
@@ -437,16 +612,26 @@ async function handleFileInput() {
     createPreview(previewContainer, dataUrl, 'Original image');
 }
 
-async function handleTextFileInput() {
+// Handle .RX file input
+async function handleRXFileInput() {
     const file = textFileInput.files[0];
     if (!file) return;
+    
+    // Check if it's an .rx file
+    if (!file.name.toLowerCase().endsWith('.rx')) {
+        alert('Please select a valid .RX file');
+        return;
+    }
     
     try {
         const text = await readFileAsText(file);
         decodeText.value = text;
-        updateStats(decodeStats, 'Loaded from file', file.size);
+        updateStats(decodeStats, 'RX file loaded', file.size);
+        
+        // Auto-decode RX files
+        setTimeout(() => decodeImage(), 500);
     } catch (e) {
-        alert('Error reading text file: ' + e.message);
+        alert('Error reading RX file: ' + e.message);
     }
 }
 

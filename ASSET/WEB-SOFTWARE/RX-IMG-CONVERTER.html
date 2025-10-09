@@ -46,8 +46,8 @@
 
 
     <div class="tabs">
-      <button class="tab active" data-tab="encode">🖼️ Encode Image | convert to text </button>
-      <button class="tab" data-tab="decode">🔍 Decode Text | convert to image</button>
+      <button class="tab active" data-tab="encode">🖼️ Encode Image | convert to .rx file  </button>
+      <button class="tab" data-tab="decode">🔍 Decode .rx file  | convert to image</button>
     </div>
 
     <!-- Rest of your existing HTML content remains the same -->
@@ -58,7 +58,7 @@
           <h2 class="section-title">Upload & Encode</h2>
           
           <div class="input-group">
-            <label for="fileInput">Upload Image</label>
+            <label for="fileInput">Upload Image / Drag & Drop</label>
             <input type="file" id="fileInput" accept="image/*">
             <div class="stats" id="fileInfo"></div>
           </div>
@@ -80,7 +80,7 @@
         <div class="card">
           <div class="input-group">
             <div class="preview-label">
-              <label for="encodedText">Base64 Output</label>
+              <label for="encodedText">Encoded text Output</label>
               <button id="copyEncoded" class="btn btn-secondary">
                 <span class="icon">📋</span> Copy
               </button>
@@ -91,12 +91,12 @@
           
           <div class="download-section">
             <button id="downloadEncoded" class="btn btn-secondary" disabled>
-              <span class="icon">📥</span> Download Text File
+              <span class="icon">📥</span> Download .rx File
             </button>
           </div>
           
           <div class="preview-container">
-            <label>Preview</label>
+            <label>Your Uploaded Image Preview</label>
             <div id="previewContainer">
               <div class="empty-preview">No image selected</div>
             </div>
@@ -112,15 +112,15 @@
           <h2 class="section-title">Decode Base64</h2>
           
           <div class="input-group">
-            <label for="decodeText">Paste Base64 Text</label>
-            <textarea id="decodeText" placeholder="Paste encoded text (data URL) here"></textarea>
+            <label for="decodeText">Paste image encoding text</label>
+            <textarea id="decodeText" placeholder="Paste encoded text here"></textarea>
             <div class="stats" id="decodeStats"></div>
           </div>
           
           <div class="input-group">
-            <label>Or Upload Text File</label>
+            <label>Or Upload .rx File</label>
             <div class="file-input-group">
-              <input type="file" id="textFileInput" accept=".txt">
+              <input type="file" id="textFileInput" accept=".rx">
             </div>
           </div>
           
@@ -154,10 +154,10 @@
         <span class="icon">ℹ️</span> How It Works
       </h2>
       <div class="info-box">
-        <p><strong>Encoding:</strong> Upload an image to generate a Base64 text string. You can resize the image before encoding to reduce output size.</p>
-        <p><strong>Decoding:</strong> Paste a Base64 string or upload a text file to reconstruct the original image.</p>
+        <p><strong>Encoding:</strong> Upload an image to generate a .rx file . You can resize the image before encoding to reduce output size.</p>
+        <p><strong>Decoding:</strong> Paste a image encode text or upload a .rx file to reconstruct the original image.</p>
         <p><strong>Watermark:</strong> Downloaded images include a subtle "RX STUDIO" watermark in the bottom right corner.</p>
-        <p><strong>Usage:</strong> Copy the encoded text to share images as text, embed in code, or transfer between devices.</p>
+        <p><strong>Usage:</strong> Download  the encoded .rx file to share images as .rx file or transfer between devices.</p>
       </div>
     </div>
   </div>
