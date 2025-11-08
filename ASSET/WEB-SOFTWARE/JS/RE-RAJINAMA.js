@@ -699,7 +699,7 @@ function toggleWitnessBothPages() {
 
 function goToHome() {
     if (confirm('Are you sure you want to go to home?')) {
-        window.location.href = 'index.html';
+        window.location.href = 'USER-DASHBOARD.html';
     }
 }
 
