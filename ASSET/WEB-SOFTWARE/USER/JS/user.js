@@ -142,25 +142,16 @@ const allUsers = [
 const contentCards = [
     {   
         id: "file1", 
-        title: "F1- KAPALI-TAMSUK OLD VERSION", 
-        description: "Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file1", 
-        icon: "fas fa-pen",
-        prices: { default: "Rs. 500",}
-       //prices: { default: "Rs. 1500", 2: "Rs. 1000", 3: "Rs. 1000", 4: "Rs. 1000", 5: "Rs. 1000" }
-    },
-    {   
-        id: "file2", 
-        title: "F2- QUESTION-MODEL-1", 
+        title: "F1- QUESTION-MODEL-1", 
         description: "LESSON A 1 - 10L", 
-        link: "KR-EXAM.html?exam=file2", 
+        link: "KR-EXAM.html?exam=file1", 
         icon: "fas fa-book",
         prices: { default: "Rs. 100" }
     },
     
     {   
-        id: "file3", 
-        title: "F3- RX-QR-Scanner/Generator", 
+        id: "file2", 
+        title: "F2- RX-QR-Scanner/Generator", 
         description: "You can create personalized messages using a QR code with this app.", 
         link: "ASSET/WEB-SOFTWARE/RX-S-QR.html", 
         icon: "fas fa-qrcode",
@@ -168,72 +159,72 @@ const contentCards = [
     },
     
     {   
-        id: "file4", 
-        title: "F4- कपाली तमसुक", 
+        id: "file3", 
+        title: "F3- कपाली तमसुक", 
         description: "कुनै सम्पत्ति धिताे, बन्धक नराखी ब्याज र प्रतिशतकाे हिसाब गरी बुझाउने मिति ताेकिएकाे नबुझाइ भाका नाघे साहुकाे थैलि मेराे घर घरना बाट असुल गरी लिनु भनी असामिकाे विश्वासमा लेखी दिएकाे तमसुक  <br>Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file4", 
+        link: "LEKA-PADI.html?exam=file3", 
         icon: "fas fa-pencil",
         prices: { default: "Rs. 600",}
     },
     {   
-        id: "file5", 
-        title: "F5- QUESTION MODEL 2", 
+        id: "file4", 
+        title: "F4- QUESTION MODEL 2", 
         description: "LESSON A 11 - 20 L | UPDATING IN PROGRESS...", 
+        link: "KR-EXAM.html?exam=file4", 
+        icon: "fas fa-book",
+        prices: { default: "Rs. 100",}
+    },
+    {   
+        id: "file5", 
+        title: "F5- QUESTION MODEL 3", 
+        description: "ALL OVER BOOK RESOURCE", 
         link: "KR-EXAM.html?exam=file5", 
         icon: "fas fa-book",
         prices: { default: "Rs. 100",}
     },
     {   
         id: "file6", 
-        title: "F6- QUESTION MODEL 3", 
-        description: "ALL OVER BOOK RESOURCE", 
-        link: "KR-EXAM.html?exam=file6", 
-        icon: "fas fa-book",
-        prices: { default: "Rs. 100",}
+        title: "F6- राजीनामा ", 
+        description: "साहुबाट असामीले कर्जा लिएकाे रूपैँया बापत आफ्नाे हक अधिकार सदाकाे निमित्त समाप्त हुने गरी साहुले भाेग गर्न पाउने गरी कुनै सम्पत्तिकाे हक छाडी गरी दिएकाे लिखित<br>Login Code: RX-2061", 
+        link: "LEKA-PADI.html?exam=file6", 
+        icon: "fas fa-pen",
+        prices: { default: "Rs. 600",}
     },
     {   
         id: "file7", 
-        title: "F7- राजीनामा ", 
-        description: "साहुबाट असामीले कर्जा लिएकाे रूपैँया बापत आफ्नाे हक अधिकार सदाकाे निमित्त समाप्त हुने गरी साहुले भाेग गर्न पाउने गरी कुनै सम्पत्तिकाे हक छाडी गरी दिएकाे लिखित<br>Login Code: RX-2061", 
+        title: "F7- राजीनामा हराएमा व्यहाेरा जनाई गरिदिएकाे राजीनामा ", 
+        description: "Login Code: RX-2061", 
         link: "LEKA-PADI.html?exam=file7", 
-        icon: "fas fa-pen",
+        icon: "fas fa-pencil",
         prices: { default: "Rs. 600",}
     },
     {   
         id: "file8", 
-        title: "F8- राजीनामा हराएमा व्यहाेरा जनाई गरिदिएकाे राजीनामा ", 
-        description: "Login Code: RX-2061", 
+        title: "F8- दृष्टिबन्धक तमसुक ", 
+        description: "साहुकाे रूपैयाँ धिताे नराखी यति ब्याज याे मितिमा बुझाउने, नभए साँवा ब्याज नबुझाएसम्म फलानाे सम्पत्ति भाेग चलन गर्ने र कच्चा ठहरे साहुले मेराे घर घरानाबाट असुल गर्ने भनेर लेखिएकाे तमसुक<br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
         link: "LEKA-PADI.html?exam=file8", 
-        icon: "fas fa-pencil",
+        icon: "fas fa-pen",
         prices: { default: "Rs. 600",}
     },
     {   
         id: "file9", 
-        title: "F9- दृष्टिबन्धक तमसुक ", 
-        description: "साहुकाे रूपैयाँ धिताे नराखी यति ब्याज याे मितिमा बुझाउने, नभए साँवा ब्याज नबुझाएसम्म फलानाे सम्पत्ति भाेग चलन गर्ने र कच्चा ठहरे साहुले मेराे घर घरानाबाट असुल गर्ने भनेर लेखिएकाे तमसुक<br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file9", 
-        icon: "fas fa-pen",
-        prices: { default: "Rs. 600",}
-    },
-    {   
-        id: "file10", 
-        title: "F10- लखबन्धक तमसुक ", 
+        title: "F9- लखबन्धक तमसुक ", 
         description: "चल अचल भाेगबन्धक वा दृष्टिबन्धक लिइ राख्नेले तमसुक बमाेजिम वम त्यसभन्दा घटी लिइ अर्काे साहुलाइ भाेगबन्धक वा दृष्टिबन्धक लेखी दिएकाे लिखत पछि लिनेले अघिकाे भन्दा बढ्ता थैलि लिएकाे र करार लेखेकाे सदर हुदैन <br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file10", 
+        link: "LEKA-PADI.html?exam=file9", 
         icon: "fas fa-pencil",
         prices: { default: "Rs. 600",}
     },
     {   
-        id: "file11", 
-        title: "F11- भाेगबन्धक तमसुक ", 
+        id: "file10", 
+        title: "F10- भाेगबन्धक तमसुक ", 
         description: "साहुकाे थैली वापत रूपैयाँ नबुझाएसम्म सकहुलाइ आसामीले कुनै सम्पत्ति भाेग गर्न नपाइने गरी लेखी दिएकाे लिखित<br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file11", 
+        link: "LEKA-PADI.html?exam=file10", 
         icon: "fas fa-pen",
         prices: { default: "Rs. 600",}
     },
     {   
-        id: "file12", 
-        title: "F12- RX IMG CONVERTER ", 
+        id: "file11", 
+        title: "F11- RX IMG CONVERTER ", 
         description: "LOGIN CODE : RX2061 <br>Easily encode images to text and decode back to images", 
         link: "ASSET/WEB-SOFTWARE/RX-IMG-CONVERTER.html", 
         icon: "fas fa-tools",
@@ -245,15 +236,15 @@ const contentCards = [
 const defaultStores = [
     {   id: "store_1", 
         name: "LEKHA-PADI", 
-        content: ["file1", "file4", "file7", "file8", "file9", "file10","file11"] },
+        content: ["file3", "file6", "file7", "file8", "file9","file10"] },
 
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 
-        content: ["file2","file5","file6"] },
+        content: ["file1","file4","file5"] },
 
     {   id: "store_3", 
         name: "WEB-SOFTWARE", 
-        content: ["file3","file12",] },
+        content: ["file2","file11",] },
 ];
 
 // ===== USER MANAGEMENT MODULE =====

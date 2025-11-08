@@ -14,47 +14,43 @@
     // Mapping: Content ID to the File Path and Type
     const contentMapping = {
         // Exam question files (JS)
-        'file2': {
+        'file1': {
             path: 'ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-1/QUESTION/KR-EXAM-QM-1.js',
             type: 'js'
         },
-        'file5': {
+        'file4': {
             path: 'ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-2/QUESTION/KR-EXAM-QM-2.js',
             type: 'js'
         },
-        'file6': {
+        'file5': {
             path: 'ASSET/KR-EXAM-FILE/KR-EXAM-QUESTION-FILE/KR-EXAM-QM-3/QUESTION/KR-EXAM-QM-3.js',
             type: 'js'
         },
-        'file1': {
-            path: 'ASSET/WEB-SOFTWARE/JS/KAPALI-TAMSUK-2.js',
+        'file3': {
+            path: 'ASSET/WEB-SOFTWARE/JS/KAPALI-TAMSUK.js',
             type: 'js'
         },
-        'file4': {
-            path: 'ASSET/WEB-SOFTWARE/JS/KAPALI-TAMSUK-1.js',
-            type: 'js'
-        },
-         'file7': {
+         'file6': {
             path: 'ASSET/WEB-SOFTWARE/JS/RAJINAMA.js',
             type: 'js'
         },
-         'file8': {
+         'file7': {
             path: 'ASSET/WEB-SOFTWARE/JS/RE-RAJINAMA.js',
             type: 'js'
         },
-        'file9': {
+        'file8': {
             path: 'ASSET/WEB-SOFTWARE/JS/DRISTI-BANDHAK.js',
             type: 'js'
         },
-        'file10': {
+        'file9': {
             path: 'ASSET/WEB-SOFTWARE/JS/LAKHA-BANDHAK.js',
             type: 'js'
         },
-        'file11': {
+        'file10': {
             path: 'ASSET/WEB-SOFTWARE/JS/VOG-BANDHAK.js',
             type: 'js'
         },
-        'file12': {
+        'file11': {
             path: 'ASSET/WEB-SOFTWARE/JS/RX-IMG-CONVERTER.js',
             type: 'js'
         },
