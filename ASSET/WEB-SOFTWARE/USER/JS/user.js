@@ -261,7 +261,7 @@ const UserManager = (() => {
         phone: "UNKNOWN",
         address: "UNKNOWN",
         accountType: "GUEST",
-        access: ["file3","file12",],
+        access: ["file2","file11",],
         timedAccessConfig: {},
         //badgeAccess: true, // Decide if guests should show a badge
         //badgeType: "GUEST" // Assign a badge type for guests
