@@ -21,7 +21,7 @@ const allUsers = [
         badgeAccess: true,    // Controls if a badge is shown at all
         badgeType: "ADMIN",   // Specifies which badge image to use
         password: "Ro&@n2061",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file0","file10","file11",],
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file9","file10","file11",],
         timedAccessConfig: {},
         dateOfBirth: "2004-07-25", //yyyy mm dd
     },
