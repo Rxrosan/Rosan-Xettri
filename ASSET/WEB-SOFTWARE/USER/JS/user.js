@@ -37,7 +37,7 @@ const allUsers = [
         badgeAccess: true,
         badgeType: "PARTNER",
         password: "RX9807483578",
-        access: ["file1","file2","file5","file11",],
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file9","file10","file11",],
         timedAccessConfig: { },
         dateOfBirth: "null", //yyyy mm dd
     },
@@ -53,11 +53,12 @@ const allUsers = [
         badgeAccess: true, // No badge for Keshab like , badgeAccess: false
         badgeType: "MEMBER", // Even if no badge, can have a type
         password: "RX9748780170",
-        access: ["file11",],
+        access: [],
         timedAccessConfig: {
-            "file1": { startDate: "2025-08-18", duration: 365 },
-            "file2": { startDate: "2025-08-18", duration: 365 },
-            "file5": { startDate: "2025-09-16", duration: 365 },
+            "file1": { startDate: "2025-11-09", duration: 90 },
+            "file2": { startDate: "2025-11-09", duration: 90 },
+            "file5": { startDate: "2025-11-09", duration: 90 },
+            "file11":{ startDate: "2025-11-09", duration: 90 },
         },
         dateOfBirth: "null", //yyyy mm dd
     },
@@ -73,7 +74,7 @@ const allUsers = [
         badgeAccess: true,
         badgeType: "PARTNER",
         password: "RX9821948199",
-        access: ["file1", "file2", "file3", "file5","file11",],
+        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file9","file10","file11",],
         timedAccessConfig: { },
         dateOfBirth: "2005-11-17", //yyyy mm dd  NEPALI : Thursday, 2062/8/2
     },
@@ -89,11 +90,12 @@ const allUsers = [
         badgeAccess: true, // No badge for Niraj like , badgeAccess: false
         badgeType: "MEMBER",
         password: "RX9800754535",
-        access: ["file11",],
+        access: [],
         timedAccessConfig: {
-            "file1": { startDate: "2025-08-18", duration: 365 },
-            "file2": { startDate: "2025-08-18", duration: 365 },
-            "file5": { startDate: "2025-09-16", duration: 365 },
+            "file1": { startDate: "2025-11-09", duration: 90 },
+            "file2": { startDate: "2025-11-09", duration: 90 },
+            "file5": { startDate: "2025-11-09", duration: 90 },
+            "file11":{ startDate: "2025-11-09", duration: 90 },
         },
         dateOfBirth: "null", //yyyy mm dd
     },
@@ -109,11 +111,12 @@ const allUsers = [
         badgeAccess: true,
         badgeType: "MEMBER",
         password: "RX9701300086",
-        access: ["file11",],
+        access: [],
         timedAccessConfig: {
-            "file1": { startDate: "2025-09-16", duration: 365 },
-            "file2": { startDate: "2025-09-16", duration: 365 },
-            "file5": { startDate: "2025-09-16", duration: 365 },
+            "file1": { startDate: "2025-11-09", duration: 90 },
+            "file2": { startDate: "2025-11-09", duration: 90 },
+            "file5": { startDate: "2025-11-09", duration: 90 },
+            "file11":{ startDate: "2025-11-09", duration: 90 },
         },
         dateOfBirth: "null", //yyyy mm dd
     },
@@ -129,11 +132,12 @@ const allUsers = [
         badgeAccess: true, // No badge for Manisha like , badgeAccess: false
         badgeType: "MEMBER",
         password: "RX9745397210",
-        access: ["file11",],
+        access: [],
         timedAccessConfig: {
-            "file1": { startDate: "2025-09-17", duration: 365 },
-            "file2": { startDate: "2025-09-17", duration: 365 },
-            "file5": { startDate: "2025-09-17", duration: 365 },
+            "file1": { startDate: "2025-11-09", duration: 90 },
+            "file2": { startDate: "2025-11-09", duration: 90 },
+            "file5": { startDate: "2025-11-09", duration: 90 },
+            "file11":{ startDate: "2025-11-09", duration: 90 },
         },
         dateOfBirth: "null", //yyyy mm dd
     }
@@ -261,8 +265,12 @@ const UserManager = (() => {
         phone: "UNKNOWN",
         address: "UNKNOWN",
         accountType: "GUEST",
-        access: ["file2","file11",],
-        timedAccessConfig: {},
+        access: [],
+        timedAccessConfig: {
+            "file1": { startDate: "2025-11-09", duration: 30 },
+            "file2": { startDate: "2025-11-09", duration: 60 },
+            "file11": { startDate: "2025-11-09", duration: 60 },
+        },
         //badgeAccess: true, // Decide if guests should show a badge
         //badgeType: "GUEST" // Assign a badge type for guests
     };
