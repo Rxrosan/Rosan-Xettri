@@ -140,7 +140,29 @@ const allUsers = [
             "file11":{ startDate: "2025-11-09", duration: 90 },
         },
         dateOfBirth: "null", //yyyy mm dd
-    }
+    },
+    {
+        id: "U008",
+        userName: "RAVI",
+        fullName: "RAVI THAPA",
+        email: "ravikshetri84@gmail.com",
+        image: "ASSET/WEB-SOFTWARE/USER/IMG/RAVI.jpg",
+        phone: "9766265561",
+        address: "GULMI-01 RANGBASS",
+        accountType: "MEMBER",
+        badgeAccess: true, // No badge for Manisha like , badgeAccess: false
+        badgeType: "MEMBER",
+        password: "RX9766265561",
+        access: [],
+        timedAccessConfig: {
+            "file1": { startDate: "2025-11-10", duration: 75 },
+            "file2": { startDate: "2025-11-10", duration: 75 },
+            "file4": { startDate: "2025-11-10", duration: 75 },
+            "file5": { startDate: "2025-11-10", duration: 75 },
+            "file11":{ startDate: "2025-11-10", duration: 75 },
+        },
+        dateOfBirth: "2004-07-22", //yyyy mm dd
+    },
 ];
 // Content Cards Database
 const contentCards = [
