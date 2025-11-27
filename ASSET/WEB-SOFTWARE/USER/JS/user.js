@@ -1,6 +1,7 @@
 // --- NEW: Define available custom badge designs and their image paths ---
 const badgeDesigns = {
     "ADMIN":  "ASSET/MAIN/IMG/BADGE/ADMIN.png",
+    "MODERATOR": "ASSET/MAIN/IMG/BADGE/MODERATOR.png",
     "PARTNER":"ASSET/MAIN/IMG/BADGE/PARTNER.png",
     "MEMBER": "ASSET/MAIN/IMG/BADGE/MEMBER.png",
     "GUEST":  "ASSET/MAIN/IMG/BADGE/GUEST.png" // You might want a specific guest badge image
@@ -33,12 +34,17 @@ const allUsers = [
         image: "ASSET/WEB-SOFTWARE/USER/IMG/Rita-Magar.jpg",
         phone: "9807483578",
         address: "BANGANGA-5 ,KAPILVASTU",
-        accountType: "PARTNER",
+        accountType: "MEMBER",
         badgeAccess: true,
-        badgeType: "PARTNER",
+        badgeType: "MEMBER",
         password: "RX9807483578",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file9","file10","file11",],
-        timedAccessConfig: { },
+         access: [],
+        timedAccessConfig: {
+            "file1": { startDate: "2025-11-09", duration: 90 },
+            "file2": { startDate: "2025-11-09", duration: 90 },
+            "file5": { startDate: "2025-11-09", duration: 90 },
+            "file11":{ startDate: "2025-11-09", duration: 90 },
+        },
         dateOfBirth: "null", //yyyy mm dd
     },
     {
@@ -72,7 +78,7 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "PARTNER",
         badgeAccess: true,
-        badgeType: "PARTNER",
+        badgeType: "MODERATOR",
         password: "RX9821948199",
         access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file9","file10","file11",],
         timedAccessConfig: { },

@@ -1,9 +1,90 @@
-// REVIEW-STYLE.js - Combined with CSS
+// no need any just add on html code --->  <section id="rx-reviewer"> </section> <--- this section all automatically added 
+// autor : RX STUDIO
+// www.rosankc.com.np
+
+// RX-REVIEWER.js - Auto-fills rx-reviewer section
 document.addEventListener('DOMContentLoaded', function() {
+    // Find your existing section with id="rx-reviewer"
+    const reviewSection = document.getElementById('rx-reviewer');
+    
+    if (!reviewSection) {
+        console.error('Section with id="rx-reviewer" not found!');
+        return;
+    }
+
+    // Add RX-REVIEWER content to your section
+    reviewSection.innerHTML = `
+    <h1 class="cta-button" >Our Clients Say</h1>
+        <div class="rx-reviews-container">
+            <div class="rx-review-card" data-image="ASSET/MAIN/IMG/REVIWER-IMG/Rohit.jpg">
+                <div class="rx-quote-icon">"</div>
+                <p class="rx-review-text">"Rosan Khattri Chettri is a highly skilled graphic designer with an amazing eye for detail. His logo and branding designs stand out with creativity and professionalism. A true expert in his field!"</p>
+                <div class="rx-reviewer">
+                    <img src="ASSET/MAIN/IMG/REVIWER-IMG/Rohit.jpg" alt="Reviewer" class="rx-reviewer-img">
+                    <div class="rx-reviewer-info">
+                        <h4>Rohit Xettri</h4>
+                        <p>Banganga-10, Kapilvastu</p>
+                    </div>
+                </div>
+            </div>
+            <div class="rx-review-card" data-image="ASSET/MAIN/IMG/REVIWER-IMG/Mahesh.jpg">
+                <div class="rx-quote-icon">"</div>
+                <p class="rx-review-text">Rosan Khattri Chettri is a talented and reliable graphic designer with a strong eye for detail. He specializes in logos, business cards, and branding, always delivering creative and high-quality work. Highly recommended!</p>
+                <div class="rx-reviewer">
+                    <img src="ASSET/MAIN/IMG/REVIWER-IMG/Mahesh.jpg" alt="Reviewer" class="rx-reviewer-img">
+                    <div class="rx-reviewer-info">
+                        <h4>महेश आचार्य</h4>
+                        <p>Arghakhachi</p>
+                    </div>
+                </div>
+            </div>
+            <div class="rx-review-card" data-image="ASSET/MAIN/IMG/REVIWER-IMG/Kusum.jpg">
+                <div class="rx-quote-icon">"</div>
+                <p class="rx-review-text">Rosan Khattri Chettri is a talented graphic designer with experience, specializing in logos, business cards, and more. He delivers creative and professional work. Highly recommended!.</p>
+                <div class="rx-reviewer">
+                    <img src="ASSET/MAIN/IMG/REVIWER-IMG/Kusum.jpg" alt="Reviewer" class="rx-reviewer-img">
+                    <div class="rx-reviewer-info">
+                        <h4>कुस्मा तरामु मगर</h4>
+                        <p>Gulmi-Lumpek</p>
+                    </div>
+                </div>
+            </div>
+            <div class="rx-review-card" data-image="ASSET/MAIN/IMG/REVIWER-IMG/Leela.jpg">
+                <div class="rx-quote-icon">"</div>
+                <p class="rx-review-text">Rosan Xettri is known for his dedication to excellence in graphic design and gaming. His innovative mindset, coupled with his refined skills, allows him to create visually stunning designs and achieve remarkable success in the gaming world.</p>
+                <div class="rx-reviewer">
+                    <img src="ASSET/MAIN/IMG/REVIWER-IMG/Leela.jpg" alt="Reviewer" class="rx-reviewer-img">
+                    <div class="rx-reviewer-info">
+                        <h4>Leela Bhudha Magar</h4>
+                        <p>Banganga-10, Kapilvastu</p>
+                    </div>
+                </div>
+            </div>
+            <div class="rx-review-card" data-image="ASSET/MAIN/IMG/REVIWER-IMG/Prasamsha.jpg">
+                <div class="rx-quote-icon">"</div>
+                <p class="rx-review-text">Rosan Xettri is a talented graphic designer and gamer who seamlessly blends creativity with technical expertise. His innovative approach and attention to detail make his work stand out, consistently delivering high-quality results.</p>
+                <div class="rx-reviewer">
+                    <img src="ASSET/MAIN/IMG/REVIWER-IMG/Prasamsha.jpg" alt="Reviewer" class="rx-reviewer-img">
+                    <div class="rx-reviewer-info">
+                        <h4>Prasamsha Khanal</h4>
+                        <p>Butwal</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
     // Inject CSS styles
     const style = document.createElement('style');
     style.textContent = `
-        .reviews-container {
+        #rx-reviewer {
+            padding: 40px 20px;
+            background-image: url('');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .rx-reviews-container {
             display: flex;
             flex-direction: column;
             gap: 30px;
@@ -13,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
             min-height: 400px;
         }
         
-        .review-card {
+        .rx-review-card {
             background: rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
@@ -41,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .review-card.active {
+        .rx-review-card.active {
             z-index: 2;
             box-shadow: 
                 0 10px 40px rgba(0, 0, 0, 0.2),
@@ -50,14 +131,14 @@ document.addEventListener('DOMContentLoaded', function() {
             background: rgba(255, 255, 255, 0.15);
         }
         
-        .review-card.current {
+        .rx-review-card.current {
             opacity: 1;
             transform: translateY(0);
             position: relative;
             z-index: 3;
         }
         
-        .review-card:hover {
+        .rx-review-card:hover {
             transform: translateY(-5px) scale(1.01) !important;
             box-shadow: 
                 0 15px 35px rgba(0, 0, 0, 0.2),
@@ -66,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function() {
             background: rgba(255, 255, 255, 0.12);
         }
         
-        .quote-icon {
+        .rx-quote-icon {
             font-size: 60px;
             line-height: 0;
             margin-bottom: 10px;
@@ -78,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
         
-        .review-text {
+        .rx-review-text {
             position: relative;
             margin: 30px 0 25px;
             font-size: 18px;
@@ -88,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
             text-shadow: 0 1px 3px rgba(233, 9, 9, 0.88);
         }
         
-        .reviewer {
+        .rx-reviewer {
             display: flex;
             align-items: center;
             position: relative;
@@ -98,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
             border-top: 1px solid rgba(255, 255, 255, 0.15);
         }
         
-        .reviewer-img {
+        .rx-reviewer-img {
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -110,13 +191,13 @@ document.addEventListener('DOMContentLoaded', function() {
             background: rgba(255, 255, 255, 0.1);
         }
         
-        .review-card:hover .reviewer-img {
+        .rx-review-card:hover .rx-reviewer-img {
             border-color: rgba(255, 255, 255, 0.8);
             transform: scale(1.05);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
-        .reviewer-info h4 {
+        .rx-reviewer-info h4 {
             margin: 0;
             font-size: 18px;
             font-weight: 600;
@@ -124,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
         }
         
-        .reviewer-info p {
+        .rx-reviewer-info p {
             margin: 5px 0 0;
             font-size: 14px;
             opacity: 0.9;
@@ -133,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         /* Background image when active */
-        .review-card.active::before {
+        .rx-review-card.active::before {
             content: '';
             position: absolute;
             top: 0;
@@ -149,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         /* Liquid glass effect overlay */
-        .review-card::after {
+        .rx-review-card::after {
             content: '';
             position: absolute;
             top: 0;
@@ -169,28 +250,25 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
 
-    // Original JavaScript functionality
-    const reviewCards = document.querySelectorAll('.review-card');
-    const reviewsContainer = document.querySelector('.reviews-container');
+    // Rest of your JavaScript functionality remains the same
+    const reviewCards = document.querySelectorAll('.rx-review-card');
+    const reviewsContainer = document.querySelector('.rx-reviews-container');
     let currentIndex = 0;
     let rotationInterval;
     let isAnimating = false;
     let isPaused = false;
 
-    // Configuration object for easy customization
     const config = {
-        rotationInterval: 5000,    // Time between rotations (ms)
-        animationDuration: 500,   // Animation duration (ms)
-        verticalOffset: 20,       // Vertical movement during animation (px)
-        mobileBreakpoint: 768,    // Breakpoint for mobile adjustments (px)
+        rotationInterval: 5000,
+        animationDuration: 500,
+        verticalOffset: 20,
+        mobileBreakpoint: 768,
         bgOverlay: 'linear-gradient(rgba(0, 0, 2, 0.7), rgba(6, 0, 10, 0.7))',
         bgColor: 'rgba(6, 0, 10, 0.7)'
     };
 
-    // Initialize cards with proper transitions
     function initializeCards() {
         reviewCards.forEach((card, index) => {
-            // Responsive card styling
             card.style.aspectRatio = '1/1';
             card.style.display = 'flex';
             card.style.position = 'absolute';
@@ -203,30 +281,25 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.transition = `opacity ${config.animationDuration}ms ease, transform ${config.animationDuration}ms ease, background ${config.animationDuration}ms ease`;
             card.style.pointerEvents = 'auto';
             
-            // Set background image properties
             const imageUrl = card.getAttribute('data-image');
             card.style.setProperty('--bg-image', `url(${imageUrl})`);
             card.style.backgroundSize = 'cover';
             card.style.backgroundPosition = 'center center';
             card.style.backgroundRepeat = 'no-repeat';
             
-            // Set initial state
             if (index === 0) {
                 card.classList.add('current');
             } else {
                 card.classList.remove('current');
             }
 
-            // Add accessibility attributes
             card.setAttribute('aria-hidden', index !== 0);
             card.setAttribute('tabindex', index === 0 ? '0' : '-1');
         });
 
-        // Handle mobile layout
         updateMobileLayout();
     }
 
-    // Update layout for mobile devices
     function updateMobileLayout() {
         const isMobile = window.innerWidth < config.mobileBreakpoint;
         reviewCards.forEach(card => {
@@ -240,7 +313,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Rotate to next review with smooth animation
     function rotateReviews(direction = 1) {
         if (isAnimating || isPaused) return;
         
@@ -249,19 +321,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const nextIndex = (currentIndex + direction + reviewCards.length) % reviewCards.length;
         const nextCard = reviewCards[nextIndex];
         
-        // Prepare next card
         nextCard.style.display = 'flex';
         nextCard.style.opacity = '0';
         nextCard.style.transform = `translateY(${direction * config.verticalOffset}px)`;
         
-        // Animate out current card
         currentCard.style.opacity = '0';
         currentCard.style.transform = `translateY(${-direction * config.verticalOffset}px)`;
         currentCard.classList.remove('current');
         currentCard.setAttribute('aria-hidden', 'true');
         currentCard.setAttribute('tabindex', '-1');
         
-        // Animate in next card
         setTimeout(() => {
             nextCard.style.opacity = '1';
             nextCard.style.transform = 'translateY(0)';
@@ -269,7 +338,6 @@ document.addEventListener('DOMContentLoaded', function() {
             nextCard.setAttribute('aria-hidden', 'false');
             nextCard.setAttribute('tabindex', '0');
             
-            // Hide previous card after animation
             setTimeout(() => {
                 currentCard.style.display = 'none';
                 currentIndex = nextIndex;
@@ -278,30 +346,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     }
 
-    // Start auto-rotation
     function startRotation() {
         clearInterval(rotationInterval);
         rotationInterval = setInterval(() => rotateReviews(1), config.rotationInterval);
     }
 
-    // Pause rotation on hover/focus
     function pauseRotation() {
         isPaused = true;
         clearInterval(rotationInterval);
     }
 
-    // Resume rotation
     function resumeRotation() {
         isPaused = false;
         startRotation();
     }
 
-    // Toggle image background with enhanced effects
     function toggleReviewImage(card) {
         if (isAnimating) return;
         
-        // Close other active cards
-        document.querySelectorAll('.review-card.active').forEach(el => {
+        document.querySelectorAll('.rx-review-card.active').forEach(el => {
             if (el !== card) {
                 el.classList.remove('active');
                 el.style.backgroundImage = 'none';
@@ -309,7 +372,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Toggle current card
         const isActivating = !card.classList.contains('active');
         card.classList.toggle('active');
         
@@ -322,29 +384,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Initialize and start rotation
     initializeCards();
     startRotation();
 
-    // Event listeners
     reviewsContainer.addEventListener('click', function(e) {
-        const card = e.target.closest('.review-card');
+        const card = e.target.closest('.rx-review-card');
         if (card && !isAnimating) {
             toggleReviewImage(card);
         }
     });
 
-    // Pause on hover/focus for better UX
     reviewsContainer.addEventListener('mouseenter', pauseRotation);
     reviewsContainer.addEventListener('mouseleave', resumeRotation);
     reviewsContainer.addEventListener('focusin', pauseRotation);
     reviewsContainer.addEventListener('focusout', resumeRotation);
 
-    // Navigation controls
-    document.querySelector('.prev-btn')?.addEventListener('click', () => rotateReviews(-1));
-    document.querySelector('.next-btn')?.addEventListener('click', () => rotateReviews(1));
-
-    // Handle window resize with debounce
     let resizeTimeout;
     window.addEventListener('resize', function() {
         clearTimeout(resizeTimeout);
@@ -356,7 +410,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     card.style.opacity = card.classList.contains('current') ? '1' : '0';
                     card.style.transform = card.classList.contains('current') ? 'translateY(0)' : `translateY(${config.verticalOffset}px)`;
                     
-                    // Force reflow
                     void card.offsetHeight;
                     
                     card.style.transition = `opacity ${config.animationDuration}ms ease, transform ${config.animationDuration}ms ease, background ${config.animationDuration}ms ease`;
@@ -365,9 +418,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 100);
     });
 
-    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
-        if (e.target.closest('.review-card')) {
+        if (e.target.closest('.rx-review-card')) {
             if (e.key === 'ArrowLeft') {
                 rotateReviews(-1);
             } else if (e.key === 'ArrowRight') {

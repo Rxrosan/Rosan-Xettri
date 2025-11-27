@@ -1,8 +1,100 @@
-// Inject CSS styles
-(function injectStyles() {
+// no need any just add on html code ---> <section id="rx-team-section"></section> <--- this section all automatically added 
+// autor : RX STUDIO
+// www.rosankc.com.np
+
+// RX-TEAM.js - CORRECTED VERSION
+document.addEventListener('DOMContentLoaded', function() {
+    // Find your existing section
+    const teamSection = document.getElementById('rx-team-section');
+    
+    if (!teamSection) {
+        console.error('Section with id="rx-team-section" not found!');
+        return;
+    }
+
+    // Add content to your existing section
+    teamSection.innerHTML = `
+    <h2 class="cta-button" >Our Team member </h2>
+        <div class="rx-team-slider-container">
+            <div class="rx-team-slider">
+                <div class="rx-team-slide">
+                    <div class="rx-team-member">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-2.png" alt="Puja Acharya Shrestha">
+                        <h3>Puja Acharya Shrestha</h3>
+                        <p class="rx-position">Palpa, Nepal</p>
+                        <p>Designer</p>
+                        <div class="rx-social-links">
+                            <a href="https://www.facebook.com/puja.acharya.7503314" aria-label="Puja Acharya Shrestha's Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/puja.acharya.7503314/" aria-label="Puja Acharya Shrestha's Instagram"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="rx-team-slide">
+                    <div class="rx-team-member">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-5.png" alt="Keshab Disuwa Magar">
+                        <h3>Keshab Disuwa Magar</h3>
+                        <p class="rx-position">Kapilvastu</p>
+                        <p>Reviewer</p>
+                        <div class="rx-social-links">
+                            <a href="https://www.facebook.com/keshabdisuwa7" aria-label="Keshab Disuwa Magar's Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.instagram.com/ksab_07even/" aria-label="Keshab Disuwa Magar's Instagram"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="rx-team-slide">
+                    <div class="rx-team-member">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-3.png" alt="Leela Bhudha Magar">
+                        <h3>Leela Bhudha Magar</h3>
+                        <p class="rx-position">Banganga-10, Kapilvastu</p>
+                        <p>Video Editor</p>
+                        <div class="rx-social-links">
+                            <a href="https://www.facebook.com/profile.php?id=100070727865998" aria-label="Leela Bhudha Magar's Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Leela Bhudha Magar's Instagram"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="rx-team-slide">
+                    <div class="rx-team-member">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-4.png" alt="कुस्मा तरामु मगर">
+                        <h3>कुस्मा तरामु मगर</h3>
+                        <p class="rx-position">Gulmi-Lumpek</p>
+                        <p>Reviewer</p>
+                       <div class="rx-social-links">
+                            <a href="https://www.facebook.com/profile.php?id=100090446589889" aria-label="कुस्मा तरामु मगर's Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="कुस्मा तरामु मगर's Instagram"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="rx-team-slide">
+                    <div class="rx-team-member">
+                        <img src="ASSET/MAIN/IMG/TEAM-IMG/T-1.png" alt="Prasamsha Khanal">
+                        <h3>Prasamsha Khanal</h3>
+                        <p class="rx-position">Butwal</p>
+                        <p>Web Developer</p>
+                        <div class="rx-social-links">
+                            <a href="https://www.facebook.com/profile.php?id=100080956815490" aria-label="Prasamsha Khanal's Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Prasamsha Khanal's Instagram"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // REMOVE THIS LINE - DO NOT ADD TO BODY AGAIN
+    // document.body.appendChild(teamSection);
+
+    // Inject CSS styles
     const style = document.createElement('style');
     style.textContent = `
-        .team-slider-container {
+        #rx-team-section {
+            padding: 40px 20px;
+            background-image: url('');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .rx-team-slider-container {
             position: relative;
             height: 400px;
             overflow: hidden;
@@ -10,12 +102,12 @@
             max-width: 300px;
         }
 
-        .team-slider {
+        .rx-team-slider {
             height: 100%;
             transition: transform 0.8s ease-in-out;
         }
 
-        .team-slide {
+        .rx-team-slide {
             height: 400px;
             width: 100%;
             display: flex;
@@ -23,12 +115,12 @@
             justify-content: center;
         }
 
-        .team-member {
+        .rx-team-member {
             text-align: center;
             padding: 20px;
         }
 
-        .team-member img {
+        .rx-team-member img {
             width: 150px;
             height: 150px;
             border-radius: 50%;
@@ -36,7 +128,7 @@
             margin-bottom: 15px;
         }
         
-        .social-links {
+        .rx-social-links {
             display: flex;
             justify-content: center;
             gap: 15px;
@@ -44,23 +136,21 @@
             font-size: 18px;
         }
 
-        .social-links a {
+        .rx-social-links a {
             color: #555;
             transition: all 0.3s ease;
         }
 
-        .social-links a:hover {
+        .rx-social-links a:hover {
             color: #000;
             transform: translateY(-3px);
         }
     `;
     document.head.appendChild(style);
-})();
 
-// Team slider functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const slider = document.querySelector('.team-slider');
-    const slides = document.querySelectorAll('.team-slide');
+    // Team slider functionality
+    const slider = document.querySelector('.rx-team-slider');
+    const slides = document.querySelectorAll('.rx-team-slide');
     const totalSlides = slides.length;
     let currentIndex = 0;
     let isAnimating = false;
@@ -92,8 +182,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const firstClone = slides[0].cloneNode(true);
         const lastClone = slides[totalSlides - 1].cloneNode(true);
         
-        firstClone.id = 'first-clone';
-        lastClone.id = 'last-clone';
+        firstClone.id = 'rx-first-clone';
+        lastClone.id = 'rx-last-clone';
         
         slider.appendChild(firstClone);
         slider.insertBefore(lastClone, slides[0]);
@@ -233,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Optional navigation buttons
-        document.querySelector('.team-next')?.addEventListener('click', nextSlide);
-        document.querySelector('.team-prev')?.addEventListener('click', prevSlide);
+        document.querySelector('.rx-team-next')?.addEventListener('click', nextSlide);
+        document.querySelector('.rx-team-prev')?.addEventListener('click', prevSlide);
     }
 });
