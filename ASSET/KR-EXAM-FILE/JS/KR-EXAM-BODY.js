@@ -28,6 +28,11 @@ const studentInfo = {
 // Audio variables
 let currentAudio = null; // To keep track of the currently playing audio element
 
+// Image view variables
+let imagePressTimer = null;
+const IMAGE_PRESS_DURATION = 1000; // 1 second for long press
+let isImageOpen = false;
+
 // Cached DOM Elements
 const dom = {};
 
@@ -45,6 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
     window.handleExitChoice = handleExitChoice;
     window.confirmSubmitExam = confirmSubmitExam;
     window.cancelSubmitExam = cancelSubmitExam;
+    window.openLargeImageView = openLargeImageView;
+    window.closeLargeImageView = closeLargeImageView;
+    window.takeAnotherExam = takeAnotherExam;
 });
 
 function cacheDOMElements() {
@@ -67,6 +75,7 @@ function cacheDOMElements() {
     dom.submitNowBtn = document.getElementById("submit-now-btn");
     dom.submitConfirmModal = document.getElementById("submit-confirm-modal");
     dom.submitConfirmMessage = document.getElementById("submit-confirm-message");
+    dom.imageOverlay = document.getElementById("image-overlay");
 }
 
 function initializeExamPage() {
@@ -98,6 +107,7 @@ function initializeExamPage() {
     createQuestionNavigation();
     setupEventListeners();
     handleScreenResize();
+    createImageOverlay(); // Create image overlay for large image view
 
     if (dom.timerBox) dom.timerBox.style.display = "block"; // Changed to block to make it visible
     
@@ -105,6 +115,38 @@ function initializeExamPage() {
     if (!dom.submitConfirmModal) {
         createSubmitConfirmationModal();
     }
+}
+
+function createImageOverlay() {
+    // Check if overlay already exists
+    if (document.getElementById("image-overlay")) return;
+    
+    const overlayHTML = `
+        <div id="image-overlay" class="image-overlay" style="display: none;">
+            <div class="image-overlay-content">
+                <button  onclick="closeLargeImageView()"> </button>
+                <img id="enlarged-image" class="enlarged-image" src="" alt="Enlarged image">
+                <div class="image-caption">Press anywhere or close button to exit</div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', overlayHTML);
+    dom.imageOverlay = document.getElementById("image-overlay");
+    
+    // Add click event to close when clicking outside the image
+    dom.imageOverlay.addEventListener('click', function(e) {
+        if (e.target === this || e.target.classList.contains('image-caption')) {
+            closeLargeImageView();
+        }
+    });
+    
+    // Add ESC key support
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isImageOpen) {
+            closeLargeImageView();
+        }
+    });
 }
 
 function createSubmitConfirmationModal() {
@@ -179,6 +221,102 @@ function setupEventListeners() {
     dom.profileModalCloseBtn?.addEventListener('click', closeProfileModal);
 }
 
+// ========== IMAGE LONG PRESS & ENLARGED VIEW FUNCTIONS ==========
+function setupImageLongPress(imageElement, imageSrc) {
+    if (!imageElement || !imageSrc) return;
+    
+    // Clear any existing timers
+    if (imagePressTimer) {
+        clearTimeout(imagePressTimer);
+    }
+    
+    // Touch events for mobile
+    imageElement.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        imagePressTimer = setTimeout(() => {
+            openLargeImageView(imageSrc);
+        }, IMAGE_PRESS_DURATION);
+    });
+    
+    imageElement.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        if (imagePressTimer) {
+            clearTimeout(imagePressTimer);
+        }
+    });
+    
+    imageElement.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+        if (imagePressTimer) {
+            clearTimeout(imagePressTimer);
+        }
+    });
+    
+    // Mouse events for desktop
+    imageElement.addEventListener('mousedown', function(e) {
+        imagePressTimer = setTimeout(() => {
+            openLargeImageView(imageSrc);
+        }, IMAGE_PRESS_DURATION);
+    });
+    
+    imageElement.addEventListener('mouseup', function() {
+        if (imagePressTimer) {
+            clearTimeout(imagePressTimer);
+        }
+    });
+    
+    imageElement.addEventListener('mouseleave', function() {
+        if (imagePressTimer) {
+            clearTimeout(imagePressTimer);
+        }
+    });
+    
+    // Also add double-click for quick opening
+    imageElement.addEventListener('dblclick', function() {
+        openLargeImageView(imageSrc);
+    });
+    
+    // Add tooltip
+    imageElement.title = "Long press (1 second) or double-click to view full size";
+}
+
+function openLargeImageView(imageSrc) {
+    if (!imageSrc || isImageOpen) return;
+    
+    const enlargedImage = document.getElementById("enlarged-image");
+    if (!enlargedImage) return;
+    
+    enlargedImage.src = imageSrc;
+    dom.imageOverlay.style.display = "flex";
+    
+    // Add fade-in effect
+    setTimeout(() => {
+        dom.imageOverlay.classList.add("active");
+    }, 10);
+    
+    isImageOpen = true;
+    
+    // Disable body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLargeImageView() {
+    if (!isImageOpen) return;
+    
+    dom.imageOverlay.classList.remove("active");
+    
+    setTimeout(() => {
+        dom.imageOverlay.style.display = "none";
+        const enlargedImage = document.getElementById("enlarged-image");
+        if (enlargedImage) {
+            enlargedImage.src = "";
+        }
+        isImageOpen = false;
+        
+        // Re-enable body scroll
+        document.body.style.overflow = 'auto';
+    }, 300);
+}
 
 // ========== 2. PROFILE MODAL & UI CONTROLS ==========
 function openProfileModal() { if (dom.profileModalOverlay) dom.profileModalOverlay.style.display = 'flex'; }
@@ -226,6 +364,14 @@ function showContent(questionNumber) {
     updateQuestionNavigation();
     handleScreenResize();
     dom.contentDisplay.scrollTo(0, 0);
+
+    // Setup image long press for question images
+    setTimeout(() => {
+        const questionImage = document.querySelector('.question-image');
+        if (questionImage && questionImage.src) {
+            setupImageLongPress(questionImage, questionImage.src);
+        }
+    }, 100);
 
     // After rendering, if there's an audio, ensure its event listeners are correctly set up
     const audioEl = document.getElementById(`audio-${questionNumber}`);
@@ -342,7 +488,6 @@ function setupAudioPlayback(questionNumber) {
     audio.addEventListener('ended', handleAudioEndEvent);
 }
 
-
 // ========== 4. NAVIGATION & SUBMISSION ==========
 function goToPrevious() { 
     clearAudio(); // Stop audio if active
@@ -450,11 +595,48 @@ function displayResults(results) {
     if (dom.questionNavigation) dom.questionNavigation.style.display = 'none';
     dom.contentDisplay.scrollTo(0, 0);
     closeTimer();
+    
+    // Setup image long press for review images
+    setTimeout(() => {
+        document.querySelectorAll('.review-question-container .question-image').forEach(img => {
+            if (img.src) {
+                setupImageLongPress(img, img.src);
+            }
+        });
+    }, 100);
 }
 
 function buildResultsSummaryHTML(results) {
     const durationStr = `${Math.floor(results.duration / 60)}m ${results.duration % 60}s`;
-    return `<div class="result-container"><div class="result-header"><h1 class="result-title">Exam Results</h1></div><div class="result-meta"><div class="meta-item"><div class="meta-label">Student Name</div><div class="meta-value">${studentInfo.name}</div></div><div class="meta-item"><div class="meta-label">Exam ID</div><div class="meta-value">${studentInfo.serial}</div></div><div class="meta-item"><div class="meta-label">Date</div><div class="meta-value">${results.dateTime.date}</div></div><div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">${durationStr}</div></div></div><div class="result-summary"><div class="summary-item"><div class="summary-value">${results.total}</div><div class="summary-label">Total</div></div><div class="summary-item"><div class="summary-value">${results.attempted}</div><div class="summary-label">Attempted</div></div><div class="summary-item"><div class="summary-value">${results.correct}</div><div class="summary-label">Correct</div></div><div class="summary-item"><div class="summary-value">${results.incorrect}</div><div class="summary-label">Incorrect</div></div><div class="summary-item"><div class="summary-value">${results.score}%</div><div class="summary-label">Score</div></div></div><a href="#" onclick="generateResultPDF()" class="download-btn"><i class="fas fa-download"></i> Download Detailed Result</a></div>`;
+    return `<div class="result-container">
+        <div class="result-header"><h1 class="result-title">Exam Results</h1></div>
+        <div class="result-meta">
+            <div class="meta-item"><div class="meta-label">Student Name</div><div class="meta-value">${studentInfo.name}</div></div>
+            <div class="meta-item"><div class="meta-label">Exam ID</div><div class="meta-value">${studentInfo.serial}</div></div>
+            <div class="meta-item"><div class="meta-label">Date</div><div class="meta-value">${results.dateTime.date}</div></div>
+            <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">${durationStr}</div></div>
+        </div>
+        <div class="result-summary">
+            <div class="summary-item"><div class="summary-value">${results.total}</div><div class="summary-label">Total</div></div>
+            <div class="summary-item"><div class="summary-value">${results.attempted}</div><div class="summary-label">Attempted</div></div>
+            <div class="summary-item"><div class="summary-value">${results.correct}</div><div class="summary-label">Correct</div></div>
+            <div class="summary-item"><div class="summary-value">${results.incorrect}</div><div class="summary-label">Incorrect</div></div>
+            <div class="summary-item"><div class="summary-value">${results.score}%</div><div class="summary-label">Score</div></div>
+        </div>
+        <div class="result-actions">
+            <a href="#" onclick="generateResultPDF()" class="download-btn"><i class="fas fa-download"></i> Download Detailed Result</a>
+            <button class="download-btn" onclick="window.location.href='USER-DASHBOARD.html'">
+  <i class="fas fa-redo"></i> Give Another Exam
+</button>
+
+        </div>
+    </div>`;
+}
+
+function takeAnotherExam() {
+    // Clear exam data and redirect to home
+    localStorage.removeItem('currentUser');
+    window.location.href = 'home.html';
 }
 
 function generateDetailedReviewHTML() {
@@ -686,7 +868,6 @@ function handleBeforeUnload(e) {
     }
 }
 
-
 function showExitConfirmationModal() {
     if (dom.exitConfirmModal) {
         dom.exitConfirmMessage.textContent =
@@ -697,7 +878,6 @@ function showExitConfirmationModal() {
         }, 10);
     }
 }
-
 
 function handleExitChoice(shouldExit) {
     if (dom.exitConfirmModal) {
