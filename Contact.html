@@ -1,279 +1,408 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="ASSET/WEB-SOFTWARE/JS/DEV-TOOL-PROTECTION-ALL.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="ASSET/MAIN/IMG/LOGO/L-3.png">
-    <title>RX| CONTACT</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="ASSET/MAIN/CSS/MAIN-NORMAL-DESIGN.css">
-    <link rel="stylesheet" href="ASSET/WEB-SOFTWARE/USER/CSS/USER-LUQUID-GLASS-DESIGN.css">
-    <link rel="stylesheet" href="ASSET/MAIN/CSS/AUTO-WRITING-ANIMATION.css">
-    
+    <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-2.png">
+    <title>RX |Contact</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-CSS/RX-WEB-MAIN.css">
+    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-CSS/RX-WEB-CONTACT.css">
 </head>
 <body>
-    <!-- Guest Notification -->
-    <div id="guest-notification">
-        <i class="fas fa-info-circle"></i>
-        <div class="content">
-            <h3 id="notification-title">You are logged in as Guest</h3>
-            <p id="notification-message">To access your real account, please login</p>
-        </div>
-        <button id="login-btn">Login Now</button>
-    </div>
-
-    <!-- Header with Navigation -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <div class="logo">
-                    <span class="glow">RX STUDIO</span>
-                </div>
-
-                <div class="hamburger" id="hamburger" >
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-
-                <div class="nav-links" id="nav-links" >
-                    <a href="index.html"> HOME</a>
-                    <a href="About.html"> ABOUT</a>
-                    <a href="Service.html"> SERVICE</a>
-                    <a href="Contact.html" class="glow"> CONTACT</a>
-                    <a href="News.html"></i> NEWS</a>
-
-                    <div class="profile-container">
-    <button class="profile-button">
-        <div class="profile-img-container">
-            <img id="profile-img" src="#" alt="Profile">
-            <div id="profile-badge" class="profile-badge"></div>
-        </div>
-        <span id="username">GUEST</span>
-    </button>
-    <div class="profile-dropdown" id="profile-dropdown">
-        <div class="profile-header">
-            <div class="dropdown-img-container">
-                <img id="dropdown-img" src="#" alt="Profile">
-                <div id="dropdown-badge" class="profile-badge"></div>
-            </div>
-            <div class="profile-info">
-                <h4 id="dropdown-name">Guest User</h4>
-                <p id="dropdown-account-type">Guest Account</p>
-            </div>
-        </div>
-        <div class="profile-details">
-            <div>
-                <i class="fas fa-id-badge"></i>
-                <span id="dropdown-user-id">N/A</span>
-            </div>
-            <div>
-                <i class="fas fa-envelope"></i>
-                <span id="dropdown-email">guest@example.com</span>
-            </div>
-            <div>
-                <i class="fas fa-phone"></i>
-                <span id="dropdown-phone">Not provided</span>
-            </div>
-            <div>
-                <i class="fas fa-map-marker-alt"></i>
-                <span id="dropdown-address">Not provided</span>
-            </div>
-        </div>
-        <button class="logout-btn" id="logout-btn">Logout</button>
-    </div>
-</div>
-                    
-                    <!-- Admin Super Settings Link (Dynamically shown) -->
-                    <a href="#" id="admin-settings-link" style="display: none;"><i class="fas fa-users-cog"></i> USERS</a>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main>
-        <div class="container">
-            <section class="hero" id="home" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-4.jpg'); background-size: cover; background-position: center;">
-                <h1>ROSAN KHATTRI CHETTRI</h1>
-                <p id="auto-writer" class="auto-writer"></p>
-                <a  class="cta-button">CONTACT</a>
-            </section>
-
-            <section class="features">
-                <div class="feature-card" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-5.jpg'); background-size: cover; background-position: center;">
-                    <div class="feature-icon">
-                       <i class="fas fa-comments"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>SOCIAL NETWORKS</h3>
-                        <p>Stay connected through our social platforms.</p>
-                        <div class="social-icons">
-                        <a href="https://www.facebook.com/RosanXettri.2004"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.facebook.com/Rosan.2061"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.youtube.com/@RX_E-SPORTS"><i class="fab fa-youtube"></i></a>
-                        <a href="https://x.com/Rx_Rosan"><i class="fab fa-twitter"></i></a>
-                        <a href="https://www.instagram.com/Rosan.2061"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.tiktok.com/@rosankc2061"><i class="fab fa-tiktok"></i></a>
-                    </div>
-                    </div>
-                </div>
-                <div class="feature-card" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-3.jpg'); background-size: cover; background-position: center;">
-                    <div class="feature-icon">
-                       <i class="fas fa-map-marker-alt"></i> 
-                    </div>
-                    <div class="feature-content">
-                        <h3>PHYSICAL COORDINATES</h3>
-                        <p>BANGANGA - 10, PAKADIACHAPA, KAPILVASTIU, NEPAL</p>
-                    </div>
-                </div>
-                <div class="feature-card" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-2.jpg'); background-size: cover; background-position: center;">
-                    <div class="feature-icon">
-                        <i class="fas fa-broadcast-tower"></i>
-                    </div>
-                    <div class="feature-content">
-                        <h3>DIGITAL CONTACT </h3>
-                        <p>Stay connected through our other digital platforms.</p>
-                        <div class="social-icons">
-                        <a href="mailto:rkc242855@gmail.com"><i class="fas fa-envelope"></i></a>
-                        <a href="mailto:rosankc820@gmail.com"><i class="fas fa-envelope"></i></a>
-                        <a href="tel:+977 9826482279"><i class="fas fa-phone"></i></a>
-                      
-                    </div>
-                    </div>
-                </div>
-                <a href="Service.html" class="cta-button">SEE OUR SERVICES</a>
-            </section>
-            </div>
-         </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>RX STUDIO</h3>
-                    <p>We create digital experiences that inspire and engage. Our solutions are tailored to meet your unique business needs.</p>
-                    <div class="social-icons">
-                        <a href="https://www.facebook.com/RosanXettri.2004"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://x.com/Rx_Rosan"><i class="fab fa-twitter"></i></a>
-                        <a href="https://www.instagram.com/Rosan.2061"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.tiktok.com/@rosankc2061"><i class="fab fa-tiktok"></i></a>
-                    </div>
-                </div>
-                <div class="footer-section">
-                    <h3>IMPORTENT LINK</h3>
-                    <ul class="footer-links">
-                        <li><a href="index.html"><i class="fas fa-chevron-right"></i> HOME</a></li>
-                        <li><a href="About.html"><i class="fas fa-chevron-right"></i> ABOUT</a></li>
-                        <li><a href="Service.html"><i class="fas fa-chevron-right"></i> SERVICE</a></li>
-                        <li><a href="News.html"><i class="fas fa-chevron-right"></i> NEWS</a></li>
-                        
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>RESOURCES</h3>
-                    <ul class="footer-links">
-                        <!--<li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Support Center</a></li>-->
-                        <li><a href="USER-DASHBOARD.html"><i class="fas fa-chevron-right"></i>OPEN RESOURCE</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>OTER LINK</h3>
-                    <ul class="footer-links">
-                        <!--<li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>-->
-                        
-                    </ul>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; <script>document.write(new Date().getFullYear())</script> ROSAN KHATTRI CHETTRI. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Login Modal -->
-    <div class="modal" id="login-modal" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-5.jpg'); background-size: cover; background-position: center;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>RX STUDIO</h2>
-                <button class="close-modal-btn" data-target="login-modal"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password">
-                </div>
-                <button class="login-btn" id="modal-login-btn">Login</button>
-            </div>
-            <div class="modal-footer">
-                <p>Don't have an account? <a href="Contact.html">Contact the admin.</a></p>
-            </div>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">RX <span>STUDIO</span></div>
+        <div class="user-actions">
+            <a  id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </a>
         </div>
     </div>
-
-       <!-- Admin Panel Modal -->
-<div class="modal" id="admin-panel-modal" style="background-image: url('ASSET/MAIN/IMG/BANNER/JPG-BANNER/BANNER-2.jpg'); background-size: cover; background-position: center;">
-    <div class="modal-content admin-modal-content">
-        <div class="modal-header">
-            <h2>RX STUDIO MEMBER INFORMATION</h2>
-            <button class="close-modal-btn" data-target="admin-panel-modal"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-body admin-panel-body">
-            <div class="user-list-sidebar">
-                <h3>RX STUDIO MEMBER'S</h3>
-                <ul id="member-list">
-                    <!-- Member list will be populated here -->
-                </ul>
-            </div>
-            <div class="user-details-display">
-                <h3 id="selected-user-header">Select a Member to View Details</h3>
-                <div id="selected-user-details">
-                    <!-- User details will be displayed here -->
-                    <div class="detail-item">
-                        <strong>User ID:</strong> <span id="admin-user-id"></span>
-                    </div>
-                    <div class="detail-item">
-                        <strong>Full Name:</strong> <span id="admin-full-name"></span>
-                    </div>
-                    <div class="detail-item">
-                        <strong>Email:</strong> <span id="admin-email"></span>
-                    </div>
-                    <div class="detail-item">
-                        <strong>Phone:</strong> <span id="admin-phone"></span>
-                    </div>
-                    <div class="detail-item">
-                        <strong>Address:</strong> <span id="admin-address"></span>
-                    </div>
-                    <div class="detail-item">
-                        <strong>Account Type:</strong> <span id="admin-account-type"></span>
-                    </div>
-                    <div class="detail-item profile-avatar-admin">
-                        <strong>Profile Image:</strong> <img id="admin-profile-img" src="" alt="Profile Image">
-                    </div>
-                    <!-- Add access details container -->
-                    <div id="admin-access-details" class="access-details-container">
-                        <!-- Access details will be populated here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-    <script src="ASSET/MAIN/JS/main.js"></script>
-    <script src="ASSET/WEB-SOFTWARE/USER/JS/user.js"></script>
-    <script src="ASSET/MAIN/JS/AUTO-WRITING-ANIMATION.js"></script>
-    <script src="ASSET/MAIN/JS/SMART-BTN-ADVANCE-DESIGN-L.js"></script>
     
+    <!-- Side Panel Overlay -->
+    <div class="panel-overlay" id="panelOverlay"></div>
+    
+    <!-- Side Panel Menu -->
+    <div class="side-panel" id="sidePanel">
+        <div class="panel-header">
+            <h3 class="logo">RX <span>STUDIO</span></h3>
+            <button class="close-panel" id="closePanel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+           <div class="panel-menu">
+            <div class="panel-item">
+                <a href="#" class="panel-link">
+                 MY PROFILE
+                </a>
+            </div><div class="panel-item">
+                <a href="#" class="panel-link">
+                 OPEN RESOURCE
+                </a>
+            </div>
+            <div class="panel-item">
+                <a href="#" class="panel-link">
+                 TERMS & CONDITION
+                </a>
+            </div>
+        </div>
+        
+        <div class="panel-footer">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Hero Section -->
+        <!-- Contact Section -->
+<!-- Contact Section -->
+<h2 class="section-title">Contact Us</h2>
+
+<!-- Contact Tabs Navigation -->
+<div class="contact-tabs">
+    <div class="tab-nav">
+        <button class="tab-btn active" data-tab="social">
+            <i class="fas fa-share-alt"></i>
+            <span>Social Media</span>
+        </button>
+        <button class="tab-btn" data-tab="direct">
+            <i class="fas fa-address-book"></i>
+            <span>Direct Contact</span>
+        </button>
+        <button class="tab-btn" data-tab="email">
+            <i class="fas fa-envelope"></i>
+            <span>Email Us</span>
+        </button>
+        <button class="tab-btn" data-tab="map">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Find Us</span>
+        </button>
+    </div>
+
+    <!-- Tab Content Container -->
+    <div class="tab-content-container">
+        <!-- Social Media Tab -->
+        <div class="tab-content active" id="social-tab">
+            <div class="tab-content-inner">
+                <div class="tab-header">
+                    <div class="tab-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3>Connect With Us</h3>
+                </div>
+                <p class="tab-description">Follow us on social media to stay updated with our latest projects, news, and creative insights.</p>
+                
+                <div class="social-media-grid">
+                    <a href="https://www.facebook.com/RosanXettri.2004" class="social-card">
+                        <div class="social-icon facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <div class="social-info">
+                            <h4>Facebook-page</h4>
+                            <p>RosanXettri.2004</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://x.com/Rx_Rosan" class="social-card">
+                        <div class="social-icon x">
+                            <i class="fab fa-x-twitter"></i>
+                        </div>
+                        <div class="social-info">
+                            <h4>X</h4>
+                            <p>Rx_Rosan</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.instagram.com/Rosan.2061" class="social-card">
+                        <div class="social-icon instagram">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <div class="social-info">
+                            <h4>Instagram</h4>
+                            <p>Rosan.2061</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.tiktok.com/@rosankc2061" class="social-card">
+                        <div class="social-icon tiktok">
+                            <i class="fab fa-tiktok"></i>
+                        </div>
+                        <div class="social-info">
+                            <h4>TikTok</h4>
+                            <p>@rosankc2061</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.youtube.com/@RX_E-SPORTS" class="social-card">
+                        <div class="social-icon youtube">
+                            <i class="fab fa-youtube"></i>
+                        </div>
+                        <div class="social-info">
+                            <h4>YouTube</h4>
+                            <p>@RX_E-SPORTS</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.facebook.com/Rosan.2061" class="social-card">
+                        <div class="social-icon facebook">
+                             <i class="fab fa-facebook-f"></i>
+                        </div>
+                        <div class="social-info">
+                            <h4>Facebook</h4>
+                            <p>Rosan.2061</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direct Contact Tab -->
+        <div class="tab-content" id="direct-tab">
+            <div class="tab-content-inner">
+                <div class="tab-header">
+                    <div class="tab-icon">
+                        <i class="fas fa-address-book"></i>
+                    </div>
+                    <h3>Direct Contact</h3>
+                </div>
+                <p class="tab-description">Reach out to us directly through any of these channels. We typically respond within 24 hours.</p>
+                
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div class="method-icon phone">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="method-details">
+                            <h4>Phone Number</h4>
+                            <p>+977 9826482279</p>
+                            <a href="tel:9826482279" class="method-action">
+                                <i class="fas fa-phone"></i> Call Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="method-details">
+                            <h4>WhatsApp</h4>
+                            <p>+977 9826482279</p>
+                            <a href="https://wa.me/9826482279" target="_blank" class="method-action">
+                                <i class="fab fa-whatsapp"></i> Message Now
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="method-icon address">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="method-details">
+                            <h4>Admin home address</h4>
+                            <p>Banganga-10 ,Kapilvastu NEPAL</p>
+                            <button class="method-action copy-address">
+                                <i class="fas fa-copy"></i> Copy Address
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Us Tab -->
+        <div class="tab-content" id="email-tab">
+            <div class="tab-content-inner">
+                <div class="tab-header">
+                    <div class="tab-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Us</h3>
+                </div>
+                <p class="tab-description">Contact us directly via email or use the form below to send us a message.</p>
+                
+                <div class="email-container">
+                    <!-- Direct Email Option -->
+                    <div class="direct-email-section">
+                        <h4>Send Direct Email</h4>
+                        <div class="direct-email-card">
+                            <div class="email-icon-main">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="email-details">
+                                <h5>rkc242855@gmail.com</h5>
+                                <p>Our primary email for all inquiries</p>
+                                <div class="email-actions">
+                                    <a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSBmXKWSMrdzdVGfPDXvhtFhDcTmkPvgjGWrWTsfJjXGhVMwWDxDRBPvGckqFjJqrKGKmWpr" class="direct-mail-btn">
+                                        <i class="fas fa-paper-plane"></i> Direct open email box
+                                    </a>
+                                    <button class="copy-email-btn">
+                                        <i class="fas fa-copy"></i> Copy Email
+                                    </button>
+                                </div>
+                            </div>
+                            </div>
+                            
+                             <div class="direct-email-card">
+                            <div class="email-icon-main">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="email-details">
+                                <h5>rosankc820@gmail.com</h5>
+                                <p>Our secondary email for inquiries</p>
+                                <div class="email-actions">
+                                    <a href="https://mail.google.com/mail/u/1/#inbox?compose=DmwnWrRqgrszTfCxJtfssfqXpKxQMFKmsxxrMRpjlvNcBChZkjrSqjKLkHxrgrzsqrcNrZZVbtQv" class="direct-mail-btn">
+                                        <i class="fas fa-paper-plane"></i> Direct open email box
+                                    </a>
+                                    <button class="copy-email-btn">
+                                        <i class="fas fa-copy"></i> Copy Email
+                                    </button>
+                                </div>
+                            </div>
+                            </div>
+
+                            <div class="direct-email-card">
+                            <div class="email-icon-main">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="email-details">
+                                <h5>rosanxettristudio@gmail.com</h5>
+                                <p>Our third email for inquiries</p>
+                                <div class="email-actions">
+                                    <a href="https://mail.google.com/mail/u/1/#inbox?compose=CllgCJfpKKjRZqtfZKXgqqSFljgkQWmNtcdHBmjmBgTSDsZbrhNBswBNsXrvzVfHsMjDbFKDNGB" class="direct-mail-btn">
+                                        <i class="fas fa-paper-plane"></i> Direct open email box
+                                    </a>
+                                    <button class="copy-email-btn">
+                                        <i class="fas fa-copy"></i> Copy Email
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="email-info-box">
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <h6>Response Time</h6>
+                                    <p>Within 24 hours on business days</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+
+<!-- Contact Form -->
+<div class="email-form-section">
+    <h4>Or Send Message Here</h4>
+    <form class="contact-form-simple" id="contactFormSimple" action="https://formspree.io/f/xzznawep" method="POST">
+        <input type="hidden" name="_subject" value="New Contact Form Submission - RX STUDIO">
+        <input type="hidden" name="_replyto" id="replyTo">
+        <input type="text" name="_gotcha" style="display:none">
+        
+        <div class="form-group-simple">
+            <label for="contactName">Your Name *</label>
+            <input type="text" id="contactName" name="name" placeholder="Enter your full name" required>
+        </div>
+        
+        <div class="form-group-simple">
+            <label for="contactEmail">Your Email *</label>
+            <input type="email" id="contactEmail" name="email" placeholder="Enter your email address" required>
+        </div>
+        
+        <div class="form-group-simple">
+            <label for="contactSubject">Subject *</label>
+            <input type="text" id="contactSubject" name="_subject" placeholder="What is this regarding?" required>
+        </div>
+        
+        <div class="form-group-simple">
+            <label for="contactMessage">Message *</label>
+            <textarea id="contactMessage" name="message" placeholder="Type your message here..." rows="6" required></textarea>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+            <button type="reset" class="clear-btn">
+                <i class="fas fa-redo"></i> Clear Form
+            </button>
+        </div>
+    </form>
+</div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Map Tab -->
+        <div class="tab-content" id="map-tab">
+            <div class="tab-content-inner">
+                <div class="tab-header">
+                    <div class="tab-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3>Find Us on Map</h3>
+                </div>
+                <p class="tab-description">Visit our studio or drop by to discuss your project in person.</p>
+                
+                <div class="map-section-simple">
+                    <div class="map-container-simple">
+                        <div class="map-placeholder-simple">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d725.728319208644!2d83.2227940321064!3d27.647873553535415!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjfCsDM4JzUyLjUiTiA4M8KwMTMnMjIuMSJF!5e1!3m2!1sen!2snp!4v1766279892071!5m2!1sen!2snp" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                    
+                    <div class="location-details">
+                        <h4>Location Details</h4>
+                        <div class="location-info">
+                            <div class="location-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h5>Address</h5>
+                                    <p>Banganga-10, Kapilvastu NEPAL</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="map-actions-simple">
+                            <a href="https://maps.app.goo.gl/XF78VsmDVW96JCsY9" target="_blank" class="map-btn">
+                                <i class="fas fa-directions"></i> Open in Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+        
+       
+        
+        <!-- Copyright Section -->
+        <div class="copyright">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
+        </div>
+    </div>
+    
+    <!-- Bottom Navbar -->
+    <nav class="bottom-navbar">
+        <ul class="nav-links">
+            <li><a href="index.html"> Home</a></li>
+            <li><a href="About.html"> About</a></li>
+           <!-- <li><a href="Service.html"> Services</a></li>-->
+            <li><a href="Contact.html" class="active"> Contact</a></li>
+        </ul>
+    </nav>
+    
+    
+    <script src="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-JS/RX-WEB-MAIN.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-JS/RX-WEB-CONTACT.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-SMART-BUTTON.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-WINDOW-POP-UP.js1"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-DATA.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-FUNCTION.js"></script>
 </body>
 </html>
