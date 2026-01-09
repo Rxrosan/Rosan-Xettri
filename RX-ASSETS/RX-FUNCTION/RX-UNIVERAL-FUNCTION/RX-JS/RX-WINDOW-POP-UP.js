@@ -13,6 +13,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add or remove objects in this array to change the carousel slides.
         slides: [
             {
+                title: "Announcement:",
+                // The text for the typing animation.
+                text: "Our website is currently being updated starting from January 8, 2026. During this period, some existing features are being modified or upgraded, and certain services may be temporarily unavailable.We appreciate your understanding and patience while we continue working on these improvements. Once the update is complete, we will make an official announcement on our social media pages.Thank you for your support.",
+                // Add image paths to this gallery.
+                galleryImages: ["RX-ASSETS/RX-IMAGE/RX-BANNER/UPDATE.png"
+                    // Example: "path/to/your/image2.jpg",
+                    // Example: "path/to/your/image3.jpg"
+                    ]
+            },
+                        {
                 title: "Welcome",
                 // The text for the typing animation.
                 text: "Hi, I'm Rosan Xettri, a passionate web designer dedicated to creating stunning and user-friendly websites. Let's build something amazing together!",
