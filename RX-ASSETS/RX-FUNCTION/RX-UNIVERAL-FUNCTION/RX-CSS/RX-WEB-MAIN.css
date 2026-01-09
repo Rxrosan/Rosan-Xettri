@@ -52,6 +52,7 @@
             display: flex;
             gap: 20px;
             align-items: center;
+            cursor: pointer;
         }
         
         .user-actions a {
@@ -62,7 +63,7 @@
         }
         
         .user-actions a:hover {
-            color: #1e05aa;
+            color: #ec0e20;
         }
         
         /* Side Panel Menu */

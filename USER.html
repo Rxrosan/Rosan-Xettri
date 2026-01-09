@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-3.png">
+    <title>RX | User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-CSS/RX-WEB-MAIN.css">
+    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-DATA-CSS/RX-USER-STURCTURE.css">
+    <style>
+        /* Add notification styles */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 9999;
+            animation: slideInRight 0.3s ease;
+        }
+        .notification-content {
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .notification-content.success {
+            background-color: #00c853;
+            color: white;
+            border: 1px solid #00e676;
+        }
+        .notification-content.error {
+            background-color: #ff5252;
+            color: white;
+            border: 1px solid #ff8a80;
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @media (max-width: 768px) {
+            .notification {
+                top: 80px;
+                right: 10px;
+                left: 10px;
+            }
+        }
+        
+        /* Profile image overlay */
+        .profile-image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 25, 47, 0.8);
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            height: 40px;
+        }
+        .profile-image-container:hover .profile-image-overlay {
+            opacity: 1;
+        }
+        .profile-image-overlay i {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">RX <span>STUDIO</span></div>
+        <div class="user-actions">
+            <a id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Side Panel Overlay -->
+    <div class="panel-overlay" id="panelOverlay"></div>
+    
+    <!-- Side Panel Menu -->
+    <div class="side-panel" id="sidePanel">
+        <div class="panel-header">
+            <h3 class="logo">RX <span>STUDIO</span></h3>
+            <button class="close-panel" id="closePanel">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="panel-menu">
+            <div class="panel-item">
+                <a href="#" class="panel-link" id="logoutBtn">
+                 LOGOUT
+                </a>
+            </div>
+            <div class="panel-item">
+                <a href="Dashboard.html" class="panel-link">
+                 OPEN RESOURCE
+                </a>
+            </div>
+            <div class="panel-item">
+                <a href="#" class="panel-link">
+                PRIVACY POLICY
+                </a>
+            </div>
+            <div class="panel-item">
+                <a href="#" class="panel-link">
+                 TERMS & CONDITION
+                </a>
+            </div>
+        </div>
+        
+        <div class="panel-footer">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Login Form (Initially Visible) -->
+        <div class="login-section" id="loginSection">
+            <div class="login-container">
+                <h2 class="login-title">RX STUDIO</h2>
+                <div class="login-form">
+                    <div class="input-group">
+                        <input type="text" id="loginNickname" placeholder="Nickname or Email" required>
+                    </div>
+                    <div class="input-group">
+                        <input type="password" id="loginPassword" placeholder="Password" required>
+                    </div>
+                    <button class="btn login-btn" id="loginBtn">LOGIN</button>
+                    <div class="login-status" id="loginStatus"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- User Profile Section (Hidden Initially) -->
+        <div class="profile-section" id="profileSection" style="display: none;">
+            <h2 class="section-title">USER PROFILE</h2>
+            <div class="profile-container">
+                <div class="profile-left">
+                    <div class="profile-image-container">
+                        <img id="profileImage" src="RX-ASSETS/RX-IMAGE/RX-USER/default-profile.png" alt="Profile Picture">
+                        <div class="profile-image-overlay" id="uploadImageBtn">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="profile-name-container">
+                        <h2 id="userFullName" class="profile-name"></h2>
+                        <p id="userNickname" class="profile-nickname"></p>
+                        <div class="user-role-badge" id="userRoleBadge">
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn edit-profile-btn" id="editProfileBtn">
+                        EDIT PROFILE
+                        </button>
+                        <button class="btn change-password-btn" id="changePasswordBtn">
+                         CHANGE PASSWORD
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="profile-right">
+                    <div class="profile-details">
+                        <h3 class="details-title">Personal Information</h3>
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <span class="detail-label">Member Type:</span>
+                                <span id="detailRole" class="detail-value"></span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <span class="detail-label">Nickname:</span>
+                                <span id="detailNickname" class="detail-value"></span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <span class="detail-label">Email:</span>
+                                <span id="detailEmail" class="detail-value"></span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <span class="detail-label">Phone:</span>
+                                <span id="detailPhone" class="detail-value"></span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <span class="detail-label">Date of Birth:</span>
+                                <span id="detailDOB" class="detail-value"></span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <span class="detail-label">Address:</span>
+                                <span id="detailAddress" class="detail-value"></span>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-content">
+                                <span class="detail-label">Joined:</span>
+                                <span id="detailJoined" class="detail-value"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Edit Profile Modal -->
+            <div class="edit-profile-modal" id="editProfileModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Profile</h3>
+                        <button class="close-modal" id="closeModalBtn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <input type="text" id="editFullName" placeholder="Full Name" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="editNickname" placeholder="Nickname" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" id="editEmail" placeholder="Email" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="tel" id="editPhone" placeholder="Phone Number" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="date" id="editDOB" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="text" id="editAddress" placeholder="Address" required>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn cancel-btn" id="cancelEditBtn">CANCEL</button>
+                        <button class="btn save-btn" id="saveProfileBtn">SAVE CHANGES</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Change Password Modal -->
+            <div class="edit-profile-modal" id="changePasswordModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Change Password</h3>
+                        <button class="close-modal" id="closePasswordModalBtn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <input type="password" id="currentPassword" placeholder="Current Password" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="newPassword" placeholder="New Password" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="confirmPassword" placeholder="Confirm New Password" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn cancel-btn" id="cancelPasswordBtn">CANCEL</button>
+                        <button class="btn save-btn" id="savePasswordBtn">UPDATE PASSWORD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Copyright Section -->
+        <div class="copyright">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
+        </div>
+    </div>
+    
+    <!-- Bottom Navbar -->
+    <nav class="bottom-navbar">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="About.html">About</a></li>
+            <li><a href="Service.html">Services</a></li>
+            <li><a href="Contact.html">Contact</a></li>
+            <li><a href="USER.html" class="active">Profile</a></li>
+        </ul>
+    </nav>
+    
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-WEB-MAIN.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js"></script>
+    <!-- Fixed order of script loading -->
+    <script src="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-DATA-JS/RX-USER-DATA.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-DATA-JS/RX-USER-PASSWORD.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-DATA-JS/RX-USER-FUNCTION.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-DATA-JS/RX-USER-PROFILE-MANAGEMENT.js"></script>
+    <script>
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize side panel functionality
+            const menuToggle = document.getElementById('menuToggle');
+            const closePanel = document.getElementById('closePanel');
+            const panelOverlay = document.getElementById('panelOverlay');
+            const sidePanel = document.getElementById('sidePanel');
+            
+            if (menuToggle && sidePanel && panelOverlay) {
+                menuToggle.addEventListener('click', function() {
+                    sidePanel.classList.add('active');
+                    panelOverlay.classList.add('active');
+                });
+            }
+            
+            if (closePanel && sidePanel && panelOverlay) {
+                closePanel.addEventListener('click', function() {
+                    sidePanel.classList.remove('active');
+                    panelOverlay.classList.remove('active');
+                });
+            }
+            
+            if (panelOverlay && sidePanel) {
+                panelOverlay.addEventListener('click', function() {
+                    sidePanel.classList.remove('active');
+                    panelOverlay.classList.remove('active');
+                });
+            }
+            
+            // Initialize login system
+            if (typeof RXUserLogin !== 'undefined') {
+                RXUserLogin.init();
+            }
+            
+            // Initialize profile management
+            if (typeof RXUserProfileManagement !== 'undefined') {
+                RXUserProfileManagement.init();
+            }
+            
+            // Initialize user data
+            if (typeof RXUserData !== 'undefined') {
+                RXUserData.init();
+            }
+            
+            // Initialize password system
+            if (typeof RXUserPassword !== 'undefined') {
+                RXUserPassword.init();
+            }
+        });
+    </script>
+</body>
+</html>
