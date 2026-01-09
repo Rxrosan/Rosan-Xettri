@@ -669,11 +669,7 @@ body {
     }
 }
 
-@media (max-width: 400px) {
-    .side-panel {
-        width: 250px;
-    }
-    
+@media (max-width: 400px) { 
     .profile-image-container {
         width: 130px;
         height: 130px;
