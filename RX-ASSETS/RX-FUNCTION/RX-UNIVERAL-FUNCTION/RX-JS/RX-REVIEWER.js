@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
             font-size: 60px;
             line-height: 0;
             margin-bottom: 10px;
-            color: rgba(255, 255, 255, 0.3);
+            color: rgba(241, 6, 6, 0.91);
             font-family: Georgia, serif;
             position: absolute;
             top: 15px;
@@ -262,8 +262,8 @@ document.addEventListener('DOMContentLoaded', function() {
         animationDuration: 500,
         verticalOffset: 20,
         mobileBreakpoint: 768,
-        bgOverlay: 'linear-gradient(rgba(0, 0, 2, 0.7), rgba(6, 0, 10, 0.7))',
-        bgColor: 'rgba(6, 0, 10, 0.7)'
+        bgOverlay: 'linear-gradient(rgba(0, 0, 2, 0), rgba(6, 0, 10, 0))',
+        bgColor: 'transprent'
     };
 
     function initializeCards() {

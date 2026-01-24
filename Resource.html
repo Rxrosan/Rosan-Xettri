@@ -5,10 +5,10 @@
     <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-2.png">
-    <title>RX |Service</title>
+    <title>RX |Resource</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-CSS/RX-WEB-MAIN.css">
-    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-CSS/RX-WEB-SERVICE.css">
+    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-CSS/RX-WEB-RESOURCE.css">
 </head>
 <body>
     <!-- Header -->
@@ -34,9 +34,9 @@
         </div>
         
         <div class="panel-menu">
-           <div class="panel-item">
-                <a href="Resource.html" class="panel-link">
-                 OPEN RESOURCE
+            <div class="panel-item">
+                <a href="#" id="logout-btn" class="panel-link">
+                   LOG-OUT
                 </a>
             </div>
             <div class="panel-item">
@@ -55,41 +55,78 @@
             <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
         </div>
     </div>
+
+    <div class="container"></div>
+    <h2 class="section-title">All Resource</h2>
     
-    <div class="container">
-        <!-- Hero Section -->
-       <section class="hero"style="background-image:url('RX-ASSETS/RX-IMAGE/RX-BANNER/B-2.gif');background-size:cover;background-position:center;">
-            <div class="hero-content">
-                <h1 class="hero-title">Rosan Xettri Studio</h1>
-                 <p id="auto-writer" class=" hero-subtitle"></p>
-                <a href="About.html" class="btn">ABOUT US</a>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="login-box">
+            <h2>RX STUDIO</h2>
+            <div class="input-group">
+                <label for="password-input">Password</label>
+                <input type="password" id="password-input" placeholder="Enter your password" autocomplete="current-password">
             </div>
-            <div class="hero-image"><img src="RX-ASSETS/RX-IMAGE/RX-BANNER/B-1.png" alt="RX STUDIO Creative Workspace"></div>
-        </section>
-         <!-- Hero Section end -->
-       
-       
-       </div>  
+            <button id="login-btn" class="btn btn-primary">
+                <span id="login-text">Access Question Bank</span>
+                <span id="login-loader" class="loader hidden"></span>
+            </button>
+            <div class="mt-3">
+                <button id="forgot-password" class="btn-link">Forgot Password?</button>
+                <span class="mx-2">|</span>
+                <a href="index.html" class="btn-link">Go Back Home</a>
+            </div>
+            <div id="error-message" class="hidden" style="color: var(--danger); margin-top: 1.5rem; font-weight: 500;"></div>
+        </div>
+    </div>
+    
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal">
+        <div class="modal-content">
+            <h3>Forgot Password?</h3>
+            <p>Please contact the administrator to get access to the question bank and information about new features or updates.</p>
+            <p>Join our support group to connect with the admin team for assistance:</p>
+            <div class="modal-actions">
+                <a href="Contact.html" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-users"></i> Contact us
+                </a>
+                <button id="close-modal-btn" class="btn btn-link">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Question Bank -->
+    <div id="question-bank" class="hidden">
+        <div class="container">
+            <div class="question-grid" id="question-grid">
+                <!-- Questions will be loaded here -->
+            </div>
+        </div>
+        <button id="scroll-to-top" class="floating-btn hidden">
+            ⇧
+        </button>
+    </div>
         <!-- Copyright Section -->
         <div class="copyright">
             <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
         </div>
-   
+    </div>
     
     <!-- Bottom Navbar -->
     <nav class="bottom-navbar">
         <ul class="nav-links">
             <li><a href="index.html"> Home</a></li>
             <li><a href="About.html"> About</a></li>
-            <li><a href="Service.html" class="active"> Services</a></li>
+            <li><a href="Service.html"> Services</a></li>
             <li><a href="Contact.html"> Contact</a></li>
             <li><a href="USER.html">Profile</a></li>
+            <li><a href="Dashboard.html" class="active"> RESOURCE</a></li>
         </ul>
     </nav>
     
     
     <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-WEB-MAIN.js"></script>
-    <script src="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-JS/RX-WEB-SERVICE.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-JS/RX-WEB-RESOURCE.js"></script>
     <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js"></script>
 </body>
 </html>

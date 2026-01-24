@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-3.png">
+    <title>RX | EPS-TOPIK UBT TRAIL EXAM</title>
+    <link rel="stylesheet" href="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-CSS/RX-EPS-MAIN.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-left">ROSAN XETTRI STUDIO</div>
+        <div class="header-right" id="user-name">Rosan kc</div>
+    </header>
+
+    <div class="stats-bar">
+        <span>Total Questions: 40</span>
+        <span>Solved: <span id="solved-count">0</span></span>
+        <span>Unsolved: <span id="unsolved-count">40</span></span>
+        <span>Time Remaining: <span id="timer">50:00</span></span>
+    </div>
+
+    <main class="main-wrapper">
+        <!-- GRID OVERVIEW SCREEN -->
+        <div id="menuScreen" class="view-container">
+            <div class="grid-dual-pane">
+                <div class="grid-column">
+                    <h3 class="pane-title">Reading Questions</h3>
+                    <div id="readGrid" class="q-grid"></div>
+                </div>
+                <div class="grid-column">
+                    <h3 class="pane-title">Listening Questions</h3>
+                    <div id="listenGrid" class="q-grid"></div>
+                </div>
+            </div>
+            <button class="btn-finish" onclick="ExamSubmit.submitExam()">SUBMIT AND FINISH EXAM</button>
+        </div>
+
+        <!-- INDEPENDENT SCROLL QUESTION SCREEN -->
+        <div id="questionScreen" class="view-container" style="display:none">
+            <div class="split-pane-container">
+                <!-- LEFT SIDE SCROLLABLE -->
+                <div class="pane left-pane" id="questionContent">
+                   <!-- Questions will be injected here -->
+                </div>
+
+                <!-- RIGHT SIDE SCROLLABLE -->
+                <div class="pane right-pane" id="optionsContainer">
+                    <!-- Options will be injected here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer id="navFooter" style="display:none">
+        <button class="nav-btn" onclick="QuestionNav.prevQ()">❮ PREVIOUS</button>
+        <button class="nav-btn" onclick="QuestionNav.toggleView()">⠿ TOTAL QUESTION</button>
+        <button class="nav-btn" onclick="QuestionNav.nextQ()">NEXT ❯</button>
+    </footer>
+
+    <!-- Core Libraries - CRITICAL ORDER -->
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/user-state.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/id.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/media-helper.js"></script>
+    
+    <!-- Questions Manager MUST load first -->
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/questions-manager.js"></script>
+    
+    <!-- Other modules -->
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/grid-renderer.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/question-loader.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/selection-handler.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/question-nav.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/timer.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/submit-handler.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/app-loader.js"></script>
+</body>
+</html>
