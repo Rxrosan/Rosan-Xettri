@@ -1,6 +1,6 @@
 (function () {
   const KEY = "__AUTO_ROUTE__";
-  const DEBUG = true; // Set to false in production
+  const DEBUG = false; // Set to true for debugging
 
   // Helper function for logging
   function log(...args) {
@@ -9,23 +9,28 @@
     }
   }
 
-  // 1. Check if we're already processing a route to prevent loops
+  // Prevent multiple initializations
   if (window.__RX_PATH_HIDE_ACTIVE) {
     log("Script already active, skipping");
     return;
   }
   window.__RX_PATH_HIDE_ACTIVE = true;
 
-  // 2. Determine current path - handle different scenarios
+  // Track loading state
+  let isLoading = false;
+  
+  // Save original HTML structure for reference
+  const originalHeadHTML = document.head.innerHTML;
+  const originalBodyHTML = document.body.innerHTML;
+
+  // 1. Save current path if not root
   const fullPath = location.pathname + location.search + location.hash;
   const isRoot = fullPath === "/" || fullPath === "" || fullPath === "/index.html";
 
-  // Save current path if not root
   if (!isRoot) {
     log("Saving current path:", fullPath);
     try {
       sessionStorage.setItem(KEY, fullPath);
-      // Only replace state if we're not in a loading cycle
       if (!sessionStorage.getItem("__RX_LOADING__")) {
         history.replaceState({ rpHide: true }, "", "/");
       }
@@ -34,215 +39,319 @@
     }
   }
 
-  // 3. Intercept link clicks with improved detection
+  // 2. Smart content extraction - NO ASSUMPTIONS NEEDED
+  function extractContentFromHTML(html) {
+    const parser = new DOMParser();
+    const newDoc = parser.parseFromString(html, "text/html");
+    
+    // Get all content between <body> tags
+    const newBodyHTML = newDoc.body.innerHTML;
+    
+    // Keep original head structure (CSS/JS files) and only update body
+    return {
+      title: newDoc.title,
+      bodyHTML: newBodyHTML
+    };
+  }
+
+  // 3. Preserve all existing scripts and styles
+  function preserveExistingResources() {
+    // This keeps all loaded resources intact
+    // We're NOT touching the head or any script tags
+    
+    // Just ensure our script doesn't break other scripts
+    const allScripts = document.querySelectorAll('script[src]');
+    allScripts.forEach(script => {
+      if (!script.hasAttribute('data-rx-preserved')) {
+        script.setAttribute('data-rx-preserved', 'true');
+      }
+    });
+  }
+
+  // 4. Show loading indicator that doesn't break layout
+  function showLoadingIndicator() {
+    // Create a subtle overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'rx-loading-overlay';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, #3498db, #2ecc71);
+      z-index: 999999;
+      animation: rx-loading 2s infinite;
+    `;
+    
+    // Add animation style if not exists
+    if (!document.querySelector('#rx-loading-style')) {
+      const style = document.createElement('style');
+      style.id = 'rx-loading-style';
+      style.textContent = `
+        @keyframes rx-loading {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(overlay);
+  }
+
+  function hideLoadingIndicator() {
+    const overlay = document.getElementById('rx-loading-overlay');
+    if (overlay) overlay.remove();
+  }
+
+  // 5. Enhanced link interception
   document.addEventListener("click", function (e) {
-    // Find the closest anchor tag
+    if (isLoading) {
+      e.preventDefault();
+      return;
+    }
+
     let link = e.target.closest("a");
     if (!link) return;
 
     const href = link.getAttribute("href");
     const target = link.getAttribute("target");
 
-    // Ignore external links, special protocols, anchors, and links with targets
-    if (
-      !href ||
-      href.startsWith("http://") ||
-      href.startsWith("https://") ||
-      href.startsWith("//") ||
-      href.startsWith("mailto:") ||
-      href.startsWith("tel:") ||
-      href.startsWith("#") ||
-      href.startsWith("javascript:") ||
-      (target && target !== "_self") ||
-      link.hasAttribute("download") ||
-      link.hasAttribute("data-no-route")
-    ) {
-      log("Ignoring link:", href);
+    // Skip links that shouldn't be intercepted
+    if (!href || 
+        href.includes("://") || // Any protocol (http://, https://, ftp://, etc.)
+        href.startsWith("//") ||
+        href.startsWith("mailto:") ||
+        href.startsWith("tel:") ||
+        href.startsWith("#") ||
+        href.startsWith("javascript:") ||
+        (target && target !== "_self") ||
+        link.hasAttribute("download") ||
+        link.classList.contains("external") ||
+        link.getAttribute("rel") === "external" ||
+        link.hasAttribute("data-no-intercept")) {
       return;
     }
 
     e.preventDefault();
-    log("Intercepted link click:", href);
+    log("Intercepted link:", href);
 
     try {
-      // Set loading flag to prevent state replacement on next load
       sessionStorage.setItem("__RX_LOADING__", "true");
       sessionStorage.setItem(KEY, href);
-      
-      // Update URL without reloading if possible
       history.replaceState({ rpHide: true }, "", "/");
-      
-      // Load the new content
-      loadRoute(href);
+      loadRouteContent(href);
     } catch (error) {
-      console.error("Failed to process link click:", error);
-      // Fallback: allow default navigation
+      console.error("Failed to process link:", error);
+      // Fallback to normal navigation
       window.location.href = href;
     }
   });
 
-  // 4. Handle browser back/forward navigation
-  window.addEventListener("popstate", function (e) {
-    log("Popstate event triggered");
-    // When user navigates back/forward, we need to handle it
-    const route = sessionStorage.getItem(KEY) || "/";
-    loadRoute(route);
-  });
-
-  // 5. Improved route loading function
-  function loadRoute(route) {
-    if (!route || route === "/") {
-      log("Loading root route");
-      clearContentAndShowLoader();
-      // For root, we might already be there, just ensure clean state
+  // 6. MAIN FUNCTION: Load content without breaking anything
+  function loadRouteContent(route) {
+    if (isLoading || !route || route === "/") {
       removeLoadingFlag();
       return;
     }
 
-    log("Loading route:", route);
-    clearContentAndShowLoader();
+    isLoading = true;
+    showLoadingIndicator();
+    log("Loading content from:", route);
 
-    // Add a timeout for slow network conditions
-    const timeoutId = setTimeout(() => {
-      log("Route loading is taking longer than expected");
-    }, 5000);
+    // Preserve all current resources
+    preserveExistingResources();
 
     fetch(route)
       .then(res => {
-        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-        }
-        
-        const contentType = res.headers.get("content-type");
-        if (!contentType || !contentType.includes("text/html")) {
-          throw new Error("Response is not HTML");
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("text/html")) {
+          throw new Error("Not HTML content");
         }
         
         return res.text();
       })
       .then(html => {
-        // Parse the HTML and extract just the body content
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, "text/html");
+        // Extract only what we need
+        const { title, bodyHTML } = extractContentFromHTML(html);
         
-        // Replace the entire document body
-        document.body.innerHTML = doc.body.innerHTML;
+        // Fade out current content smoothly
+        document.body.style.opacity = "0.7";
+        document.body.style.transition = "opacity 0.2s";
         
-        // Update the title if available
-        if (doc.title) {
-          document.title = doc.title;
-        }
-        
-        // Re-initialize any scripts if needed
-        reinitializeScripts(doc);
-        
-        log("Route loaded successfully");
-        removeLoadingFlag();
-        
-        // Scroll to top after loading
-        window.scrollTo(0, 0);
-        
-        // Dispatch a custom event for other scripts to hook into
-        window.dispatchEvent(new CustomEvent("routechanged", {
-          detail: { route }
-        }));
+        setTimeout(() => {
+          // Replace ONLY the body content
+          document.body.innerHTML = bodyHTML;
+          
+          // Restore opacity
+          document.body.style.opacity = "1";
+          
+          // Update page title
+          if (title && title !== document.title) {
+            document.title = title;
+          }
+          
+          // Re-run any initialization scripts if they exist
+          if (window.initializePage) {
+            try {
+              window.initializePage();
+            } catch (e) {
+              console.warn("Custom initializePage failed:", e);
+            }
+          }
+          
+          // Dispatch event for other scripts
+          window.dispatchEvent(new CustomEvent("routechanged", {
+            detail: { route, title }
+          }));
+          
+          log("Content loaded successfully");
+          isLoading = false;
+          hideLoadingIndicator();
+          removeLoadingFlag();
+          
+          // Scroll to top
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 200);
       })
       .catch(error => {
-        clearTimeout(timeoutId);
         console.error("Failed to load route:", route, error);
-        
-        // Show error to user
-        document.body.innerHTML = `
-          <div style="padding: 40px; text-align: center; font-family: sans-serif;">
-            <h2>Page Load Error</h2>
-            <p>Failed to load: ${route}</p>
-            <p><a href="/" style="color: blue; text-decoration: underline;">Return to homepage</a></p>
-          </div>
-        `;
-        
+        isLoading = false;
+        hideLoadingIndicator();
         removeLoadingFlag();
+        
+        // Show error but don't break the page
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = `
+          position: fixed;
+          top: 10px;
+          right: 10px;
+          background: #ff4444;
+          color: white;
+          padding: 10px 20px;
+          border-radius: 5px;
+          z-index: 99999;
+          max-width: 300px;
+        `;
+        errorDiv.innerHTML = `
+          <strong>Failed to load page</strong><br>
+          <small>${route}</small>
+          <button onclick="this.parentElement.remove()" style="
+            background: none;
+            border: none;
+            color: white;
+            float: right;
+            cursor: pointer;
+          ">×</button>
+        `;
+        document.body.appendChild(errorDiv);
+        
+        // Auto-remove error after 5 seconds
+        setTimeout(() => {
+          if (errorDiv.parentElement) {
+            errorDiv.remove();
+          }
+        }, 5000);
       });
   }
 
-  // 6. Helper functions
-  function clearContentAndShowLoader() {
-    // You can customize this loader as needed
-    document.body.innerHTML = `
-      <div style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        font-family: sans-serif;
-      ">
-        <div style="text-align: center;">
-          <div style="
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-          "></div>
-          <p>Loading page...</p>
-        </div>
-      </div>
-      <style>
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      </style>
-    `;
-  }
+  // 7. Handle browser navigation
+  window.addEventListener("popstate", function () {
+    if (isLoading) return;
+    const route = sessionStorage.getItem(KEY) || "/";
+    if (route !== "/") {
+      loadRouteContent(route);
+    }
+  });
 
-  function reinitializeScripts(newDoc) {
-    // This function can be extended to reinitialize specific scripts
-    // For now, we'll just re-add event listeners
-    log("Reinitializing page scripts");
-  }
-
+  // 8. Remove loading flag
   function removeLoadingFlag() {
     sessionStorage.removeItem("__RX_LOADING__");
   }
 
-  // 7. Initial page load - check for saved route
+  // 9. Initial page load
   window.addEventListener("DOMContentLoaded", function () {
-    // Small delay to ensure everything is ready
     setTimeout(() => {
       const route = sessionStorage.getItem(KEY);
-      const isLoading = sessionStorage.getItem("__RX_LOADING__");
+      const wasLoading = sessionStorage.getItem("__RX_LOADING__");
       
-      log("Initial check - Route:", route, "Loading:", isLoading);
+      log("Initial check - Route:", route, "Loading:", wasLoading);
       
-      // Only load a route if we have one saved AND we're not already loading
-      if (route && route !== "/" && !isLoading) {
-        loadRoute(route);
-      } else {
-        removeLoadingFlag();
+      if (route && route !== "/" && !wasLoading) {
+        loadRouteContent(route);
       }
+      
+      removeLoadingFlag();
     }, 100);
   });
 
-  // 8. Prevent form submission from breaking the flow
+  // 10. Handle form submissions
   document.addEventListener("submit", function (e) {
+    if (isLoading) {
+      e.preventDefault();
+      return;
+    }
+
     const form = e.target;
     if (form.tagName === "FORM" && form.method === "get") {
-      // For GET forms, we should intercept like links
       const action = form.getAttribute("action") || "";
-      if (action && !action.startsWith("http") && !action.startsWith("#")) {
+      if (action && !action.includes("://") && !action.startsWith("#")) {
         e.preventDefault();
         const params = new URLSearchParams(new FormData(form));
         const url = action + (params.toString() ? "?" + params.toString() : "");
+        sessionStorage.setItem("__RX_LOADING__", "true");
         sessionStorage.setItem(KEY, url);
         history.replaceState({}, "", "/");
-        loadRoute(url);
+        loadRouteContent(url);
       }
     }
   });
 
-  log("RX-PATH-HIDE initialized");
+  // 11. Listen for dynamic content additions
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.addedNodes.length) {
+        // New content was added, ensure our click handler works
+        mutation.addedNodes.forEach(function(node) {
+          if (node.nodeType === 1 && node.tagName === 'A') { // Element node with A tag
+            node.addEventListener('click', handleLinkClick);
+          } else if (node.nodeType === 1 && node.querySelectorAll) {
+            node.querySelectorAll('a').forEach(function(link) {
+              link.addEventListener('click', handleLinkClick);
+            });
+          }
+        });
+      }
+    });
+  });
+
+  // Start observing
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  // Separate handler for dynamically added links
+  function handleLinkClick(e) {
+    const link = e.target.closest('a');
+    if (!link) return;
+    
+    const href = link.getAttribute('href');
+    if (!href || href.includes('://') || href.startsWith('#') || href.startsWith('mailto:')) {
+      return;
+    }
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    sessionStorage.setItem("__RX_LOADING__", "true");
+    sessionStorage.setItem(KEY, href);
+    history.replaceState({ rpHide: true }, "", "/");
+    loadRouteContent(href);
+  }
+
+  log("RX-PATH-HIDE initialized - Automatic mode");
 })();
