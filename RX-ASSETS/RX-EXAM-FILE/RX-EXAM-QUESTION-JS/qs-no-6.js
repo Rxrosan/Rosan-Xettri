@@ -10,7 +10,7 @@ const questionsForNumber6 = [
             text: "", image: null, audio: null
         },
         options: [
-            { text: "", image: "EXAM-FILE/RX-EXAM-IMAGE/IMG-1.png", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-1.png", audio: null },
             { text: "", image: "EXAM-FILE/RX-EXAM-IMAGE/IMG-1.png", audio: null },
             { text: "", image: "EXAM-FILE/RX-EXAM-IMAGE/IMG-1.png", audio: null },
             { text: "", image: "EXAM-FILE/RX-EXAM-IMAGE/IMG-1.png", audio: null }

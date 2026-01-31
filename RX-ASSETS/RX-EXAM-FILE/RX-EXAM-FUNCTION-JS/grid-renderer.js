@@ -1,4 +1,5 @@
-// grid-renderer.js - Handles question grid rendering
+// grid-renderer.js - Fixed to preserve answers when clicking questions
+
 const GridRenderer = {
     init: function() {
         console.log('🎨 GridRenderer.init() - Creating fresh grid');
@@ -52,7 +53,7 @@ const GridRenderer = {
             return;
         }
         
-        // Load the question (fresh, no pre-selection)
+        // Load the question WITH saved answer preserved
         QuestionLoader.loadQuestion(questionNumber, true);
     },
     
@@ -72,7 +73,7 @@ const GridRenderer = {
                 box.title = status.message;
             }
             
-            // Check if answered (should be none on fresh load)
+            // Check if answered (show as answered if saved)
             if (UserState.userAnswers[id]) {
                 box.classList.add('answered');
             }

@@ -1,4 +1,5 @@
-// media-helper.js - Handles media content to HTML conversion
+// media-helper.js - Updated with IDs for media elements
+
 const MediaHelper = {
     getMediaHTML: function(obj) {
         if (!obj) return "";
@@ -9,15 +10,17 @@ const MediaHelper = {
             html += `<div class="content-text" style="font-size:16px; font-weight:500; margin-bottom:5px;">${obj.text}</div>`;
         }
         
-        // Add image
+        // Add image with unique ID
         if (obj.image) {
-            html += `<img src="${obj.image}" class="content-image" style="max-width:260px; display:block; margin:10px 0; border:1px solid #ddd; padding:5px; background:#fff; border-radius:4px;">`;
+            const imgId = 'img-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            html += `<img src="${obj.image}" id="${imgId}" class="content-image" style="max-width:260px; display:block; margin:10px 0; border:1px solid #ddd; padding:5px; background:#fff; border-radius:4px; cursor:pointer;" title="Tap to view larger">`;
         }
         
-        // Add audio player
+        // Add audio player with unique ID
         if (obj.audio) {
-            html += `<div class="content-audio" style="margin:10px 0;">
-                <audio controls style="width:100%; height:35px;">
+            const audioId = 'audio-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            html += `<div class="content-audio" style="margin:15px 0;">
+                <audio id="${audioId}" controls style="width:100%; height:35px;">
                     <source src="${obj.audio}" type="audio/mpeg">
                     Your browser does not support the audio element.
                 </audio>

@@ -1,25 +1,33 @@
-// selection-handler.js - Handles option selection
+// selection-handler.js - COMPLETE UPDATED VERSION
+
 const SelectionHandler = {
     selectOption: function(choice) {
         const currentId = UserState.currentQuestionId;
+        console.log(`🎯 Selecting option ${choice} for Q${currentId}`);
         
-        // Clear any previous answer for this question
+        // Get current saved answer
         const previousAnswer = UserState.getAnswerForQuestion(currentId);
         
-        // Only proceed if it's a different selection or clearing
-        if (previousAnswer !== choice) {
+        // If clicking the same option, deselect it
+        if (previousAnswer === choice) {
+            console.log(`🗑️ Deselecting option ${choice} for Q${currentId}`);
+            UserState.clearUserAnswer(currentId);
+            this.clearOptionUI();
+        } else {
+            // Select new option
+            console.log(`💾 Saving answer ${choice} for Q${currentId}`);
             UserState.setUserAnswer(currentId, choice);
             
             // Update UI for the selected option
             this.updateOptionUI(choice);
-            
-            // Update grid and stats
-            GridRenderer.updateGridColors();
-        } else {
-            // If clicking same option again, deselect it
-            UserState.clearUserAnswer(currentId);
-            this.clearOptionUI();
-            GridRenderer.updateGridColors();
+        }
+        
+        // Update grid and stats
+        GridRenderer.updateGridColors();
+        
+        // Auto-save progress
+        if (typeof AppLoader !== 'undefined') {
+            AppLoader.autoSaveProgress();
         }
     },
     

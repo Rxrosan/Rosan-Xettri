@@ -11,56 +11,17 @@ const questionsForNumber21 = [
         questionBody: {
             text: "",
             image: null,
-            audio: null
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3"
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3"},
+            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3" },
+            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3" },
+            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3" }
         ],
         answer: 4
     },
-    {
-        id: 21,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 21,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 3
-    }
+    
 ];
 
 // Register these questions with the manager
