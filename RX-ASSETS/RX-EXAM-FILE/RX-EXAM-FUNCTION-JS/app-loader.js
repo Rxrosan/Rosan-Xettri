@@ -6,10 +6,16 @@ const AppLoader = {
         // Force clear all localStorage on every fresh start
         this.clearAllSavedData();
         
-        // Initialize modules
+        // Initialize modules (No UserID.init())
         UserState.init();
-        UserID.init();
+        // Removed: UserID.init();
         QuestionsManager.init();
+        
+        // Set username directly (no need for id.js)
+        const userNameEl = document.getElementById('user-name');
+        if (userNameEl) {
+            userNameEl.textContent = 'Rosan kc'; // Directly set username
+        }
         
         // Start with GRID MENU SCREEN
         this.showMenuScreen();

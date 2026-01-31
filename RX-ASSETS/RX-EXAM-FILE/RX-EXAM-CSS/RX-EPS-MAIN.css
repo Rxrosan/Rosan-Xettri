@@ -1,27 +1,34 @@
 :root {
-    --primary: #3498db;      /* Deep Blue */
-    --secondary: #380c9e;    /* Cyan Blue */
+    --primary: #3498db;
+    --secondary: #380c9e;
     --border: #e20e0e;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+    font-family: 'Segoe UI', sans-serif; 
+}
 
 body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Prevent the whole page from scrolling */
+    overflow: hidden;
 }
 
-/* Header & Stats */
+/* Header & Stats - SMALLER */
 .main-header {
     background: var(--primary);
     color: rgb(231, 8, 8);
-    padding: 10px 20px;
+    padding: 8px 15px;
     display: flex;
     justify-content: space-between;
     font-weight: bold;
     flex-shrink: 0;
+    font-size: 14px;
+    height: 40px;
 }
 
 .stats-bar {
@@ -29,17 +36,18 @@ body {
     color: white;
     display: flex;
     justify-content: space-around;
-    padding: 8px;
-    font-size: 13px;
+    padding: 6px;
+    font-size: 12px;
     border-bottom: 1px solid white;
     flex-shrink: 0;
+    height: 35px;
 }
 
 /* Main Layout */
 .main-wrapper {
     flex: 1;
-    overflow: hidden; /* Keeps scrollbars inside the panes */
-    padding: 15px;
+    overflow: hidden;
+    padding: 10px;
     background: #f4f7f6;
 }
 
@@ -49,31 +57,40 @@ body {
     flex-direction: column;
 }
 
-/* Grid Design */
+/* Grid Design - SMALLER */
 .grid-dual-pane {
     display: flex;
-    gap: 20px;
+    gap: 15px;
     flex: 1;
     background: white;
     border: 1px solid var(--border);
-    padding: 15px;
+    padding: 10px;
     overflow-y: auto;
 }
 
 .grid-column { flex: 1; text-align: center; }
-.pane-title { color: var(--secondary); margin-bottom: 15px; font-size: 16px; }
+.pane-title { 
+    color: var(--secondary); 
+    margin-bottom: 10px; 
+    font-size: 14px; 
+}
 
 .q-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
+    gap: 6px;
 }
 
 .qnum {
     border: 1px solid var(--secondary);
-    padding: 10px 0;
+    padding: 6px 0;
     cursor: pointer;
     transition: 0.2s;
+    font-size: 13px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .qnum.answered { background: #e3f2fd; color: var(--primary); font-weight: bold; }
@@ -83,49 +100,53 @@ body {
     background: var(--secondary);
     color: rgb(62, 236, 9);
     border: none;
-    padding: 12px;
+    padding: 8px;
     font-weight: bold;
-    margin-top: 15px;
+    margin-top: 10px;
     cursor: pointer;
+    font-size: 13px;
+    height: 35px;
 }
 
-
+/* Question Screen */
 .split-pane-container {
     display: flex;
-    flex: 1; /* Takes remaining height */
+    flex: 1;
     background: white;
     border: 1px solid var(--border);
-    overflow: hidden; /* Critical to contain internal scrolls */
+    overflow: hidden;
 }
 
 .pane {
     flex: 1;
-    padding: 20px;
-    overflow-y: auto; /* Independent Scrollbar */
+    padding: 15px;
+    overflow-y: auto;
 }
 
 .left-pane { border-right: 1px solid var(--border); }
 
-/* Custom Scrollbar Styling */
-.pane::-webkit-scrollbar { width: 6px; }
+/* Custom Scrollbar */
+.pane::-webkit-scrollbar { width: 5px; }
 .pane::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
 
-.q-image { max-width: 100%; height: auto; margin: 15px 0; border: 1px solid #eee; }
+.q-image { max-width: 100%; height: auto; margin: 10px 0; border: 1px solid #eee; }
 
 .option-item {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 15px;
+    gap: 12px;
+    padding: 10px;
     border-bottom: 1px solid #f0f0f0;
     cursor: pointer;
+    font-size: 13px;
+    min-height: 50px;
 }
 
 .option-item:hover { background: #fafafa; }
 
 .opt-circle {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     border: 1px solid var(--secondary);
     border-radius: 50%;
     display: flex;
@@ -133,6 +154,7 @@ body {
     align-items: center;
     color: var(--secondary);
     flex-shrink: 0;
+    font-size: 12px;
 }
 
 .option-item.selected .opt-circle {
@@ -140,81 +162,262 @@ body {
     color: white;
 }
 
-/* Footer Navigation */
+/* Footer Navigation - SMALL AND ONE LINE */
 footer {
-    padding: 15px;
+    padding: 8px 10px;
     display: flex;
     justify-content: space-between;
     background: white;
     border-top: 1px solid var(--border);
     flex-shrink: 0;
+    height: 45px;
+    align-items: center;
+    gap: 5px;
 }
 
 .nav-btn {
     background: var(--secondary);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 6px 10px;
     border-radius: 4px;
     cursor: pointer;
     font-weight: bold;
-}
-/* Add to existing CSS: */
-
-.qnum.error {
-    background-color: #ffebee !important;
-    color: #c62828 !important;
-    border-color: #c62828 !important;
-    position: relative;
-}
-
-.qnum.error:hover {
-    background-color: #ffcdd2 !important;
-}
-
-.qnum.error::after {
-    content: "!";
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #c62828;
-    color: white;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
     font-size: 12px;
+    height: 30px;
+    flex: 1;
+    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.nav-btn:nth-child(1) { order: 1; }
+.nav-btn:nth-child(2) { order: 2; }
+.nav-btn:nth-child(3) { order: 3; }
+
+/* Question States */
+.qnum.error {
+    background-color: #ffebee;
+    color: #c62828;
+    border-color: #c62828;
+    font-size: 11px;
 }
 
 .qnum.not-loaded {
-    background-color: #fff8e1 !important;
-    color: #ff8f00 !important;
-    border-color: #ff8f00 !important;
+    background-color: #fff8e1;
+    color: #ff8f00;
+    border-color: #ff8f00;
     opacity: 0.7;
 }
 
-.qnum.answered {
-    background: #e3f2fd !important;
-    color: var(--primary) !important;
-    font-weight: bold !important;
-}
-
 .qnum.active {
-    border-width: 2px !important;
-    border-color: var(--primary) !important;
-    transform: scale(1.05);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border-width: 2px;
+    border-color: var(--primary);
 }
 
-
-/* PORTRAIT MODE ADJUSTMENT */
+/* RESPONSIVE - ONE LINE ONLY */
 @media (max-width: 768px) {
-    .split-pane-container { flex-direction: column; }
-    .left-pane { border-right: none; border-bottom: 1px solid var(--border); height: 50%; }
-    .right-pane { height: 50%; }
-    .grid-dual-pane { flex-direction: column; }
-    .q-grid { grid-template-columns: repeat(4, 1fr); }
+    /* Make everything smaller */
+    .main-header {
+        padding: 6px 10px;
+        font-size: 12px;
+        height: 35px;
+    }
+    
+    .stats-bar {
+        padding: 4px;
+        font-size: 11px;
+        height: 30px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    
+    .stats-bar span {
+        white-space: nowrap;
+        padding: 0 5px;
+    }
+    
+    .main-wrapper {
+        padding: 8px;
+    }
+    
+    .grid-dual-pane {
+        flex-direction: column;
+        gap: 10px;
+        padding: 8px;
+    }
+    
+    .pane-title {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+    
+    .q-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+    }
+    
+    .qnum {
+        padding: 5px 0;
+        font-size: 12px;
+        min-height: 25px;
+    }
+    
+    .split-pane-container {
+        flex-direction: column;
+    }
+    
+    .left-pane {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+    
+    .pane {
+        padding: 10px;
+    }
+    
+    .option-item {
+        padding: 8px;
+        gap: 8px;
+        font-size: 12px;
+        min-height: 40px;
+    }
+    
+    .opt-circle {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+    }
+    
+    /* BUTTONS STAY ONE LINE - SMALLER */
+    footer {
+        padding: 6px 8px;
+        height: 40px;
+        gap: 4px;
+    }
+    
+    .nav-btn {
+        padding: 4px 6px;
+        font-size: 11px;
+        height: 26px;
+    }
+    
+    .btn-finish {
+        padding: 6px;
+        font-size: 12px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .q-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 4px;
+    }
+    
+    .qnum {
+        font-size: 11px;
+        min-height: 22px;
+    }
+    
+    .main-header {
+        font-size: 11px;
+        height: 32px;
+    }
+    
+    .stats-bar {
+        font-size: 10px;
+        height: 28px;
+    }
+    
+    /* BUTTONS ONE LINE - SMALLEST */
+    footer {
+        padding: 5px 6px;
+        height: 35px;
+        gap: 3px;
+    }
+    
+    .nav-btn {
+        padding: 3px 5px;
+        font-size: 10px;
+        height: 24px;
+    }
+    
+    .nav-btn:nth-child(1) {
+        content: "❮";
+        font-size: 12px;
+    }
+    
+    .nav-btn:nth-child(2) {
+        font-size: 10px;
+    }
+    
+    .nav-btn:nth-child(3) {
+        content: "❯";
+        font-size: 12px;
+    }
+    
+    .btn-finish {
+        padding: 5px;
+        font-size: 11px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 320px) {
+    .q-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* ULTRA SMALL BUTTONS IN ONE LINE */
+    .nav-btn {
+        padding: 2px 4px;
+        font-size: 9px;
+        height: 22px;
+        min-width: 0;
+    }
+    
+    .nav-btn:nth-child(1) span { display: none; }
+    .nav-btn:nth-child(1)::after { content: "❮ Prev"; font-size: 9px; }
+    
+    .nav-btn:nth-child(2) span { display: none; }
+    .nav-btn:nth-child(2)::after { content: "Grid"; font-size: 9px; }
+    
+    .nav-btn:nth-child(3) span { display: none; }
+    .nav-btn:nth-child(3)::after { content: "Next ❯"; font-size: 9px; }
+    
+    footer {
+        padding: 4px 5px;
+        height: 30px;
+        gap: 2px;
+    }
+}
+
+/* Force buttons to never stack */
+footer {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+}
+
+.nav-btn {
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
+/* Make sure everything fits */
+* {
+    max-width: 100%;
+}
+
+/* Fix for mobile height */
+@supports (-webkit-touch-callout: none) {
+    body {
+        height: -webkit-fill-available;
+    }
 }

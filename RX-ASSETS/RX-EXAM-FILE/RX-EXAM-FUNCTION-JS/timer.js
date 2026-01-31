@@ -1,4 +1,4 @@
-// timer.js - Handles exam timer
+// timer.js - Handles exam timer with auto-submit
 const ExamTimer = {
     timeLeft: 50 * 60, // 50 minutes in seconds
     timerInterval: null,
@@ -21,7 +21,9 @@ const ExamTimer = {
     tick: function() {
         if (this.timeLeft <= 0) {
             this.stop();
-            ExamSubmit.submitExam(); // This will show alert without redirect
+            // Auto-submit when time is up (no confirmation needed)
+            console.log('⏰ Time is up! Auto-submitting exam...');
+            ExamSubmit.submitExam(false); // false means no confirmation modal
             return;
         }
         
@@ -31,6 +33,11 @@ const ExamTimer = {
         // Auto-save progress every 30 seconds
         if (this.timeLeft % 30 === 0) {
             this.autoSave();
+        }
+        
+        // Add warning style when less than 5 minutes
+        if (this.timeLeft === 5 * 60) {
+            this.showTimeWarning();
         }
     },
     
@@ -48,17 +55,67 @@ const ExamTimer = {
         const timerEl = document.getElementById('timer');
         
         if (timerEl) {
-            timerEl.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            const timeStr = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timerEl.textContent = timeStr;
             
             // Add warning class when less than 5 minutes
             if (this.timeLeft < 5 * 60) {
                 timerEl.style.color = '#e74c3c';
                 timerEl.style.fontWeight = 'bold';
+                timerEl.style.animation = 'pulse 1s infinite';
             } else {
-                timerEl.style.color = ''; // Reset color
+                timerEl.style.color = '';
                 timerEl.style.fontWeight = '';
+                timerEl.style.animation = '';
             }
         }
+    },
+    
+    showTimeWarning: function() {
+        // Show warning message when 5 minutes left
+        const warningMsg = document.createElement('div');
+        warningMsg.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            z-index: 999;
+            animation: slideInRight 0.5s ease;
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes pulse {
+                0% { opacity: 1; }
+                50% { opacity: 0.7; }
+                100% { opacity: 1; }
+            }
+        `;
+        
+        document.head.appendChild(style);
+        
+        warningMsg.innerHTML = `
+            <strong>⏰ TIME WARNING!</strong><br>
+            Only 5 minutes remaining!
+        `;
+        
+        document.body.appendChild(warningMsg);
+        
+        // Remove warning after 5 seconds
+        setTimeout(() => {
+            if (document.body.contains(warningMsg)) {
+                document.body.removeChild(warningMsg);
+                document.head.removeChild(style);
+            }
+        }, 5000);
     },
     
     addTime: function(seconds) {
@@ -86,24 +143,5 @@ const ExamTimer = {
         };
         
         localStorage.setItem('examProgress', JSON.stringify(progress));
-    },
-    
-    loadSavedProgress: function() {
-        const saved = localStorage.getItem('examProgress');
-        if (saved) {
-            try {
-                const progress = JSON.parse(saved);
-                
-                // Restore time if within reasonable limits
-                if (progress.timeRemaining && progress.timeRemaining > 0) {
-                    this.timeLeft = progress.timeRemaining;
-                }
-                
-                return true;
-            } catch (e) {
-                console.error('Error loading saved progress:', e);
-            }
-        }
-        return false;
     }
 };

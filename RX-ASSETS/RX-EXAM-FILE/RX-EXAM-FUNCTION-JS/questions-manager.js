@@ -231,6 +231,14 @@ const QuestionsManager = {
         // Clear all selections
         this.selectedQuestions = {};
         return this.currentExamSessionId;
+    },
+    
+    // Mark exam as submitted (called from submit-handler)
+    markExamSubmitted: function() {
+        console.log('📤 Exam marked as submitted in QuestionsManager');
+        // Clear selected questions for next exam
+        this.selectedQuestions = {};
+        localStorage.removeItem('questionSelections');
     }
 };
 
