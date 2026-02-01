@@ -1,23 +1,13 @@
-// media-controller.js - COMPLETE WORKING VERSION WITH REFRESH RESET
-
+// media-controller.js - COMPLETE WORKING VERSION
 const MediaController = {
-    // State management
-    audioStates: new Map(), // questionId-audioIndex -> playCount
+    audioStates: new Map(),
     currentQuestionId: null,
     currentAudio: null,
-    audioElements: new Map(), // audioId -> {element, button, timeout}
+    audioElements: new Map(),
     isAudioPlaying: false,
     
-    // Initialize everything
     init: function() {
         console.log('🔊 MediaController initializing...');
-        
-        // RESET ON REFRESH - Clear all audio states
-        console.log('🔄 Resetting audio states on refresh...');
-        this.clearAllStates();
-        
-        // Load saved states (will be empty after reset)
-        this.loadAudioStates();
         
         // Setup image modal
         this.setupImageModal();
@@ -34,7 +24,7 @@ const MediaController = {
     // ============ STATE MANAGEMENT ============
     loadAudioStates: function() {
         try {
-            const saved = localStorage.getItem('audioPlayStates');
+            const saved = localStorage.getItem('examAudioStates');
             if (saved) {
                 const states = JSON.parse(saved);
                 for (const [key, value] of Object.entries(states)) {
@@ -50,7 +40,7 @@ const MediaController = {
     saveAudioStates: function() {
         try {
             const states = Object.fromEntries(this.audioStates);
-            localStorage.setItem('audioPlayStates', JSON.stringify(states));
+            localStorage.setItem('examAudioStates', JSON.stringify(states));
         } catch (e) {
             console.error('Failed to save audio states:', e);
         }
@@ -73,7 +63,6 @@ const MediaController = {
     
     // ============ IMAGE MODAL ============
     setupImageModal: function() {
-        // Create modal
         const modalHTML = `
             <div id="imageModal" class="image-modal-overlay">
                 <div class="image-modal-content">
@@ -84,26 +73,22 @@ const MediaController = {
         `;
         document.body.insertAdjacentHTML('beforeend', modalHTML);
         
-        // Close button
         document.querySelector('.image-modal-close').addEventListener('click', () => {
             this.closeImageModal();
         });
         
-        // Close on overlay click
         document.getElementById('imageModal').addEventListener('click', (e) => {
             if (e.target.id === 'imageModal') {
                 this.closeImageModal();
             }
         });
         
-        // Close on ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.closeImageModal();
             }
         });
         
-        // Image click handler
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('content-image')) {
                 this.openImageModal(e.target.src);
@@ -124,12 +109,16 @@ const MediaController = {
     
     // ============ AUDIO SYSTEM ============
     setupAudioSystem: function() {
-        // Get current question
         this.currentQuestionId = UserState.currentQuestionId || 1;
         console.log(`🔧 Setting up audio for Q${this.currentQuestionId}`);
         
-        // Setup all audio elements
-        this.setupAllAudioElements();
+        // Load audio states
+        this.loadAudioStates();
+        
+        // Setup audio elements
+        setTimeout(() => {
+            this.setupAllAudioElements();
+        }, 500);
     },
     
     setupAllAudioElements: function() {
@@ -139,33 +128,22 @@ const MediaController = {
             const audioElement = container.querySelector('audio');
             if (!audioElement) return;
             
-            // Get stored play count (will be 0 after reset)
             const playCount = this.getPlayCount(this.currentQuestionId, index);
-            
-            // Hide original audio
-            audioElement.style.display = 'none';
-            audioElement.controls = false;
-            
-            // Create unique ID
             const audioId = `audio-${this.currentQuestionId}-${index}`;
             
-            // Create play button
             this.createAudioButton(container, audioElement, audioId, index, playCount);
         });
     },
     
     createAudioButton: function(container, audioElement, audioId, audioIndex, initialPlayCount) {
-        // Remove existing button
         const oldBtn = container.querySelector('.audio-play-button');
         if (oldBtn) oldBtn.remove();
         
-        // Create button
         const button = document.createElement('button');
         button.className = 'audio-play-button';
         button.dataset.audioId = audioId;
         button.dataset.index = audioIndex;
         
-        // Set button text based on play count
         if (initialPlayCount >= 2) {
             button.innerHTML = '⏹️ Completed (2/2)';
             button.classList.add('completed');
@@ -175,10 +153,8 @@ const MediaController = {
             button.disabled = false;
         }
         
-        // Add to container
         container.insertBefore(button, audioElement);
         
-        // Store reference
         this.audioElements.set(audioId, {
             element: audioElement,
             button: button,
@@ -188,14 +164,12 @@ const MediaController = {
             timeout: null
         });
         
-        // Add click handler
         button.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             this.handlePlayClick(audioId);
         });
         
-        // Setup audio event listeners
         this.setupAudioListeners(audioElement, audioId);
     },
     
@@ -203,14 +177,10 @@ const MediaController = {
         const audioData = this.audioElements.get(audioId);
         if (!audioData) return;
         
-        // Clear existing listeners
         const newAudio = audioElement.cloneNode(true);
         audioElement.parentNode.replaceChild(newAudio, audioElement);
-        
-        // Update reference
         audioData.element = newAudio;
         
-        // Play event
         newAudio.addEventListener('play', () => {
             console.log('▶ Audio started:', audioId);
             audioData.isPlaying = true;
@@ -218,42 +188,35 @@ const MediaController = {
             this.onAudioPlay(audioId);
         });
         
-        // Playing event (audio actually producing sound)
         newAudio.addEventListener('playing', () => {
             console.log('🔊 Audio is producing sound:', audioId);
         });
         
-        // Can play event
         newAudio.addEventListener('canplay', () => {
             console.log('✅ Audio can play:', audioId);
         });
         
-        // Can play through event
         newAudio.addEventListener('canplaythrough', () => {
             console.log('✅ Audio fully loaded:', audioId);
         });
         
-        // Ended event
         newAudio.addEventListener('ended', () => {
             console.log('⏹️ Audio ended:', audioId);
             audioData.isPlaying = false;
             this.onAudioEnd(audioId);
         });
         
-        // Error event
         newAudio.addEventListener('error', (e) => {
             console.error('❌ Audio error:', audioId, e);
             audioData.isPlaying = false;
             this.onAudioError(audioId);
         });
         
-        // Pause event
         newAudio.addEventListener('pause', () => {
             audioData.isPlaying = false;
             this.onAudioPause(audioId);
         });
         
-        // Load audio
         newAudio.load();
     },
     
@@ -261,23 +224,19 @@ const MediaController = {
         const audioData = this.audioElements.get(audioId);
         if (!audioData) return;
         
-        // Check if already played 2 times
         if (audioData.playCount >= 2) {
             console.log('Already played 2 times');
             return;
         }
         
-        // Stop any currently playing audio
         if (this.currentAudio && this.currentAudio !== audioId) {
             this.stopAudio(this.currentAudio);
         }
         
-        // Update button to loading
         audioData.button.innerHTML = '⌛ Loading...';
         audioData.button.disabled = true;
         audioData.button.classList.add('loading');
         
-        // Play audio with error handling
         this.playAudio(audioId);
     },
     
@@ -292,12 +251,10 @@ const MediaController = {
         }).catch(error => {
             console.log('Audio play failed, retrying...', error);
             
-            // Reset button
             audioData.button.classList.remove('loading');
             audioData.button.innerHTML = `▶ ${audioData.playCount > 0 ? 'Play Again' : 'Play Audio'} (${audioData.playCount}/2)`;
             audioData.button.disabled = false;
             
-            // Try again with different strategy
             this.retryAudioPlay(audioId, error);
         });
     },
@@ -306,15 +263,12 @@ const MediaController = {
         const audioData = this.audioElements.get(audioId);
         if (!audioData) return;
         
-        // Strategy 1: Reset and retry
         setTimeout(() => {
             audioData.element.currentTime = 0;
             
             const retryPromise = audioData.element.play();
             retryPromise.catch(retryError => {
                 console.log('Retry failed:', retryError);
-                
-                // Strategy 2: Create new audio element
                 this.recreateAudioElement(audioId);
             });
         }, 500);
@@ -324,23 +278,17 @@ const MediaController = {
         const audioData = this.audioElements.get(audioId);
         if (!audioData) return;
         
-        // Get original source
         const originalSrc = audioData.element.src;
-        
-        // Create new audio element
         const newAudio = new Audio();
         newAudio.src = originalSrc;
         newAudio.preload = 'auto';
         newAudio.style.display = 'none';
         
-        // Replace old element
         audioData.element.parentNode.replaceChild(newAudio, audioData.element);
         audioData.element = newAudio;
         
-        // Re-setup listeners
         this.setupAudioListeners(newAudio, audioId);
         
-        // Try playing again
         setTimeout(() => {
             this.playAudio(audioId);
         }, 1000);
@@ -350,13 +298,11 @@ const MediaController = {
         const audioData = this.audioElements.get(audioId);
         if (!audioData) return;
         
-        // Update button
         audioData.button.classList.remove('loading');
         audioData.button.classList.add('playing');
         audioData.button.innerHTML = `Playing (${audioData.playCount + 1}/2)`;
         audioData.button.disabled = true;
         
-        // Disable interactions
         this.disableInteractions();
     },
     
@@ -364,35 +310,27 @@ const MediaController = {
         const audioData = this.audioElements.get(audioId);
         if (!audioData) return;
         
-        // Increment play count
         audioData.playCount++;
         this.setPlayCount(audioData.questionId, audioData.index, audioData.playCount);
         
-        // Clear current audio
         if (this.currentAudio === audioId) {
             this.currentAudio = null;
         }
         
-        // Check if played 2 times
         if (audioData.playCount >= 2) {
-            // Mark as completed
             audioData.button.classList.remove('playing');
             audioData.button.classList.add('completed');
             audioData.button.innerHTML = 'Completed (2/2)';
             audioData.button.disabled = true;
             
-            // Enable interactions
             this.enableInteractions();
         } else {
-            // Show waiting state
             audioData.button.classList.remove('playing');
             audioData.button.innerHTML = ` Waiting... (${audioData.playCount}/2)`;
             audioData.button.disabled = true;
             
-            // Disable interactions during wait
             this.disableInteractions();
             
-            // Auto-play after 5 seconds
             audioData.timeout = setTimeout(() => {
                 if (audioData.playCount < 2) {
                     console.log('Auto-playing 2nd time...');
@@ -407,12 +345,10 @@ const MediaController = {
         const audioData = this.audioElements.get(audioId);
         if (!audioData) return;
         
-        // Reset button
         audioData.button.classList.remove('playing', 'loading');
         audioData.button.innerHTML = `▶ ${audioData.playCount > 0 ? 'Try Again' : 'Play Audio'} (${audioData.playCount}/2)`;
         audioData.button.disabled = false;
         
-        // Enable interactions
         this.enableInteractions();
     },
     
@@ -420,23 +356,19 @@ const MediaController = {
         const audioData = this.audioElements.get(audioId);
         if (!audioData) return;
         
-        // Clear timeout if exists
         if (audioData.timeout) {
             clearTimeout(audioData.timeout);
             audioData.timeout = null;
         }
         
-        // Update button
         audioData.button.classList.remove('playing');
         audioData.button.innerHTML = `▶ ${audioData.playCount > 0 ? 'Resume' : 'Play Audio'} (${audioData.playCount}/2)`;
         audioData.button.disabled = false;
         
-        // Clear current audio
         if (this.currentAudio === audioId) {
             this.currentAudio = null;
         }
         
-        // Enable interactions
         this.enableInteractions();
     },
     
@@ -444,34 +376,28 @@ const MediaController = {
         const audioData = this.audioElements.get(audioId);
         if (!audioData) return;
         
-        // Stop audio
         audioData.element.pause();
         audioData.element.currentTime = 0;
         
-        // Clear timeout
         if (audioData.timeout) {
             clearTimeout(audioData.timeout);
             audioData.timeout = null;
         }
         
-        // Update button
         audioData.button.classList.remove('playing');
         audioData.button.innerHTML = `▶ ${audioData.playCount > 0 ? 'Play Again' : 'Play Audio'} (${audioData.playCount}/2)`;
         audioData.button.disabled = false;
         
-        // Clear current audio
         if (this.currentAudio === audioId) {
             this.currentAudio = null;
         }
         
-        // Enable interactions
         this.enableInteractions();
     },
     
     disableInteractions: function() {
         document.body.classList.add('audio-playing');
         
-        // Disable all buttons except option cards
         const elements = document.querySelectorAll('button, .qnum, .btn-finish, .nav-btn');
         elements.forEach(el => {
             if (!el.classList.contains('audio-play-button') && 
@@ -485,7 +411,6 @@ const MediaController = {
     enableInteractions: function() {
         document.body.classList.remove('audio-playing');
         
-        // Enable all elements
         const elements = document.querySelectorAll('*');
         elements.forEach(el => {
             el.style.pointerEvents = '';
@@ -494,29 +419,20 @@ const MediaController = {
     },
     
     stopAllAudio: function() {
-        // Stop all audios
         this.audioElements.forEach((data, audioId) => {
             this.stopAudio(audioId);
         });
         
-        // Enable interactions
         this.enableInteractions();
     },
     
-    // ============ QUESTION NAVIGATION ============
     updateForQuestion: function(questionId) {
         console.log('🔄 Updating audio for Q' + questionId);
         
-        // Stop any playing audio
         this.stopAllAudio();
-        
-        // Update current question
         this.currentQuestionId = questionId;
-        
-        // Clear current references
         this.currentAudio = null;
         
-        // Update audio buttons
         setTimeout(() => {
             this.updateAudioButtons();
         }, 300);
@@ -532,10 +448,8 @@ const MediaController = {
             const playCount = this.getPlayCount(this.currentQuestionId, index);
             const audioId = `audio-${this.currentQuestionId}-${index}`;
             
-            // Update or create button
             const existingBtn = container.querySelector('.audio-play-button');
             if (existingBtn) {
-                // Update existing button
                 if (playCount >= 2) {
                     existingBtn.innerHTML = 'Completed (2/2)';
                     existingBtn.classList.add('completed');
@@ -547,7 +461,6 @@ const MediaController = {
                 }
                 existingBtn.dataset.audioId = audioId;
                 
-                // Update stored data
                 this.audioElements.set(audioId, {
                     element: audioElement,
                     button: existingBtn,
@@ -557,29 +470,23 @@ const MediaController = {
                     timeout: null
                 });
             } else {
-                // Create new button
                 this.createAudioButton(container, audioElement, audioId, index, playCount);
             }
             
-            // Setup audio element
             audioElement.style.display = 'none';
             audioElement.controls = false;
         });
     },
     
-    // ============ EVENT LISTENERS ============
     setupEventListeners: function() {
-        // Global click to resume audio context
         document.addEventListener('click', () => {
             this.resumeAudioContext();
         }, { once: true });
         
-        // Setup question navigation listeners
         this.setupQuestionListeners();
     },
     
     resumeAudioContext: function() {
-        // This helps with iOS/Safari audio
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         if (AudioContext) {
             const context = new AudioContext();
@@ -590,14 +497,12 @@ const MediaController = {
     },
     
     setupQuestionListeners: function() {
-        // Listen for question changes through UserState
         const originalSetCurrent = UserState.setCurrentQuestionId;
         UserState.setCurrentQuestionId = function(id) {
             originalSetCurrent.call(this, id);
             MediaController.updateForQuestion(id);
         };
         
-        // Also hook into QuestionLoader
         if (typeof QuestionLoader !== 'undefined') {
             const originalLoad = QuestionLoader.loadQuestion;
             QuestionLoader.loadQuestion = function(id, scrollReset) {
@@ -608,7 +513,6 @@ const MediaController = {
             };
         }
         
-        // Hook into navigation
         if (typeof QuestionNav !== 'undefined') {
             ['toggleView', 'prevQ', 'nextQ'].forEach(method => {
                 const original = QuestionNav[method];
@@ -619,24 +523,14 @@ const MediaController = {
             });
         }
         
-        // Stop audio when clicking grid
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('qnum')) {
                 this.stopAllAudio();
             }
         });
-    },
-    
-    // Clear all states (for new exam)
-    clearAllStates: function() {
-        this.audioStates.clear();
-        this.audioElements.clear();
-        localStorage.removeItem('audioPlayStates');
-        console.log('🧹 Cleared all audio states');
     }
 };
 
-// Initialize
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         if (typeof MediaController !== 'undefined') {
@@ -645,5 +539,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1500);
 });
 
-// Make global
 window.MediaController = MediaController;

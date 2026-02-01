@@ -2,11 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js1"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-3.png">
     <title>RX | EPS-TOPIK UBT TRAIL EXAM</title>
     <link rel="stylesheet" href="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-CSS/RX-EPS-MAIN.css">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#3498db">
+    <meta name="msapplication-navbutton-color" content="#3498db">
+    <meta name="apple-mobile-web-app-title" content="RX Exam">
 </head>
 <body>
 
@@ -54,11 +60,11 @@
         </div>
     </main>
 
-    <footer id="navFooter" style="display:none">
-        <button class="nav-btn" onclick="QuestionNav.prevQ()">❮ PREVIOUS</button>
-        <button class="nav-btn" onclick="QuestionNav.toggleView()">⠿ TOTAL QUESTION</button>
-        <button class="nav-btn" onclick="QuestionNav.nextQ()">NEXT ❯</button>
-    </footer>
+   <footer id="navFooter" style="display: none; visibility: hidden;">
+    <button class="nav-btn" onclick="QuestionNav.prevQ()"><span>❮ PREVIOUS</span></button>
+    <button class="nav-btn" onclick="QuestionNav.toggleView()"><span>⠿ TOTAL QUESTION</span></button>
+    <button class="nav-btn" onclick="QuestionNav.nextQ()"><span>NEXT ❯</span></button>
+</footer>
 
     <!-- Core Libraries - CRITICAL ORDER -->
     <script src="RX-ASSETS/RX-EXAM-FILE/RX-EXAM-FUNCTION-JS/user-state.js"></script>

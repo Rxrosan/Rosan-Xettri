@@ -6,26 +6,52 @@ const UserState = {
     isInitialized: false,
     
     init: function() {
-        console.log('🔄 UserState.init() - Starting fresh session');
+        console.log('🔄 UserState.init() - Starting fresh exam session');
         
-        // ALWAYS start fresh - no saved progress
-        this.reset();
-        
-        // Clear any saved progress from localStorage
-        localStorage.removeItem('examProgress');
-        localStorage.removeItem('questionSelections');
-        localStorage.removeItem('lastExamSubmitted');
-        localStorage.removeItem('examSessionId');
-        
-        this.isInitialized = true;
-        console.log('✅ UserState initialized - Fresh session started');
-    },
-    
-    reset: function() {
+        // PRESERVE LOGIN - Only clear exam data
         this.currentQuestionId = 1;
         this.userAnswers = {};
         this.examSubmitted = false;
-        console.log('🔄 UserState reset to initial values');
+        
+        // Clear only exam-specific localStorage
+        this.clearExamStorageOnly();
+        
+        this.isInitialized = true;
+        console.log('✅ UserState initialized - Login preserved');
+    },
+    
+    clearExamStorageOnly: function() {
+        // Only remove exam-related localStorage items
+        const examKeys = [
+            'examProgress',
+            'examSelections',
+            'examAudioStates',
+            'examSession',
+            'examSubmitted',
+            'examTimer'
+        ];
+        
+        examKeys.forEach(key => {
+            if (localStorage.getItem(key)) {
+                localStorage.removeItem(key);
+                console.log(`🧹 Removed exam key: ${key}`);
+            }
+        });
+        
+        // Keep these login/session keys ALWAYS:
+        const preserveKeys = [
+            'userToken',
+            'userSession',
+            'loginState',
+            'userId',
+            'userName',
+            'authToken',
+            'isLoggedIn',
+            'rememberMe',
+            'sessionId'
+        ];
+        
+        console.log('✅ Exam storage cleared (login preserved)');
     },
     
     getCurrentQuestionId: function() {
@@ -41,16 +67,27 @@ const UserState = {
     },
     
     setUserAnswer: function(questionId, answer) {
-        // Only save if exam is not submitted
         if (!this.examSubmitted) {
             this.userAnswers[questionId] = answer;
-            // DO NOT auto-save to localStorage - we want fresh start on refresh
+            // Save to exam storage
+            this.saveExamProgress();
             console.log(`💾 Answer saved for Q${questionId}: ${answer}`);
         }
     },
     
+    saveExamProgress: function() {
+        const examProgress = {
+            answers: this.userAnswers,
+            currentQuestion: this.currentQuestionId,
+            timestamp: new Date().toISOString()
+        };
+        
+        localStorage.setItem('examProgress', JSON.stringify(examProgress));
+    },
+    
     clearUserAnswer: function(questionId) {
         delete this.userAnswers[questionId];
+        this.saveExamProgress();
         console.log(`🗑️ Answer cleared for Q${questionId}`);
     },
     
@@ -60,7 +97,7 @@ const UserState = {
     
     markExamSubmitted: function() {
         this.examSubmitted = true;
-        this.reset();
-        console.log('📤 Exam marked as submitted - All answers cleared');
+        this.clearExamStorageOnly();
+        console.log('📤 Exam marked as submitted');
     }
 };

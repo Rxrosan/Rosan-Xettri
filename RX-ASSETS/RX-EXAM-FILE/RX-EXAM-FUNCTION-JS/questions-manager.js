@@ -15,14 +15,12 @@ const QuestionsManager = {
     init: function() {
         console.log('🚀 QuestionsManager.init() - Starting fresh');
         
-        // ALWAYS start fresh - clear everything
         this.reset();
         
-        // Clear any saved selections
-        localStorage.removeItem('questionSelections');
-        localStorage.removeItem('examSessionId');
+        // Clear only exam selections
+        localStorage.removeItem('examSelections');
         
-        // Load all question files (no auto-selection)
+        // Load all question files
         this.loadAllQuestions();
         
         return this;
@@ -30,24 +28,22 @@ const QuestionsManager = {
     
     reset: function() {
         this.questionsByNumber = {};
-        this.selectedQuestions = {}; // EMPTY - no auto-selection
+        this.selectedQuestions = {};
         this.questionErrors = {};
         this.loadedCount = 0;
         this.isNewExamSession = true;
-        this.currentExamSessionId = 'fresh-' + Date.now();
-        console.log('🔄 QuestionsManager reset - No questions selected');
+        this.currentExamSessionId = 'exam-' + Date.now();
+        console.log('🔄 QuestionsManager reset');
     },
     
     loadAllQuestions: function() {
-        console.log('📚 Loading question files (no auto-selection)...');
+        console.log('📚 Loading question files...');
         this.isLoading = true;
         
-        // Load each question file
         for (let i = 1; i <= this.totalQuestions; i++) {
             this.loadQuestionFile(i);
         }
         
-        // Check loading status after delay
         setTimeout(() => {
             this.isLoading = false;
             this.finalizeLoading();
@@ -66,7 +62,6 @@ const QuestionsManager = {
             console.log(`✅ Loaded: qs-no-${questionNumber}.js`);
             this.loadedCount++;
             
-            // Check if questions were registered
             setTimeout(() => {
                 if (!this.questionsByNumber[questionNumber]) {
                     console.warn(`⚠️ Q${questionNumber}: File loaded but no questions`);
@@ -89,12 +84,8 @@ const QuestionsManager = {
         document.head.appendChild(script);
     },
     
-    // ============================================================
-    // REGISTRATION - NO AUTO-SELECTION
-    // ============================================================
-    
     registerQuestions: function(questionNumber, questionsArray) {
-        console.log(`📝 Registering Q${questionNumber} (no auto-select)`);
+        console.log(`📝 Registering Q${questionNumber}`);
         
         if (!Array.isArray(questionsArray) || questionsArray.length === 0) {
             console.error(`❌ Q${questionNumber}: Invalid questions array`);
@@ -105,17 +96,12 @@ const QuestionsManager = {
             return;
         }
         
-        // Store questions but DO NOT auto-select
         this.questionsByNumber[questionNumber] = questionsArray;
         delete this.questionErrors[questionNumber];
         
         console.log(`✅ Q${questionNumber}: ${questionsArray.length} variations available`);
-        
-        // IMPORTANT: DO NOT select any question automatically
-        // Questions will be selected only when needed
     },
     
-    // Select question ONLY when explicitly requested
     selectQuestionForDisplay: function(questionNumber) {
         const questions = this.questionsByNumber[questionNumber];
         
@@ -124,13 +110,11 @@ const QuestionsManager = {
             return false;
         }
         
-        // If already selected, keep it
         if (this.selectedQuestions[questionNumber]) {
             console.log(`🎯 Q${questionNumber}: Using existing selection`);
             return true;
         }
         
-        // Select random question for display
         const randomIndex = Math.floor(Math.random() * questions.length);
         this.selectedQuestions[questionNumber] = questions[randomIndex];
         
@@ -142,9 +126,8 @@ const QuestionsManager = {
         console.log('📊 Loading complete:');
         console.log(`   Files loaded: ${this.loadedCount}/40`);
         console.log(`   Questions available: ${Object.keys(this.questionsByNumber).length}/40`);
-        console.log(`   Selected questions: ${Object.keys(this.selectedQuestions).length} (should be 0)`);
+        console.log(`   Selected questions: ${Object.keys(this.selectedQuestions).length}`);
         
-        // Update UI
         this.updateUI();
     },
     
@@ -157,12 +140,7 @@ const QuestionsManager = {
         }
     },
     
-    // ============================================================
-    // PUBLIC API
-    // ============================================================
-    
     getQuestion: function(questionNumber) {
-        // Check for errors
         if (this.questionErrors[questionNumber]) {
             return {
                 id: questionNumber,
@@ -171,7 +149,6 @@ const QuestionsManager = {
             };
         }
         
-        // If not selected yet, select one now
         if (!this.selectedQuestions[questionNumber]) {
             const success = this.selectQuestionForDisplay(questionNumber);
             if (!success) {
@@ -210,7 +187,6 @@ const QuestionsManager = {
         return { status: 'not-loaded', message: 'File not found' };
     },
     
-    // Force new random selection for a question
     reselectQuestion: function(questionNumber) {
         console.log(`🔄 Reselecting random question for Q${questionNumber}`);
         
@@ -224,35 +200,28 @@ const QuestionsManager = {
         return true;
     },
     
-    // Start fresh exam
     startFreshExam: function() {
         console.log('🆕 Starting fresh exam');
         this.reset();
-        // Clear all selections
         this.selectedQuestions = {};
         return this.currentExamSessionId;
     },
     
-    // Mark exam as submitted (called from submit-handler)
     markExamSubmitted: function() {
         console.log('📤 Exam marked as submitted in QuestionsManager');
-        // Clear selected questions for next exam
         this.selectedQuestions = {};
-        localStorage.removeItem('questionSelections');
+        localStorage.removeItem('examSelections');
     }
 };
 
-// Global registration function
 function registerQuestionSet(questionNumber, questionsArray) {
     if (typeof QuestionsManager !== 'undefined') {
         QuestionsManager.registerQuestions(questionNumber, questionsArray);
     } else {
         console.error(`❌ QuestionsManager not ready`);
-        // Store for later
         window[`_pendingQuestion${questionNumber}`] = questionsArray;
     }
 }
 
-// Make globally available
 window.QuestionsManager = QuestionsManager;
 window.registerQuestionSet = registerQuestionSet;

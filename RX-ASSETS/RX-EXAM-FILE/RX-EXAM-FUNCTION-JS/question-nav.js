@@ -15,8 +15,12 @@ const QuestionNav = {
     toggleView: function() {
         // Hide question screen
         document.getElementById('questionScreen').style.display = 'none';
-        // Hide navigation footer
-        document.getElementById('navFooter').style.display = 'none';
+        
+        // HIDE FOOTER WITH NAVIGATION BUTTONS
+        const navFooter = document.getElementById('navFooter');
+        navFooter.style.display = 'none';
+        navFooter.style.visibility = 'hidden';
+        
         // Show menu screen
         document.getElementById('menuScreen').style.display = 'flex';
         

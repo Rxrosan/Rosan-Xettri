@@ -5,10 +5,8 @@ const ExamSubmit = {
     },
     
     showConfirmationModal: function() {
-        // Remove existing modals
         this.removeExistingModals();
         
-        // Create modal overlay
         const modalOverlay = document.createElement('div');
         modalOverlay.id = 'confirm-modal';
         modalOverlay.style.cssText = `
@@ -26,7 +24,6 @@ const ExamSubmit = {
             box-sizing: border-box;
         `;
         
-        // Create modal content
         const modalContent = document.createElement('div');
         modalContent.style.cssText = `
             background: white;
@@ -103,7 +100,6 @@ const ExamSubmit = {
         modalOverlay.appendChild(modalContent);
         document.body.appendChild(modalOverlay);
         
-        // Add CSS animation
         const style = document.createElement('style');
         style.textContent = `
             @keyframes fadeIn {
@@ -142,7 +138,6 @@ const ExamSubmit = {
         `;
         document.head.appendChild(style);
         
-        // Event listeners
         document.getElementById('cancel-btn').addEventListener('click', () => {
             this.closeModal(modalOverlay, style);
         });
@@ -152,7 +147,6 @@ const ExamSubmit = {
             this.processSubmission();
         });
         
-        // Close on overlay click
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) {
                 this.closeModal(modalOverlay, style);
@@ -165,20 +159,19 @@ const ExamSubmit = {
         const score = this.calculateScore();
         this.saveResults(score);
         this.showResultsModal(score);
-        localStorage.removeItem('examProgress');
-        QuestionsManager.markExamSubmitted();
+        
+        // Only clear exam data
+        this.clearExamData();
     },
     
     calculateScore: function() {
         let correct = 0;
-        let answered = 0;
         
         for (const [questionId, userAnswer] of Object.entries(UserState.userAnswers)) {
             const question = QuestionsManager.getQuestion(parseInt(questionId));
             if (question && !question.hasError && question.answer === userAnswer) {
                 correct++;
             }
-            answered++;
         }
         
         return {
@@ -197,11 +190,27 @@ const ExamSubmit = {
         localStorage.setItem('examResults', JSON.stringify(results));
     },
     
+    clearExamData: function() {
+        // Only clear exam-specific data
+        const examKeys = [
+            'examProgress',
+            'examSelections',
+            'examAudioStates',
+            'examSession',
+            'examTimer'
+        ];
+        
+        examKeys.forEach(key => {
+            localStorage.removeItem(key);
+        });
+        
+        console.log('✅ Exam data cleared (login preserved)');
+        QuestionsManager.markExamSubmitted();
+    },
+    
     showResultsModal: function(score) {
-        // Remove existing modals
         this.removeExistingModals();
         
-        // Create modal overlay
         const modalOverlay = document.createElement('div');
         modalOverlay.id = 'results-modal';
         modalOverlay.style.cssText = `
@@ -219,13 +228,11 @@ const ExamSubmit = {
             box-sizing: border-box;
         `;
         
-        // Determine grade color
-        let gradeColor = '#2ecc71'; // Default green
+        let gradeColor = '#2ecc71';
         if (score.percentage < 50) gradeColor = '#e74c3c';
         else if (score.percentage < 70) gradeColor = '#f39c12';
         else if (score.percentage < 90) gradeColor = '#3498db';
         
-        // Create modal content
         const modalContent = document.createElement('div');
         modalContent.style.cssText = `
             background: white;
@@ -239,7 +246,6 @@ const ExamSubmit = {
         `;
         
         modalContent.innerHTML = `
-            <!-- Title -->
             <h2 style="
                 color: #2c3e50;
                 margin: 0 0 10px 0;
@@ -256,7 +262,6 @@ const ExamSubmit = {
                 Congratulations! You have successfully completed the exam.
             </p>
             
-            <!-- Score Display -->
             <div style="
                 background: linear-gradient(135deg, #f8f9fa, #e9ecef);
                 border-radius: 15px;
@@ -300,7 +305,6 @@ const ExamSubmit = {
                 </div>
             </div>
             
-            <!-- Buttons -->
             <div style="display: flex; gap: 15px;">
                 <button id="retake-btn" style="
                     flex: 1;
@@ -347,7 +351,6 @@ const ExamSubmit = {
         modalOverlay.appendChild(modalContent);
         document.body.appendChild(modalOverlay);
         
-        // Add CSS animation
         const style = document.createElement('style');
         style.textContent = `
             @keyframes slideUp {
@@ -365,7 +368,6 @@ const ExamSubmit = {
                 transform: translateY(-2px);
             }
             
-            /* Responsive styles */
             @media (max-width: 500px) {
                 #results-modal > div {
                     padding: 30px 20px !important;
@@ -385,53 +387,21 @@ const ExamSubmit = {
                     font-size: 15px !important;
                 }
             }
-            
-            @media (max-width: 400px) {
-                #results-modal > div {
-                    padding: 25px 15px !important;
-                }
-                
-                #results-modal h2 {
-                    font-size: 22px !important;
-                }
-                
-                #results-modal .score-percentage {
-                    font-size: 32px !important;
-                }
-                
-                #results-modal .button-group {
-                    flex-direction: column !important;
-                    gap: 12px !important;
-                }
-                
-                #results-modal button {
-                    width: 100% !important;
-                }
-            }
-            
-            @media (max-height: 600px) {
-                #results-modal > div {
-                    max-height: 90vh;
-                    overflow-y: auto;
-                }
-            }
         `;
         document.head.appendChild(style);
         
-        // Event listeners
         document.getElementById('retake-btn').addEventListener('click', () => {
-            localStorage.clear();
+            this.clearExamData();
             window.location.reload();
         });
         
         document.getElementById('exit-btn').addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = 'Resource.html';
         });
         
-        // Close on overlay click
         modalOverlay.addEventListener('click', (e) => {
             if (e.target === modalOverlay) {
-                window.location.href = 'index.html';
+                window.location.href = 'Resource.html';
             }
         });
     },
@@ -443,7 +413,6 @@ const ExamSubmit = {
             if (modal) document.body.removeChild(modal);
         });
         
-        // Remove any added styles
         const styles = document.querySelectorAll('style');
         styles.forEach(style => {
             if (style.textContent.includes('modal') || 

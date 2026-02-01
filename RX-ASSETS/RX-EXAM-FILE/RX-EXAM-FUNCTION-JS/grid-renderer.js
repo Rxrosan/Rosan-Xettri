@@ -55,6 +55,9 @@ const GridRenderer = {
         
         // Load the question WITH saved answer preserved
         QuestionLoader.loadQuestion(questionNumber, true);
+        
+        // MAKE SURE FOOTER IS VISIBLE
+        document.getElementById('navFooter').style.display = 'flex';
     },
     
     updateGridColors: function() {

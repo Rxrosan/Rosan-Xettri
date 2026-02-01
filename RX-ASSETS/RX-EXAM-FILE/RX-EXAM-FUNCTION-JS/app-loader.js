@@ -1,11 +1,10 @@
 // app-loader.js - COMPLETE REWRITE
-
 const AppLoader = {
     init: function() {
         console.log('🚀 AppLoader.init() - Starting exam system');
         
-        // Check if we should clear saved data
-        this.checkAndClearSavedData();
+        // PROTECT LOGIN DATA - Only clear exam data
+        this.clearExamDataOnly();
         
         // Initialize ALL modules in correct order
         this.initializeModules();
@@ -28,43 +27,28 @@ const AppLoader = {
         // Initialize MediaController
         this.initMediaController();
         
-        console.log('✅ AppLoader initialized successfully');
+        console.log('✅ AppLoader initialized successfully (login preserved)');
     },
     
-    checkAndClearSavedData: function() {
-        // Check if this is a fresh start
-        const hasPreviousSession = localStorage.getItem('examSessionId');
-        const urlParams = new URLSearchParams(window.location.search);
-        const shouldClear = urlParams.has('clear') || !hasPreviousSession;
-        
-        if (shouldClear) {
-            console.log('🧹 Clearing previous session data');
-            this.clearAllSavedData();
-            
-            // Create new session ID
-            const newSessionId = 'exam-' + Date.now();
-            localStorage.setItem('examSessionId', newSessionId);
-            console.log(`🆕 New session ID: ${newSessionId}`);
-        } else {
-            console.log('📚 Continuing previous session');
-            // Load any saved progress
-            this.loadSavedProgress();
-        }
-    },
-    
-    clearAllSavedData: function() {
-        // Clear localStorage items
-        const itemsToClear = [
+    clearExamDataOnly: function() {
+        // Only clear exam-specific localStorage
+        const examKeys = [
             'examProgress',
-            'questionSelections',
-            'lastExamSubmitted'
+            'examSelections',
+            'examSession',
+            'examTimer',
+            'examAudioStates'
         ];
         
-        itemsToClear.forEach(item => {
-            localStorage.removeItem(item);
+        examKeys.forEach(key => {
+            localStorage.removeItem(key);
         });
         
-        console.log('✅ Session data cleared');
+        // Create new exam session
+        const newSessionId = 'exam-' + Date.now();
+        localStorage.setItem('examSession', newSessionId);
+        
+        console.log('✅ Exam data cleared (login preserved)');
     },
     
     loadSavedProgress: function() {
@@ -72,15 +56,13 @@ const AppLoader = {
             const savedProgress = localStorage.getItem('examProgress');
             if (savedProgress) {
                 const progress = JSON.parse(savedProgress);
-                console.log('📥 Loading saved progress:', progress);
+                console.log('📥 Loading saved exam progress:', progress);
                 
-                // Load saved answers into UserState
                 if (progress.answers && UserState) {
                     UserState.userAnswers = progress.answers;
                     console.log(`📊 Loaded ${Object.keys(progress.answers).length} saved answers`);
                 }
                 
-                // Load current question
                 if (progress.currentQuestion && UserState) {
                     UserState.currentQuestionId = progress.currentQuestion;
                 }
@@ -93,13 +75,11 @@ const AppLoader = {
     initializeModules: function() {
         console.log('🛠️ Initializing modules...');
         
-        // Initialize UserState FIRST
         if (typeof UserState !== 'undefined') {
             UserState.init();
             console.log('✅ UserState initialized');
         }
         
-        // Initialize QuestionsManager
         if (typeof QuestionsManager !== 'undefined') {
             QuestionsManager.init();
             console.log('✅ QuestionsManager initialized');
@@ -107,7 +87,6 @@ const AppLoader = {
     },
     
     initMediaController: function() {
-        // Initialize MediaController after everything is loaded
         setTimeout(() => {
             if (typeof MediaController !== 'undefined') {
                 MediaController.init();
@@ -117,35 +96,28 @@ const AppLoader = {
     },
     
     setupUI: function() {
-        // Set username
         const userNameEl = document.getElementById('user-name');
         if (userNameEl) {
             userNameEl.textContent = 'Rosan kc';
         }
         
-        // Setup timer display
         const timerEl = document.getElementById('timer');
         if (timerEl) {
             timerEl.textContent = '50:00';
         }
         
-        // Setup stats
         this.updateStatsDisplay();
     },
     
     setupEventListeners: function() {
         console.log('🔗 Setting up event listeners');
         
-        // Prevent accidental page refresh/close during exam
         window.addEventListener('beforeunload', this.handleBeforeUnload.bind(this));
         
-        // Auto-save progress periodically
-        setInterval(this.autoSaveProgress.bind(this), 30000); // Every 30 seconds
+        setInterval(this.autoSaveProgress.bind(this), 30000);
         
-        // Handle visibility change (tab switching)
         document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
         
-        // Handle page load completion
         window.addEventListener('load', this.handlePageLoad.bind(this));
     },
     
@@ -153,10 +125,8 @@ const AppLoader = {
         if (typeof ExamTimer !== 'undefined' && ExamTimer.isRunning && 
             typeof UserState !== 'undefined' && Object.keys(UserState.userAnswers).length > 0) {
             
-            // Auto-save before leaving
             this.autoSaveProgress();
             
-            // Show warning
             e.preventDefault();
             e.returnValue = 'You have unsaved answers. Are you sure you want to leave?';
             return e.returnValue;
@@ -165,7 +135,6 @@ const AppLoader = {
     
     handleVisibilityChange: function() {
         if (document.hidden) {
-            // Tab switched away - auto save
             this.autoSaveProgress();
             console.log('📱 Tab switched away - auto-saved progress');
         }
@@ -173,7 +142,6 @@ const AppLoader = {
     
     handlePageLoad: function() {
         console.log('📄 Page fully loaded');
-        // Additional initialization after everything is loaded
         setTimeout(() => {
             this.finalizeInitialization();
         }, 1000);
@@ -186,19 +154,18 @@ const AppLoader = {
             answers: UserState.userAnswers,
             currentQuestion: UserState.currentQuestionId,
             timestamp: new Date().toISOString(),
-            sessionId: localStorage.getItem('examSessionId')
+            sessionId: localStorage.getItem('examSession')
         };
         
         try {
             localStorage.setItem('examProgress', JSON.stringify(progress));
-            console.log('💾 Auto-saved progress');
+            console.log('💾 Auto-saved exam progress');
         } catch (error) {
             console.error('❌ Error auto-saving:', error);
         }
     },
     
     updateStatsDisplay: function() {
-        // Initial stats update
         setTimeout(() => {
             if (typeof GridRenderer !== 'undefined') {
                 GridRenderer.updateStats();
@@ -215,7 +182,6 @@ const AppLoader = {
         if (questionScreen) questionScreen.style.display = 'none';
         if (navFooter) navFooter.style.display = 'none';
         
-        // Update grid to show answered questions
         setTimeout(() => {
             if (typeof GridRenderer !== 'undefined') {
                 GridRenderer.updateGridColors();
@@ -238,19 +204,13 @@ const AppLoader = {
     },
     
     initializeGrid: function() {
-        // Wait for questions to load, then initialize grid
         setTimeout(() => {
             if (typeof GridRenderer !== 'undefined') {
                 GridRenderer.init();
                 
-                // Verify state
                 if (typeof UserState !== 'undefined') {
                     const answersCount = Object.keys(UserState.userAnswers).length;
                     console.log(`🔍 Initial state: ${answersCount} answers loaded`);
-                    
-                    if (answersCount > 0) {
-                        console.log('📝 Answers found, grid will show them as answered');
-                    }
                 }
             } else {
                 console.error('❌ GridRenderer not available');
@@ -259,7 +219,6 @@ const AppLoader = {
     },
     
     startTimer: function() {
-        // Wait a bit then start timer
         setTimeout(() => {
             if (typeof ExamTimer !== 'undefined') {
                 ExamTimer.init();
@@ -271,7 +230,6 @@ const AppLoader = {
     finalizeInitialization: function() {
         console.log('🎉 Finalizing initialization...');
         
-        // Double-check all modules are ready
         const modules = [
             { name: 'UserState', obj: UserState },
             { name: 'QuestionsManager', obj: QuestionsManager },
@@ -290,10 +248,7 @@ const AppLoader = {
             }
         });
         
-        // Final stats update
         this.updateStatsDisplay();
-        
-        // Show welcome message
         this.showWelcomeMessage();
     },
     
@@ -308,20 +263,16 @@ const AppLoader = {
         }
     },
     
-    // Public methods for other modules to call
     navigateToQuestion: function(questionId) {
         if (questionId >= 1 && questionId <= 40) {
             console.log(`🔗 Navigating to question ${questionId}`);
             
-            // Save current state before navigation
             this.autoSaveProgress();
             
-            // Stop any playing audio
             if (typeof MediaController !== 'undefined') {
                 MediaController.stopAllAudio();
             }
             
-            // Load the question
             if (typeof QuestionLoader !== 'undefined') {
                 QuestionLoader.loadQuestion(questionId, true);
                 this.showQuestionScreen();
@@ -334,7 +285,6 @@ const AppLoader = {
         this.showMenuScreen();
         this.autoSaveProgress();
         
-        // Stop any playing audio
         if (typeof MediaController !== 'undefined') {
             MediaController.stopAllAudio();
         }
@@ -343,31 +293,25 @@ const AppLoader = {
     submitExam: function() {
         console.log('📤 Submitting exam...');
         
-        // Stop timer
         if (typeof ExamTimer !== 'undefined') {
             ExamTimer.stop();
         }
         
-        // Stop all audio
         if (typeof MediaController !== 'undefined') {
             MediaController.stopAllAudio();
         }
         
-        // Save final progress
         this.autoSaveProgress();
         
-        // Call submit handler
         if (typeof ExamSubmit !== 'undefined') {
             ExamSubmit.submitExam();
         }
         
-        // Clear session data after submission
         setTimeout(() => {
-            this.clearAllSavedData();
+            this.clearExamDataOnly();
         }, 1000);
     },
     
-    // Debug/development helper
     debugState: function() {
         console.group('🔍 Debug State');
         if (typeof UserState !== 'undefined') {
@@ -380,15 +324,12 @@ const AppLoader = {
     }
 };
 
-// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('📄 DOM Content Loaded');
     
-    // Small delay to ensure all scripts are loaded
     setTimeout(() => {
         AppLoader.init();
     }, 100);
 });
 
-// Make AppLoader globally available
 window.AppLoader = AppLoader;
