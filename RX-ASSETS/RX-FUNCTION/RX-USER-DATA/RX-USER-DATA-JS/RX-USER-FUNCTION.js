@@ -69,19 +69,34 @@ const RXUserLogin = {
             return;
         }
         
-        // Login successful
+        // Login successful - Save to localStorage
         RXUserData.setCurrentUser(user.id);
+        
+        // Also save login timestamp for future use
+        localStorage.setItem('rxLoginTime', new Date().toISOString());
+        
         this.showProfile(user);
         this.showLoginStatus('Login successful!', 'success');
         
         // Clear form
         document.getElementById('loginNickname').value = '';
         document.getElementById('loginPassword').value = '';
+        
+        // Check if we're on USER.html and need to redirect
+        if (window.location.pathname.includes('USER.html')) {
+            setTimeout(() => {
+                // Redirect to home page or stay on profile page
+                window.location.href = '#';
+            }, 1500);
+        }
     },
 
     // Logout function
     logout: function() {
+        // Clear all login data from localStorage
         RXUserData.clearCurrentUser();
+        localStorage.removeItem('rxLoginTime');
+        
         this.showLoginForm();
         
         // Close side panel if open
@@ -93,6 +108,14 @@ const RXUserLogin = {
         }
         
         this.showLoginStatus('Logged out successfully', 'success');
+        
+        // Reload page if on resource page to show login screen
+        if (window.location.pathname.includes('Resource.html') || 
+            window.location.pathname.includes('Dashboard.html')) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
     },
 
     // Show profile section
@@ -127,7 +150,7 @@ const RXUserLogin = {
         const userRoleBadge = document.getElementById('userRoleBadge');
         
         if (profileImage) {
-            profileImage.src = user.profileImage || 'RX-ASSETS/RX-IMAGE/RX-USER/default-profile.png';
+            profileImage.src = user.profileImage || 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-6.gif';
         }
         
         if (userFullName) userFullName.textContent = user.fullName;
@@ -188,3 +211,8 @@ const RXUserLogin = {
         }, 3000);
     }
 };
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    RXUserLogin.init();
+});

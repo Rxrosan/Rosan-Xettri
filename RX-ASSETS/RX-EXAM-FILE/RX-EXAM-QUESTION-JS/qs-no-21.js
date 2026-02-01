@@ -4,23 +4,24 @@ const questionsForNumber21 = [
     {
         id: 21,
         instruction: {
-            text: "[~]",
+            text: "21. 들은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-1.mp3"
         },
         options: [
-            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3"},
-            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3" },
-            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3" },
-            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3" }
+            { text: "끓다", image: null, audio: null},
+            { text: "신다", image: null, audio: null},
+            { text: "삶다", image: null, audio: null},
+            { text: "싫다", image: null, audio: null}
         ],
         answer: 4
     },
+    
     
 ];
 
