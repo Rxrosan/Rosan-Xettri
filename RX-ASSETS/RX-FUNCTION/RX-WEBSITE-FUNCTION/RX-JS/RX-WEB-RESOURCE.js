@@ -219,7 +219,7 @@ function renderQuestions() {
                 <div class="card-footer">
                     <span class="category-badge">${question.category}</span>
                     <a href="${question.link}" class="btn-view">
-                        <i class="fas fa-play"></i> OPEN 
+                       Loading...
                     </a>
                 </div>
             </div>
