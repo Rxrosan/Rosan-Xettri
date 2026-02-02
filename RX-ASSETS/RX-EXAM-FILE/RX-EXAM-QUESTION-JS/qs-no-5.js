@@ -36,7 +36,7 @@ const questionsForNumber5 = [
         options: [
             { text: "중고 거래 플랫품에서 비싼 가격에 물건이 거래됩니다.", image: null, audio: null },
             { text: "물건을 거래할 때 대부분 택배를 이용해서 물건을 받습니다.", image: null, audio: null },
-            { text: "중고 거래 플랫품으로 새 구입할 수 있습니다.", image: null, audio: null },
+            { text: "중고 거래 플랫품으로 새 물건을 구입할 수 있습니다.", image: null, audio: null },
             { text: "중고 거래 플랫품에서 가구와 같은 물건은 구할 수 없습니다.", image: null, audio: null }
         ],
         answer: 3
