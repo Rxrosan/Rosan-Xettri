@@ -4,7 +4,7 @@ const questionsForNumber2 = [
     {
         id: 1,
         instruction: {
-            text: "2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            text: "[QID-1]<br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -24,7 +24,7 @@ const questionsForNumber2 = [
     {
         id: 2,
         instruction: {
-            text: "2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            text: "[QID-2]<br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -44,7 +44,7 @@ const questionsForNumber2 = [
     {
         id: 3,
         instruction: {
-            text: "2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            text: "[QID-3]<br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -61,6 +61,27 @@ const questionsForNumber2 = [
         ],
         answer: 2
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[QID-4]<br> 2.다음 그림을 보고 맞는 단어나 문장을 고르십시오",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "",
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-3.png",
+            audio: null
+        },
+        options: [
+            { text: "굴착기입니다.", image: null, audio: null },
+            { text: "경운기입니다.", image: null, audio: null },
+            { text: "트랙터입니다.", image: null, audio: null },
+            { text: "지게차입니다", image: null, audio: null }
+        ],
+        answer: 4
+    },
+    
 
 ];
 

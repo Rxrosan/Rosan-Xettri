@@ -4,63 +4,24 @@ const questionsForNumber12 = [
     {
         id: 12,
         instruction: {
-            text: "[~]",
+            text: "[QID-1]<br> 12. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text: "한국어를 배우고 싶지만 학원에 갈 시간이 없습니다. 그래서 퇴근 후에 인터넷 강의를 - - - - - 한국어를 공부하고 있습니다.",
             image: null,
             audio: null
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "들으면서", image: null, audio: null },
+            { text: "듣자마자", image: null, audio: null },
+            { text: "들으려고", image: null, audio: null },
+            { text: "듣느라고", image: null, audio: null }
         ],
-        answer: 4
+        answer: 1
     },
-    {
-        id: 12,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 12,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 3
-    }
+    
 ];
 
 // Register these questions with the manager

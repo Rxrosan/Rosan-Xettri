@@ -4,63 +4,24 @@ const questionsForNumber17 = [
     {
         id: 17,
         instruction: {
-            text: "[~]",
+            text: "[QID-1]<br> 17. 다음 설명에 알맞은 어휘를 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text: "손에 쥐고 철사를 끊거나 구부릴 때 쓰는 도구입니다. 전선이나 작은 부품을 잡을 때도 사용합니다.",
             image: null,
             audio: null
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "쇠톱", image: null, audio: null },
+            { text: "망치", image: null, audio: null },
+            { text: "토치", image: null, audio: null },
+            { text: "펜치", image: null, audio: null }
         ],
         answer: 4
     },
-    {
-        id: 17,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 17,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 3
-    }
+    
 ];
 
 // Register these questions with the manager

@@ -10,7 +10,7 @@ const RXUserData = {
             phone: "9826482279",
             dob: "2004-07-25",
             address: "Banganga-10, Kapilvastu",
-            profileImage: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/A-2.png",
+            profileImage: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/A-1.png",
             role: "admin",
             joinDate: "2024-01-01"
         },

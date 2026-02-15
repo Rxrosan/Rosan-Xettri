@@ -4,63 +4,24 @@ const questionsForNumber11 = [
     {
         id: 11,
         instruction: {
-            text: "[~]",
+            text: "[QID-1]<br> 11. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text: "지급 방법 - - - - - - ",
             image: null,
             audio: null
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 4
-    },
-    {
-        id: 11,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "생일 선물", image: null, audio: null },
+            { text: "통장 입금", image: null, audio: null },
+            { text: "가족 모임", image: null, audio: null },
+            { text: "출근 시간", image: null, audio: null }
         ],
         answer: 2
     },
-    {
-        id: 11,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 3
-    }
+    
 ];
 
 // Register these questions with the manager

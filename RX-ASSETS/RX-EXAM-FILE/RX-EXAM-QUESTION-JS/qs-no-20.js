@@ -4,63 +4,24 @@ const questionsForNumber20 = [
     {
         id: 20,
         instruction: {
-            text: "[~]",
+            text: "[QID-1]<br> 20. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text: "한국에서 일하는 외국인 근로자는 4대 사회보험 혜택을 받습니다. 4대 사회보험 중 산재보험은 사업주만 가입하면 되지만 국민연금, 건강보험, 고용보험은 사업주와 근로자 모두 반드시 가입해야 합니다. 외국인 근로자는 질병, 부상, 상해, 실업 등이 발생하였을 때 가입한 4대 보험의 보험금을 받을 수 있습니다.",
             image: null,
             audio: null
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 4
-    },
-    {
-        id: 20,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 20,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "근로자는 가입하고 싶은 보험을 선택하여 가입할 수 있습니다.", image: null, audio: null },
+            { text: "산재보험은 근로자와 사업주가 모두 가입해야 합니다.", image: null, audio: null },
+            { text: "사업주는 4대 사회보험에 모두 가입해야 합니다.", image: null, audio: null },
+            { text: "사업주는 사고가 발생하면 보험금을 받을 수 있습니다.", image: null, audio: null }
         ],
         answer: 3
-    }
+    },
+    
 ];
 
 // Register these questions with the manager

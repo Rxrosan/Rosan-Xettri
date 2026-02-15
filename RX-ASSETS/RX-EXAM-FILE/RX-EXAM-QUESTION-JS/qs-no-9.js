@@ -4,63 +4,24 @@ const questionsForNumber9 = [
     {
         id: 9,
         instruction: {
-            text: "[~]",
+            text: "[QID-1]<br> 9. 다음 단어와 관계있는 것은 무엇입니까?",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text: "작업장",
             image: null,
             audio: null
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 4
-    },
-    {
-        id: 9,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 9,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "근로자가 운동하는 곳이에요.", image: null, audio: null },
+            { text: "근로자가 상담하는 곳이에요.", image: null, audio: null },
+            { text: "근로자가 일하는 곳이에요.", image: null, audio: null },
+            { text: "근로자가 거주하는 곳이에요.", image: null, audio: null }
         ],
         answer: 3
-    }
+    },
+    
 ];
 
 // Register these questions with the manager

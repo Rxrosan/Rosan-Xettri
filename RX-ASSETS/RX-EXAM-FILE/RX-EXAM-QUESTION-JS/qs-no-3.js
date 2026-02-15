@@ -5,7 +5,7 @@ const questionsForNumber3 = [
         {
         id: 1,
         instruction: {
-            text: "3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
+            text: "[QID-1]<br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -25,7 +25,7 @@ const questionsForNumber3 = [
     {
         id: 2,
         instruction: {
-            text: "3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
+            text: "[QID-2]<br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -45,7 +45,7 @@ const questionsForNumber3 = [
     {
         id: 3,
         instruction: {
-            text: "3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
+            text: "[QID-3]<br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -61,6 +61,26 @@ const questionsForNumber3 = [
             { text: "주말에 <u>일하았어요</u>.", image: null, audio: null }
         ],
         answer: 3
+    },
+    {
+        id: 3,
+        instruction: {
+            text: "[QID-4]<br> 3. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-4.png",
+            audio: null
+        },
+        options: [
+            { text: "피아노를 치고 있습니다.", image: null, audio: null },
+            { text: "책을 읽고 있습니다.", image: null, audio: null },
+            { text: "밥을 먹고 있습니다.", image: null, audio: null },
+            { text: "친구를 만나고 있습니다.", image: null, audio: null }
+        ],
+        answer: 1
     },
     
 ];

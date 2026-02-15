@@ -4,63 +4,24 @@ const questionsForNumber8 = [
     {
         id: 8,
         instruction: {
-            text: "[~]",
+            text: "[QID-1]<br> 8. 다음 단어와 관계있는 것은 무엇입니까?",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text: "복장",
             image: null,
             audio: null
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "작업복", image: null, audio: null },
+            { text: "컴퓨터", image: null, audio: null },
+            { text: "비빔밥", image: null, audio: null },
+            { text: "기차표", image: null, audio: null }
         ],
-        answer: 4
+        answer: 1
     },
-    {
-        id: 8,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 8,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 3
-    }
+    
 ];
 
 // Register these questions with the manager

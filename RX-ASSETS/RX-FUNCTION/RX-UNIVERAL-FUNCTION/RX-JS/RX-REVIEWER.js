@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="rx-reviewer">
                     <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-3.jpg" alt="Reviewer" class="rx-reviewer-img">
                     <div class="rx-reviewer-info">
-                        <h4>महेश आचार्य</h4>
-                        <p>Arghakhachi</p>
+                        <h4>Puja Acharya Shrestha</h4>
+                        <p>Palpa, Nepal</p>
                     </div>
                 </div>
             </div>
@@ -54,19 +54,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="rx-reviewer">
                     <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-2.jpg" alt="Reviewer" class="rx-reviewer-img">
                     <div class="rx-reviewer-info">
-                        <h4>Leela Bhudha Magar</h4>
-                        <p>Banganga-10, Kapilvastu</p>
+                        <h4>Rita Magar</h4>
+                        <p>Banganga-5, Kapilvastu</p>
                     </div>
                 </div>
             </div>
-            <div class="rx-review-card" data-image="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-4.jpg">
+            <div class="rx-review-card" data-image="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-6.jpg">
                 <div class="rx-quote-icon">"</div>
                 <p class="rx-review-text">Rosan Xettri is a talented graphic designer and gamer who seamlessly blends creativity with technical expertise. His innovative approach and attention to detail make his work stand out, consistently delivering high-quality results.</p>
                 <div class="rx-reviewer">
-                    <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-4.jpg" alt="Reviewer" class="rx-reviewer-img">
+                    <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-6.jpg" alt="Reviewer" class="rx-reviewer-img">
                     <div class="rx-reviewer-info">
-                        <h4>Prasamsha Khanal</h4>
-                        <p>Butwal</p>
+                        <h4>Pawana Thapaliya</h4>
+                        <p>Kathmandu, Nepal</p>
                     </div>
                 </div>
             </div>

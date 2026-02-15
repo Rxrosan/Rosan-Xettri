@@ -4,7 +4,7 @@ const questionsForNumber4 = [
     {
         id: 1,
         instruction: {
-            text: "4. 다음 중 밑출 친 부분이 맞는 것을 고르십시오.",
+            text: "[QID-1]<br> 4. 다음 중 밑출 친 부분이 맞는 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -24,7 +24,7 @@ const questionsForNumber4 = [
     {
         id: 2,
         instruction: {
-            text: "4. 다음 중 밑출 친 부분이 맞는 것을 고르십시오.",
+            text: "[QID-2]<br> 4. 다음 중 밑출 친 부분이 맞는 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -44,7 +44,7 @@ const questionsForNumber4 = [
     {
         id: 3,
         instruction: {
-            text: "4. 다음 중 밑출 친 부분이 맞는 것을 고르십시오.",
+            text: "[QID-3]<br> 4. 다음 중 밑출 친 부분이 맞는 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -60,6 +60,26 @@ const questionsForNumber4 = [
             { text: "텔레비전<u>을</u> 봐요.", image: null, audio: null }
         ],
         answer: 4
+    },
+    {
+        id: 4,
+        instruction: {
+            text: "[QID-4]<br> 4. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-5.png",
+            audio: null
+        },
+        options: [
+            { text: "바닥이 미끄러우니까 조심하세요.", image: null, audio: null },
+            { text: "불이 붙을 수 있으니까 조심하세요.", image: null, audio: null },
+            { text: "떨어질 수 있으니까 조심하세요.", image: null, audio: null },
+            { text: "전기가 흐르니까 조심하세요.", image: null, audio: null }
+        ],
+        answer: 3
     },
     
 ];

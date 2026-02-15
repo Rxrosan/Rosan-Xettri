@@ -18,61 +18,26 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="rx-team-slider">
                 <div class="rx-team-slide">
                     <div class="rx-team-member">
-                        <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/T-2.png" alt="Puja Acharya Shrestha">
-                        <h3>Puja Acharya Shrestha</h3>
-                        <p class="rx-position">Palpa, Nepal</p>
-                        <p>Designer</p>
+                        <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/A-1.png" alt="Admin - ROSAN KC">
+                        <h3>ROSAN KC</h3>
+                        <p class="rx-position">ADMIN</p>
+                        <p>Banganga-10, Kapilvastu - NEPAL</p>
                         <div class="rx-social-links">
-                            <a href="https://www.facebook.com/puja.acharya.7503314" aria-label="Puja Acharya Shrestha's Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://www.instagram.com/puja.acharya.7503314/" aria-label="Puja Acharya Shrestha's Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.facebook.com/Rosan.2061" aria-label="rosan kc facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.tiktok.com/@rosankc2061?is_from_webapp=1&sender_device=pc" aria-label="rosan kc tiktok"><i class="fab fa-tiktok"></i></a>
                         </div>
                     </div>
                 </div>
+                
                 <div class="rx-team-slide">
                     <div class="rx-team-member">
-                        <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/T-5.png" alt="Keshab Disuwa Magar">
-                        <h3>Keshab Disuwa Magar</h3>
-                        <p class="rx-position">Kapilvastu</p>
-                        <p>Reviewer</p>
+                        <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/T-0.jpg" alt="#">
+                        <h3>?</h3>
+                        <p class="rx-position">?</p>
+                        <p>?</p>
                         <div class="rx-social-links">
-                            <a href="https://www.facebook.com/keshabdisuwa7" aria-label="Keshab Disuwa Magar's Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="https://www.instagram.com/ksab_07even/" aria-label="Keshab Disuwa Magar's Instagram"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="rx-team-slide">
-                    <div class="rx-team-member">
-                        <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/T-3.png" alt="Leela Bhudha Magar">
-                        <h3>Leela Bhudha Magar</h3>
-                        <p class="rx-position">Banganga-10, Kapilvastu</p>
-                        <p>Video Editor</p>
-                        <div class="rx-social-links">
-                            <a href="https://www.facebook.com/profile.php?id=100070727865998" aria-label="Leela Bhudha Magar's Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" aria-label="Leela Bhudha Magar's Instagram"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="rx-team-slide">
-                    <div class="rx-team-member">
-                        <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/T-4.png" alt="कुस्मा तरामु मगर">
-                        <h3>कुस्मा तरामु मगर</h3>
-                        <p class="rx-position">Gulmi-Lumpek</p>
-                        <p>Reviewer</p>
-                       <div class="rx-social-links">
-                            <a href="https://www.facebook.com/profile.php?id=100090446589889" aria-label="कुस्मा तरामु मगर's Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" aria-label="कुस्मा तरामु मगर's Instagram"><i class="fab fa-instagram"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="rx-team-slide">
-                    <div class="rx-team-member">
-                        <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/T-1.png" alt="Prasamsha Khanal">
-                        <h3>Prasamsha Khanal</h3>
-                        <p class="rx-position">Butwal</p>
-                        <p>Web Developer</p>
-                        <div class="rx-social-links">
-                            <a href="https://www.facebook.com/profile.php?id=100080956815490" aria-label="Prasamsha Khanal's Facebook"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#" aria-label="Prasamsha Khanal's Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="#"><i class="fab fa-instagram"></i></a>
                         </div>
                     </div>
                 </div>

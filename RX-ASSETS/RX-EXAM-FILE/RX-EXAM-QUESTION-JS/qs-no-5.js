@@ -4,7 +4,7 @@ const questionsForNumber5 = [
     {
         id: 1,
         instruction: {
-            text: "5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "[QID-1]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -24,7 +24,7 @@ const questionsForNumber5 = [
     {
         id: 2,
         instruction: {
-            text: "5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "[QID-2]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -44,7 +44,7 @@ const questionsForNumber5 = [
     {
         id: 3,
         instruction: {
-            text: "5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "[QID-3]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -64,7 +64,7 @@ const questionsForNumber5 = [
     {
         id: 4,
         instruction: {
-            text: "5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "[QID-4]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -81,6 +81,26 @@ const questionsForNumber5 = [
             
         ],
         answer: 1
+    },
+    {
+        id: 5,
+        instruction: {
+            text: "[QID-5]<br> 5. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: null,
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "집<u>을</u> 작아요.", image: null, audio: null },
+            { text: "딸기<u>가</u> 먹어요.", image: null, audio: null },
+            { text: "겨울<u>에서</u> 추워요.", image: null, audio: null },
+            { text: "회사<u>에</u> 다녀요.", image: null, audio: null }
+        ],
+        answer: 4
     },
 
 ];

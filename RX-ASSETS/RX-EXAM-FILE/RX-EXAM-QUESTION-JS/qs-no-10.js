@@ -4,63 +4,24 @@ const questionsForNumber10 = [
     {
         id: 10,
         instruction: {
-            text: "[~]",
+            text: "[QID-1]<br> 10. 다음 글을 읽고 물음에 답하십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
-            image: null,
+            text: " 한국의 수산물 수입 현황에 대한 설명으로 맞는 것은 무엇입니까?",
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-7.png",
             audio: null
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "한국이 수산물을 수입하는 국가 중 2위는 노르웨이입니다.", image: null, audio: null },
+            { text: "한국이 수입하는 수산물 중 베트남산은 5% 미만입니다.", image: null, audio: null },
+            { text: "한국은 수산물을 중국에서 가장 많이 수입합니다.", image: null, audio: null },
+            { text: "한국은 미국보다 러시아에서 수산물을 더 많이 수입합니다.", image: null, audio: null }
         ],
         answer: 4
     },
-    {
-        id: 10,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 10,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 3
-    }
+    
 ];
 
 // Register these questions with the manager

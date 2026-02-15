@@ -4,63 +4,24 @@ const questionsForNumber15 = [
     {
         id: 15,
         instruction: {
-            text: "[~]",
+            text: "[QID-1]<br> 15. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text: "못에 찔렸을 때는 상처가 가벼워도 바로 소독을 해야 합니다. 그리고 병원에 가서 진료를 받고 주사를 - - - - - .",
             image: null,
             audio: null
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 4
-    },
-    {
-        id: 15,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 15,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "놓는 것이 좋습니다", image: null, audio: null },
+            { text: "맞지 않도록 합니다", image: null, audio: null },
+            { text: "맞는 것이 좋습니다", image: null, audio: null },
+            { text: "놓지 않도록 합니다", image: null, audio: null }
         ],
         answer: 3
-    }
+    },
+    
 ];
 
 // Register these questions with the manager

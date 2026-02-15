@@ -4,7 +4,7 @@ const questionsForNumber1 = [
     {
         id: 1,
         instruction: {
-            text: "1. 다음 단어와 관계있는 무엇입니까 ?",
+            text: "[QID-1]<br> 1. 다음 단어와 관계있는 무엇입니까 ?",
             image: null,
             audio: null
         },
@@ -24,7 +24,7 @@ const questionsForNumber1 = [
     {
         id: 2,
         instruction: {
-            text: "1. 다음 단어와 관계있는 것은 무엇입니까 ?",
+            text: "[QID-2]<br> 1. 다음 단어와 관계있는 것은 무엇입니까 ?",
             image: null,
             audio: null
         },
@@ -44,7 +44,7 @@ const questionsForNumber1 = [
     {
         id: 3,
         instruction: {
-            text: "1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
+            text: "[QID-3]<br> 1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -64,7 +64,7 @@ const questionsForNumber1 = [
     {
         id: 4,
         instruction: {
-            text: "1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
+            text: "[QID4]<br> 1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -80,11 +80,11 @@ const questionsForNumber1 = [
             { text: "날짜", image: null, audio: null }
         ],
         answer: 4
-    },
+        },
         {
         id: 5,
         instruction: {
-            text: "1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
+            text: "[QID-5]<br> 1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -100,6 +100,26 @@ const questionsForNumber1 = [
             { text: "평일", image: null, audio: null }
         ],
         answer: 3
+    },
+    {
+        id: 5,
+        instruction: {
+            text: "[QID-6]<br> 1. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-2.png",
+            audio: null
+        },
+        options: [
+            { text: "가위입니다.", image: null, audio: null },
+            { text: "가방입니다.", image: null, audio: null },
+            { text: "안경입니다.", image: null, audio: null },
+            { text: "볼펜입니다.", image: null, audio: null }
+        ],
+        answer: 2
     },
 ];
 
