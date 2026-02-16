@@ -93,7 +93,7 @@
     { 
       command: 'clear chat', 
       description: 'Clear all messages',
-      response: 'Chat history cleared!',
+      response: 'cleared!',
       action: 'clear'
     },
     { 
