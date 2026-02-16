@@ -72,32 +72,40 @@
     { 
       command: 'about', 
       description: 'About RX Studio',
-      response: 'RX STUDIO v2.0\n\nA powerful command-based chat system.\n\nFeatures:\n• Easy command addition\n• Persistent chat history\n• Draggable interface',
-      category: 'info'
+      response: 'Rosan Khattri Chettri is a 22-year-old BBS third-year student from Banganga-10, Kapilvastu. He is passionate about design and web development, creating visually appealing and user-friendly digital experiences. Dedicated to continuous learning, he strives to grow creatively and technically while making a positive impact in the digital world.',
+      category: 'info',
+      isLink: true,
+      url: 'About.html',
+      linkText: 'click to open about Page'
     },
     { 
       command: 'contact', 
       description: 'Contact information',
-      response: '📞 CONTACT US\n\nClick the link below to open our contact page:',
+      response: 'CONTACT US\n\nClick the link below to open our contact page:',
       category: 'contact',
       isLink: true,
-      url: 'contact.html',
-      linkText: '📧 Open Contact Page'
+      url: 'Contact.html',
+      linkText: 'click to open Contact Page'
     },
     { 
       command: 'service', 
       description: 'Our services',
       response: 'RX SERVICES:\n\n• Web Development\n• Mobile App Development\n• UI/UX Design\n• Cloud Solutions',
-      category: 'services'
+      category: 'Service',
+      isLink: true,
+      url: 'Service.html',
+      linkText: 'click to open service Page'
     },
     { 
       command: 'close window', 
+      category: 'system',
       description: 'Close chat window',
       response: 'Closing window... See you soon!',
       action: 'close'
     },
     { 
       command: 'clear chat', 
+      category: 'system',
       description: 'Clear all messages',
       response: 'cleared!',
       action: 'clear'
@@ -112,16 +120,10 @@
       command: 'website', 
       description: 'Visit our website',
       response: 'RX Official Website',
+      category: 'website-link',
       isLink: true,
       url: 'https://rosankc.com.np/',
-      linkText: '🌐 Open Website',
-      category: 'links'
-    },
-    { 
-      command: 'time', 
-      description: 'Current time',
-      response: 'Current time: ' + new Date().toLocaleTimeString(),
-      category: 'utility'
+      linkText: 'click to open Website'
     },
     { 
       command: 'date', 
@@ -133,7 +135,7 @@
 
   /**
    * ===============================
-   * State Management - MODIFIED
+   * State Management
    * ===============================
    */
   function saveWindowState(isOpen) {
@@ -916,9 +918,11 @@
       chatWindow.classList.add('show');
       saveWindowState(true);
       
-      // Clear any existing messages and start fresh
-      clearMessageHistory();
-      showWelcomeSequence();
+      // Check if there are any messages, if not show welcome
+      const messageContainer = document.getElementById('rx-chat-messages');
+      if (messageContainer && messageContainer.children.length === 0) {
+        showWelcomeSequence();
+      }
     }
 
     // Try to find and attach to the trigger
@@ -941,7 +945,7 @@
       }
       
       // Method 2: Find by image source
-      const images = document.querySelectorAll('img[src*="RX-AI.png"]');
+      const images = document.querySelectorAll('img[src*="BOT-PROFILE-1.png"]');
       for (const img of images) {
         const parent = img.closest('.RX-SMART-BUTTON-menu-item');
         if (parent) {
@@ -1018,7 +1022,7 @@
 
   /**
    * ===============================
-   * Setup - MODIFIED
+   * Setup
    * ===============================
    */
   function setupInteractions() {
@@ -1043,7 +1047,7 @@
       chatWindow.style.transform = 'none';
     }
 
-    // Close button - MODIFIED to clear history
+    // Close button - clears history
     closeBtn.addEventListener('click', () => {
       chatWindow.classList.remove('show');
       saveWindowState(false);
@@ -1057,7 +1061,12 @@
       if (e.key === 'Enter') handleUserInput();
     });
 
-    // Don't load window state on init - always start fresh
+    // Load window state on init - only if it was open before
+    if (loadWindowState()) {
+      chatWindow.classList.add('show');
+      loadMessageHistory();
+    }
+
     // Setup the trigger for your specific HTML
     setupTrigger();
   }
