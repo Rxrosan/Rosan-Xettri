@@ -223,7 +223,7 @@
       <div class="RX-SMART-BUTTON-menu-item RX-item-1" data-link="USER.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="user"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-3" data-link="https://rosanxettristudio.netlify.app/"><img src="RX-ASSETS/RX-IMAGE/RX-LOGO/L-6.gif" alt="logo"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-5" data-link="mailto:rkc242855@gmail.com"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/email.png" alt="email"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-4" data-link="#"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/qrsc.png" alt="qr"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-4" data-link=""><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/BOT-PROFILE-1.png" alt="chat"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-6" data-link="https://www.youtube.com/@RX_E-SPORTS"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/youtube.png" alt="youtube"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-2" data-link="Resource.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/store.png" alt="store"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-7" data-link="https://www.facebook.com/RosanXettri.2004"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/facebook.png" alt="facebook"></div>
