@@ -51,12 +51,15 @@
       windowState: 'rx-window-state',
       messages: 'rx-messages',
       position: 'rx-window-position'
-    }
+    },
+    
+    // Contact Page URL
+    contactPageUrl: 'contact.html'
   };
 
   /**
    * ===============================
-   * COMMAND SYSTEM
+   * COMMAND SYSTEM - ENHANCED
    * ===============================
    */
   const commands = [
@@ -75,8 +78,11 @@
     { 
       command: 'contact', 
       description: 'Contact information',
-      response: 'CONTACT CHANNELS:\n\nEmail: rkc242855@gmail.com\nWebsite: https://rosankc.com.np/\nYouTube: @RX_E-SPORTS',
-      category: 'contact'
+      response: '📞 CONTACT US\n\nClick the link below to open our contact page:',
+      category: 'contact',
+      isLink: true,
+      url: 'contact.html',
+      linkText: '📧 Open Contact Page'
     },
     { 
       command: 'service', 
@@ -108,6 +114,7 @@
       response: 'RX Official Website',
       isLink: true,
       url: 'https://rosankc.com.np/',
+      linkText: '🌐 Open Website',
       category: 'links'
     },
     { 
@@ -126,7 +133,7 @@
 
   /**
    * ===============================
-   * State Management
+   * State Management - MODIFIED
    * ===============================
    */
   function saveWindowState(isOpen) {
@@ -159,11 +166,15 @@
         const sender = wrapper.classList.contains('bot') ? 'bot' : 'user';
         const messageDiv = wrapper.querySelector('.rx-message');
         const avatarDiv = wrapper.querySelector('.rx-avatar');
+        const link = wrapper.querySelector('.rx-link-button');
         messages.push({
           sender: sender,
           text: messageDiv.textContent,
           isLink: messageDiv.classList.contains('crystal-link'),
-          avatarEmoji: avatarDiv ? avatarDiv.textContent : ''
+          avatarEmoji: avatarDiv ? avatarDiv.textContent : '',
+          hasLink: !!link,
+          linkUrl: link ? link.href : null,
+          linkText: link ? link.textContent : null
         });
       });
       localStorage.setItem(config.storageKeys.messages, JSON.stringify(messages));
@@ -176,7 +187,11 @@
       try {
         const messages = JSON.parse(saved);
         messages.forEach(msg => {
-          addMessage(msg.text, msg.sender, msg.isLink, msg.avatarEmoji);
+          if (msg.hasLink) {
+            addMessageWithLink(msg.text, msg.sender, msg.linkUrl, msg.linkText);
+          } else {
+            addMessage(msg.text, msg.sender, msg.isLink, msg.avatarEmoji);
+          }
         });
       } catch (e) {}
     }
@@ -189,7 +204,7 @@
 
   /**
    * ===============================
-   * CSS Injection
+   * CSS Injection - ENHANCED for responsive
    * ===============================
    */
   function generateCSS() {
@@ -347,6 +362,24 @@
       border-bottom-right-radius: 4px;
     }
 
+    .rx-link-button {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 8px 15px;
+      background: rgba(100, 255, 218, 0.2);
+      border: 1px solid #64ffda;
+      border-radius: 20px;
+      color: #64ffda;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .rx-link-button:hover {
+      background: #64ffda;
+      color: #000;
+    }
+
     .rx-input-area {
       display: flex;
       padding: 12px;
@@ -424,10 +457,127 @@
       30% { transform: translateY(-6px); opacity: 1; }
     }
 
+    /* Responsive Design for all devices */
     @media (max-width: 768px) {
       .rx-chat-window {
-        width: 90vw;
-        height: 80vh;
+        width: 95vw;
+        height: 85vh;
+        border-radius: 20px;
+      }
+      
+      .rx-message-wrapper {
+        max-width: 90%;
+      }
+      
+      .rx-message {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+      }
+      
+      .rx-input-area input {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+      }
+      
+      .rx-input-area button {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .rx-chat-window {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        top: 0;
+        left: 0;
+        transform: none;
+      }
+      
+      .rx-chat-header {
+        padding: 12px;
+      }
+      
+      .rx-message-wrapper {
+        max-width: 95%;
+      }
+      
+      .rx-avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+      }
+      
+      .rx-copyright {
+        font-size: 0.65rem;
+        padding: 4px;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .rx-chat-window {
+        width: 400px;
+        height: 550px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .rx-chat-window {
+        width: 450px;
+        height: 600px;
+      }
+      
+      .rx-message {
+        font-size: 1rem;
+        padding: 12px 18px;
+      }
+    }
+
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+      .rx-input-area button:hover {
+        transform: none;
+      }
+      
+      .rx-link-button:hover {
+        background: rgba(100, 255, 218, 0.2);
+        color: #64ffda;
+      }
+      
+      .rx-header-close {
+        width: 1cm;
+        height: 1cm;
+        font-size: 24px;
+      }
+    }
+
+    /* Landscape orientation */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .rx-chat-window {
+        height: 95vh;
+      }
+      
+      .rx-chat-header {
+        height: 0.8cm;
+      }
+      
+      .rx-chat-messages {
+        padding: 10px;
+      }
+      
+      .rx-input-area {
+        padding: 8px;
+      }
+      
+      .rx-input-area input {
+        padding: 8px 15px;
+      }
+      
+      .rx-input-area button {
+        width: 35px;
+        height: 35px;
       }
     }
     `;
@@ -456,7 +606,7 @@
           <div class="rx-header-icon" id="rx-header-icon">
             ${!config.images.headerIcon ? avatars.headerEmoji : ''}
           </div>
-          <div class="rx-header-title">ROSAN XETTRI STUDIO </div>
+          <div class="rx-header-title">ROSAN XETTRI STUDIO</div>
           <div class="rx-header-close" id="rx-close-btn">×</div>
         </div>
 
@@ -479,7 +629,7 @@
 
   /**
    * ===============================
-   * Message Functions
+   * Message Functions - ENHANCED
    * ===============================
    */
   function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '') {
@@ -506,6 +656,51 @@
 
     wrapper.appendChild(avatar);
     wrapper.appendChild(message);
+    container.appendChild(wrapper);
+    container.scrollTop = container.scrollHeight;
+    
+    saveMessageHistory();
+  }
+
+  function addMessageWithLink(text, sender, url, linkText) {
+    const container = document.getElementById('rx-chat-messages');
+    if (!container) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = `rx-message-wrapper ${sender}`;
+
+    const avatar = document.createElement('div');
+    avatar.className = `rx-avatar ${sender}`;
+    
+    if (config.avatars.useImages) {
+      avatar.textContent = '';
+    } else {
+      avatar.textContent = sender === 'bot' ? config.avatars.botEmoji : config.avatars.userEmoji;
+    }
+
+    const messageContainer = document.createElement('div');
+    messageContainer.className = 'rx-message';
+    messageContainer.style.whiteSpace = 'pre-line';
+    
+    const textDiv = document.createElement('div');
+    textDiv.textContent = text;
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.className = 'rx-link-button';
+    link.textContent = linkText || 'Open Link';
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    
+    link.addEventListener('click', (e) => {
+      e.stopPropagation();
+    });
+
+    messageContainer.appendChild(textDiv);
+    messageContainer.appendChild(link);
+    
+    wrapper.appendChild(avatar);
+    wrapper.appendChild(messageContainer);
     container.appendChild(wrapper);
     container.scrollTop = container.scrollHeight;
     
@@ -610,6 +805,8 @@
         setTimeout(() => {
           document.getElementById('rx-chat-window').classList.remove('show');
           saveWindowState(false);
+          // Clear message history when closing
+          clearMessageHistory();
         }, 1500);
       }
       else if (cmd.action === 'clear') {
@@ -620,8 +817,11 @@
         showHelp();
       }
       else if (cmd.isLink) {
-        addMessage(cmd.response, 'bot', true);
-        window.open(cmd.url, '_blank');
+        addMessageWithLink(cmd.response, 'bot', cmd.url, cmd.linkText);
+        // Open the link/page
+        setTimeout(() => {
+          window.open(cmd.url, '_blank');
+        }, 500);
       }
       else {
         addMessage(cmd.response, 'bot');
@@ -716,12 +916,9 @@
       chatWindow.classList.add('show');
       saveWindowState(true);
       
-      if (document.getElementById('rx-chat-messages').children.length === 0) {
-        loadMessageHistory();
-        if (document.getElementById('rx-chat-messages').children.length === 0) {
-          showWelcomeSequence();
-        }
-      }
+      // Clear any existing messages and start fresh
+      clearMessageHistory();
+      showWelcomeSequence();
     }
 
     // Try to find and attach to the trigger
@@ -821,7 +1018,7 @@
 
   /**
    * ===============================
-   * Setup
+   * Setup - MODIFIED
    * ===============================
    */
   function setupInteractions() {
@@ -846,10 +1043,12 @@
       chatWindow.style.transform = 'none';
     }
 
-    // Close button
+    // Close button - MODIFIED to clear history
     closeBtn.addEventListener('click', () => {
       chatWindow.classList.remove('show');
       saveWindowState(false);
+      // Clear message history when closed
+      clearMessageHistory();
     });
 
     // Send message
@@ -858,12 +1057,7 @@
       if (e.key === 'Enter') handleUserInput();
     });
 
-    // Load window state on init
-    if (loadWindowState()) {
-      chatWindow.classList.add('show');
-      loadMessageHistory();
-    }
-
+    // Don't load window state on init - always start fresh
     // Setup the trigger for your specific HTML
     setupTrigger();
   }
