@@ -25,7 +25,8 @@
       userAvatar: 'RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png',
       headerIcon: 'RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/BOT-PROFILE.png',
       background: 'RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/RX-AI-BG-3.png',
-      messageBg: 'RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/message-bg.png',
+      messageBg: null,
+      sendIcon: 'RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/send.png' 
     },
     
     // Custom Colors
@@ -414,17 +415,26 @@
       height: 45px;
       border-radius: 50%;
       border: none;
-      background: transprent;
-      color: red;
+      background: transparent;
+      color: white;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 20px;
+      padding: 0;
+      overflow: hidden;
     }
 
     .rx-input-area button:hover {
       transform: scale(1.1);
+    }
+
+    .rx-send-icon {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0) invert(1); /* Makes white icon if needed */
     }
 
     .rx-copyright {
@@ -616,7 +626,9 @@
 
         <div class="rx-input-area">
           <input type="text" placeholder="Type your command..." id="rx-user-input">
-          <button id="rx-send-btn">➤</button>
+          <button id="rx-send-btn">
+            <img src="${config.images.sendIcon}" alt="send" class="rx-send-icon">
+          </button>
         </div>
 
         <div class="rx-copyright">${config.copyright}</div>
