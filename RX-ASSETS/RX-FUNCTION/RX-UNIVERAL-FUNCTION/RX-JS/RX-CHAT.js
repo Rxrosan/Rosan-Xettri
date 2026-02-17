@@ -1,5 +1,5 @@
 // RX-COMMAND-SYSTEM-EMERGENCY-FIX.js
-// 100% Working version with exact trigger matching
+// 100% Working version with exact trigger matching and mobile drag support
 (function () {
   'use strict';
 
@@ -58,7 +58,15 @@
     },
     
     // Contact Page URL
-    contactPageUrl: 'contact.html'
+    contactPageUrl: 'contact.html',
+    
+    // Mobile drag settings
+    mobileDrag: {
+      enable: true,
+      dragHandleHeight: '1cm',
+      longPressDelay: 200,
+      edgeResistance: 10
+    }
   };
 
   /**
@@ -210,7 +218,7 @@
 
   /**
    * ===============================
-   * CSS Injection - ENHANCED for responsive
+   * CSS Injection - ENHANCED for mobile drag
    * ===============================
    */
   function generateCSS() {
@@ -219,6 +227,10 @@
     return `
     * {
       box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .rx-chat-window {
@@ -241,10 +253,18 @@
       overflow: hidden;
       z-index: 1000000;
       color: ${colors.textColor || 'white'};
+      touch-action: none;
+      will-change: transform, left, top;
     }
 
     .rx-chat-window.show {
       display: flex;
+    }
+
+    .rx-chat-window.dragging {
+      transition: none;
+      opacity: 0.95;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6);
     }
 
     .rx-chat-header {
@@ -255,14 +275,23 @@
       align-items: center;
       gap: 10px;
       cursor: move;
+      cursor: grab;
       height: 1cm;
+      touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .rx-chat-header:active {
+      cursor: grabbing;
     }
 
     .rx-header-icon {
       width: 0.8cm;
       height: 0.8cm;
       border-radius: 50%;
-      background:transprent;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -270,6 +299,7 @@
       font-size: 12px;
       border: 2px solid rgba(255,255,255,0.5);
       ${images.headerIcon ? `background-image: url('${images.headerIcon}'); background-size: cover; background-position: center;` : ''}
+      pointer-events: none;
     }
 
     .rx-header-title {
@@ -277,6 +307,7 @@
       font-weight: bold;
       text-align: center;
       color: ${colors.textColor || 'white'};
+      pointer-events: none;
     }
 
     .rx-header-close {
@@ -291,10 +322,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      z-index: 10;
+      pointer-events: auto;
+      -webkit-tap-highlight-color: rgba(255,255,255,0.2);
     }
 
     .rx-header-close:hover {
       background: rgba(255,255,255,0.3);
+    }
+
+    .rx-header-close:active {
+      transform: scale(0.95);
     }
 
     .rx-chat-messages {
@@ -305,6 +343,8 @@
       flex-direction: column;
       gap: 10px;
       background: ${images.messageBg ? `url('${images.messageBg}') repeat` : 'transparent'};
+      -webkit-overflow-scrolling: touch;
+      touch-action: pan-y;
     }
 
     .rx-message-wrapper {
@@ -327,7 +367,7 @@
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: transprent;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -336,6 +376,7 @@
       border: 2px solid rgba(255,255,255,0.3);
       flex-shrink: 0;
       overflow: hidden;
+      pointer-events: none;
     }
 
     .rx-avatar.bot {
@@ -356,6 +397,7 @@
       line-height: 1.4;
       white-space: pre-line;
       backdrop-filter: blur(5px);
+      word-break: break-word;
     }
 
     .rx-message-wrapper.bot .rx-message {
@@ -364,7 +406,7 @@
     }
 
     .rx-message-wrapper.user .rx-message {
-      background: transprent;
+      background: transparent;
       border-bottom-right-radius: 4px;
     }
 
@@ -379,9 +421,17 @@
       text-decoration: none;
       font-size: 0.9rem;
       transition: all 0.3s ease;
+      pointer-events: auto;
+      -webkit-tap-highlight-color: rgba(100, 255, 218, 0.3);
     }
 
     .rx-link-button:hover {
+      background: #64ffda;
+      color: #000;
+    }
+
+    .rx-link-button:active {
+      transform: scale(0.95);
       background: #64ffda;
       color: #000;
     }
@@ -392,6 +442,7 @@
       gap: 8px;
       background: ${colors.headerBg || 'rgba(0,0,0,0.3)'};
       border-top: 1px solid rgba(255,255,255,0.2);
+      pointer-events: auto;
     }
 
     .rx-input-area input {
@@ -403,6 +454,9 @@
       outline: none;
       color: ${colors.textColor || 'white'};
       font-size: 0.9rem;
+      -webkit-appearance: none;
+      appearance: none;
+      touch-action: manipulation;
     }
 
     .rx-input-area input::placeholder {
@@ -427,10 +481,16 @@
       font-size: 20px;
       padding: 0;
       overflow: hidden;
+      -webkit-tap-highlight-color: rgba(255,255,255,0.2);
+      touch-action: manipulation;
     }
 
     .rx-input-area button:hover {
       transform: scale(1.1);
+    }
+
+    .rx-input-area button:active {
+      transform: scale(0.95);
     }
 
     .rx-send-icon {
@@ -438,6 +498,7 @@
       height: 100%;
       object-fit: contain;
       filter: brightness(0) invert(1);
+      pointer-events: none;
     }
 
     .rx-copyright {
@@ -447,6 +508,12 @@
       color: rgba(255,255,255,0.5);
       background: ${colors.headerBg || 'rgba(0,0,0,0.3)'};
       border-top: 1px solid rgba(255,255,255,0.1);
+      pointer-events: none;
+    }
+
+    .rx-copyright a {
+      pointer-events: auto;
+      -webkit-tap-highlight-color: rgba(100, 255, 218, 0.3);
     }
 
     .rx-typing-indicator {
@@ -472,7 +539,7 @@
       30% { transform: translateY(-6px); opacity: 1; }
     }
 
-    /* Responsive Design - Auto screen size detection */
+    /* Responsive Design */
     @media screen and (max-width: 480px) {
       .rx-chat-window {
         width: ${config.mobileWidth};
@@ -552,6 +619,14 @@
 
     /* Touch device optimizations */
     @media (hover: none) and (pointer: coarse) {
+      .rx-chat-header {
+        cursor: default;
+      }
+      
+      .rx-chat-header.drag-active {
+        background: rgba(255,255,255,0.1);
+      }
+      
       .rx-input-area button:hover {
         transform: none;
       }
@@ -565,6 +640,14 @@
         width: 1cm;
         height: 1cm;
         font-size: 24px;
+      }
+      
+      .rx-header-close:active {
+        background: rgba(255,255,255,0.3);
+      }
+      
+      .rx-input-area input {
+        font-size: 16px;
       }
     }
 
@@ -595,6 +678,20 @@
         width: 35px;
         height: 35px;
       }
+    }
+
+    /* Prevent text selection while dragging */
+    .rx-chat-window.dragging * {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .rx-chat-window.dragging .rx-header-close,
+    .rx-chat-window.dragging .rx-input-area,
+    .rx-chat-window.dragging .rx-link-button {
+      pointer-events: none;
     }
     `;
   }
@@ -861,54 +958,200 @@
 
   /**
    * ===============================
-   * Drag Functions
+   * Enhanced Draggable with Mobile Support
    * ===============================
    */
   function makeDraggable(element, handle) {
     let isDragging = false;
     let startX, startY, startLeft, startTop;
+    let currentX, currentY;
+    let dragStartTime;
+    let isTouchDevice = ('ontouchstart' in window);
+    let longPressTimer;
+    let initialTouch;
 
-    handle.addEventListener('mousedown', (e) => {
-      if (e.target.closest('button')) return;
-      
+    function getClientCoordinates(e) {
+      if (e.type.startsWith('touch')) {
+        const touch = e.touches[0] || e.changedTouches[0];
+        return {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        };
+      }
+      return {
+        clientX: e.clientX,
+        clientY: e.clientY
+      };
+    }
+
+    function startDrag(e) {
+      // Don't start drag if clicking close button or input area
+      if (e.target.closest('#rx-close-btn') || 
+          e.target.closest('.rx-input-area') ||
+          e.target.closest('.rx-link-button')) {
+        return;
+      }
+
       e.preventDefault();
       
+      const coords = getClientCoordinates(e);
       const rect = element.getBoundingClientRect();
-      startX = e.clientX - rect.left;
-      startY = e.clientY - rect.top;
+      
+      startX = coords.clientX - rect.left;
+      startY = coords.clientY - rect.top;
+      
+      startLeft = rect.left;
+      startTop = rect.top;
       
       isDragging = true;
-      element.style.cursor = 'grabbing';
-    });
+      dragStartTime = Date.now();
+      
+      element.classList.add('dragging');
+      
+      if (isTouchDevice) {
+        element.style.transition = 'none';
+        document.body.style.overflow = 'hidden';
+      }
+    }
 
-    window.addEventListener('mousemove', (e) => {
+    function onDrag(e) {
       if (!isDragging) return;
       
       e.preventDefault();
       
-      let newLeft = e.clientX - startX;
-      let newTop = e.clientY - startY;
+      const coords = getClientCoordinates(e);
       
-      newLeft = Math.max(0, Math.min(window.innerWidth - element.offsetWidth, newLeft));
-      newTop = Math.max(0, Math.min(window.innerHeight - element.offsetHeight, newTop));
+      let newLeft = coords.clientX - startX;
+      let newTop = coords.clientY - startY;
+      
+      // Boundary checks with edge resistance
+      newLeft = Math.max(config.mobileDrag.edgeResistance, 
+                Math.min(window.innerWidth - element.offsetWidth - config.mobileDrag.edgeResistance, newLeft));
+      newTop = Math.max(config.mobileDrag.edgeResistance, 
+               Math.min(window.innerHeight - element.offsetHeight - config.mobileDrag.edgeResistance, newTop));
       
       element.style.left = newLeft + 'px';
       element.style.top = newTop + 'px';
       element.style.right = 'auto';
       element.style.bottom = 'auto';
       element.style.transform = 'none';
-    });
+      
+      currentX = newLeft;
+      currentY = newTop;
+    }
 
-    window.addEventListener('mouseup', () => {
-      if (isDragging) {
+    function stopDrag(e) {
+      if (!isDragging) return;
+      
+      const dragDuration = Date.now() - dragStartTime;
+      
+      // Check if it was a tap/click (short drag)
+      if (isTouchDevice && dragDuration < config.mobileDrag.longPressDelay) {
+        // This was likely a tap, not a drag
+        element.classList.remove('dragging');
         isDragging = false;
-        element.style.cursor = '';
         
+        if (isTouchDevice) {
+          document.body.style.overflow = '';
+          element.style.transition = '';
+        }
+        return;
+      }
+      
+      e.preventDefault();
+      
+      element.classList.remove('dragging');
+      
+      if (isTouchDevice) {
+        document.body.style.overflow = '';
+        element.style.transition = '';
+      }
+      
+      if (currentX !== undefined && currentY !== undefined) {
+        saveWindowPosition(currentX, currentY);
+      } else {
         const left = parseInt(element.style.left) || 0;
         const top = parseInt(element.style.top) || 0;
         saveWindowPosition(left, top);
       }
-    });
+      
+      isDragging = false;
+      
+      // Clear any long press timer
+      if (longPressTimer) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+      }
+    }
+
+    // Mouse events
+    handle.addEventListener('mousedown', startDrag);
+    window.addEventListener('mousemove', onDrag);
+    window.addEventListener('mouseup', stopDrag);
+
+    // Touch events for mobile
+    if (isTouchDevice) {
+      handle.addEventListener('touchstart', (e) => {
+        // Store initial touch for long press detection
+        initialTouch = e.touches[0];
+        
+        // Long press to activate drag
+        longPressTimer = setTimeout(() => {
+          if (!isDragging) {
+            handle.classList.add('drag-active');
+            startDrag(e);
+          }
+        }, config.mobileDrag.longPressDelay);
+      }, { passive: false });
+
+      handle.addEventListener('touchmove', (e) => {
+        // Clear long press timer on move
+        if (longPressTimer) {
+          clearTimeout(longPressTimer);
+          longPressTimer = null;
+          handle.classList.remove('drag-active');
+        }
+        
+        if (isDragging) {
+          e.preventDefault();
+          onDrag(e);
+        }
+      }, { passive: false });
+
+      handle.addEventListener('touchend', (e) => {
+        if (longPressTimer) {
+          clearTimeout(longPressTimer);
+          longPressTimer = null;
+          handle.classList.remove('drag-active');
+        }
+        
+        if (isDragging) {
+          e.preventDefault();
+          stopDrag(e);
+        }
+      });
+
+      handle.addEventListener('touchcancel', (e) => {
+        if (longPressTimer) {
+          clearTimeout(longPressTimer);
+          longPressTimer = null;
+          handle.classList.remove('drag-active');
+        }
+        
+        if (isDragging) {
+          stopDrag(e);
+        }
+      });
+    }
+
+    // Prevent default touch actions on the header
+    handle.addEventListener('touchstart', (e) => {
+      if (!e.target.closest('#rx-close-btn') && 
+          !e.target.closest('.rx-input-area') &&
+          !e.target.closest('.rx-link-button')) {
+        e.preventDefault();
+      }
+    }, { passive: false });
   }
 
   /**
