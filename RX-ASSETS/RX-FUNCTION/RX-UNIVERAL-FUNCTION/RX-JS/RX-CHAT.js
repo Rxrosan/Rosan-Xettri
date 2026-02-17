@@ -9,13 +9,16 @@
    * ===============================
    */
   const config = {
-    // Window Settings
-    chatWidth: '420px',
-    chatHeight: '520px',
+    // Window Settings - Responsive sizes
+    chatWidth: '380px',
+    chatHeight: '500px',
+    mobileWidth: '320px',
+    mobileHeight: '450px',
+    smallMobileWidth: '280px',
+    smallMobileHeight: '400px',
     
     // Messages
-    welcomeMessage: 'Welcome to RX STUDIO',
-    welcomeTip: 'Tip: Send "hello" to continue',
+    welcomeMessage: 'Welcome to RX STUDIO \n\nTo cuntinue type hello or help ',
     typingSpeed: 30,
     copyright: ' <p>&copy; <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>',
     
@@ -26,7 +29,7 @@
       headerIcon: 'RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/BOT-PROFILE.png',
       background: 'RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/RX-AI-BG-3.png',
       messageBg: null,
-      sendIcon: 'RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/send.png' 
+      sendIcon: 'RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/send.png'
     },
     
     // Custom Colors
@@ -434,7 +437,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: brightness(0) invert(1); /* Makes white icon if needed */
+      filter: brightness(0) invert(1);
     }
 
     .rx-copyright {
@@ -469,11 +472,11 @@
       30% { transform: translateY(-6px); opacity: 1; }
     }
 
-    /* Responsive Design for all devices */
-    @media (max-width: 768px) {
+    /* Responsive Design - Auto screen size detection */
+    @media screen and (max-width: 480px) {
       .rx-chat-window {
-        width: 95vw;
-        height: 85vh;
+        width: ${config.mobileWidth};
+        height: ${config.mobileHeight};
         border-radius: 20px;
       }
       
@@ -498,18 +501,11 @@
       }
     }
 
-    @media (max-width: 480px) {
+    @media screen and (max-width: 360px) {
       .rx-chat-window {
-        width: 100vw;
-        height: 100vh;
-        border-radius: 0;
-        top: 0;
-        left: 0;
-        transform: none;
-      }
-      
-      .rx-chat-header {
-        padding: 12px;
+        width: ${config.smallMobileWidth};
+        height: ${config.smallMobileHeight};
+        border-radius: 15px;
       }
       
       .rx-message-wrapper {
@@ -528,14 +524,21 @@
       }
     }
 
-    @media (min-width: 769px) and (max-width: 1024px) {
+    @media screen and (min-width: 481px) and (max-width: 768px) {
       .rx-chat-window {
         width: 400px;
-        height: 550px;
+        height: 520px;
       }
     }
 
-    @media (min-width: 1440px) {
+    @media screen and (min-width: 769px) and (max-width: 1024px) {
+      .rx-chat-window {
+        width: 420px;
+        height: 540px;
+      }
+    }
+
+    @media screen and (min-width: 1440px) {
       .rx-chat-window {
         width: 450px;
         height: 600px;
@@ -568,7 +571,8 @@
     /* Landscape orientation */
     @media (max-height: 500px) and (orientation: landscape) {
       .rx-chat-window {
-        height: 95vh;
+        height: 85vh;
+        width: ${config.mobileWidth};
       }
       
       .rx-chat-header {
@@ -625,7 +629,7 @@
         <div class="rx-chat-messages" id="rx-chat-messages"></div>
 
         <div class="rx-input-area">
-          <input type="text" placeholder="Type your command..." id="rx-user-input">
+          <input type="text" placeholder="Aa..." id="rx-user-input">
           <button id="rx-send-btn">
             <img src="${config.images.sendIcon}" alt="send" class="rx-send-icon">
           </button>
@@ -775,10 +779,6 @@
         message.textContent += welcome.charAt(i);
         i++;
         setTimeout(typeWriter, config.typingSpeed);
-      } else {
-        setTimeout(() => {
-          addMessage(config.welcomeTip, 'bot', false);
-        }, 500);
       }
     }
     typeWriter();
@@ -819,7 +819,6 @@
         setTimeout(() => {
           document.getElementById('rx-chat-window').classList.remove('show');
           saveWindowState(false);
-          // Clear message history when closing
           clearMessageHistory();
         }, 1500);
       }
@@ -832,7 +831,6 @@
       }
       else if (cmd.isLink) {
         addMessageWithLink(cmd.response, 'bot', cmd.url, cmd.linkText);
-        // Open the link/page
         setTimeout(() => {
           window.open(cmd.url, '_blank');
         }, 500);
@@ -922,7 +920,6 @@
     const chatWindow = document.getElementById('rx-chat-window');
     if (!chatWindow) return;
 
-    // DIRECT SELECTOR FOR YOUR EXACT HTML
     const triggerSelector = '.RX-SMART-BUTTON-menu-item.RX-item-4[data-link=""]';
     
     function openChatWindow() {
@@ -930,21 +927,17 @@
       chatWindow.classList.add('show');
       saveWindowState(true);
       
-      // Check if there are any messages, if not show welcome
       const messageContainer = document.getElementById('rx-chat-messages');
       if (messageContainer && messageContainer.children.length === 0) {
         showWelcomeSequence();
       }
     }
 
-    // Try to find and attach to the trigger
     function attachToTrigger() {
-      // Method 1: Direct selector for your exact HTML
       const trigger = document.querySelector(triggerSelector);
       if (trigger) {
         console.log('RX Chat: Found trigger with direct selector');
         
-        // Remove any existing listeners to prevent duplicates
         trigger.removeEventListener('click', openChatWindow);
         trigger.addEventListener('click', (e) => {
           e.preventDefault();
@@ -956,7 +949,6 @@
         return true;
       }
       
-      // Method 2: Find by image source
       const images = document.querySelectorAll('img[src*="BOT-PROFILE-1.png"]');
       for (const img of images) {
         const parent = img.closest('.RX-SMART-BUTTON-menu-item');
@@ -975,7 +967,6 @@
         }
       }
       
-      // Method 3: Find by alt text
       const altImages = document.querySelectorAll('img[alt="chat"]');
       for (const img of altImages) {
         const parent = img.closest('.RX-SMART-BUTTON-menu-item');
@@ -997,11 +988,9 @@
       return false;
     }
 
-    // Try to attach immediately
     if (!attachToTrigger()) {
       console.log('RX Chat: Trigger not found, watching for it...');
       
-      // Watch for the trigger to appear
       const observer = new MutationObserver(() => {
         if (attachToTrigger()) {
           console.log('RX Chat: Trigger found and attached');
@@ -1014,7 +1003,6 @@
         subtree: true
       });
       
-      // Also check periodically for 10 seconds
       let attempts = 0;
       const interval = setInterval(() => {
         if (attachToTrigger()) {
@@ -1046,10 +1034,8 @@
 
     if (!chatWindow || !closeBtn || !sendBtn || !input || !header) return;
 
-    // Make window draggable
     makeDraggable(chatWindow, header);
 
-    // Load saved position
     const savedPos = loadWindowPosition();
     if (savedPos) {
       chatWindow.style.left = savedPos.left + 'px';
@@ -1059,27 +1045,22 @@
       chatWindow.style.transform = 'none';
     }
 
-    // Close button - clears history
     closeBtn.addEventListener('click', () => {
       chatWindow.classList.remove('show');
       saveWindowState(false);
-      // Clear message history when closed
       clearMessageHistory();
     });
 
-    // Send message
     sendBtn.addEventListener('click', handleUserInput);
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') handleUserInput();
     });
 
-    // Load window state on init - only if it was open before
     if (loadWindowState()) {
       chatWindow.classList.add('show');
       loadMessageHistory();
     }
 
-    // Setup the trigger for your specific HTML
     setupTrigger();
   }
 
