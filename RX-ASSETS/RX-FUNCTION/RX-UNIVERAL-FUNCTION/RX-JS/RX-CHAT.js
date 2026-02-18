@@ -1163,7 +1163,7 @@
     const chatWindow = document.getElementById('rx-chat-window');
     if (!chatWindow) return;
 
-    const triggerSelector = '.RX-SMART-BUTTON-menu-item.RX-item-4[data-link=""]';
+    const triggerSelector = '.RX-SMART-BUTTON-menu-item.RX-item-9[data-link=""]';
     
     function openChatWindow() {
       console.log('RX Chat: Opening window');
