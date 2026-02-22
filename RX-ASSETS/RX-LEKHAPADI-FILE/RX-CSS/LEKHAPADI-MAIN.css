@@ -948,3 +948,55 @@ footer {
 .btn-info:hover {
     background: linear-gradient(135deg, #138496 0%, #117a8b 100%);
 }
+/* Add these styles to your existing lekhapadi.css */
+
+/* Template Selection Styles */
+.template-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 20px 0;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+}
+
+.template-item {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.template-item:last-child {
+    border-bottom: none;
+}
+
+.template-item:hover {
+    background-color: var(--input-bg);
+}
+
+.template-item.selected {
+    background-color: rgba(0, 150, 255, 0.1);
+    border-left: 4px solid var(--primary);
+}
+
+.template-name {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.selected-badge {
+    background-color: var(--primary);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.modal-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 15px;
+    font-size: 14px;
+}

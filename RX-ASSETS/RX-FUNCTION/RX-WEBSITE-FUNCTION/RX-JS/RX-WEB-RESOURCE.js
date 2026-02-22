@@ -9,46 +9,12 @@ const QUESTIONS = [
     },
     {
         id: 2,
-        title: "LEKHAPADI-METRIAL | कपाली तमसुक",
-        content: "कुनै सम्पत्ति धिताे, बन्धक नराखी ब्याज र प्रतिशतकाे हिसाब गरी बुझाउने मिति ताेकिएकाे नबुझाइ भाका नाघे साहुकाे थैलि मेराे घर घरना बाट असुल गरी लिनु भनी असामिकाे विश्वासमा लेखी दिएकाे तमसुक",
+        title: "LEKHAPADI-METRIAL / WEB-SOFTWARE",
+        content: "#",
         link: "RX-LEKA-PADI.html",
         category: "SUPPORT | COMPUTER / TAB / MOBILE"
     },
-    {
-        id: 3,
-        title: "LEKHAPADI-METRIAL | राजीनामा",
-        content: "साहुबाट असामीले कर्जा लिएकाे रूपैँया बापत आफ्नाे हक अधिकार सदाकाे निमित्त समाप्त हुने गरी साहुले भाेग गर्न पाउने गरी कुनै सम्पत्तिकाे हक छाडी गरी दिएकाे लिखित",
-        link: "#",
-        category: "SUPPORT | COMPUTER / TAB / MOBILE",
-    },
-    {
-        id: 4,
-        title: "LEKHAPADI-METRIAL | राजीनामा हराएमा व्यहाेरा जनाई गरिदिएकाे राजीनामा",
-        content: "",
-        link: "#",
-        category: "SUPPORT | COMPUTER / TAB / MOBILE",
-    },
-    {
-        id: 5,
-        title: "LEKHAPADI-METRIAL | दृष्टिबन्धक तमसुक",
-        content: "साहुकाे रूपैयाँ धिताे नराखी यति ब्याज याे मितिमा बुझाउने, नभए साँवा ब्याज नबुझाएसम्म फलानाे सम्पत्ति भाेग चलन गर्ने र कच्चा ठहरे साहुले मेराे घर घरानाबाट असुल गर्ने भनेर लेखिएकाे तमसुक",
-        link: "#",
-        category: "SUPPORT | COMPUTER / TAB / MOBILE",
-    },
-    {
-        id: 6,
-        title: "LEKHAPADI-METRIAL | लखबन्धक तमसुक",
-        content: "चल अचल भाेगबन्धक वा दृष्टिबन्धक लिइ राख्नेले तमसुक बमाेजिम वम त्यसभन्दा घटी लिइ अर्काे साहुलाइ भाेगबन्धक वा दृष्टिबन्धक लेखी दिएकाे लिखत पछि लिनेले अघिकाे भन्दा बढ्ता थैलि लिएकाे र करार लेखेकाे सदर हुदैन UPDATE IN PROGRESS...",
-        link: "#",
-        category: "SUPPORT | COMPUTER / TAB / MOBILE",
-    },
-    {
-        id: 7,
-        title: "LEKHAPADI-METRIAL | भाेगबन्धक तमसुक",
-        content: "साहुकाे थैली वापत रूपैयाँ नबुझाएसम्म सकहुलाइ आसामीले कुनै सम्पत्ति भाेग गर्न नपाइने गरी लेखी दिएकाे लिखित",
-        link: "#",
-        category: "SUPPORT | COMPUTER / TAB / MOBILE",
-    },
+
     {
         id: 8,
         title: "RX-QR-Scanner/Generator",

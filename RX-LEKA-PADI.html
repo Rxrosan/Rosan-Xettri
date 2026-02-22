@@ -30,20 +30,20 @@
         <div class="header-top">
             <div class="header-title">
                 <div class="header-icon">
-                    <a>RX</a>
+                    <span>RX</span>
                 </div>
                 <h1>ROSAN XETTRI STUDIO</h1>
             </div>
             <button class="settings-btn" id="settingsBtn">
-                 SETTINGS
+            SETTINGS
             </button>
             <div class="settings-popup" id="settingsPopup">
                 <div class="settings-option" id="homeOption">
-                 Go to Home
+                Go to Home
                 </div>
                 <div class="settings-option">
                     <div class="theme-toggle">
-                 Light Mode</span>
+                        <span>Light Mode</span>
                         <label class="toggle-switch">
                             <input type="checkbox" id="themeToggle">
                             <span class="slider"></span>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="settings-option">
                     <div class="animation-toggle">
-                        <span> Writing Animation</span>
+                        <span>Writing Animation</span>
                         <label class="toggle-switch">
                             <input type="checkbox" id="animationToggle">
                             <span class="slider"></span>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
                 <div class="settings-option" id="logoutOption">
-                     Log Out
+                Log Out
                 </div>
             </div>
         </div>
@@ -73,17 +73,9 @@
         </div>
     </header>
 
-    <section id="editorContainer">
-        <div class="editor-container">
-            <div class="editor-witness-column">
-                <div class="section-title">
-                     साक्षी विवरण
-                </div>
-                <div class="editable-area" id="editableWitnesses" style="height: 100%;"></div>
-            </div>
-           
-        </div>
-    </section>
+    <div id="editorContainer">
+        <!-- Editor will be dynamically created here -->
+    </div>
 
     <section id="result-area" class="hidden"></section>
 
@@ -110,7 +102,7 @@
 <div class="modal-overlay" id="termsModal">
     <div class="modal-content">
         <button class="modal-close" id="closeTerms">&times;</button>
-        <h2 class="modal-title">प्रयोगका सर्तहरू</h2>
+       <h2 class="modal-title">प्रयोगका सर्तहरू</h2>
         <div class="modal-text">
             <p><strong>अन्तिम अद्यावधिक: साउन २०८०</strong></p>          
             <h3>१. सर्तहरूको स्वीकृति</h3>
@@ -150,7 +142,7 @@
 <div class="modal-overlay" id="privacyModal">
     <div class="modal-content">
         <button class="modal-close" id="closePrivacy">&times;</button>
-        <h2 class="modal-title">गोपनीयता नीति</h2>
+         <h2 class="modal-title">गोपनीयता नीति</h2>
         <div class="modal-text">
             <p><strong>अन्तिम अद्यावधिक: साउन २०८०</strong></p>
 
@@ -196,7 +188,10 @@
         </div>
     </div>
 </div>
+
 <script src="RX-ASSETS/RX-LEKHAPADI-FILE/RX-JS/LEKHAPADI-MAIN.js"></script>
-<script src="RX-ASSETS/RX-LEKHAPADI-FILE/RX-LEKHAIADI-DOCUMENTS-JS/KAPALI-TAMSUK.js"></script>
+<script src="RX-ASSETS/RX-LEKHAPADI-FILE/RX-JS/LEKHAPADI-TEMPLATE.js"></script>
+
+
 </body>
 </html>
