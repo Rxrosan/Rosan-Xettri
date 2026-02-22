@@ -998,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function goToHome() {
         if (confirm('Are you sure you want to go to home?')) {
-            window.location.href = 'USER-DASHBOARD.html';
+            window.location.href = 'https://rosankc.com.np/';
         }
     }
 
