@@ -18,7 +18,7 @@
     smallMobileHeight: '400px',
     
     // Messages
-    welcomeMessage: 'Welcome to RX STUDIO AI\n\nI am your assistant. Type "help" to see available commands.',
+    welcomeMessage: 'Welcome to RX STUDIO\nI am your assistant. Type "hello" to start Conversation.',
     typingSpeed: 30,
     copyright: '<p>&copy; <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>',
     
@@ -68,7 +68,8 @@
       messages: 'rx-messages',
       position: 'rx-window-position',
       geminiKey: 'rx-gemini-key',
-      geminiModel: 'rx-gemini-model'
+      geminiModel: 'rx-gemini-model',
+      chatMode: 'rx-chat-mode' // New storage key for chat mode
     },
     
     // Contact Page URL
@@ -92,7 +93,7 @@
     { 
       command: 'hello', 
       description: 'Start conversation',
-      response: 'Hello! I am RX STUDIO ASSISTANT. You can use command mode or type "ai mode" to enable AI chat with your Gemini API key.',
+      response: 'Hello! I am RX STUDIO ASSISTANT. type "help" to see all comands.',
       category: 'basic'
     },
     { 
@@ -102,7 +103,7 @@
       category: 'info',
       isLink: true,
       url: 'About.html',
-      linkText: 'click to open about Page'
+      linkText: 'auto redrict on page if not open click to open about Page'
     },
     { 
       command: 'contact', 
@@ -111,7 +112,7 @@
       category: 'contact',
       isLink: true,
       url: 'Contact.html',
-      linkText: 'click to open Contact Page'
+      linkText: 'auto redrict on page if not open click to open Contact Page'
     },
     { 
       command: 'service', 
@@ -120,7 +121,7 @@
       category: 'Service',
       isLink: true,
       url: 'Service.html',
-      linkText: 'click to open service Page'
+      linkText: 'auto redrict on page if not open click to open service Page'
     },
     { 
       command: 'close window', 
@@ -149,7 +150,7 @@
       category: 'website-link',
       isLink: true,
       url: 'https://rosankc.com.np/',
-      linkText: 'click to open Website'
+      linkText: 'auto redrict on page if not open click to open Website'
     },
     { 
       command: 'date', 
@@ -167,56 +168,56 @@
       command: 'ai mode', 
       description: 'Enable AI chat with Gemini',
       response: '',
-      category: 'system',
+      category: 'ai-mode',
       action: 'aiMode'
     },
     { 
       command: 'command mode', 
       description: 'Switch to command mode',
       response: 'Command mode activated! Type "help" to see available commands.',
-      category: 'system',
+      category: 'command-mode',
       action: 'commandMode'
     },
     { 
       command: 'set key', 
       description: 'Set Gemini API key',
       response: 'Processing API key...',
-      category: 'system',
+      category: 'ai-functions',
       action: 'setApiKey'
     },
     { 
       command: 'clear key', 
       description: 'Clear saved API key and switch to command mode',
       response: '',
-      category: 'system',
+      category: 'ai-functions',
       action: 'clearApiKey'
     },
     { 
       command: 'remove key', 
       description: 'Alias for clear key - Remove saved API key',
       response: '',
-      category: 'system',
+      category: 'ai-functions',
       action: 'clearApiKey'
     },
     { 
       command: 'check key', 
       description: 'Check if API key is saved',
       response: '',
-      category: 'system',
+      category: 'ai-functions',
       action: 'checkApiKey'
     },
     { 
       command: 'models', 
       description: 'List available FREE models',
       response: '',
-      category: 'system',
+      category: 'ai-functions',
       action: 'listModels'
     },
     { 
       command: 'use model', 
       description: 'Switch to a specific model ',
       response: '',
-      category: 'system',
+      category: 'ai-functions',
       action: 'switchModel',
       requiresParameter: true
     },
@@ -224,24 +225,24 @@
       command: 'current model', 
       description: 'Show currently active AI model',
       response: '',
-      category: 'system',
+      category: 'ai-functions',
       action: 'showCurrentModel'
     },
     { 
-      command: 'test models', 
+      command: 'models', 
       description: 'Test all FREE models',
       response: '',
-      category: 'system',
+      category: 'ai-functions',
       action: 'testAllModels'
     },
     { 
       command: 'get api key', 
       description: 'Get a free Gemini API key',
       response: 'Get your free Gemini API key from Google AI Studio:',
-      category: 'system',
+      category: 'ai-functions',
       isLink: true,
       url: 'https://aistudio.google.com/app/apikey',
-      linkText: 'click to open API Key Page'
+      linkText: 'auto redrict on page if not open click to open API Key Page'
     },
   
   ];
@@ -295,8 +296,26 @@
     return config.gemini.currentModel;
   }
 
+  // New functions for chat mode persistence
+  function saveChatMode(mode) {
+    if (mode) {
+      localStorage.setItem(config.storageKeys.chatMode, mode);
+      return true;
+    }
+    return false;
+  }
+
+  function loadChatMode() {
+    const savedMode = localStorage.getItem(config.storageKeys.chatMode);
+    if (savedMode && (savedMode === 'ai' || savedMode === 'command')) {
+      return savedMode;
+    }
+    return 'command'; // Default to command mode
+  }
+
   function removeApiKey() {
     localStorage.removeItem(config.storageKeys.geminiKey);
+    localStorage.removeItem(config.storageKeys.chatMode); // Also clear mode when key is removed
     config.gemini.apiKey = null;
     chatMode = 'command';
     awaitingApiKey = false;
@@ -403,15 +422,15 @@
 
   async function connectToFreeTier() {
     if (!config.gemini.apiKey) {
-      addMessage('❌ No API key found. Please set your API key first using: set key YOUR_API_KEY', 'bot');
+      addMessage('No API key found. Please set your API key first using: set key YOUR_API_KEY', 'bot');
       return false;
     }
 
-    addMessage('Testing FREE models...', 'bot');
+    addMessage('Testing models...', 'bot');
     
     // Try each free model in order
     for (const model of config.gemini.availableModels) {
-      addMessage(`📡 Testing ${model.name}...`, 'bot');
+      addMessage(`Testing ${model.name}...`, 'bot');
       
       showTypingIndicator();
       const isWorking = await testModelConnection(model.id);
@@ -420,6 +439,7 @@
       if (isWorking) {
         saveModel(model.id);
         chatMode = 'ai';
+        saveChatMode('ai'); // Save the AI mode state
         updateModeIndicator();
         addMessage(`Connected with ${model.name} (FREE tier)! How can I help you?`, 'bot');
         return true;
@@ -464,8 +484,9 @@
     if (workingModel) {
       saveModel(workingModel.id);
       chatMode = 'ai';
+      saveChatMode('ai'); // Save the AI mode state
       updateModeIndicator();
-      resultMessage += `\n Auto-connected to: ${workingModel.name}`;
+      resultMessage += `\nAuto-connected to: ${workingModel.name}`;
     } else {
       resultMessage += `\nNo working models found. Go to https://aistudio.google.com/ and create a new key.`;
     }
@@ -1074,7 +1095,7 @@
         <div class="rx-chat-messages" id="rx-chat-messages"></div>
 
         <div class="rx-input-area">
-          <input type="text" placeholder="Type a command or 'ai mode'..." id="rx-user-input">
+          <input type="text" placeholder="Aa..." id="rx-user-input">
           <button id="rx-send-btn">
             <img src="${config.images.sendIcon}" alt="send" class="rx-send-icon">
           </button>
@@ -1266,7 +1287,7 @@
     helpText += '\nCurrent mode: ' + chatMode.toUpperCase();
     if (config.gemini.apiKey) {
       const modelInfo = getCurrentModelInfo();
-      helpText += ` (AI ready - using ${modelInfo.name})`;
+      helpText += ` ( ${modelInfo.name} )`;
     } else {
       helpText += '\n Type "ai mode" to set up AI chat with your Gemini API key.';
     }
@@ -1302,7 +1323,7 @@
     if (model) {
       saveModel(model.id);
       const modelInfo = getCurrentModelInfo();
-      addMessage(` Switched to ${modelInfo.name}`, 'bot');
+      addMessage(`Switched to ${modelInfo.name}`, 'bot');
       updateModeIndicator();
       
       if (chatMode === 'ai' && config.gemini.apiKey) {
@@ -1313,20 +1334,20 @@
           removeTypingIndicator();
           
           if (isConnected) {
-            addMessage(` ${modelInfo.name} is working!`, 'bot');
+            addMessage(`${modelInfo.name} is working!`, 'bot');
           } else {
-            addMessage(` ${modelInfo.name} failed. Try another model.`, 'bot');
+            addMessage(`${modelInfo.name} failed. Try another model.`, 'bot');
           }
         }, 500);
       }
     } else {
-      addMessage(` Model not found. Type "models" to see available options.`, 'bot');
+      addMessage(`Model not found. Type "models" to see available options.`, 'bot');
     }
   }
 
   function showCurrentModel() {
     const modelInfo = getCurrentModelInfo();
-    addMessage(` Current Model: ${modelInfo.name}`, 'bot');
+    addMessage(`Current Model: ${modelInfo.name}`, 'bot');
   }
 
   function findCommand(input) {
@@ -1355,10 +1376,10 @@
       if (input.toLowerCase().startsWith('set key ')) {
         const key = input.substring(8).trim();
         if (saveApiKey(key)) {
-          addMessage(' API key saved! Testing FREE models...', 'bot');
+          addMessage('API key saved! Testing models...', 'bot');
           await connectToFreeTier();
         } else {
-          addMessage(' Invalid API key.', 'bot');
+          addMessage('Invalid API key.', 'bot');
         }
         awaitingApiKey = false;
         return;
@@ -1398,6 +1419,7 @@
       }
       else if (cmd.action === 'commandMode') {
         chatMode = 'command';
+        saveChatMode('command'); // Save the command mode state
         awaitingApiKey = false;
         updateModeIndicator();
         addMessage(cmd.response, 'bot');
@@ -1411,9 +1433,9 @@
       else if (cmd.action === 'checkApiKey') {
         if (config.gemini.apiKey) {
           const modelInfo = getCurrentModelInfo();
-          addMessage(`API key saved\n Model: ${modelInfo.name}\nMode: ${chatMode.toUpperCase()}`, 'bot');
+          addMessage(`API key saved\nModel: ${modelInfo.name}\nMode: ${chatMode.toUpperCase()}`, 'bot');
         } else {
-          addMessage(' No API key saved. Type "ai mode" to set up.', 'bot');
+          addMessage('No API key saved. Type "ai mode" to set up.', 'bot');
         }
       }
       else if (cmd.action === 'listModels') {
@@ -1680,7 +1702,7 @@
         if (savedKey) {
           const modelInfo = getCurrentModelInfo();
           setTimeout(() => {
-            addMessage(`Saved API key found. Using ${modelInfo.name}\n\nType "ai mode" to access ai mode.`, 'bot');
+            addMessage(`Saved API key found. Using ${modelInfo.name}`, 'bot');
           }, 2000);
         }
       }
@@ -1775,14 +1797,27 @@
       if (e.key === 'Enter') handleUserInput();
     });
 
+    // Load saved state
     loadApiKey();
     loadModel();
+    
+    // Load and set the saved chat mode
+    chatMode = loadChatMode();
+    
     updateModeIndicator();
 
     if (loadWindowState()) {
       chatWindow.classList.add('show');
       // Load saved message history when window opens
       loadMessageHistory();
+      
+      // If we're in AI mode and have an API key, show a restoration message
+      if (chatMode === 'ai' && config.gemini.apiKey) {
+        const modelInfo = getCurrentModelInfo();
+        setTimeout(() => {
+          addMessage(`AI mode restored with ${modelInfo.name}. How can I help you?`, 'bot');
+        }, 1000);
+      }
     }
 
     setupTrigger();
