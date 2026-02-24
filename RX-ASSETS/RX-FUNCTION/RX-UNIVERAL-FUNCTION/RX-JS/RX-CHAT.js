@@ -1,5 +1,5 @@
-// RX-COMMAND-SYSTEM-EMERGENCY-FIX.js
-// 100% Working version with exact trigger matching and mobile drag support
+// RX-CHAT-WITH-GEMINI-MANUAL-API.js
+// RX STUDIO Chat with Optional Gemini AI Integration
 (function () {
   'use strict';
 
@@ -18,9 +18,21 @@
     smallMobileHeight: '400px',
     
     // Messages
-    welcomeMessage: 'Welcome to RX STUDIO \n\nTo cuntinue type hello or help ',
+    welcomeMessage: 'Welcome to RX STUDIO AI\n\nI am your assistant. Type "help" to see available commands.',
     typingSpeed: 30,
-    copyright: ' <p>&copy; <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>',
+    copyright: '<p>&copy; <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>',
+    
+    // Gemini API Configuration - Just 3 FREE models
+    gemini: {
+      apiKey: null, // User must enter this
+      currentModel: 'gemini-2.5-flash', // Default to fastest free model
+      availableModels: [
+        { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', free: true, description: 'Fast, free model' },
+        { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', free: true, description: 'More powerful, still free' },
+        { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash Preview', free: true, description: 'Latest flash model' }
+      ],
+      apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/'
+    },
     
     // Custom Images
     images: {
@@ -54,7 +66,9 @@
     storageKeys: {
       windowState: 'rx-window-state',
       messages: 'rx-messages',
-      position: 'rx-window-position'
+      position: 'rx-window-position',
+      geminiKey: 'rx-gemini-key',
+      geminiModel: 'rx-gemini-model'
     },
     
     // Contact Page URL
@@ -71,14 +85,14 @@
 
   /**
    * ===============================
-   * COMMAND SYSTEM - ENHANCED
+   * COMMAND SYSTEM
    * ===============================
    */
   const commands = [
     { 
       command: 'hello', 
       description: 'Start conversation',
-      response: 'Hello! I am RX STUDIO ASSISTANT. Type "help" to see all available commands.',
+      response: 'Hello! I am RX STUDIO ASSISTANT. You can use command mode or type "ai mode" to enable AI chat with your Gemini API key.',
       category: 'basic'
     },
     { 
@@ -112,14 +126,14 @@
       command: 'close window', 
       category: 'system',
       description: 'Close chat window',
-      response: 'Closing window... See you soon!',
+      response: 'Closing window... Chat cleared. See you soon!',
       action: 'close'
     },
     { 
       command: 'clear chat', 
       category: 'system',
       description: 'Clear all messages',
-      response: 'cleared!',
+      response: 'Chat cleared!',
       action: 'clear'
     },
     { 
@@ -140,14 +154,328 @@
     { 
       command: 'date', 
       description: 'Current date',
-      response: 'Today is: ' + new Date().toLocaleDateString(),
+      response: () => 'Today is: ' + new Date().toLocaleDateString(),
       category: 'utility'
-    }
+    },
+    { 
+      command: 'time', 
+      description: 'Current time',
+      response: () => 'Current time is: ' + new Date().toLocaleTimeString(),
+      category: 'utility'
+    },
+    { 
+      command: 'ai mode', 
+      description: 'Enable AI chat with Gemini',
+      response: '',
+      category: 'system',
+      action: 'aiMode'
+    },
+    { 
+      command: 'command mode', 
+      description: 'Switch to command mode',
+      response: 'Command mode activated! Type "help" to see available commands.',
+      category: 'system',
+      action: 'commandMode'
+    },
+    { 
+      command: 'set key', 
+      description: 'Set Gemini API key',
+      response: 'Processing API key...',
+      category: 'system',
+      action: 'setApiKey'
+    },
+    { 
+      command: 'clear key', 
+      description: 'Clear saved API key and switch to command mode',
+      response: '',
+      category: 'system',
+      action: 'clearApiKey'
+    },
+    { 
+      command: 'remove key', 
+      description: 'Alias for clear key - Remove saved API key',
+      response: '',
+      category: 'system',
+      action: 'clearApiKey'
+    },
+    { 
+      command: 'check key', 
+      description: 'Check if API key is saved',
+      response: '',
+      category: 'system',
+      action: 'checkApiKey'
+    },
+    { 
+      command: 'models', 
+      description: 'List available FREE models',
+      response: '',
+      category: 'system',
+      action: 'listModels'
+    },
+    { 
+      command: 'use model', 
+      description: 'Switch to a specific model ',
+      response: '',
+      category: 'system',
+      action: 'switchModel',
+      requiresParameter: true
+    },
+    { 
+      command: 'current model', 
+      description: 'Show currently active AI model',
+      response: '',
+      category: 'system',
+      action: 'showCurrentModel'
+    },
+    { 
+      command: 'test models', 
+      description: 'Test all FREE models',
+      response: '',
+      category: 'system',
+      action: 'testAllModels'
+    },
+    { 
+      command: 'get api key', 
+      description: 'Get a free Gemini API key',
+      response: 'Get your free Gemini API key from Google AI Studio:',
+      category: 'system',
+      isLink: true,
+      url: 'https://aistudio.google.com/app/apikey',
+      linkText: 'click to open API Key Page'
+    },
+  
   ];
+
+  // Chat mode: 'ai' or 'command'
+  let chatMode = 'command';
+  let awaitingApiKey = false;
 
   /**
    * ===============================
-   * State Management
+   * API Key & Model Management
+   * ===============================
+   */
+  function saveApiKey(key) {
+    if (key && key.trim()) {
+      localStorage.setItem(config.storageKeys.geminiKey, key.trim());
+      config.gemini.apiKey = key.trim();
+      return true;
+    }
+    return false;
+  }
+
+  function loadApiKey() {
+    const savedKey = localStorage.getItem(config.storageKeys.geminiKey);
+    if (savedKey) {
+      config.gemini.apiKey = savedKey;
+      return savedKey;
+    }
+    return null;
+  }
+
+  function saveModel(modelId) {
+    if (modelId) {
+      localStorage.setItem(config.storageKeys.geminiModel, modelId);
+      config.gemini.currentModel = modelId;
+      return true;
+    }
+    return false;
+  }
+
+  function loadModel() {
+    const savedModel = localStorage.getItem(config.storageKeys.geminiModel);
+    if (savedModel) {
+      const modelExists = config.gemini.availableModels.some(m => m.id === savedModel);
+      if (modelExists) {
+        config.gemini.currentModel = savedModel;
+        return savedModel;
+      }
+    }
+    config.gemini.currentModel = config.gemini.availableModels[0].id;
+    return config.gemini.currentModel;
+  }
+
+  function removeApiKey() {
+    localStorage.removeItem(config.storageKeys.geminiKey);
+    config.gemini.apiKey = null;
+    chatMode = 'command';
+    awaitingApiKey = false;
+    updateModeIndicator();
+  }
+
+  function clearApiKey() {
+    removeApiKey();
+    addMessage('API key cleared successfully. Switched to command mode. Type "ai mode" to set up a new API key.', 'bot');
+  }
+
+  function getCurrentModelInfo() {
+    return config.gemini.availableModels.find(m => m.id === config.gemini.currentModel) || config.gemini.availableModels[0];
+  }
+
+  function updateModeIndicator() {
+    const indicator = document.getElementById('rx-mode-indicator');
+    if (indicator) {
+      if (chatMode === 'ai' && config.gemini.apiKey) {
+        const modelInfo = getCurrentModelInfo();
+        indicator.textContent = 'AI';
+        indicator.style.color = '#64ffda';
+        indicator.title = `Using: ${modelInfo.name}`;
+      } else {
+        indicator.textContent = 'CMD';
+        indicator.style.color = '#ffaa64';
+        indicator.title = 'Command Mode';
+      }
+    }
+  }
+
+  /**
+   * ===============================
+   * Gemini AI Functions - Like HTML version
+   * ===============================
+   */
+  async function getGeminiResponse(userMessage) {
+    if (!config.gemini.apiKey) {
+      return 'No API key set. Please set your Gemini API key first using: set key YOUR_API_KEY';
+    }
+
+    try {
+      const modelInfo = getCurrentModelInfo();
+      
+      const response = await fetch(`${config.gemini.apiUrl}${modelInfo.id}:generateContent?key=${config.gemini.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: userMessage
+            }]
+          }]
+        })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok && data.candidates && data.candidates[0]) {
+        return data.candidates[0].content.parts[0].text;
+      } else {
+        console.error('Gemini API Error:', data);
+        
+        if (data.error?.message?.includes('API key')) {
+          return 'Invalid API key. Please check your key and try again.';
+        } else if (data.error?.message?.includes('not found')) {
+          return `Model "${modelInfo.name}" is not available. Try "test models" to find a working model.`;
+        } else {
+          return `Error: ${data.error?.message || 'Unknown error'}`;
+        }
+      }
+    } catch (error) {
+      console.error('Connection Error:', error);
+      return 'Network error. Please check your connection.';
+    }
+  }
+
+  async function testModelConnection(modelId) {
+    if (!config.gemini.apiKey) return false;
+    
+    try {
+      const response = await fetch(`${config.gemini.apiUrl}${modelId}:generateContent?key=${config.gemini.apiKey}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: 'Hello'
+            }]
+          }]
+        })
+      });
+
+      const data = await response.json();
+      return response.ok && !data.error && data.candidates;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  async function connectToFreeTier() {
+    if (!config.gemini.apiKey) {
+      addMessage('❌ No API key found. Please set your API key first using: set key YOUR_API_KEY', 'bot');
+      return false;
+    }
+
+    addMessage('Testing FREE models...', 'bot');
+    
+    // Try each free model in order
+    for (const model of config.gemini.availableModels) {
+      addMessage(`📡 Testing ${model.name}...`, 'bot');
+      
+      showTypingIndicator();
+      const isWorking = await testModelConnection(model.id);
+      removeTypingIndicator();
+      
+      if (isWorking) {
+        saveModel(model.id);
+        chatMode = 'ai';
+        updateModeIndicator();
+        addMessage(`Connected with ${model.name} (FREE tier)! How can I help you?`, 'bot');
+        return true;
+      }
+    }
+    
+    addMessage('Your API key works but needs to be enabled for Gemini API. Go to https://aistudio.google.com/ and create a new key.', 'bot');
+    return false;
+  }
+
+  async function testAllAvailableModels() {
+    if (!config.gemini.apiKey) {
+      addMessage('No API key found. Please set your API key first using "set key YOUR_API_KEY"', 'bot');
+      return;
+    }
+    
+    addMessage('Testing all FREE models...\n', 'bot');
+    
+    const results = [];
+    let workingModel = null;
+    
+    for (const model of config.gemini.availableModels) {
+      addMessage(`Testing ${model.name}...`, 'bot');
+      
+      showTypingIndicator();
+      const isWorking = await testModelConnection(model.id);
+      removeTypingIndicator();
+      
+      if (isWorking) {
+        results.push(`${model.name} - Connected`);
+        if (!workingModel) {
+          workingModel = model;
+        }
+      } else {
+        results.push(`${model.name} - Failed`);
+      }
+    }
+    
+    let resultMessage = 'TEST RESULTS:\n\n';
+    results.forEach(r => resultMessage += r + '\n');
+    
+    if (workingModel) {
+      saveModel(workingModel.id);
+      chatMode = 'ai';
+      updateModeIndicator();
+      resultMessage += `\n Auto-connected to: ${workingModel.name}`;
+    } else {
+      resultMessage += `\nNo working models found. Go to https://aistudio.google.com/ and create a new key.`;
+    }
+    
+    addMessage(resultMessage, 'bot');
+  }
+
+  /**
+   * ===============================
+   * State Management - Keep on refresh, clear only on close
    * ===============================
    */
   function saveWindowState(isOpen) {
@@ -213,12 +541,13 @@
 
   function clearMessageHistory() {
     localStorage.removeItem(config.storageKeys.messages);
-    document.getElementById('rx-chat-messages').innerHTML = '';
+    const container = document.getElementById('rx-chat-messages');
+    if (container) container.innerHTML = '';
   }
 
   /**
    * ===============================
-   * CSS Injection - ENHANCED for mobile drag
+   * CSS Injection (Keep all your existing CSS)
    * ===============================
    */
   function generateCSS() {
@@ -308,6 +637,18 @@
       text-align: center;
       color: ${colors.textColor || 'white'};
       pointer-events: none;
+      font-size: 14px;
+    }
+
+    .rx-mode-indicator {
+      font-size: 10px;
+      padding: 2px 6px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      color: #ffaa64;
+      margin-left: 5px;
+      border: 1px solid rgba(255,255,255,0.2);
+      cursor: help;
     }
 
     .rx-header-close {
@@ -566,6 +907,10 @@
         height: 40px;
         font-size: 18px;
       }
+      
+      .rx-header-title {
+        font-size: 12px;
+      }
     }
 
     @media screen and (max-width: 360px) {
@@ -719,14 +1064,17 @@
           <div class="rx-header-icon" id="rx-header-icon">
             ${!config.images.headerIcon ? avatars.headerEmoji : ''}
           </div>
-          <div class="rx-header-title">ROSAN XETTRI STUDIO</div>
+          <div class="rx-header-title">
+            ROSAN XETTRI STUDIO
+            <span class="rx-mode-indicator" id="rx-mode-indicator">CMD</span>
+          </div>
           <div class="rx-header-close" id="rx-close-btn">×</div>
         </div>
 
         <div class="rx-chat-messages" id="rx-chat-messages"></div>
 
         <div class="rx-input-area">
-          <input type="text" placeholder="Aa..." id="rx-user-input">
+          <input type="text" placeholder="Type a command or 'ai mode'..." id="rx-user-input">
           <button id="rx-send-btn">
             <img src="${config.images.sendIcon}" alt="send" class="rx-send-icon">
           </button>
@@ -744,7 +1092,7 @@
 
   /**
    * ===============================
-   * Message Functions - ENHANCED
+   * Message Functions
    * ===============================
    */
   function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '') {
@@ -767,13 +1115,19 @@
     message.className = 'rx-message';
     if (isLink) message.classList.add('crystal-link');
     message.style.whiteSpace = 'pre-line';
-    message.textContent = text;
+    
+    if (typeof text === 'function') {
+      message.textContent = text();
+    } else {
+      message.textContent = text;
+    }
 
     wrapper.appendChild(avatar);
     wrapper.appendChild(message);
     container.appendChild(wrapper);
     container.scrollTop = container.scrollHeight;
     
+    // Save message history after adding new message
     saveMessageHistory();
   }
 
@@ -798,7 +1152,12 @@
     messageContainer.style.whiteSpace = 'pre-line';
     
     const textDiv = document.createElement('div');
-    textDiv.textContent = text;
+    
+    if (typeof text === 'function') {
+      textDiv.textContent = text();
+    } else {
+      textDiv.textContent = text;
+    }
     
     const link = document.createElement('a');
     link.href = url;
@@ -819,6 +1178,7 @@
     container.appendChild(wrapper);
     container.scrollTop = container.scrollHeight;
     
+    // Save message history after adding new message
     saveMessageHistory();
   }
 
@@ -879,6 +1239,9 @@
       }
     }
     typeWriter();
+    
+    // Save welcome message to history
+    saveMessageHistory();
   }
 
   function showHelp() {
@@ -893,29 +1256,128 @@
     });
     
     for (let cat in categories) {
-      helpText += `${cat.toUpperCase()}:\n`;
+      helpText += `🔹 ${cat.toUpperCase()}:\n`;
       categories[cat].forEach(cmd => {
-        helpText += `  • ${cmd.command} - ${cmd.description}\n`;
+        helpText += `   • ${cmd.command} - ${cmd.description}\n`;
       });
       helpText += '\n';
+    }
+    
+    helpText += '\nCurrent mode: ' + chatMode.toUpperCase();
+    if (config.gemini.apiKey) {
+      const modelInfo = getCurrentModelInfo();
+      helpText += ` (AI ready - using ${modelInfo.name})`;
+    } else {
+      helpText += '\n Type "ai mode" to set up AI chat with your Gemini API key.';
     }
     
     addMessage(helpText, 'bot');
   }
 
-  function findCommand(input) {
-    return commands.find(cmd => cmd.command.toLowerCase() === input.toLowerCase().trim());
+  function listModels() {
+    let modelList = 'FREE MODELS:\n\n';
+    
+    config.gemini.availableModels.forEach((model, index) => {
+      const isCurrent = model.id === config.gemini.currentModel;
+      modelList += `${isCurrent ? '' : '•'} ${model.name}\n`;
+      modelList += `   ${model.description}\n`;
+      if (isCurrent) modelList += '   (currently active)\n';
+      modelList += '\n';
+    });
+    
+    modelList += '\nTo switch models, type: use model MODEL_NAME';
+    modelList += '\nTo test all models, type: test models';
+    addMessage(modelList, 'bot');
   }
 
-  function processCommand(input) {
+  function switchModel(modelId) {
+    if (!modelId) {
+      addMessage('Please specify a model. Format: use model MODEL_NAME\n\nType "models" to see available models.', 'bot');
+      return;
+    }
+    
+    let model = config.gemini.availableModels.find(m => m.id.toLowerCase().includes(modelId.toLowerCase()) || 
+                                                        m.name.toLowerCase().includes(modelId.toLowerCase()));
+    
+    if (model) {
+      saveModel(model.id);
+      const modelInfo = getCurrentModelInfo();
+      addMessage(` Switched to ${modelInfo.name}`, 'bot');
+      updateModeIndicator();
+      
+      if (chatMode === 'ai' && config.gemini.apiKey) {
+        setTimeout(async () => {
+          addMessage(`Testing ${modelInfo.name}...`, 'bot');
+          showTypingIndicator();
+          const isConnected = await testModelConnection(model.id);
+          removeTypingIndicator();
+          
+          if (isConnected) {
+            addMessage(` ${modelInfo.name} is working!`, 'bot');
+          } else {
+            addMessage(` ${modelInfo.name} failed. Try another model.`, 'bot');
+          }
+        }, 500);
+      }
+    } else {
+      addMessage(` Model not found. Type "models" to see available options.`, 'bot');
+    }
+  }
+
+  function showCurrentModel() {
+    const modelInfo = getCurrentModelInfo();
+    addMessage(` Current Model: ${modelInfo.name}`, 'bot');
+  }
+
+  function findCommand(input) {
+    let cmd = commands.find(c => input.toLowerCase() === c.command.toLowerCase());
+    
+    if (!cmd) {
+      cmd = commands.find(c => 
+        input.toLowerCase().startsWith(c.command.toLowerCase() + ' ') && 
+        c.requiresParameter
+      );
+    }
+    
+    return cmd;
+  }
+
+  function extractParameter(input, command) {
+    const parts = input.split(' ');
+    if (parts.length >= 2) {
+      return parts.slice(1).join(' ').trim();
+    }
+    return null;
+  }
+
+  async function processCommand(input) {
+    if (awaitingApiKey) {
+      if (input.toLowerCase().startsWith('set key ')) {
+        const key = input.substring(8).trim();
+        if (saveApiKey(key)) {
+          addMessage(' API key saved! Testing FREE models...', 'bot');
+          await connectToFreeTier();
+        } else {
+          addMessage(' Invalid API key.', 'bot');
+        }
+        awaitingApiKey = false;
+        return;
+      } else {
+        addMessage('Please use: set key YOUR_API_KEY', 'bot');
+        return;
+      }
+    }
+
     const cmd = findCommand(input);
     
     if (cmd) {
       if (cmd.action === 'close') {
-        addMessage(cmd.response, 'bot');
+        const response = typeof cmd.response === 'function' ? cmd.response() : cmd.response;
+        addMessage(response, 'bot');
         setTimeout(() => {
           document.getElementById('rx-chat-window').classList.remove('show');
           saveWindowState(false);
+          // Clear messages and history on close
           clearMessageHistory();
         }, 1500);
       }
@@ -926,21 +1388,78 @@
       else if (cmd.action === 'showHelp') {
         showHelp();
       }
+      else if (cmd.action === 'aiMode') {
+        if (config.gemini.apiKey) {
+          await connectToFreeTier();
+        } else {
+          awaitingApiKey = true;
+          addMessage('Enter your Gemini API key:\n\nFormat: set key YOUR_API_KEY\n\nGet a free key: type "get api key"', 'bot');
+        }
+      }
+      else if (cmd.action === 'commandMode') {
+        chatMode = 'command';
+        awaitingApiKey = false;
+        updateModeIndicator();
+        addMessage(cmd.response, 'bot');
+      }
+      else if (cmd.action === 'setApiKey') {
+        addMessage('Use: set key YOUR_API_KEY', 'bot');
+      }
+      else if (cmd.action === 'clearApiKey') {
+        clearApiKey();
+      }
+      else if (cmd.action === 'checkApiKey') {
+        if (config.gemini.apiKey) {
+          const modelInfo = getCurrentModelInfo();
+          addMessage(`API key saved\n Model: ${modelInfo.name}\nMode: ${chatMode.toUpperCase()}`, 'bot');
+        } else {
+          addMessage(' No API key saved. Type "ai mode" to set up.', 'bot');
+        }
+      }
+      else if (cmd.action === 'listModels') {
+        listModels();
+      }
+      else if (cmd.action === 'switchModel') {
+        const parameter = extractParameter(input, cmd.command);
+        switchModel(parameter);
+      }
+      else if (cmd.action === 'showCurrentModel') {
+        showCurrentModel();
+      }
+      else if (cmd.action === 'testAllModels') {
+        await testAllAvailableModels();
+      }
       else if (cmd.isLink) {
-        addMessageWithLink(cmd.response, 'bot', cmd.url, cmd.linkText);
+        const response = typeof cmd.response === 'function' ? cmd.response() : cmd.response;
+        addMessageWithLink(response, 'bot', cmd.url, cmd.linkText);
         setTimeout(() => {
           window.open(cmd.url, '_blank');
         }, 500);
       }
       else {
-        addMessage(cmd.response, 'bot');
+        const response = typeof cmd.response === 'function' ? cmd.response() : cmd.response;
+        addMessage(response, 'bot');
       }
     } else {
-      addMessage(`Unknown command: "${input}"\n\nType "help" to see all commands.`, 'bot');
+      if (chatMode === 'ai' && config.gemini.apiKey) {
+        showTypingIndicator();
+        try {
+          const aiResponse = await getGeminiResponse(input);
+          removeTypingIndicator();
+          addMessage(aiResponse, 'bot');
+        } catch (error) {
+          removeTypingIndicator();
+          addMessage('Error. Please try again.', 'bot');
+        }
+      } else if (chatMode === 'ai' && !config.gemini.apiKey) {
+        addMessage('Set API key first: set key YOUR_API_KEY', 'bot');
+      } else {
+        addMessage(`Unknown: "${input}"\n\nType "help" for commands.`, 'bot');
+      }
     }
   }
 
-  function handleUserInput() {
+  async function handleUserInput() {
     const input = document.getElementById('rx-user-input');
     const text = input.value.trim();
     if (!text) return;
@@ -948,17 +1467,12 @@
     addMessage(text, 'user');
     input.value = '';
 
-    showTypingIndicator();
-    
-    setTimeout(() => {
-      removeTypingIndicator();
-      processCommand(text);
-    }, 800);
+    await processCommand(text);
   }
 
   /**
    * ===============================
-   * Enhanced Draggable with Mobile Support
+   * Draggable Function
    * ===============================
    */
   function makeDraggable(element, handle) {
@@ -968,7 +1482,6 @@
     let dragStartTime;
     let isTouchDevice = ('ontouchstart' in window);
     let longPressTimer;
-    let initialTouch;
 
     function getClientCoordinates(e) {
       if (e.type.startsWith('touch')) {
@@ -985,7 +1498,6 @@
     }
 
     function startDrag(e) {
-      // Don't start drag if clicking close button or input area
       if (e.target.closest('#rx-close-btn') || 
           e.target.closest('.rx-input-area') ||
           e.target.closest('.rx-link-button')) {
@@ -1024,7 +1536,6 @@
       let newLeft = coords.clientX - startX;
       let newTop = coords.clientY - startY;
       
-      // Boundary checks with edge resistance
       newLeft = Math.max(config.mobileDrag.edgeResistance, 
                 Math.min(window.innerWidth - element.offsetWidth - config.mobileDrag.edgeResistance, newLeft));
       newTop = Math.max(config.mobileDrag.edgeResistance, 
@@ -1045,9 +1556,7 @@
       
       const dragDuration = Date.now() - dragStartTime;
       
-      // Check if it was a tap/click (short drag)
       if (isTouchDevice && dragDuration < config.mobileDrag.longPressDelay) {
-        // This was likely a tap, not a drag
         element.classList.remove('dragging');
         isDragging = false;
         
@@ -1077,25 +1586,18 @@
       
       isDragging = false;
       
-      // Clear any long press timer
       if (longPressTimer) {
         clearTimeout(longPressTimer);
         longPressTimer = null;
       }
     }
 
-    // Mouse events
     handle.addEventListener('mousedown', startDrag);
     window.addEventListener('mousemove', onDrag);
     window.addEventListener('mouseup', stopDrag);
 
-    // Touch events for mobile
     if (isTouchDevice) {
       handle.addEventListener('touchstart', (e) => {
-        // Store initial touch for long press detection
-        initialTouch = e.touches[0];
-        
-        // Long press to activate drag
         longPressTimer = setTimeout(() => {
           if (!isDragging) {
             handle.classList.add('drag-active');
@@ -1105,7 +1607,6 @@
       }, { passive: false });
 
       handle.addEventListener('touchmove', (e) => {
-        // Clear long press timer on move
         if (longPressTimer) {
           clearTimeout(longPressTimer);
           longPressTimer = null;
@@ -1144,7 +1645,6 @@
       });
     }
 
-    // Prevent default touch actions on the header
     handle.addEventListener('touchstart', (e) => {
       if (!e.target.closest('#rx-close-btn') && 
           !e.target.closest('.rx-input-area') &&
@@ -1156,7 +1656,7 @@
 
   /**
    * ===============================
-   * EXACT TRIGGER MATCHING - FIXED FOR YOUR HTML
+   * Trigger Setup
    * ===============================
    */
   function setupTrigger() {
@@ -1173,19 +1673,28 @@
       const messageContainer = document.getElementById('rx-chat-messages');
       if (messageContainer && messageContainer.children.length === 0) {
         showWelcomeSequence();
+        
+        const savedKey = loadApiKey();
+        const savedModel = loadModel();
+        
+        if (savedKey) {
+          const modelInfo = getCurrentModelInfo();
+          setTimeout(() => {
+            addMessage(`Saved API key found. Using ${modelInfo.name}\n\nType "ai mode" to access ai mode.`, 'bot');
+          }, 2000);
+        }
       }
     }
 
     function attachToTrigger() {
       const trigger = document.querySelector(triggerSelector);
       if (trigger) {
-        console.log('RX Chat: Found trigger with direct selector');
+        console.log('RX Chat: Found trigger');
         
         trigger.removeEventListener('click', openChatWindow);
         trigger.addEventListener('click', (e) => {
           e.preventDefault();
           e.stopPropagation();
-          console.log('RX Chat: Trigger clicked');
           openChatWindow();
         });
         
@@ -1196,31 +1705,12 @@
       for (const img of images) {
         const parent = img.closest('.RX-SMART-BUTTON-menu-item');
         if (parent) {
-          console.log('RX Chat: Found trigger by image source');
+          console.log('RX Chat: Found trigger by image');
           
           parent.removeEventListener('click', openChatWindow);
           parent.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('RX Chat: Trigger clicked');
-            openChatWindow();
-          });
-          
-          return true;
-        }
-      }
-      
-      const altImages = document.querySelectorAll('img[alt="chat"]');
-      for (const img of altImages) {
-        const parent = img.closest('.RX-SMART-BUTTON-menu-item');
-        if (parent) {
-          console.log('RX Chat: Found trigger by alt text');
-          
-          parent.removeEventListener('click', openChatWindow);
-          parent.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('RX Chat: Trigger clicked');
             openChatWindow();
           });
           
@@ -1232,11 +1722,11 @@
     }
 
     if (!attachToTrigger()) {
-      console.log('RX Chat: Trigger not found, watching for it...');
+      console.log('RX Chat: Watching for trigger...');
       
       const observer = new MutationObserver(() => {
         if (attachToTrigger()) {
-          console.log('RX Chat: Trigger found and attached');
+          console.log('RX Chat: Trigger attached');
           observer.disconnect();
         }
       });
@@ -1245,21 +1735,6 @@
         childList: true,
         subtree: true
       });
-      
-      let attempts = 0;
-      const interval = setInterval(() => {
-        if (attachToTrigger()) {
-          console.log('RX Chat: Trigger found via interval');
-          clearInterval(interval);
-          observer.disconnect();
-        }
-        
-        attempts++;
-        if (attempts > 20) {
-          clearInterval(interval);
-          console.log('RX Chat: Stopped looking for trigger');
-        }
-      }, 500);
     }
   }
 
@@ -1291,6 +1766,7 @@
     closeBtn.addEventListener('click', () => {
       chatWindow.classList.remove('show');
       saveWindowState(false);
+      // Clear messages on close
       clearMessageHistory();
     });
 
@@ -1299,8 +1775,13 @@
       if (e.key === 'Enter') handleUserInput();
     });
 
+    loadApiKey();
+    loadModel();
+    updateModeIndicator();
+
     if (loadWindowState()) {
       chatWindow.classList.add('show');
+      // Load saved message history when window opens
       loadMessageHistory();
     }
 
