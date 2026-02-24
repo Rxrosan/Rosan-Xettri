@@ -22,10 +22,10 @@
     typingSpeed: 30,
     copyright: '<p>&copy; <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>',
     
-    // Gemini API Configuration - Just 3  models
+    // Gemini API Configuration - Just 3 models
     gemini: {
-      apiKey: null, // User must enter this
-      currentModel: 'gemini-2.5-flash', // Default to fastest model
+      apiKey: null, // Can be pre-filled here auto-connects in AI mode.
+      currentModel: 'gemini-3-flash-preview', // Default to fastest model
       availableModels: [
         { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', free: true, description: 'Fast model' },
         { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', free: true, description: 'More powerful' },
@@ -208,14 +208,14 @@
     },
     { 
       command: 'models', 
-      description: 'List available  models',
+      description: 'List available models',
       response: '',
       category: 'ai-functions',
       action: 'listModels'
     },
     { 
       command: 'use model', 
-      description: 'Switch to a specific model ',
+      description: 'Switch to a specific model',
       response: '',
       category: 'ai-functions',
       action: 'switchModel',
@@ -229,16 +229,16 @@
       action: 'showCurrentModel'
     },
     { 
-      command: 'models', 
-      description: 'Test all  models',
+      command: 'test models', 
+      description: 'Test all models',
       response: '',
       category: 'ai-functions',
       action: 'testAllModels'
     },
     { 
       command: 'get api key', 
-      description: 'Get a  Gemini API key',
-      response: 'Get your  Gemini API key from Google AI Studio:',
+      description: 'Get a Gemini API key',
+      response: 'Get your Gemini API key from Google AI Studio:',
       category: 'ai-functions',
       isLink: true,
       url: 'https://aistudio.google.com/app/apikey',
@@ -266,6 +266,12 @@
   }
 
   function loadApiKey() {
+    // First check if API key is pre-filled in config
+    if (config.gemini.apiKey) {
+      return config.gemini.apiKey;
+    }
+    
+    // Otherwise check localStorage
     const savedKey = localStorage.getItem(config.storageKeys.geminiKey);
     if (savedKey) {
       config.gemini.apiKey = savedKey;
@@ -428,7 +434,7 @@
 
     addMessage('Testing models...', 'bot');
     
-    // Try each  model in order
+    // Try each model in order
     for (const model of config.gemini.availableModels) {
       addMessage(`Testing ${model.name}...`, 'bot');
       
@@ -441,7 +447,7 @@
         chatMode = 'ai';
         saveChatMode('ai'); // Save the AI mode state
         updateModeIndicator();
-        addMessage(`Connected with ${model.name} ! How can I help you?`, 'bot');
+        addMessage(`Connected with ${model.name}! How can I help you?`, 'bot');
         return true;
       }
     }
@@ -1287,20 +1293,20 @@
     helpText += '\nCurrent mode: ' + chatMode.toUpperCase();
     if (config.gemini.apiKey) {
       const modelInfo = getCurrentModelInfo();
-      helpText += ` ( ${modelInfo.name} )`;
+      helpText += ` (${modelInfo.name})`;
     } else {
-      helpText += '\n Type "ai mode" to set up AI chat with your Gemini API key.';
+      helpText += '\nType "ai mode" to set up AI chat with your Gemini API key.';
     }
     
     addMessage(helpText, 'bot');
   }
 
   function listModels() {
-    let modelList = ' MODELS:\n\n';
+    let modelList = 'MODELS:\n\n';
     
     config.gemini.availableModels.forEach((model, index) => {
       const isCurrent = model.id === config.gemini.currentModel;
-      modelList += `${isCurrent ? '' : '•'} ${model.name}\n`;
+      modelList += `${isCurrent ? '✓' : '•'} ${model.name}\n`;
       modelList += `   ${model.description}\n`;
       if (isCurrent) modelList += '   (currently active)\n';
       modelList += '\n';
@@ -1411,6 +1417,8 @@
       }
       else if (cmd.action === 'aiMode') {
         if (config.gemini.apiKey) {
+          // Auto-connect if API key exists (either pre-filled or saved)
+          addMessage('API key found! Connecting to Gemini...', 'bot');
           await connectToFreeTier();
         } else {
           awaitingApiKey = true;
@@ -1702,7 +1710,7 @@
         if (savedKey) {
           const modelInfo = getCurrentModelInfo();
           setTimeout(() => {
-            addMessage(`Saved API key found. Using ${modelInfo.name}`, 'bot');
+            addMessage(`loaded : ${modelInfo.name}`, 'bot');
           }, 2000);
         }
       }
@@ -1797,7 +1805,7 @@
       if (e.key === 'Enter') handleUserInput();
     });
 
-    // Load saved state
+    // Load saved state - IMPORTANT: This now checks for pre-filled config key first
     loadApiKey();
     loadModel();
     
