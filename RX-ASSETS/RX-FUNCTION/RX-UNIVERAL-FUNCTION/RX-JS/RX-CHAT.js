@@ -22,13 +22,13 @@
     typingSpeed: 30,
     copyright: '<p>&copy; <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>',
     
-    // Gemini API Configuration - Just 3 FREE models
+    // Gemini API Configuration - Just 3  models
     gemini: {
       apiKey: null, // User must enter this
-      currentModel: 'gemini-2.5-flash', // Default to fastest free model
+      currentModel: 'gemini-2.5-flash', // Default to fastest model
       availableModels: [
-        { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', free: true, description: 'Fast, free model' },
-        { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', free: true, description: 'More powerful, still free' },
+        { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', free: true, description: 'Fast model' },
+        { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', free: true, description: 'More powerful' },
         { id: 'gemini-3-flash-preview', name: 'Gemini 3 Flash Preview', free: true, description: 'Latest flash model' }
       ],
       apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/'
@@ -208,7 +208,7 @@
     },
     { 
       command: 'models', 
-      description: 'List available FREE models',
+      description: 'List available  models',
       response: '',
       category: 'ai-functions',
       action: 'listModels'
@@ -230,15 +230,15 @@
     },
     { 
       command: 'models', 
-      description: 'Test all FREE models',
+      description: 'Test all  models',
       response: '',
       category: 'ai-functions',
       action: 'testAllModels'
     },
     { 
       command: 'get api key', 
-      description: 'Get a free Gemini API key',
-      response: 'Get your free Gemini API key from Google AI Studio:',
+      description: 'Get a  Gemini API key',
+      response: 'Get your  Gemini API key from Google AI Studio:',
       category: 'ai-functions',
       isLink: true,
       url: 'https://aistudio.google.com/app/apikey',
@@ -428,7 +428,7 @@
 
     addMessage('Testing models...', 'bot');
     
-    // Try each free model in order
+    // Try each  model in order
     for (const model of config.gemini.availableModels) {
       addMessage(`Testing ${model.name}...`, 'bot');
       
@@ -441,7 +441,7 @@
         chatMode = 'ai';
         saveChatMode('ai'); // Save the AI mode state
         updateModeIndicator();
-        addMessage(`Connected with ${model.name} (FREE tier)! How can I help you?`, 'bot');
+        addMessage(`Connected with ${model.name} ! How can I help you?`, 'bot');
         return true;
       }
     }
@@ -456,7 +456,7 @@
       return;
     }
     
-    addMessage('Testing all FREE models...\n', 'bot');
+    addMessage('Testing all models...\n', 'bot');
     
     const results = [];
     let workingModel = null;
@@ -1296,7 +1296,7 @@
   }
 
   function listModels() {
-    let modelList = 'FREE MODELS:\n\n';
+    let modelList = ' MODELS:\n\n';
     
     config.gemini.availableModels.forEach((model, index) => {
       const isCurrent = model.id === config.gemini.currentModel;
@@ -1414,7 +1414,7 @@
           await connectToFreeTier();
         } else {
           awaitingApiKey = true;
-          addMessage('Enter your Gemini API key:\n\nFormat: set key YOUR_API_KEY\n\nGet a free key: type "get api key"', 'bot');
+          addMessage('Enter your Gemini API key:\n\nFormat: set key YOUR_API_KEY\n\nGet a key: type "get api key"', 'bot');
         }
       }
       else if (cmd.action === 'commandMode') {
