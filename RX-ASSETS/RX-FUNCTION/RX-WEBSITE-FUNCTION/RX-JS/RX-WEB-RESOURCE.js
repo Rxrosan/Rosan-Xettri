@@ -63,11 +63,6 @@ const RXCompleteManager = (function() {
                 2: { purchased: '2024-01-01', price: 0, expiresDays: null },
                 3: { purchased: '2024-01-01', price: 0, expiresDays: null },
                 4: { purchased: '2024-01-01', price: 0, expiresDays: null },
-                5: { purchased: '2024-01-01', price: 0, expiresDays: null },
-                6: { purchased: '2024-01-01', price: 0, expiresDays: null },
-                7: { purchased: '2024-01-01', price: 0, expiresDays: null },
-                8: { purchased: '2024-01-01', price: 0, expiresDays: null },
-                9: { purchased: '2024-01-01', price: 0, expiresDays: null }
             }
         }
     };
