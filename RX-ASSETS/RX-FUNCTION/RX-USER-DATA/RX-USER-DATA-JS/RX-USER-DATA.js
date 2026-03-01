@@ -14,30 +14,6 @@ const RXUserData = {
             role: "admin",
             joinDate: "2024-01-01"
         },
-        {
-            id: 2,
-            fullName: "John Smith",
-            nickname: "john",
-            email: "john@rxstudio.com",
-            phone: "+1 234 567 8900",
-            dob: "1990-01-01",
-            address: "New York, USA",
-            profileImage: "RX-ASSETS/RX-IMAGE/RX-USER/default-profile.png",
-            role: "member",
-            joinDate: "2024-01-15"
-        },
-        {
-            id: 3,
-            fullName: "Emma Johnson",
-            nickname: "emma",
-            email: "emma@rxstudio.com",
-            phone: "+44 7911 123456",
-            dob: "1992-07-22",
-            address: "London, UK",
-            profileImage: "RX-ASSETS/RX-IMAGE/RX-USER/default-profile.png",
-            role: "user",
-            joinDate: "2024-02-01"
-        }
     ],
 
     // Initialize - load from localStorage if available

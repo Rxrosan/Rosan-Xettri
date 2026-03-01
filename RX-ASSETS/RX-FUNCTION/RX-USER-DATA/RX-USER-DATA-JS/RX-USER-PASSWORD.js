@@ -86,9 +86,7 @@ const RXUserPassword = {
 
 // Initialize with default passwords
 RXUserPassword.passwords = [
-    { userId: 1, password: "ROSAN" },
-    { userId: 2, password: "JOHN123" },
-    { userId: 3, password: "EMMA456" }
+    { userId: 1, password: "Ro&@n2061" },
 ];
 
 RXUserPassword.init();
