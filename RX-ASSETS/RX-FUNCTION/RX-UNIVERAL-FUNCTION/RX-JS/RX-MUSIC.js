@@ -9,16 +9,16 @@
    * ===============================
    */
   const config = {
-    // Window Settings - Compact size 1 inch height (96px) × 5 inch width (480px)
+    // Window Settings 
     playerWidth: '300px',
-    playerHeight: '120px', // Exactly 1 inch (96px)
-    expandedHeight: '320px', // Expanded for playlist
+    playerHeight: '120px', 
+    expandedHeight: '320px', 
     mobileWidth: '320px',
-    mobileHeight: '90px',
+    mobileHeight: '115px',
     mobileExpandedHeight: '300px',
-    smallMobileWidth: '280px',
-    smallMobileHeight: '85px',
-    smallMobileExpandedHeight: '280px',
+    smallMobileWidth: '305px',
+    smallMobileHeight: '110px',
+    smallMobileExpandedHeight: '305px',
     
     // Messages
     welcomeMessage: null,
@@ -415,15 +415,23 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 18px;
-      color: white;
-      line-height: 1;
       flex-shrink: 0;
+    }
+
+    .rx-music-menu-btn img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      transition: filter 0.2s ease;
     }
 
     .rx-music-menu-btn.active {
       background: ${colors.activeColor || '#64ffda'};
-      color: #000;
+    }
+
+    .rx-music-menu-btn.active img {
+      filter: brightness(0) invert(0);
     }
 
     .rx-music-volume-control {
@@ -431,6 +439,21 @@
       align-items: center;
       gap: 4px;
       margin-left: auto;
+    }
+
+    .rx-music-volume-icon {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rx-music-volume-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
     }
 
     .rx-music-volume-slider {
@@ -570,7 +593,16 @@
       .rx-music-menu-btn {
         width: 26px;
         height: 26px;
-        font-size: 16px;
+      }
+      
+      .rx-music-menu-btn img {
+        width: 14px;
+        height: 14px;
+      }
+      
+      .rx-music-volume-icon {
+        width: 14px;
+        height: 14px;
       }
       
       .rx-music-volume-slider {
@@ -610,7 +642,16 @@
       .rx-music-menu-btn {
         width: 24px;
         height: 24px;
-        font-size: 15px;
+      }
+      
+      .rx-music-menu-btn img {
+        width: 12px;
+        height: 12px;
+      }
+      
+      .rx-music-volume-icon {
+        width: 12px;
+        height: 12px;
       }
       
       .rx-music-volume-slider {
@@ -702,10 +743,14 @@
                 </button>
               </div>
               
-              <div class="rx-music-menu-btn" id="rx-music-menu-btn">≣</div>
+              <div class="rx-music-menu-btn" id="rx-music-menu-btn">
+                <img src="${config.images.menuIcon || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'16\' height=\'16\' viewBox=\'0 0 24 24\' fill=\'white\'><path d=\'M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z\'/></svg>'}" alt="menu">
+              </div>
               
               <div class="rx-music-volume-control">
-                <img src="${config.images.volumeIcon || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'white\'><path d=\'M3 9v6h4l5 5V4L7 9H3z\'/></svg>'}" alt="vol" style="width: 12px; height: 12px;">
+                <div class="rx-music-volume-icon">
+                  <img src="${config.images.volumeIcon || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'12\' height=\'12\' viewBox=\'0 0 24 24\' fill=\'white\'><path d=\'M3 9v6h4l5 5V4L7 9H3z\'/></svg>'}" alt="vol">
+                </div>
                 <input type="range" min="0" max="100" value="70" class="rx-music-volume-slider" id="rx-music-volume-slider">
               </div>
             </div>
