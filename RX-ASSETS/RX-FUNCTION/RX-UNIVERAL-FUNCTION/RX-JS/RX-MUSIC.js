@@ -11,7 +11,7 @@
   const config = {
     // Window Settings 
     playerWidth: '300px',
-    playerHeight: '120px', 
+    playerHeight: '115px', 
     expandedHeight: '320px', 
     mobileWidth: '320px',
     mobileHeight: '115px',
