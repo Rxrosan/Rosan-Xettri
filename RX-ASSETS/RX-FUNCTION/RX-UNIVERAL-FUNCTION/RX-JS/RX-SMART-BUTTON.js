@@ -124,19 +124,31 @@
     pointer-events: auto;
   }
 
-  /* positions for up to 12 items */
-  .RX-SMART-BUTTON-circle.expanded .RX-item-1  { transform: rotate(30deg) translateX(var(--rx-menu-distance)) rotate(-30deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-2  { transform: rotate(60deg) translateX(var(--rx-menu-distance)) rotate(-60deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-3  { transform: rotate(90deg) translateX(var(--rx-menu-distance)) rotate(-90deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-4  { transform: rotate(120deg) translateX(var(--rx-menu-distance)) rotate(-120deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-5  { transform: rotate(150deg) translateX(var(--rx-menu-distance)) rotate(-150deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-6  { transform: rotate(180deg) translateX(var(--rx-menu-distance)) rotate(-180deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-7  { transform: rotate(210deg) translateX(var(--rx-menu-distance)) rotate(-210deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-8  { transform: rotate(240deg) translateX(var(--rx-menu-distance)) rotate(-240deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-9  { transform: rotate(270deg) translateX(var(--rx-menu-distance)) rotate(-270deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-10 { transform: rotate(300deg) translateX(var(--rx-menu-distance)) rotate(-300deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-11 { transform: rotate(330deg) translateX(var(--rx-menu-distance)) rotate(-330deg) scale(1); }
-  .RX-SMART-BUTTON-circle.expanded .RX-item-12 { transform: rotate(360deg) translateX(var(--rx-menu-distance)) rotate(-360deg) scale(1); }
+  /* positions for up to 24 items */
+  .RX-SMART-BUTTON-circle.expanded .RX-item-1  { transform: rotate(15deg) translateX(var(--rx-menu-distance)) rotate(-15deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-2  { transform: rotate(45deg) translateX(var(--rx-menu-distance)) rotate(-45deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-3  { transform: rotate(75deg) translateX(var(--rx-menu-distance)) rotate(-75deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-4  { transform: rotate(105deg) translateX(var(--rx-menu-distance)) rotate(-105deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-5  { transform: rotate(135deg) translateX(var(--rx-menu-distance)) rotate(-135deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-6  { transform: rotate(165deg) translateX(var(--rx-menu-distance)) rotate(-165deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-7  { transform: rotate(195deg) translateX(var(--rx-menu-distance)) rotate(-195deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-8  { transform: rotate(225deg) translateX(var(--rx-menu-distance)) rotate(-225deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-9  { transform: rotate(255deg) translateX(var(--rx-menu-distance)) rotate(-255deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-10 { transform: rotate(285deg) translateX(var(--rx-menu-distance)) rotate(-285deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-11 { transform: rotate(315deg) translateX(var(--rx-menu-distance)) rotate(-315deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-12 { transform: rotate(345deg) translateX(var(--rx-menu-distance)) rotate(-345deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-13 { transform: rotate(30deg) translateX(var(--rx-menu-distance)) rotate(-30deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-14 { transform: rotate(60deg) translateX(var(--rx-menu-distance)) rotate(-60deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-15 { transform: rotate(90deg) translateX(var(--rx-menu-distance)) rotate(-90deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-16 { transform: rotate(120deg) translateX(var(--rx-menu-distance)) rotate(-120deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-17 { transform: rotate(150deg) translateX(var(--rx-menu-distance)) rotate(-150deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-18 { transform: rotate(180deg) translateX(var(--rx-menu-distance)) rotate(-180deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-19 { transform: rotate(210deg) translateX(var(--rx-menu-distance)) rotate(-210deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-20 { transform: rotate(240deg) translateX(var(--rx-menu-distance)) rotate(-240deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-21 { transform: rotate(270deg) translateX(var(--rx-menu-distance)) rotate(-270deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-22 { transform: rotate(300deg) translateX(var(--rx-menu-distance)) rotate(-300deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-23 { transform: rotate(330deg) translateX(var(--rx-menu-distance)) rotate(-330deg) scale(1); }
+  .RX-SMART-BUTTON-circle.expanded .RX-item-24 { transform: rotate(360deg) translateX(var(--rx-menu-distance)) rotate(-360deg) scale(1); }
 
   .RX-SMART-BUTTON-menu-item:hover {
     background: rgba(255,255,255,0.22);
@@ -144,7 +156,7 @@
   }
   .RX-SMART-BUTTON-menu-item:hover img { transform: scale(1.08); filter: brightness(1.05); }
 
-  /* Popup overlay and popup (note: overlay click will not close popup per user request) */
+  /* Popup overlay and popup */
   .RX-popup-overlay {
     position: fixed;
     inset: 0;
@@ -211,7 +223,7 @@
 
   /**
    * ===============================
-   * HTML Injection
+   * HTML Injection with all menu items
    * ===============================
    */
   const injectedHTML = `
@@ -219,19 +231,33 @@
     <div class="RX-SMART-BUTTON-circle" role="button" aria-label="Smart button">
       <div class="RX-SMART-BUTTON-center-point" aria-hidden="true"></div>
 
-      <!-- Menu items -->
-      <div class="RX-SMART-BUTTON-menu-item RX-item-2" data-link="USER.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="user"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-3" data-link="https://rosanxettristudio.netlify.app/"><img src="RX-ASSETS/RX-IMAGE/RX-LOGO/L-6.gif" alt="logo"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-5" data-link="mailto:rkc242855@gmail.com"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/email.png" alt="email"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-9" data-link=""><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/BOT-PROFILE-1.png" alt="chat"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-6" data-link="https://www.youtube.com/@RX_E-SPORTS"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/youtube.png" alt="youtube"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-8" data-link="Resource.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/store.png" alt="store"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-7" data-link=""><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/RX-MUSIC.png" alt="music"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-4" data-link="https://x.com/Rx_Rosan"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/xcorp.png" alt="xcorp"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-10" data-link="https://rosankc.com.np/"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/home.png" alt="home"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-11" data-link="About.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/about.png" alt="about"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-12" data-link="Service.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/service.png" alt="service"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-1" data-link="Contact.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/contact.png" alt="contact"></div>
+      <!-- Menu items Blue Theme (1-12) -->
+      <div class="RX-SMART-BUTTON-menu-item RX-item-1 blue-item" data-link="Contact.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/contact.png" alt="contact"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-2 blue-item" data-link="USER.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="user"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-3 blue-item" data-link="https://rosanxettristudio.netlify.app/"><img src="RX-ASSETS/RX-IMAGE/RX-LOGO/L-6.gif" alt="logo"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-4 blue-item" data-link="https://x.com/Rx_Rosan"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/xcorp.png" alt="xcorp"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-5 blue-item" data-link="mailto:rkc242855@gmail.com"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/email.png" alt="email"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-6 blue-item" data-link="https://www.youtube.com/@RX_E-SPORTS"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/youtube.png" alt="youtube"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-7 blue-item" data-link=""><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/RX-MUSIC.png" alt="music"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-8 blue-item" data-link="Resource.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/store.png" alt="store"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-9 blue-item" data-link=""><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/BOT-PROFILE-1.png" alt="chat"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-10 blue-item" data-link="https://rosankc.com.np/"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/home.png" alt="home"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-11 blue-item" data-link="About.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/about.png" alt="about"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-12 blue-item" data-link="Service.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/service.png" alt="service"></div>
+
+      <!-- Menu items Silver Theme (13-24) - Initially hidden -->
+      <div class="RX-SMART-BUTTON-menu-item RX-item-13 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item13"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-14 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item14"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-15 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item15"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-16 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item16"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-17 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item17"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-18 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item18"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-19 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item19"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-20 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item20"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-21 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item21"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-22 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item22"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-23 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item23"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-24 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item24"></div>
     </div>
   </div>
 
@@ -270,6 +296,24 @@
 
   /**
    * ===============================
+   * Toggle menu items based on theme
+   * ===============================
+   */
+  function toggleMenuItems(themeName) {
+    const blueItems = document.querySelectorAll('.blue-item');
+    const silverItems = document.querySelectorAll('.silver-item');
+    
+    if (themeName === 'blue') {
+      blueItems.forEach(item => item.style.display = 'flex');
+      silverItems.forEach(item => item.style.display = 'none');
+    } else if (themeName === 'silver') {
+      blueItems.forEach(item => item.style.display = 'none');
+      silverItems.forEach(item => item.style.display = 'flex');
+    }
+  }
+
+  /**
+   * ===============================
    * Theme functions
    * - applyTheme(themeName) - applies and saves
    * - cycleTheme() - cycles to next theme
@@ -282,6 +326,9 @@
     document.documentElement.style.setProperty('--rx-glass-border', theme.border);
     document.documentElement.style.setProperty('--rx-center-gradient', theme.centerGradient);
     document.documentElement.style.setProperty('--rx-icon-highlight', theme.iconHighlight);
+
+    // Toggle menu items based on theme
+    toggleMenuItems(themeName);
 
     localStorage.setItem('RX-SMART-BUTTON-theme', themeName);
     currentThemeIndex = themeKeys.indexOf(themeName);
@@ -479,10 +526,11 @@
       saveState();
     });
 
-    // Double-click center to cycle theme (non-intrusive)
+    // Double-click center to cycle theme and change menu items
     const centerPoint = circle.querySelector('.RX-SMART-BUTTON-center-point');
     if (centerPoint) {
       centerPoint.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
         cycleTheme();
       });
     }
@@ -603,7 +651,7 @@
       item.addEventListener('click', function (e) {
         e.stopPropagation();
         const link = this.getAttribute('data-link');
-        if (!link || link === '#') return;
+        if (!link || link === '') return;
         if (link.startsWith('http') || link.startsWith('mailto')) {
           window.open(link, '_blank', 'noopener');
         } else {
