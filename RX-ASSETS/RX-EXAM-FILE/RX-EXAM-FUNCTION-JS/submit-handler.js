@@ -345,6 +345,27 @@ const ExamSubmit = {
                     <span></span>
                     Exit
                 </button>
+
+                <button onclick="window.location.href='history.html'"
+                style="
+                  flex: 1;
+                  background: #0ed118;
+                  color: white;
+                  border: none;
+                  padding: 16px;
+                  border-radius: 12px;
+                  font-weight: 600;
+                  font-size: 16px;
+                  cursor: pointer;
+                  transition: all 0.3s;
+                 display: flex;
+                 align-items: center;
+                 justify-content: center;
+                  gap: 8px;
+                ">
+                  <span></span>
+                     Review
+                </button>
             </div>
         `;
         

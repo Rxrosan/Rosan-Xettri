@@ -44,7 +44,7 @@
       headerBg: 'rgba(0,0,0,0.3)',
       playerBg: 'rgba(0,0,0,0.2)',
       textColor: 'white',
-      activeColor: '#64ffda',
+      activeColor: '#c70d0d',
       playlistItemBg: 'rgba(255,255,255,0.1)',
       playlistItemHover: 'rgba(100,255,218,0.2)'
     },
@@ -82,6 +82,12 @@
         artist: 'Aditya Rikhari',
         url: 'RX-ASSETS/RX-MUSIC/NASAMAJH.mp3',
         duration: '2:50'
+      },
+      { 
+        title: 'HundredDollar-Bill', 
+        artist: 'Lana Del Rey',
+        url: 'RX-ASSETS/RX-MUSIC/HundredDollar-Bill.mp3',
+        duration: '3:15'
       },
     ],
     
@@ -364,7 +370,7 @@
 
     .rx-music-progress-fill {
       height: 100%;
-      background: ${colors.activeColor || '#64ffda'};
+      background: ${colors.activeColor};
       border-radius: 2px;
       width: 0%;
     }
@@ -427,7 +433,7 @@
     }
 
     .rx-music-menu-btn.active {
-      background: ${colors.activeColor || '#64ffda'};
+      background: ${colors.activeColor};
     }
 
     .rx-music-menu-btn.active img {
@@ -471,7 +477,7 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background: ${colors.activeColor || '#64ffda'};
+      background: ${colors.activeColor};
       cursor: pointer;
     }
 
@@ -514,7 +520,7 @@
 
     .rx-music-playlist-item.active {
       background: ${colors.playlistItemHover || 'rgba(100,255,218,0.2)'};
-      border-left: 3px solid ${colors.activeColor || '#64ffda'};
+      border-left: 3px solid ${colors.activeColor};
     }
 
     .rx-music-playlist-info {
