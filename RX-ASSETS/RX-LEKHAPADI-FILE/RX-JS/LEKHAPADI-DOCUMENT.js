@@ -39,7 +39,7 @@ const TEMPLATE_COLLECTION = {
     // कपाली तमसुक
     KAPALI_TAMSUK: {
         id: 'kapali-tamsuk',
-        name: 'कपाली तमसुक incomplete ',
+        name: 'कपाली तमसुक',
         pages: {
             page1: {
                 title: "पृष्ठ १ - मुख्य विवरण / कपाली तमसुक ",
