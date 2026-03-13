@@ -1,7 +1,7 @@
 // Sample user data (for demonstration purposes)
 const allUsers = [
     {
-        id: "U001",
+        id: "RX-A-01",
         userName: "ROSAN",
         fullName: "ROSAN KC",
         email: "rkc242855@gmail.com",
@@ -10,50 +10,12 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "ADMIN",
         password: "Ro&@n2061",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file9","file10","file11",],
+        access: ["file1", "file2", "file3", "file4", ],
         timedAccessConfig: {},
         dateOfBirth: "2004-07-25",
     },
     {
-        id: "U002",
-        userName: "RITA",
-        fullName: "Rita Rana Magar",
-        email: "rita24839@gmail.com",
-        image: "ASSET/WEB-SOFTWARE/USER/IMG/Rita-Magar.jpg",
-        phone: "9807483578",
-        address: "BANGANGA-5 ,KAPILVASTU",
-        accountType: "MEMBER",
-        password: "RX9807483578",
-        access: [],
-        timedAccessConfig: {
-            "file1": { startDate: "2025-11-09", duration: 90 },
-            "file2": { startDate: "2025-11-09", duration: 90 },
-            "file5": { startDate: "2025-11-09", duration: 90 },
-            "file11":{ startDate: "2025-11-09", duration: 90 },
-        },
-        dateOfBirth: "null",
-    },
-    {
-        id: "U003",
-        userName: "KESHAB",
-        fullName: "Keshab Disuwa Magar",
-        email: "keshabdisuwa7@gmail.com",
-        image: "ASSET/WEB-SOFTWARE/USER/IMG/Keshab-Disuwa-Magar.jpg",
-        phone: "9748780170",
-        address: "BANGANGA-11 ,KAPILVASTU",
-        accountType: "MEMBER",
-        password: "RX9748780170",
-        access: [],
-        timedAccessConfig: {
-            "file1": { startDate: "2025-11-09", duration: 90 },
-            "file2": { startDate: "2025-11-09", duration: 90 },
-            "file5": { startDate: "2025-11-09", duration: 90 },
-            "file11":{ startDate: "2025-11-09", duration: 90 },
-        },
-        dateOfBirth: "null",
-    },
-    {
-        id: "U004",
+        id: "RX-P-01",
         userName: "ROHIT",
         fullName: "Rohit kc",
         email: "rohitchattri71@gmail.com",
@@ -62,86 +24,9 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "PARTNER",
         password: "RX9821948199",
-        access: ["file1", "file2", "file3", "file4", "file5", "file6", "file7","file8","file9","file10","file11",],
+        access: ["file1", "file2", "file3", "file4", ],
         timedAccessConfig: { },
         dateOfBirth: "2005-11-17",
-    },
-    {
-        id: "U005",
-        userName: "NIRAJ",
-        fullName: "Niraj Thapa",
-        email: "nirajthapa54535@gmail.com",
-        image: "ASSET/WEB-SOFTWARE/USER/IMG/Niraj.jpg",
-        phone: "9800754535",
-        address: "BANGANGA-4, GAJEHADA",
-        accountType: "MEMBER",
-        password: "RX9800754535",
-        access: [],
-        timedAccessConfig: {
-            "file1": { startDate: "2025-11-09", duration: 90 },
-            "file2": { startDate: "2025-11-09", duration: 90 },
-            "file5": { startDate: "2025-11-09", duration: 90 },
-            "file11":{ startDate: "2025-11-09", duration: 90 },
-        },
-        dateOfBirth: "null",
-    },
-    {
-        id: "U006",
-        userName: "SAGAR",
-        fullName: "Sagar Giri",
-        email: "girisagar745@gmail.com",
-        image: "ASSET/WEB-SOFTWARE/USER/IMG/SAGAR.jpg",
-        phone: "9701300086",
-        address: "JITPUR, KAPILVASTU",
-        accountType: "MEMBER",
-        password: "RX9701300086",
-        access: [],
-        timedAccessConfig: {
-            "file1": { startDate: "2025-11-09", duration: 90 },
-            "file2": { startDate: "2025-11-09", duration: 90 },
-            "file5": { startDate: "2025-11-09", duration: 90 },
-            "file11":{ startDate: "2025-11-09", duration: 90 },
-        },
-        dateOfBirth: "null",
-    },
-    {
-        id: "U007",
-        userName: "MANISHA",
-        fullName: "Manisha Tharu",
-        email: "manishatharu388@gmail.com",
-        image: "ASSET/WEB-SOFTWARE/USER/IMG/MANISHA.jpg",
-        phone: "9745397210",
-        address: "SALJHANDI, RUPANDEHI",
-        accountType: "MEMBER",
-        password: "RX9745397210",
-        access: [],
-        timedAccessConfig: {
-            "file1": { startDate: "2025-11-09", duration: 90 },
-            "file2": { startDate: "2025-11-09", duration: 90 },
-            "file5": { startDate: "2025-11-09", duration: 90 },
-            "file11":{ startDate: "2025-11-09", duration: 90 },
-        },
-        dateOfBirth: "null",
-    },
-    {
-        id: "U008",
-        userName: "RAVI",
-        fullName: "RAVI THAPA",
-        email: "ravikshetri84@gmail.com",
-        image: "ASSET/WEB-SOFTWARE/USER/IMG/RAVI.jpg",
-        phone: "9766265561",
-        address: "GULMI-01 RANGBASS",
-        accountType: "MEMBER",
-        password: "RX9766265561",
-        access: [],
-        timedAccessConfig: {
-            "file1": { startDate: "2025-11-10", duration: 75 },
-            "file2": { startDate: "2025-11-10", duration: 75 },
-            "file4": { startDate: "2025-11-10", duration: 75 },
-            "file5": { startDate: "2025-11-10", duration: 75 },
-            "file11":{ startDate: "2025-11-10", duration: 75 },
-        },
-        dateOfBirth: "2004-07-22",
     },
 ];
 
@@ -149,105 +34,50 @@ const allUsers = [
 const contentCards = [
     {   
         id: "file1", 
-        title: "F1- QUESTION-MODEL-1", 
-        description: "LESSON A 1 - 10L", 
-        link: "KR-EXAM.html?exam=file1", 
-        icon: "fas fa-book",
-        prices: { default: "Rs. 100" }
+        title: "F1- LEKHAPADI ", 
+        description: "ALL DOCUMENT COLLECTION : LOGIN PASSWORD = RX-2061", 
+        link: "RX-LEKA-PADI.html?exam=file1", 
+        icon: "fas fa-pencil",
+        prices: { default: "Rs. 999/Month" }
     },
     {   
         id: "file2", 
-        title: "F2- RX-QR-Scanner/Generator", 
-        description: "You can create personalized messages using a QR code with this app.", 
-        link: "ASSET/WEB-SOFTWARE/RX-S-QR.html", 
-        icon: "fas fa-qrcode",
-        prices: { default: "Rs. 100" }
+        title: "F2- KOREAN EXAM PRACTICE", 
+        description: "You can practice exam every time auto generate new questions randomly.", 
+        link: "KR-EXAM.html", 
+        icon: "fas fa-book",
+        prices: { default: "Rs. 999/Month" }
     },
     {   
         id: "file3", 
-        title: "F3- कपाली तमसुक", 
-        description: "कुनै सम्पत्ति धिताे, बन्धक नराखी ब्याज र प्रतिशतकाे हिसाब गरी बुझाउने मिति ताेकिएकाे नबुझाइ भाका नाघे साहुकाे थैलि मेराे घर घरना बाट असुल गरी लिनु भनी असामिकाे विश्वासमा लेखी दिएकाे तमसुक  <br>Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file3", 
+        title: "F3- QR SCANNER", 
+        description: "", 
+        link: "RX-S-QR.html?exam=file3", 
         icon: "fas fa-pencil",
-        prices: { default: "Rs. 600",}
+        prices: { default: "Rs. 100",}
     },
     {   
         id: "file4", 
-        title: "F4- QUESTION MODEL 2", 
-        description: "LESSON A 11 - 20 L | UPDATING IN PROGRESS...", 
-        link: "KR-EXAM.html?exam=file4", 
+        title: "F4- TEXT TO IMAGE ", 
+        description: "LOGIN PASSWORD = RX2061", 
+        link: "RX-IMG-CONVERTER.html?exam=file4", 
         icon: "fas fa-book",
         prices: { default: "Rs. 100",}
     },
-    {   
-        id: "file5", 
-        title: "F5- QUESTION MODEL 3", 
-        description: "ALL OVER BOOK RESOURCE", 
-        link: "KR-EXAM.html?exam=file5", 
-        icon: "fas fa-book",
-        prices: { default: "Rs. 100",}
-    },
-    {   
-        id: "file6", 
-        title: "F6- राजीनामा ", 
-        description: "साहुबाट असामीले कर्जा लिएकाे रूपैँया बापत आफ्नाे हक अधिकार सदाकाे निमित्त समाप्त हुने गरी साहुले भाेग गर्न पाउने गरी कुनै सम्पत्तिकाे हक छाडी गरी दिएकाे लिखित<br>Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file6", 
-        icon: "fas fa-pen",
-        prices: { default: "Rs. 600",}
-    },
-    {   
-        id: "file7", 
-        title: "F7- राजीनामा हराएमा व्यहाेरा जनाई गरिदिएकाे राजीनामा ", 
-        description: "Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file7", 
-        icon: "fas fa-pencil",
-        prices: { default: "Rs. 600",}
-    },
-    {   
-        id: "file8", 
-        title: "F8- दृष्टिबन्धक तमसुक ", 
-        description: "साहुकाे रूपैयाँ धिताे नराखी यति ब्याज याे मितिमा बुझाउने, नभए साँवा ब्याज नबुझाएसम्म फलानाे सम्पत्ति भाेग चलन गर्ने र कच्चा ठहरे साहुले मेराे घर घरानाबाट असुल गर्ने भनेर लेखिएकाे तमसुक<br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file8", 
-        icon: "fas fa-pen",
-        prices: { default: "Rs. 600",}
-    },
-    {   
-        id: "file9", 
-        title: "F9- लखबन्धक तमसुक ", 
-        description: "चल अचल भाेगबन्धक वा दृष्टिबन्धक लिइ राख्नेले तमसुक बमाेजिम वम त्यसभन्दा घटी लिइ अर्काे साहुलाइ भाेगबन्धक वा दृष्टिबन्धक लेखी दिएकाे लिखत पछि लिनेले अघिकाे भन्दा बढ्ता थैलि लिएकाे र करार लेखेकाे सदर हुदैन <br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file9", 
-        icon: "fas fa-pencil",
-        prices: { default: "Rs. 600",}
-    },
-    {   
-        id: "file10", 
-        title: "F10- भाेगबन्धक तमसुक ", 
-        description: "साहुकाे थैली वापत रूपैयाँ नबुझाएसम्म सकहुलाइ आसामीले कुनै सम्पत्ति भाेग गर्न नपाइने गरी लेखी दिएकाे लिखित<br>UPDATE IN PROGRESS...<br>Login Code: RX-2061", 
-        link: "LEKA-PADI.html?exam=file10", 
-        icon: "fas fa-pen",
-        prices: { default: "Rs. 600",}
-    },
-    {   
-        id: "file11", 
-        title: "F11- RX IMG CONVERTER ", 
-        description: "LOGIN CODE : RX2061 <br>Easily encode images to text and decode back to images", 
-        link: "ASSET/WEB-SOFTWARE/RX-IMG-CONVERTER.html", 
-        icon: "fas fa-tools",
-        prices: { default: "Rs. 600",}
-    }
+    
 ];
 
 // Developer-Managed Stores (Fixed - Cannot be edited)
 const stores = [
     {   id: "store_1", 
         name: "LEKHA-PADI", 
-        content: ["file3", "file6", "file7", "file8", "file9","file10"] },
+        content: ["file1",] },
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 
-        content: ["file1","file4","file5"] },
+        content: ["file2",] },
     {   id: "store_3", 
         name: "WEB-SOFTWARE", 
-        content: ["file2","file11",] },
+        content: ["file3","file4"], },
 ];
 
 // ===== USER MANAGEMENT MODULE =====
@@ -266,9 +96,8 @@ const UserManager = (() => {
             accountType: "GUEST",
             access: [],
             timedAccessConfig: {
-                "file1": { startDate: "2025-11-09", duration: 30 },
-                "file2": { startDate: "2025-11-09", duration: 60 },
-                "file11": { startDate: "2025-11-09", duration: 60 },
+                "file3": { startDate: "2026-01-01", duration: 375 },
+                "file4": { startDate: "2026-01-01", duration: 375 },
             },
             dateOfBirth: null
         };
