@@ -743,7 +743,7 @@ const UserManager = (() => {
             isGuest: true,
             userName: "GUEST",
             fullName: "RX STUDIO",
-            email: "guest@rxstudio.com",
+            email: "-",
             image: "ASSET/WEB-SOFTWARE/USER/IMG/USER.png",
             phone: "-",
             address: "-",
