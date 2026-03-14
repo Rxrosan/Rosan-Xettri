@@ -1,4 +1,4 @@
-// RX-ACESS.js - ACCESS CONTROL ONLY
+// RX-ACESS.js - ACCESS CONTROL ONLY (Works with existing login system)
 
 (function() {
     // Prevent multiple executions
@@ -250,16 +250,8 @@
         overlay.appendChild(container);
         document.body.appendChild(overlay);
         
-        // Hide the login screen and main content but don't remove them
-        const loginScreen = document.getElementById('loginScreen');
-        const mainContent = document.getElementById('mainContent');
-        
-        if (loginScreen) {
-            loginScreen.style.display = 'none';
-        }
-        if (mainContent) {
-            mainContent.style.display = 'none';
-        }
+        // DON'T hide the login screen or main content
+        // Let the existing system handle that
     }
 
     // ===================================================================
@@ -271,46 +263,22 @@
         
         // Get current user
         const currentUser = getCurrentUser();
-        console.log('Current user:', currentUser ? currentUser.userName : 'Guest');
+        console.log('Current user:', currentUser ? currentUser.userName : 'No user');
         
         // Get content ID from URL
         const contentId = getQueryParameter('content') || getQueryParameter('exam');
         console.log('Content ID:', contentId);
         
-        // If no content ID, show login screen by default
+        // If no content ID, do nothing - let the existing system work
         if (!contentId) {
-            console.log('No content ID found in URL - showing login screen');
-            
-            // Show login screen, hide main content
-            const loginScreen = document.getElementById('loginScreen');
-            const mainContent = document.getElementById('mainContent');
-            
-            if (loginScreen) {
-                loginScreen.style.display = 'block';
-            }
-            if (mainContent) {
-                mainContent.classList.add('hidden');
-                mainContent.style.display = 'none';
-            }
-            return;
+            console.log('No content ID found - using existing login system');
+            return true;
         }
         
         const contentConfig = contentMapping[contentId];
         if (!contentConfig) {
             showNotification('Error', `No configuration for: ${contentId}`, 'error');
-            
-            // Show login screen on error
-            const loginScreen = document.getElementById('loginScreen');
-            const mainContent = document.getElementById('mainContent');
-            
-            if (loginScreen) {
-                loginScreen.style.display = 'block';
-            }
-            if (mainContent) {
-                mainContent.classList.add('hidden');
-                mainContent.style.display = 'none';
-            }
-            return;
+            return true;
         }
         
         // Check access
@@ -334,21 +302,6 @@
             );
         }
         
-        // Show the main content, hide login screen
-        const mainContent = document.getElementById('mainContent');
-        const loginScreen = document.getElementById('loginScreen');
-        
-        if (mainContent) {
-            mainContent.classList.remove('hidden');
-            mainContent.style.display = 'block';
-            console.log('Showing mainContent');
-        }
-        
-        if (loginScreen) {
-            loginScreen.style.display = 'none';
-            console.log('Hiding loginScreen');
-        }
-        
         console.log('✅ Access granted for:', contentConfig.title);
         return true;
     }
@@ -360,7 +313,7 @@
     function initialize() {
         console.log('RX-ACESS initializing...');
         
-        // Wait a bit for other scripts to load
+        // Wait for everything to load
         setTimeout(function() {
             // Check if we have the required elements
             const loginScreen = document.getElementById('loginScreen');
@@ -373,7 +326,7 @@
             
             // Run access check
             checkAccessAndNotify();
-        }, 500); // Half second delay to ensure DOM is ready
+        }, 1000); // 1 second delay to ensure everything is loaded
     }
 
     // Start when page is fully loaded
