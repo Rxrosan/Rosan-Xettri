@@ -2,11 +2,11 @@
 
 (function() {
     // Prevent multiple executions
-    if (window.__JS_LINKER_LOADED) {
-        console.log('JS-LINKER already loaded, skipping...');
+    if (window.__RXACESS_LOADED) {
+        console.log('RXACESS already loaded, skipping...');
         return;
     }
-    window.__JS_LINKER_LOADED = true;
+    window.__RXACESS_LOADED = true;
 
     /**
      * ===================================================================
@@ -38,17 +38,9 @@
     function getCurrentUser() {
         try {
             const userData = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
-            if (!userData) return null;
-            
-            const user = JSON.parse(userData);
-            
-            // Ensure user object has required properties
-            if (!user.access) user.access = [];
-            if (!user.timedAccessConfig) user.timedAccessConfig = {};
-            
-            return user;
+            return userData ? JSON.parse(userData) : null;
         } catch (e) {
-            console.error('Error parsing user data:', e);
+            console.error('RXACESS: Error parsing user data:', e);
             return null;
         }
     }
@@ -56,32 +48,23 @@
     function hasAccessToFile(user, fileId) {
         if (!user) return false;
         
-        // Guest user check
         if (user.isGuest) {
             const guestConfig = user.timedAccessConfig ? user.timedAccessConfig[fileId] : null;
             if (guestConfig && guestConfig.startDate && guestConfig.duration) {
-                const startDate = new Date(guestConfig.startDate);
-                // Ensure date is valid
-                if (isNaN(startDate.getTime())) return false;
-                
+                const startDate = new Date(`${guestConfig.startDate}T00:00:00Z`);
                 const timedAccessEnd = startDate.getTime() + (guestConfig.duration * 24 * 60 * 60 * 1000);
                 return timedAccessEnd > Date.now();
             }
             return false;
         }
         
-        // Regular user access check
         if (user.access && Array.isArray(user.access) && user.access.includes(fileId)) {
             return true;
         }
         
-        // Timed access check
         const fileConfig = user.timedAccessConfig ? user.timedAccessConfig[fileId] : null;
         if (fileConfig && fileConfig.startDate && fileConfig.duration) {
-            const startDate = new Date(fileConfig.startDate);
-            // Ensure date is valid
-            if (isNaN(startDate.getTime())) return false;
-            
+            const startDate = new Date(`${fileConfig.startDate}T00:00:00Z`);
             const timedAccessEnd = startDate.getTime() + (fileConfig.duration * 24 * 60 * 60 * 1000);
             return timedAccessEnd > Date.now();
         }
@@ -95,7 +78,7 @@
 
     function showNotification(title, message, type = 'info') {
         // Remove existing notification
-        const existing = document.getElementById('access-notification');
+        const existing = document.getElementById('rxacess-notification');
         if (existing) existing.remove();
         
         const colors = {
@@ -106,7 +89,8 @@
         };
         
         const notification = document.createElement('div');
-        notification.id = 'access-notification';
+        notification.id = 'rxacess-notification';
+        notification.className = 'rxacess-notification';
         notification.style.cssText = `
             position: fixed;
             top: 20px;
@@ -118,23 +102,24 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             z-index: 10000;
             max-width: 400px;
-            animation: slideIn 0.3s ease;
+            animation: rxacess-slideIn 0.3s ease;
             font-family: Arial, sans-serif;
         `;
         
         notification.innerHTML = `
-            <strong style="color: ${colors[type] || colors.info}; display: block; margin-bottom: 5px; font-size: 16px;">
+            <strong class="rxacess-notification-title" style="color: ${colors[type] || colors.info}; display: block; margin-bottom: 5px; font-size: 16px;">
                 ${title}
             </strong>
-            <p style="margin: 0; color: #666; font-size: 14px;">${message}</p>
+            <p class="rxacess-notification-message" style="margin: 0; color: #666; font-size: 14px;">${message}</p>
         `;
         
         // Add animation style if not exists
-        if (!document.getElementById('notification-styles')) {
+        if (!document.getElementById('rxacess-styles')) {
             const style = document.createElement('style');
-            style.id = 'notification-styles';
+            style.id = 'rxacess-styles';
+            style.className = 'rxacess-styles';
             style.textContent = `
-                @keyframes slideIn {
+                @keyframes rxacess-slideIn {
                     from { transform: translateX(100%); opacity: 0; }
                     to { transform: translateX(0); opacity: 1; }
                 }
@@ -147,41 +132,39 @@
         // Auto remove after 5 seconds
         setTimeout(() => {
             if (notification.parentNode) {
-                notification.style.animation = 'slideIn 0.3s reverse';
+                notification.style.animation = 'rxacess-slideIn 0.3s reverse';
                 setTimeout(() => notification.remove(), 300);
             }
         }, 5000);
     }
 
     // ===================================================================
-    //                        ACCESS DENIED OVERLAY
+    //                        ACCESS DENIED PAGE
     // ===================================================================
 
     function showAccessDenied(user, fileId, contentTitle) {
         // Don't show if already showing
-        if (document.getElementById('access-denied-overlay')) {
+        if (document.getElementById('rxacess-denied-container')) {
             return;
         }
         
-        // Create overlay instead of clearing the page
-        const overlay = document.createElement('div');
-        overlay.id = 'access-denied-overlay';
-        overlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 9999;
+        // Clear the page but keep essential elements
+        document.body.innerHTML = '';
+        document.body.className = 'rxacess-denied-body';
+        document.body.style.cssText = `
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         `;
         
         const container = document.createElement('div');
+        container.id = 'rxacess-denied-container';
+        container.className = 'rxacess-denied-container';
         container.style.cssText = `
             background: white;
             padding: 40px;
@@ -190,26 +173,24 @@
             max-width: 500px;
             width: 90%;
             text-align: center;
-            position: relative;
-            animation: fadeIn 0.3s ease;
         `;
         
         let message = '';
         if (user && user.isGuest) {
             message = `
-                <h2 style="color: #333; margin-bottom: 20px;">🔒 Guest Access Limited</h2>
-                <p style="color: #666; margin-bottom: 15px; line-height: 1.6;">
+                <h2 class="rxacess-denied-title" style="color: #333; margin-bottom: 20px;">🔒 Guest Access Limited</h2>
+                <p class="rxacess-denied-message" style="color: #666; margin-bottom: 15px; line-height: 1.6;">
                     You are currently logged in as <strong>Guest</strong>.
                 </p>
-                <p style="color: #666; margin-bottom: 25px; line-height: 1.6;">
+                <p class="rxacess-denied-submessage" style="color: #666; margin-bottom: 25px; line-height: 1.6;">
                     This content (${contentTitle}) requires additional access rights.
                     Please login with an account that has access to this content.
                 </p>
             `;
         } else {
             message = `
-                <h2 style="color: #f44336; margin-bottom: 20px;">🚫 Access Denied</h2>
-                <p style="color: #666; margin-bottom: 25px; line-height: 1.6;">
+                <h2 class="rxacess-denied-title" style="color: #f44336; margin-bottom: 20px;">🚫 Access Denied</h2>
+                <p class="rxacess-denied-message" style="color: #666; margin-bottom: 25px; line-height: 1.6;">
                     You don't have access to <strong>${contentTitle}</strong>.
                     Please purchase access or contact support.
                 </p>
@@ -218,8 +199,8 @@
         
         container.innerHTML = `
             ${message}
-            <div style="margin-top: 30px;">
-                <button onclick="window.location.href='https://rosankc.com.np'" style="
+            <div class="rxacess-denied-buttons" style="margin-top: 30px;">
+                <button class="rxacess-btn rxacess-btn-home" onclick="window.location.href='https://rosankc.com.np'" style="
                     background: #2196F3;
                     color: white;
                     border: none;
@@ -228,9 +209,8 @@
                     font-size: 16px;
                     cursor: pointer;
                     margin: 0 10px;
-                    transition: opacity 0.3s;
-                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Go to Home</button>
-                <button onclick="window.location.href='https://rosankc.com.np/Resource.html'" style="
+                ">Go to Home</button>
+                <button class="rxacess-btn rxacess-btn-resource" onclick="window.location.href='https://rosankc.com.np/Resource.html'" style="
                     background: #4CAF50;
                     color: white;
                     border: none;
@@ -239,45 +219,11 @@
                     font-size: 16px;
                     cursor: pointer;
                     margin: 0 10px;
-                    transition: opacity 0.3s;
-                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Go to Resource</button>
-                <button onclick="this.closest('#access-denied-overlay').remove()" style="
-                    background: #f44336;
-                    color: white;
-                    border: none;
-                    padding: 12px 30px;
-                    border-radius: 8px;
-                    font-size: 16px;
-                    cursor: pointer;
-                    margin: 10px 0 0 0;
-                    width: 100%;
-                    transition: opacity 0.3s;
-                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Close</button>
+                ">Go to Resource</button>
             </div>
         `;
         
-        // Add animation style if not exists
-        if (!document.getElementById('overlay-styles')) {
-            const style = document.createElement('style');
-            style.id = 'overlay-styles';
-            style.textContent = `
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: scale(0.9); }
-                    to { opacity: 1; transform: scale(1); }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        overlay.appendChild(container);
-        document.body.appendChild(overlay);
-        
-        // Hide main content but don't remove it
-        const mainContent = document.getElementById('mainContent');
-        if (mainContent) {
-            mainContent.style.opacity = '0.3';
-            mainContent.style.pointerEvents = 'none';
-        }
+        document.body.appendChild(container);
     }
 
     // ===================================================================
@@ -285,80 +231,63 @@
     // ===================================================================
 
     function checkAccessAndNotify() {
-        console.log('🔧 Access Control checking...');
+        console.log('🔧 RXACESS Control checking...');
         
         // Get current user
         const currentUser = getCurrentUser();
-        console.log('Current user:', currentUser ? (currentUser.userName || 'User') : 'No user');
+        console.log('RXACESS Current user:', currentUser ? currentUser.userName : 'Guest');
         
         // Get content ID from URL
-        const contentId = getQueryParameter('content') || getQueryParameter('exam');
-        console.log('Content ID:', contentId);
+        const contentId = getQueryParameter('rxacess_content') || getQueryParameter('rxacess_exam') || getQueryParameter('content') || getQueryParameter('exam');
+        console.log('RXACESS Content ID:', contentId);
         
         if (!contentId) {
-            console.log('No content ID found in URL');
-            return true; // Allow access if no content specified
+            console.log('RXACESS: No content ID found in URL');
+            return;
         }
         
         const contentConfig = contentMapping[contentId];
         if (!contentConfig) {
             showNotification('Error', `No configuration for: ${contentId}`, 'error');
-            return true; // Allow access but show error
+            return;
         }
         
         // Check access
         if (!hasAccessToFile(currentUser, contentId)) {
             showAccessDenied(currentUser, contentId, contentConfig.title);
-            
-            // Hide main content if it exists
-            const mainContent = document.getElementById('mainContent');
-            if (mainContent) {
-                mainContent.style.display = 'none';
-            }
-            
-            // Hide login screen if it exists
-            const loginScreen = document.getElementById('loginScreen');
-            if (loginScreen) {
-                loginScreen.style.display = 'none';
-            }
-            
             return false;
         }
         
         // Access granted - show welcome notification
-        if (currentUser) {
-            if (currentUser.isGuest) {
-                showNotification(
-                    'Guest Access',
-                    'You are viewing content with guest access. Login for full access.',
-                    'info'
-                );
-            } else {
-                showNotification(
-                    `Welcome ${currentUser.userName || 'User'}!`,
-                    `You have access to ${contentConfig.title}`,
-                    'success'
-                );
-            }
+        if (currentUser && !currentUser.isGuest) {
+            showNotification(
+                `Welcome ${currentUser.userName}!`,
+                `You have access to ${contentConfig.title}`,
+                'success'
+            );
+        } else if (currentUser && currentUser.isGuest) {
+            showNotification(
+                'Guest Access',
+                'You are viewing content with guest access. Login for full access.',
+                'info'
+            );
         }
         
-        // Show the main content
-        const mainContent = document.getElementById('mainContent');
-        const loginScreen = document.getElementById('loginScreen');
+        // Show the main content (using original IDs as fallback)
+        const mainContent = document.getElementById('mainContent') || document.getElementById('rxacess-mainContent');
+        const loginScreen = document.getElementById('loginScreen') || document.getElementById('rxacess-loginScreen');
         
         if (mainContent) {
             mainContent.style.display = 'block';
-            mainContent.style.opacity = '1';
-            mainContent.style.pointerEvents = 'auto';
-            console.log('Showing mainContent');
+            console.log('RXACESS: Showing mainContent');
         }
         
         if (loginScreen) {
             loginScreen.style.display = 'none';
-            console.log('Hiding loginScreen');
+            console.log('RXACESS: Hiding loginScreen');
         }
         
-        console.log('✅ Access granted for:', contentConfig.title);
+        console.log('✅ RXACESS: Access granted for:', contentConfig.title);
         return true;
     }
 
@@ -376,11 +305,11 @@
     }
 
     // Clear any pending timeouts
-    const existingTimeouts = window.__JS_LINKER_TIMEOUTS;
+    const existingTimeouts = window.__RXACESS_TIMEOUTS;
     if (existingTimeouts) {
         existingTimeouts.forEach(clearTimeout);
     }
-    window.__JS_LINKER_TIMEOUTS = [];
+    window.__RXACESS_TIMEOUTS = [];
 
     // Start when ready
     if (document.readyState === 'loading') {
@@ -388,16 +317,19 @@
     } else {
         // Use setTimeout to ensure it runs after everything else
         const timeoutId = setTimeout(initialize, 100);
-        window.__JS_LINKER_TIMEOUTS.push(timeoutId);
+        window.__RXACESS_TIMEOUTS.push(timeoutId);
     }
 
     // Export function for manual access checking if needed
-    window.checkFileAccess = function(fileId) {
+    window.rxacess_checkFileAccess = function(fileId) {
         const currentUser = getCurrentUser();
         const contentConfig = contentMapping[fileId];
         
         if (!contentConfig) return false;
         return hasAccessToFile(currentUser, fileId);
     };
+
+    // Also keep original for backward compatibility
+    window.checkFileAccess = window.rxacess_checkFileAccess;
 
 })();
