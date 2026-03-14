@@ -1,4 +1,4 @@
-// EXAM-JS-LINKER.js - ACCESS CONTROL ONLY (No JS Loading)
+// RX-ACESS.js - ACCESS CONTROL ONLY
 
 (function() {
     // Prevent multiple executions
@@ -40,7 +40,7 @@
             const userData = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
             return userData ? JSON.parse(userData) : null;
         } catch (e) {
-            console.error('RXACESS: Error parsing user data:', e);
+            console.error('Error parsing user data:', e);
             return null;
         }
     }
@@ -78,7 +78,7 @@
 
     function showNotification(title, message, type = 'info') {
         // Remove existing notification
-        const existing = document.getElementById('rxacess-notification');
+        const existing = document.getElementById('access-notification');
         if (existing) existing.remove();
         
         const colors = {
@@ -89,8 +89,7 @@
         };
         
         const notification = document.createElement('div');
-        notification.id = 'rxacess-notification';
-        notification.className = 'rxacess-notification';
+        notification.id = 'access-notification';
         notification.style.cssText = `
             position: fixed;
             top: 20px;
@@ -102,24 +101,23 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             z-index: 10000;
             max-width: 400px;
-            animation: rxacess-slideIn 0.3s ease;
+            animation: slideIn 0.3s ease;
             font-family: Arial, sans-serif;
         `;
         
         notification.innerHTML = `
-            <strong class="rxacess-notification-title" style="color: ${colors[type] || colors.info}; display: block; margin-bottom: 5px; font-size: 16px;">
+            <strong style="color: ${colors[type] || colors.info}; display: block; margin-bottom: 5px; font-size: 16px;">
                 ${title}
             </strong>
-            <p class="rxacess-notification-message" style="margin: 0; color: #666; font-size: 14px;">${message}</p>
+            <p style="margin: 0; color: #666; font-size: 14px;">${message}</p>
         `;
         
         // Add animation style if not exists
-        if (!document.getElementById('rxacess-styles')) {
+        if (!document.getElementById('notification-styles')) {
             const style = document.createElement('style');
-            style.id = 'rxacess-styles';
-            style.className = 'rxacess-styles';
+            style.id = 'notification-styles';
             style.textContent = `
-                @keyframes rxacess-slideIn {
+                @keyframes slideIn {
                     from { transform: translateX(100%); opacity: 0; }
                     to { transform: translateX(0); opacity: 1; }
                 }
@@ -132,39 +130,40 @@
         // Auto remove after 5 seconds
         setTimeout(() => {
             if (notification.parentNode) {
-                notification.style.animation = 'rxacess-slideIn 0.3s reverse';
+                notification.style.animation = 'slideIn 0.3s reverse';
                 setTimeout(() => notification.remove(), 300);
             }
         }, 5000);
     }
 
     // ===================================================================
-    //                        ACCESS DENIED PAGE
+    //                        ACCESS DENIED OVERLAY
     // ===================================================================
 
     function showAccessDenied(user, fileId, contentTitle) {
         // Don't show if already showing
-        if (document.getElementById('rxacess-denied-container')) {
+        if (document.getElementById('access-denied-overlay')) {
             return;
         }
         
-        // Clear the page but keep essential elements
-        document.body.innerHTML = '';
-        document.body.className = 'rxacess-denied-body';
-        document.body.style.cssText = `
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        // Create overlay - DON'T clear the page
+        const overlay = document.createElement('div');
+        overlay.id = 'access-denied-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         `;
         
         const container = document.createElement('div');
-        container.id = 'rxacess-denied-container';
-        container.className = 'rxacess-denied-container';
         container.style.cssText = `
             background: white;
             padding: 40px;
@@ -173,24 +172,25 @@
             max-width: 500px;
             width: 90%;
             text-align: center;
+            animation: fadeIn 0.3s ease;
         `;
         
         let message = '';
         if (user && user.isGuest) {
             message = `
-                <h2 class="rxacess-denied-title" style="color: #333; margin-bottom: 20px;">🔒 Guest Access Limited</h2>
-                <p class="rxacess-denied-message" style="color: #666; margin-bottom: 15px; line-height: 1.6;">
+                <h2 style="color: #333; margin-bottom: 20px;">🔒 Guest Access Limited</h2>
+                <p style="color: #666; margin-bottom: 15px; line-height: 1.6;">
                     You are currently logged in as <strong>Guest</strong>.
                 </p>
-                <p class="rxacess-denied-submessage" style="color: #666; margin-bottom: 25px; line-height: 1.6;">
+                <p style="color: #666; margin-bottom: 25px; line-height: 1.6;">
                     This content (${contentTitle}) requires additional access rights.
                     Please login with an account that has access to this content.
                 </p>
             `;
         } else {
             message = `
-                <h2 class="rxacess-denied-title" style="color: #f44336; margin-bottom: 20px;">🚫 Access Denied</h2>
-                <p class="rxacess-denied-message" style="color: #666; margin-bottom: 25px; line-height: 1.6;">
+                <h2 style="color: #f44336; margin-bottom: 20px;">🚫 Access Denied</h2>
+                <p style="color: #666; margin-bottom: 25px; line-height: 1.6;">
                     You don't have access to <strong>${contentTitle}</strong>.
                     Please purchase access or contact support.
                 </p>
@@ -199,8 +199,8 @@
         
         container.innerHTML = `
             ${message}
-            <div class="rxacess-denied-buttons" style="margin-top: 30px;">
-                <button class="rxacess-btn rxacess-btn-home" onclick="window.location.href='https://rosankc.com.np'" style="
+            <div style="margin-top: 30px;">
+                <button onclick="window.location.href='https://rosankc.com.np'" style="
                     background: #2196F3;
                     color: white;
                     border: none;
@@ -210,7 +210,7 @@
                     cursor: pointer;
                     margin: 0 10px;
                 ">Go to Home</button>
-                <button class="rxacess-btn rxacess-btn-resource" onclick="window.location.href='https://rosankc.com.np/Resource.html'" style="
+                <button onclick="window.location.href='https://rosankc.com.np/Resource.html'" style="
                     background: #4CAF50;
                     color: white;
                     border: none;
@@ -220,10 +220,46 @@
                     cursor: pointer;
                     margin: 0 10px;
                 ">Go to Resource</button>
+                <button onclick="this.closest('#access-denied-overlay').remove()" style="
+                    background: #f44336;
+                    color: white;
+                    border: none;
+                    padding: 12px 30px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    margin: 10px 0 0 0;
+                    width: 100%;
+                ">Close</button>
             </div>
         `;
         
-        document.body.appendChild(container);
+        // Add animation style if not exists
+        if (!document.getElementById('overlay-styles')) {
+            const style = document.createElement('style');
+            style.id = 'overlay-styles';
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: scale(0.9); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        overlay.appendChild(container);
+        document.body.appendChild(overlay);
+        
+        // Hide the login screen and main content but don't remove them
+        const loginScreen = document.getElementById('loginScreen');
+        const mainContent = document.getElementById('mainContent');
+        
+        if (loginScreen) {
+            loginScreen.style.display = 'none';
+        }
+        if (mainContent) {
+            mainContent.style.display = 'none';
+        }
     }
 
     // ===================================================================
@@ -231,24 +267,49 @@
     // ===================================================================
 
     function checkAccessAndNotify() {
-        console.log('🔧 RXACESS Control checking...');
+        console.log('🔧 Access Control checking...');
         
         // Get current user
         const currentUser = getCurrentUser();
-        console.log('RXACESS Current user:', currentUser ? currentUser.userName : 'Guest');
+        console.log('Current user:', currentUser ? currentUser.userName : 'Guest');
         
         // Get content ID from URL
-        const contentId = getQueryParameter('rxacess_content') || getQueryParameter('rxacess_exam') || getQueryParameter('content') || getQueryParameter('exam');
-        console.log('RXACESS Content ID:', contentId);
+        const contentId = getQueryParameter('content') || getQueryParameter('exam');
+        console.log('Content ID:', contentId);
         
+        // If no content ID, show login screen by default
         if (!contentId) {
-            console.log('RXACESS: No content ID found in URL');
+            console.log('No content ID found in URL - showing login screen');
+            
+            // Show login screen, hide main content
+            const loginScreen = document.getElementById('loginScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (loginScreen) {
+                loginScreen.style.display = 'block';
+            }
+            if (mainContent) {
+                mainContent.classList.add('hidden');
+                mainContent.style.display = 'none';
+            }
             return;
         }
         
         const contentConfig = contentMapping[contentId];
         if (!contentConfig) {
             showNotification('Error', `No configuration for: ${contentId}`, 'error');
+            
+            // Show login screen on error
+            const loginScreen = document.getElementById('loginScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (loginScreen) {
+                loginScreen.style.display = 'block';
+            }
+            if (mainContent) {
+                mainContent.classList.add('hidden');
+                mainContent.style.display = 'none';
+            }
             return;
         }
         
@@ -273,21 +334,22 @@
             );
         }
         
-        // Show the main content (using original IDs as fallback)
-        const mainContent = document.getElementById('mainContent') || document.getElementById('rxacess-mainContent');
-        const loginScreen = document.getElementById('loginScreen') || document.getElementById('rxacess-loginScreen');
+        // Show the main content, hide login screen
+        const mainContent = document.getElementById('mainContent');
+        const loginScreen = document.getElementById('loginScreen');
         
         if (mainContent) {
+            mainContent.classList.remove('hidden');
             mainContent.style.display = 'block';
-            console.log('RXACESS: Showing mainContent');
+            console.log('Showing mainContent');
         }
         
         if (loginScreen) {
             loginScreen.style.display = 'none';
-            console.log('RXACESS: Hiding loginScreen');
+            console.log('Hiding loginScreen');
         }
         
-        console.log('✅ RXACESS: Access granted for:', contentConfig.title);
+        console.log('✅ Access granted for:', contentConfig.title);
         return true;
     }
 
@@ -296,40 +358,38 @@
     // ===================================================================
 
     function initialize() {
-        // Remove any existing event listeners
-        document.removeEventListener('DOMContentLoaded', initialize);
-        window.removeEventListener('load', initialize);
+        console.log('RX-ACESS initializing...');
         
-        // Run access check
-        checkAccessAndNotify();
+        // Wait a bit for other scripts to load
+        setTimeout(function() {
+            // Check if we have the required elements
+            const loginScreen = document.getElementById('loginScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (!loginScreen || !mainContent) {
+                console.error('Required elements not found!');
+                return;
+            }
+            
+            // Run access check
+            checkAccessAndNotify();
+        }, 500); // Half second delay to ensure DOM is ready
     }
 
-    // Clear any pending timeouts
-    const existingTimeouts = window.__RXACESS_TIMEOUTS;
-    if (existingTimeouts) {
-        existingTimeouts.forEach(clearTimeout);
-    }
-    window.__RXACESS_TIMEOUTS = [];
-
-    // Start when ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initialize, { once: true });
+    // Start when page is fully loaded
+    if (document.readyState === 'complete') {
+        initialize();
     } else {
-        // Use setTimeout to ensure it runs after everything else
-        const timeoutId = setTimeout(initialize, 100);
-        window.__RXACESS_TIMEOUTS.push(timeoutId);
+        window.addEventListener('load', initialize);
     }
 
     // Export function for manual access checking if needed
-    window.rxacess_checkFileAccess = function(fileId) {
+    window.checkFileAccess = function(fileId) {
         const currentUser = getCurrentUser();
         const contentConfig = contentMapping[fileId];
         
         if (!contentConfig) return false;
         return hasAccessToFile(currentUser, fileId);
     };
-
-    // Also keep original for backward compatibility
-    window.checkFileAccess = window.rxacess_checkFileAccess;
 
 })();
