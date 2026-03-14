@@ -22,14 +22,6 @@
             title: 'EXAM QUESTIONS',
             description: 'Access to EXAM QUESTIONS content'
         },
-        'file3': {
-            title: 'QR SCANNER',
-            description: 'Access to QR SCANNER functionality'
-        },
-        'file4': {
-            title: 'TEXT TO IMAGE',
-            description: 'Access to TEXT TO IMAGE converter'
-        },
     };
 
     const LOCAL_STORAGE_USER_KEY = 'currentUser';
@@ -46,7 +38,15 @@
     function getCurrentUser() {
         try {
             const userData = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
-            return userData ? JSON.parse(userData) : null;
+            if (!userData) return null;
+            
+            const user = JSON.parse(userData);
+            
+            // Ensure user object has required properties
+            if (!user.access) user.access = [];
+            if (!user.timedAccessConfig) user.timedAccessConfig = {};
+            
+            return user;
         } catch (e) {
             console.error('Error parsing user data:', e);
             return null;
@@ -56,23 +56,32 @@
     function hasAccessToFile(user, fileId) {
         if (!user) return false;
         
+        // Guest user check
         if (user.isGuest) {
             const guestConfig = user.timedAccessConfig ? user.timedAccessConfig[fileId] : null;
             if (guestConfig && guestConfig.startDate && guestConfig.duration) {
-                const startDate = new Date(`${guestConfig.startDate}T00:00:00Z`);
+                const startDate = new Date(guestConfig.startDate);
+                // Ensure date is valid
+                if (isNaN(startDate.getTime())) return false;
+                
                 const timedAccessEnd = startDate.getTime() + (guestConfig.duration * 24 * 60 * 60 * 1000);
                 return timedAccessEnd > Date.now();
             }
             return false;
         }
         
+        // Regular user access check
         if (user.access && Array.isArray(user.access) && user.access.includes(fileId)) {
             return true;
         }
         
+        // Timed access check
         const fileConfig = user.timedAccessConfig ? user.timedAccessConfig[fileId] : null;
         if (fileConfig && fileConfig.startDate && fileConfig.duration) {
-            const startDate = new Date(`${fileConfig.startDate}T00:00:00Z`);
+            const startDate = new Date(fileConfig.startDate);
+            // Ensure date is valid
+            if (isNaN(startDate.getTime())) return false;
+            
             const timedAccessEnd = startDate.getTime() + (fileConfig.duration * 24 * 60 * 60 * 1000);
             return timedAccessEnd > Date.now();
         }
@@ -145,30 +154,34 @@
     }
 
     // ===================================================================
-    //                        ACCESS DENIED PAGE
+    //                        ACCESS DENIED OVERLAY
     // ===================================================================
 
     function showAccessDenied(user, fileId, contentTitle) {
         // Don't show if already showing
-        if (document.getElementById('access-denied-container')) {
+        if (document.getElementById('access-denied-overlay')) {
             return;
         }
         
-        // Clear the page but keep essential elements
-        document.body.innerHTML = '';
-        document.body.style.cssText = `
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        // Create overlay instead of clearing the page
+        const overlay = document.createElement('div');
+        overlay.id = 'access-denied-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 9999;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         `;
         
         const container = document.createElement('div');
-        container.id = 'access-denied-container';
         container.style.cssText = `
             background: white;
             padding: 40px;
@@ -177,6 +190,8 @@
             max-width: 500px;
             width: 90%;
             text-align: center;
+            position: relative;
+            animation: fadeIn 0.3s ease;
         `;
         
         let message = '';
@@ -213,7 +228,8 @@
                     font-size: 16px;
                     cursor: pointer;
                     margin: 0 10px;
-                ">Go to Home</button>
+                    transition: opacity 0.3s;
+                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Go to Home</button>
                 <button onclick="window.location.href='https://rosankc.com.np/Resource.html'" style="
                     background: #4CAF50;
                     color: white;
@@ -223,11 +239,45 @@
                     font-size: 16px;
                     cursor: pointer;
                     margin: 0 10px;
-                ">Go to Resource</button>
+                    transition: opacity 0.3s;
+                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Go to Resource</button>
+                <button onclick="this.closest('#access-denied-overlay').remove()" style="
+                    background: #f44336;
+                    color: white;
+                    border: none;
+                    padding: 12px 30px;
+                    border-radius: 8px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    margin: 10px 0 0 0;
+                    width: 100%;
+                    transition: opacity 0.3s;
+                " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Close</button>
             </div>
         `;
         
-        document.body.appendChild(container);
+        // Add animation style if not exists
+        if (!document.getElementById('overlay-styles')) {
+            const style = document.createElement('style');
+            style.id = 'overlay-styles';
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: scale(0.9); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        overlay.appendChild(container);
+        document.body.appendChild(overlay);
+        
+        // Hide main content but don't remove it
+        const mainContent = document.getElementById('mainContent');
+        if (mainContent) {
+            mainContent.style.opacity = '0.3';
+            mainContent.style.pointerEvents = 'none';
+        }
     }
 
     // ===================================================================
@@ -239,7 +289,7 @@
         
         // Get current user
         const currentUser = getCurrentUser();
-        console.log('Current user:', currentUser ? currentUser.userName : 'Guest');
+        console.log('Current user:', currentUser ? (currentUser.userName || 'User') : 'No user');
         
         // Get content ID from URL
         const contentId = getQueryParameter('content') || getQueryParameter('exam');
@@ -247,34 +297,49 @@
         
         if (!contentId) {
             console.log('No content ID found in URL');
-            return;
+            return true; // Allow access if no content specified
         }
         
         const contentConfig = contentMapping[contentId];
         if (!contentConfig) {
             showNotification('Error', `No configuration for: ${contentId}`, 'error');
-            return;
+            return true; // Allow access but show error
         }
         
         // Check access
         if (!hasAccessToFile(currentUser, contentId)) {
             showAccessDenied(currentUser, contentId, contentConfig.title);
+            
+            // Hide main content if it exists
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                mainContent.style.display = 'none';
+            }
+            
+            // Hide login screen if it exists
+            const loginScreen = document.getElementById('loginScreen');
+            if (loginScreen) {
+                loginScreen.style.display = 'none';
+            }
+            
             return false;
         }
         
         // Access granted - show welcome notification
-        if (currentUser && !currentUser.isGuest) {
-            showNotification(
-                `Welcome ${currentUser.userName}!`,
-                `You have access to ${contentConfig.title}`,
-                'success'
-            );
-        } else if (currentUser && currentUser.isGuest) {
-            showNotification(
-                'Guest Access',
-                'You are viewing content with guest access. Login for full access.',
-                'info'
-            );
+        if (currentUser) {
+            if (currentUser.isGuest) {
+                showNotification(
+                    'Guest Access',
+                    'You are viewing content with guest access. Login for full access.',
+                    'info'
+                );
+            } else {
+                showNotification(
+                    `Welcome ${currentUser.userName || 'User'}!`,
+                    `You have access to ${contentConfig.title}`,
+                    'success'
+                );
+            }
         }
         
         // Show the main content
@@ -283,6 +348,8 @@
         
         if (mainContent) {
             mainContent.style.display = 'block';
+            mainContent.style.opacity = '1';
+            mainContent.style.pointerEvents = 'auto';
             console.log('Showing mainContent');
         }
         
