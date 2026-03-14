@@ -25,7 +25,10 @@ const allUsers = [
         accountType: "PARTNER",
         password: "RX9821948199",
         access: ["file1", "file2", "file3", "file4"],
-        timedAccessConfig: {},
+        timedAccessConfig: {
+            //"file1": { startDate: "2026-03-09", duration: 23 },
+           // "file2": { startDate: "2026-03-09", duration: 23 },
+        },
         dateOfBirth: "2005-11-17",
     },
 ];
