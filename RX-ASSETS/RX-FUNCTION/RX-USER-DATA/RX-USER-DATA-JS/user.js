@@ -10,7 +10,7 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "ADMIN",
         password: "Ro&@n2061",
-        access: ["file1", "file2", "file3", "file4", ],
+        access: ["file1", "file2", "file3", "file4"],
         timedAccessConfig: {},
         dateOfBirth: "2004-07-25",
     },
@@ -24,8 +24,8 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "PARTNER",
         password: "RX9821948199",
-        access: ["file1", "file2", "file3", "file4", ],
-        timedAccessConfig: { },
+        access: ["file1", "file2", "file3", "file4"],
+        timedAccessConfig: {},
         dateOfBirth: "2005-11-17",
     },
 ];
@@ -44,7 +44,7 @@ const contentCards = [
         id: "file2", 
         title: "F2- KOREAN EXAM PRACTICE", 
         description: "You can practice exam every time auto generate new questions randomly.", 
-        link: "KR-EXAM.html", 
+        link: "KR-EXAM.html?exam=file2", 
         icon: "fas fa-book",
         prices: { default: "Rs. 999/Month" }
     },
@@ -54,7 +54,7 @@ const contentCards = [
         description: "", 
         link: "RX-S-QR.html?exam=file3", 
         icon: "fas fa-pencil",
-        prices: { default: "Rs. 100",}
+        prices: { default: "Rs. 100" }
     },
     {   
         id: "file4", 
@@ -62,23 +62,677 @@ const contentCards = [
         description: "LOGIN PASSWORD = RX2061", 
         link: "RX-IMG-CONVERTER.html?exam=file4", 
         icon: "fas fa-book",
-        prices: { default: "Rs. 100",}
+        prices: { default: "Rs. 100" }
     },
-    
 ];
 
 // Developer-Managed Stores (Fixed - Cannot be edited)
 const stores = [
     {   id: "store_1", 
         name: "LEKHA-PADI", 
-        content: ["file1",] },
+        content: ["file1"] },
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 
-        content: ["file2",] },
+        content: ["file2"] },
     {   id: "store_3", 
         name: "WEB-SOFTWARE", 
-        content: ["file3","file4"], },
+        content: ["file3", "file4"] },
 ];
+
+// Formspree endpoint
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xzznawep';
+
+// ===== NOTIFICATION MODULE =====
+const NotificationManager = (() => {
+    let timeoutId = null;
+    
+    const showNotification = (title, message, type = "warning", duration = 5000) => {
+        // Try to find notification element
+        let notification = document.getElementById('guest-notification');
+        
+        // If notification element doesn't exist, create it
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'guest-notification';
+            notification.className = 'guest-notification';
+            notification.innerHTML = `
+                <i class="fas fa-info-circle"></i>
+                <div class="notification-content">
+                    <div id="notification-title" class="notification-title">${title}</div>
+                    <div id="notification-message" class="notification-message">${message}</div>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            // Add styles for notification
+            const style = document.createElement('style');
+            style.textContent = `
+                .guest-notification {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background: #1a1a2e;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                    transform: translateX(400px);
+                    transition: transform 0.3s ease;
+                    z-index: 10000;
+                    border-left: 4px solid;
+                    max-width: 350px;
+                }
+                .guest-notification.show {
+                    transform: translateX(0);
+                }
+                .guest-notification i {
+                    font-size: 24px;
+                }
+                .notification-content {
+                    flex: 1;
+                }
+                .notification-title {
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                    font-size: 16px;
+                }
+                .notification-message {
+                    font-size: 14px;
+                    opacity: 0.9;
+                }
+                @media (max-width: 480px) {
+                    .guest-notification {
+                        bottom: 10px;
+                        right: 10px;
+                        left: 10px;
+                        max-width: none;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        const icon = notification.querySelector('i');
+        const notificationTitle = document.getElementById('notification-title');
+        const notificationMessage = document.getElementById('notification-message');
+
+        notification.classList.remove('show');
+        notification.style.borderLeftColor = '';
+
+        if (notificationTitle) notificationTitle.textContent = title;
+        if (notificationMessage) notificationMessage.textContent = message;
+
+        const colors = {
+            warning: '#fbbf24',
+            success: '#4ade80',
+            info: '#64ffda',
+            danger: '#f87171'
+        };
+
+        const icons = {
+            warning: 'fa-info-circle',
+            success: 'fa-check-circle',
+            info: 'fa-info-circle',
+            danger: 'fa-exclamation-circle'
+        };
+
+        if (icon) {
+            icon.className = `fas ${icons[type] || 'fa-info-circle'}`;
+            icon.style.color = colors[type] || colors.info;
+        }
+        notification.style.borderLeftColor = colors[type] || colors.info;
+        notification.classList.add('show');
+
+        if (timeoutId) clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            notification.classList.remove('show');
+        }, duration);
+    };
+
+    const hideNotification = () => {
+        const notification = document.getElementById('guest-notification');
+        if (notification) {
+            notification.classList.remove('show');
+        }
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+        }
+    };
+
+    return { showNotification, hideNotification };
+})();
+
+// ===== PAYMENT MODULE =====
+const PaymentManager = (() => {
+    // Create the payment modal HTML dynamically
+    const createPaymentModal = () => {
+        if (document.getElementById('rx-payment-modal')) return;
+
+        const modalHTML = `
+            <div id="rx-payment-modal" class="rx-modal" style="display: none;">
+                <div class="rx-modal-content">
+                    <div class="rx-modal-header">
+                        <h2 id="rx-modal-title">Purchase Access</h2>
+                        <span class="rx-close" onclick="PaymentManager.closeModal()">&times;</span>
+                    </div>
+                    
+                    <div class="rx-modal-body">
+                        <form id="rx-payment-form">
+                            <input type="hidden" name="_subject" id="rx-form-subject" value="New Purchase Request">
+                            <input type="hidden" name="_template" value="table">
+                            <input type="hidden" name="_gotcha" style="display:none !important">
+                            
+                            <div class="rx-section">
+                                <h3><i class="fas fa-file-alt"></i> File Information</h3>
+                                <div class="rx-form-grid">
+                                    <div class="rx-form-group">
+                                        <label>File Name</label>
+                                        <input type="text" id="rx-file-name" name="file_name" readonly class="rx-auto-field">
+                                    </div>
+                                    <div class="rx-form-group">
+                                        <label>Price</label>
+                                        <input type="text" id="rx-file-price" name="file_price" readonly class="rx-auto-field">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="rx-section">
+                                <h3><i class="fas fa-user"></i> Your Information</h3>
+                                <div class="rx-form-grid">
+                                    <div class="rx-form-group">
+                                        <label>Full Name</label>
+                                        <input type="text" id="rx-user-name" name="user_name" readonly class="rx-auto-field">
+                                    </div>
+                                    <div class="rx-form-group">
+                                        <label>User ID</label>
+                                        <input type="text" id="rx-user-id" name="user_id" readonly class="rx-auto-field">
+                                    </div>
+                                    <div class="rx-form-group">
+                                        <label>Email</label>
+                                        <input type="email" id="rx-user-email" name="user_email" readonly class="rx-auto-field">
+                                    </div>
+                                    <div class="rx-form-group">
+                                        <label>Phone</label>
+                                        <input type="text" id="rx-user-phone" name="user_phone" readonly class="rx-auto-field">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="rx-section">
+                                <h3><i class="fas fa-exchange-alt"></i> Transaction Details</h3>
+                                <div class="rx-form-grid">
+                                    <div class="rx-form-group">
+                                        <label>Transaction Type</label>
+                                        <input type="text" id="rx-transaction-type" name="transaction_type" readonly class="rx-auto-field">
+                                    </div>
+                                    <div class="rx-form-group">
+                                        <label>Date</label>
+                                        <input type="text" id="rx-transaction-date" name="transaction_date" readonly class="rx-auto-field">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="rx-section">
+                                <h3><i class="fas fa-pencil-alt"></i> Additional Notes</h3>
+                                <div class="rx-form-group">
+                                    <label for="rx-remark">Remark (Optional)</label>
+                                    <textarea id="rx-remark" name="remark" rows="4" placeholder="Enter any special requests or additional information..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div id="rx-response-message" class="rx-response-message" style="display: none;"></div>
+                            
+                            <div class="rx-form-actions">
+                                <button type="submit" id="rx-submit-btn" class="rx-btn rx-btn-submit">
+                                    <i class="fas fa-paper-plane"></i> Submit Request
+                                </button>
+                                <button type="button" class="rx-btn rx-btn-cancel" onclick="PaymentManager.closeModal()">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        // Add modal styles
+        addPaymentStyles();
+    };
+
+    // Add payment styles
+    const addPaymentStyles = () => {
+        if (document.getElementById('rx-payment-styles')) return;
+
+        const style = document.createElement('style');
+        style.id = 'rx-payment-styles';
+        style.textContent = `
+            .rx-modal {
+                display: none;
+                position: fixed;
+                z-index: 999999;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.9);
+                backdrop-filter: blur(10px);
+                animation: rxFadeIn 0.3s ease;
+            }
+
+            @keyframes rxFadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
+            .rx-modal-content {
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+                color: #fff;
+                margin: 20px auto;
+                padding: 0;
+                border-radius: 20px;
+                width: 95%;
+                max-width: 700px;
+                max-height: 90vh;
+                overflow-y: auto;
+                position: relative;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                animation: rxSlideIn 0.4s ease;
+            }
+
+            @keyframes rxSlideIn {
+                from {
+                    transform: translateY(-50px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
+            }
+
+            .rx-modal-header {
+                padding: 25px 30px;
+                border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+                position: relative;
+                background: rgba(0, 0, 0, 0.2);
+                border-radius: 20px 20px 0 0;
+            }
+
+            .rx-modal-header h2 {
+                margin: 0;
+                font-size: 1.8rem;
+                font-weight: 600;
+                color: #fff;
+            }
+
+            .rx-close {
+                position: absolute;
+                right: 25px;
+                top: 20px;
+                color: #fff;
+                font-size: 32px;
+                font-weight: bold;
+                cursor: pointer;
+                opacity: 0.7;
+                transition: all 0.3s ease;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .rx-close:hover {
+                opacity: 1;
+                background: rgba(255, 255, 255, 0.2);
+                transform: rotate(90deg);
+            }
+
+            .rx-modal-body {
+                padding: 30px;
+            }
+
+            .rx-section {
+                background: rgba(255, 255, 255, 0.05);
+                border-radius: 15px;
+                padding: 20px;
+                margin-bottom: 25px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .rx-section h3 {
+                margin: 0 0 20px 0;
+                font-size: 1.2rem;
+                color: #4facfe;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding-bottom: 12px;
+            }
+
+            .rx-section h3 i {
+                font-size: 1.3rem;
+                color: #00f2fe;
+            }
+
+            .rx-form-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            .rx-form-group {
+                margin-bottom: 15px;
+            }
+
+            .rx-form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 0.85rem;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .rx-form-group input,
+            .rx-form-group textarea {
+                width: 100%;
+                padding: 12px 15px;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.05);
+                color: #fff;
+                font-size: 0.95rem;
+                transition: all 0.3s ease;
+                box-sizing: border-box;
+            }
+
+            .rx-form-group input:focus,
+            .rx-form-group textarea:focus {
+                outline: none;
+                border-color: #4facfe;
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .rx-form-group input[readonly] {
+                background: rgba(255, 255, 255, 0.02);
+                border-color: rgba(255, 255, 255, 0.05);
+                color: rgba(255, 255, 255, 0.7);
+                cursor: default;
+            }
+
+            .rx-form-group textarea {
+                resize: vertical;
+                min-height: 100px;
+                font-family: inherit;
+            }
+
+            .rx-response-message {
+                padding: 15px 20px;
+                border-radius: 12px;
+                margin: 20px 0;
+                text-align: center;
+                font-weight: 500;
+            }
+
+            .rx-response-message.success {
+                background: rgba(76, 175, 80, 0.2);
+                border: 2px solid #4CAF50;
+                color: #fff;
+            }
+
+            .rx-response-message.error {
+                background: rgba(244, 67, 54, 0.2);
+                border: 2px solid #f44336;
+                color: #fff;
+            }
+
+            .rx-response-message i {
+                margin-right: 10px;
+                font-size: 1.2rem;
+            }
+
+            .rx-form-actions {
+                display: flex;
+                gap: 15px;
+                margin-top: 30px;
+            }
+
+            .rx-btn {
+                flex: 1;
+                padding: 15px 20px;
+                border: none;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .rx-btn i {
+                font-size: 1.1rem;
+            }
+
+            .rx-btn-submit {
+                background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+                color: #fff;
+            }
+
+            .rx-btn-submit:hover:not(:disabled) {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(79, 172, 254, 0.5);
+            }
+
+            .rx-btn-submit:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+            .rx-btn-cancel {
+                background: rgba(255, 255, 255, 0.1);
+                color: #fff;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .rx-btn-cancel:hover {
+                background: rgba(255, 255, 255, 0.15);
+                transform: translateY(-3px);
+            }
+
+            .fa-spinner {
+                animation: rxSpin 1s linear infinite;
+            }
+
+            @keyframes rxSpin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+
+            @media (max-width: 768px) {
+                .rx-modal-content {
+                    margin: 10px auto;
+                    width: 98%;
+                }
+                .rx-modal-header { padding: 20px; }
+                .rx-modal-header h2 { font-size: 1.4rem; }
+                .rx-modal-body { padding: 20px; }
+                .rx-section { padding: 15px; }
+                .rx-form-grid { grid-template-columns: 1fr; }
+                .rx-form-actions { flex-direction: column; }
+            }
+        `;
+        document.head.appendChild(style);
+    };
+
+    // Get price for user
+    const getPriceForUser = (card, user) => {
+        if (!card || !card.prices) return "Not for sale";
+        if (user && card.prices[user.id]) return card.prices[user.id];
+        return card.prices.default || "Contact for price";
+    };
+
+    // Format current date
+    const getCurrentDate = () => {
+        const now = new Date();
+        return now.toLocaleString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+        });
+    };
+
+    // Show purchase modal
+    const showPurchaseModal = (contentId, isRenewal = false) => {
+        createPaymentModal();
+
+        const card = contentCards.find(c => c.id === contentId);
+        if (!card) {
+            NotificationManager.showNotification("Error", "Content not found!", "danger", 4000);
+            return false;
+        }
+
+        const currentUser = UserManager.getCurrentUser();
+        if (!currentUser) {
+            NotificationManager.showNotification("Error", "Please login first!", "warning", 4000);
+            return false;
+        }
+
+        const modal = document.getElementById('rx-payment-modal');
+        const title = document.getElementById('rx-modal-title');
+        const fileName = document.getElementById('rx-file-name');
+        const filePrice = document.getElementById('rx-file-price');
+        const userName = document.getElementById('rx-user-name');
+        const userId = document.getElementById('rx-user-id');
+        const userEmail = document.getElementById('rx-user-email');
+        const userPhone = document.getElementById('rx-user-phone');
+        const transactionType = document.getElementById('rx-transaction-type');
+        const transactionDate = document.getElementById('rx-transaction-date');
+        const remark = document.getElementById('rx-remark');
+        const subject = document.getElementById('rx-form-subject');
+
+        const price = getPriceForUser(card, currentUser);
+
+        if (title) title.textContent = isRenewal ? `Renew Access: ${card.title}` : `Purchase Access: ${card.title}`;
+        if (fileName) fileName.value = card.title;
+        if (filePrice) filePrice.value = price;
+        if (userName) userName.value = currentUser.fullName || 'N/A';
+        if (userId) userId.value = currentUser.id || 'N/A';
+        if (userEmail) userEmail.value = currentUser.email || 'N/A';
+        if (userPhone) userPhone.value = currentUser.phone || 'N/A';
+        if (transactionType) transactionType.value = isRenewal ? 'Renewal Request' : 'Purchase Request';
+        if (transactionDate) transactionDate.value = getCurrentDate();
+        if (remark) remark.value = '';
+        if (subject) subject.value = `${isRenewal ? 'Renewal' : 'Purchase'} Request - ${card.title} - ${currentUser.userName}`;
+
+        const form = document.getElementById('rx-payment-form');
+        if (form) {
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                await handleFormSubmit(e, card, isRenewal);
+            };
+        }
+
+        if (modal) {
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        return true;
+    };
+
+    // Handle form submission
+    const handleFormSubmit = async (e, card, isRenewal) => {
+        const form = e.target;
+        const submitBtn = document.getElementById('rx-submit-btn');
+        const responseMessage = document.getElementById('rx-response-message');
+        const remark = document.getElementById('rx-remark');
+        const currentUser = UserManager.getCurrentUser();
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        }
+
+        if (responseMessage) {
+            responseMessage.style.display = 'none';
+        }
+
+        try {
+            const formData = new FormData(form);
+            formData.append('submitted_at', new Date().toISOString());
+            formData.append('content_id', card.id);
+
+            const response = await fetch(FORMSPREE_ENDPOINT, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (response.ok) {
+                if (responseMessage) {
+                    responseMessage.style.display = 'block';
+                    responseMessage.className = 'rx-response-message success';
+                    responseMessage.innerHTML = `
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Request Sent Successfully!</strong><br>
+                        We'll contact you at ${currentUser?.email || 'your email'} within 24 hours.
+                    `;
+                }
+                if (remark) remark.value = '';
+                setTimeout(() => closeModal(), 4000);
+            } else {
+                throw new Error('Submission failed');
+            }
+        } catch (error) {
+            if (responseMessage) {
+                responseMessage.style.display = 'block';
+                responseMessage.className = 'rx-response-message error';
+                responseMessage.innerHTML = `
+                    <i class="fas fa-exclamation-circle"></i>
+                    <strong>Submission Failed!</strong><br>
+                    Please try again or email rkc242855@gmail.com
+                `;
+            }
+        } finally {
+            setTimeout(() => {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Request';
+                }
+            }, 3000);
+        }
+    };
+
+    // Close modal
+    const closeModal = () => {
+        const modal = document.getElementById('rx-payment-modal');
+        if (modal) {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    };
+
+    return {
+        getPriceForUser,
+        showPurchaseModal,
+        closeModal
+    };
+})();
 
 // ===== USER MANAGEMENT MODULE =====
 const UserManager = (() => {
@@ -127,13 +781,12 @@ const UserManager = (() => {
         return getUserData();
     };
 
-    // Update UI with user data (for USER.html)
+    // Update UI with user data
     const updateUIWithUserData = (user) => {
         // Check if we're on USER.html page
         const isUserPage = document.getElementById('profileSection') !== null;
         
         if (isUserPage) {
-            // Update USER.html elements with correct IDs
             const profileImg = document.getElementById('profile-img');
             const profileFullname = document.getElementById('profile-fullname');
             const profileUsername = document.getElementById('profile-username');
@@ -149,7 +802,6 @@ const UserManager = (() => {
             if (profileImg) profileImg.src = user.image || 'RX-ASSETS/RX-IMAGE/RX-USER/default-profile.png';
             if (profileFullname) profileFullname.textContent = user.fullName || 'N/A';
             if (profileUsername) profileUsername.textContent = '@' + (user.userName || 'username');
-            
             if (dropdownName) dropdownName.textContent = user.fullName || 'N/A';
             if (username) username.textContent = user.userName || 'N/A';
             if (dropdownEmail) dropdownEmail.textContent = user.email || 'N/A';
@@ -159,7 +811,6 @@ const UserManager = (() => {
             if (dropdownUserId) dropdownUserId.textContent = user.id || 'N/A';
             if (detailDOB) detailDOB.textContent = (user.dateOfBirth && user.dateOfBirth !== 'null') ? user.dateOfBirth : 'Not set';
         } else {
-            // Update dashboard elements
             const usernameEl = document.getElementById('username');
             const profileImgEl = document.getElementById('profile-img');
             const dropdownImgEl = document.getElementById('dropdown-img');
@@ -181,16 +832,13 @@ const UserManager = (() => {
             if (dropdownAccountTypeEl) dropdownAccountTypeEl.textContent = user.accountType;
         }
 
-        // Show/hide admin settings link
         const adminSettingsLink = document.getElementById('admin-settings-link');
         if (adminSettingsLink) {
             adminSettingsLink.style.display = user.accountType === "ADMIN" ? 'flex' : 'none';
         }
         
-        // Show/hide login/profile sections on USER.html
         const loginSection = document.getElementById('loginSection');
         const profileSection = document.getElementById('profileSection');
-        
         if (loginSection && profileSection) {
             if (user && !user.isGuest) {
                 loginSection.style.display = 'none';
@@ -209,30 +857,20 @@ const UserManager = (() => {
             saveUserData(foundUser);
             updateUIWithUserData(foundUser);
 
-            // Clear login form fields
             const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
             if (emailInput) emailInput.value = '';
             if (passwordInput) passwordInput.value = '';
 
-            // Show notification
             const loginStatus = document.getElementById('loginStatus');
             if (loginStatus) {
                 loginStatus.textContent = 'Login successful!';
                 loginStatus.className = 'login-status success';
             }
             
-            if (typeof NotificationManager !== 'undefined') {
-                if (foundUser.accountType === "ADMIN") {
-                    NotificationManager.showNotification("Welcome Admin!", "You have successfully logged in as an administrator.", "success", 8000);
-                } else {
-                    NotificationManager.showNotification("Welcome Back!", `You have successfully logged in as ${foundUser.fullName}.`, "success");
-                }
-            }
-
+            NotificationManager.showNotification("Welcome Back!", `You have successfully logged in as ${foundUser.fullName}.`, "success");
             return true;
         } else {
-            // Show error
             const loginStatus = document.getElementById('loginStatus');
             if (loginStatus) {
                 loginStatus.textContent = 'Invalid email or password';
@@ -249,30 +887,23 @@ const UserManager = (() => {
         const guestUser = createGuestUser();
         saveUserData(guestUser);
         updateUIWithUserData(guestUser);
-        
-        if (typeof NotificationManager !== 'undefined') {
-            NotificationManager.showNotification("Logged Out", "You have been logged out. Please login to access your account.", "warning");
-        }
+        NotificationManager.showNotification("Logged Out", "You have been logged out. Please login to access your account.", "warning");
     };
 
     // Initialize user state
     const initUser = () => {
         let user = getUserData();
-
         if (!user || user.isGuest) { 
             user = createGuestUser();
             saveUserData(user);
-            
-            // Only show guest notification if user has never logged in before and NotificationManager exists
-            if (!hasUserLoggedInBefore() && typeof NotificationManager !== 'undefined') {
+            if (!hasUserLoggedInBefore()) {
                 NotificationManager.showNotification("You are logged in as Guest", "To access your real account, please login", "warning");
             }
         } else {
-            if (!hasUserLoggedInBefore() && typeof NotificationManager !== 'undefined') {
+            if (!hasUserLoggedInBefore()) {
                 NotificationManager.showNotification("Welcome Back!", `You are logged in as ${user.fullName}.`, "success", 3000);
             }
         }
-
         updateUIWithUserData(user);
     };
 
@@ -280,7 +911,6 @@ const UserManager = (() => {
     const hasAccessToFile = (userId, fileId) => {
         const user = allUsers.find(u => u.id === userId);
         if (!user) return false;
-        
         if (user.access && user.access.includes(fileId)) return true;
         
         const fileConfig = user.timedAccessConfig ? user.timedAccessConfig[fileId] : null;
@@ -289,7 +919,6 @@ const UserManager = (() => {
             const timedAccessEnd = startDate.getTime() + (fileConfig.duration * 24 * 60 * 60 * 1000);
             return timedAccessEnd > Date.now();
         }
-        
         return false;
     };
 
@@ -297,7 +926,6 @@ const UserManager = (() => {
     const getRemainingTime = (userId, fileId) => {
         const user = allUsers.find(u => u.id === userId);
         if (!user) return 0;
-        
         const fileConfig = user.timedAccessConfig ? user.timedAccessConfig[fileId] : null;
         if (fileConfig && fileConfig.startDate && fileConfig.duration) {
             const startDate = new Date(`${fileConfig.startDate}T00:00:00Z`);
@@ -305,7 +933,6 @@ const UserManager = (() => {
             const remaining = timedAccessEnd - Date.now();
             return remaining > 0 ? remaining : 0;
         }
-        
         return 0;
     };
 
@@ -317,76 +944,6 @@ const UserManager = (() => {
         hasUserLoggedInBefore,
         hasAccessToFile,
         getRemainingTime
-    };
-})();
-
-// ===== NOTIFICATION MODULE =====
-const NotificationManager = (() => {
-    let timeoutId = null;
-    
-    // Show notification
-    const showNotification = (title, message, type = "warning", duration = 5000) => {
-        const notification = document.getElementById('guest-notification');
-        if (!notification) {
-            // Fallback to alert if notification element doesn't exist
-            console.log(`${title}: ${message}`);
-            alert(`${title}: ${message}`);
-            return;
-        }
-        
-        const icon = notification.querySelector('i');
-        const notificationTitle = document.getElementById('notification-title');
-        const notificationMessage = document.getElementById('notification-message');
-
-        notification.classList.remove('show');
-        notification.style.borderLeftColor = '';
-
-        if (notificationTitle) notificationTitle.textContent = title;
-        if (notificationMessage) notificationMessage.textContent = message;
-
-        if (type === "warning") {
-            if (icon) icon.className = 'fas fa-info-circle';
-            if (icon) icon.style.color = 'var(--warning)';
-            notification.style.borderLeftColor = 'var(--warning)';
-        } else if (type === "success") {
-            if (icon) icon.className = 'fas fa-check-circle';
-            if (icon) icon.style.color = 'var(--success)';
-            notification.style.borderLeftColor = 'var(--success)';
-        } else if (type === "info") {
-            if (icon) icon.className = 'fas fa-info-circle';
-            if (icon) icon.style.color = 'var(--accent)';
-            notification.style.borderLeftColor = 'var(--accent)';
-        } else if (type === "danger") {
-            if (icon) icon.className = 'fas fa-exclamation-circle';
-            if (icon) icon.style.color = '#f87171';
-            notification.style.borderLeftColor = '#f87171';
-        }
-
-        notification.classList.add('show');
-
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-        }
-        timeoutId = setTimeout(() => {
-            hideNotification();
-        }, duration);
-    };
-
-    // Hide notification
-    const hideNotification = () => {
-        const notification = document.getElementById('guest-notification');
-        if (notification) {
-            notification.classList.remove('show');
-        }
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-            timeoutId = null;
-        }
-    };
-
-    return {
-        showNotification,
-        hideNotification
     };
 })();
 
@@ -444,7 +1001,6 @@ const AdminPanelManager = (() => {
         if (accountTypeEl) accountTypeEl.textContent = user.accountType;
         if (profileImgEl) profileImgEl.src = user.image;
 
-        // Update selected class in sidebar
         document.querySelectorAll('#member-list li').forEach(item => {
             item.classList.remove('selected');
             if (item.dataset.userId === userId) {
@@ -470,9 +1026,7 @@ const AdminPanelManager = (() => {
             const modal = document.getElementById('admin-panel-modal');
             if (modal) modal.style.display = 'block';
         } else {
-            if (typeof NotificationManager !== 'undefined') {
-                NotificationManager.showNotification("Access Denied", "You do not have administrative privileges.", "danger", 4000);
-            }
+            NotificationManager.showNotification("Access Denied", "You do not have administrative privileges.", "danger", 4000);
         }
     };
 
@@ -565,11 +1119,11 @@ const StoreManager = (() => {
             } else {
                 if (isExpired) {
                     detailsHtml = `<p class="time-limit-expired">Your timed access has expired.</p>`;
-                    buttonHtml = `<button class="purchase-btn" onclick="requestAccess('${card.id}', true)"><i class="fas fa-envelope"></i> Request Renewal</button>`;
+                    buttonHtml = `<button class="purchase-btn" onclick="handlePurchaseRequest('${card.id}', true)"><i class="fas fa-envelope"></i> Request Renewal</button>`;
                 } else {
-                    const price = getPriceForUser(card, currentUser);
+                    const price = PaymentManager.getPriceForUser(card, currentUser);
                     detailsHtml = `<p>Purchase to get access.</p><div class="price">${price}</div>`;
-                    buttonHtml = `<button class="purchase-btn" onclick="requestAccess('${card.id}', false)"><i class="fas fa-shopping-cart"></i> Purchase Access</button>`;
+                    buttonHtml = `<button class="purchase-btn" onclick="handlePurchaseRequest('${card.id}', false)"><i class="fas fa-shopping-cart"></i> Purchase Access</button>`;
                 }
             }
             cardElement.innerHTML = `<i class="${card.icon || 'fas fa-file'} card-icon"></i><h3>${card.title}</h3>${detailsHtml}${!hasAccess ? '<div class="lock-icon"><i class="fas fa-lock"></i></div>' : ''}${buttonHtml}`;
@@ -577,12 +1131,6 @@ const StoreManager = (() => {
         });
 
         startCountdownTimers();
-    };
-
-    const getPriceForUser = (card, user) => {
-        if (!card.prices) return "Not for sale";
-        if (user && card.prices[user.id]) return card.prices[user.id];
-        return card.prices.default || "Contact for price";
     };
 
     const startCountdownTimers = () => {
@@ -612,52 +1160,11 @@ const StoreManager = (() => {
     };
 
     const prepareAndLaunchExam = (examId, examUrl) => {
-        if (!examId || !examUrl) {
-            console.error("Cannot launch exam: Missing examId or examUrl.");
-            return;
-        }
-        console.log(`Preparing to launch exam. ID: ${examId}`);
+        if (!examId || !examUrl) return;
         localStorage.setItem('selectedExamId', examId);
         window.location.href = examUrl;
     };
 
-    const requestAccess = (contentId, isRenewal) => {
-        const card = contentCards.find(c => c.id === contentId);
-        if (!card) {
-            console.error("Card data not found for ID:", contentId);
-            return;
-        }
-
-        const modalTitleEl = document.getElementById('modalTitle');
-        const modalPriceEl = document.getElementById('modalPrice');
-        const facebookLink = document.getElementById('facebookContactLink');
-        const emailLink = document.getElementById('emailContactLink');
-
-        if (!modalTitleEl || !modalPriceEl || !facebookLink || !emailLink) {
-            alert("Error: The contact modal HTML is missing or has incorrect IDs. Please check the dashboard file.");
-            return;
-        }
-
-        const price = getPriceForUser(card, UserManager.getCurrentUser());
-        let subject = '';
-
-        if (isRenewal) {
-            modalTitleEl.textContent = `Request Renewal: ${card.title}`;
-            modalPriceEl.textContent = `Please contact us to discuss renewal options.`;
-            subject = `Renewal Inquiry for ${card.title} (User: ${UserManager.getCurrentUser().userName})`;
-        } else {
-            modalTitleEl.textContent = `Purchase Access: ${card.title}`;
-            modalPriceEl.textContent = `Price: ${price}`;
-            subject = `Purchase Inquiry for ${card.title} (User: ${UserManager.getCurrentUser().userName})`;
-        }
-
-        facebookLink.href = "https://www.facebook.com/RosanXettri.2004"; 
-        emailLink.href = `mailto:rkc242855@gmail.com?subject=${encodeURIComponent(subject)}`;
-        
-        showModal('purchaseModal');
-    };
-
-    // Initialize stores (just sets currentStoreId)
     const initializeStores = () => {
         if (stores.length > 0 && !currentStoreId) {
             currentStoreId = stores[0].id;
@@ -668,38 +1175,57 @@ const StoreManager = (() => {
         initializeStores,
         renderStoreNavigation,
         renderContentCards,
-        prepareAndLaunchExam,
-        requestAccess
+        prepareAndLaunchExam
     };
 })();
 
-// Global functions
-function showModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
+// Global function to handle purchase requests with guest check
+function handlePurchaseRequest(contentId, isRenewal) {
+    const currentUser = UserManager.getCurrentUser();
+    
+    // Check if user is guest
+    if (currentUser && (currentUser.isGuest === true || currentUser.id === "GUEST" || currentUser.accountType === "GUEST")) {
+        NotificationManager.showNotification(
+            "Login Required", 
+            "Please login to your personal account to make a purchase. Guest accounts cannot make purchases.", 
+            "warning", 
+            6000
+        );
+        return;
     }
+    
+    // If not guest, show purchase modal
+    PaymentManager.showPurchaseModal(contentId, isRenewal);
+}
+
+// Global functions for backward compatibility
+function requestAccess(contentId, isRenewal) {
+    handlePurchaseRequest(contentId, isRenewal);
 }
 
 function closeModal() {
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        modal.style.display = 'none';
-    });
-    document.body.style.overflow = 'auto';
+    PaymentManager.closeModal();
 }
 
-// Make StoreManager functions globally available
-window.prepareAndLaunchExam = StoreManager.prepareAndLaunchExam;
-window.requestAccess = StoreManager.requestAccess;
+function prepareAndLaunchExam(examId, examUrl) {
+    StoreManager.prepareAndLaunchExam(examId, examUrl);
+}
+
+// Make functions globally available
+window.prepareAndLaunchExam = prepareAndLaunchExam;
+window.requestAccess = requestAccess;
+window.handlePurchaseRequest = handlePurchaseRequest;
+window.closeModal = closeModal;
+window.PaymentManager = PaymentManager;
+window.UserManager = UserManager;
+window.NotificationManager = NotificationManager;
+window.AdminPanelManager = AdminPanelManager;
+window.StoreManager = StoreManager;
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize user state
-    if (typeof UserManager !== 'undefined') {
-        UserManager.initUser();
-    }
+    UserManager.initUser();
 
     // Initialize stores if on dashboard
     if (document.getElementById('storeNavigation')) {
@@ -715,6 +1241,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             UserManager.loginUser(email, password);
+            
+            // Refresh content cards after login
+            if (document.getElementById('storeNavigation')) {
+                setTimeout(() => StoreManager.renderContentCards(), 100);
+            }
         });
     }
 
@@ -723,6 +1254,11 @@ document.addEventListener('DOMContentLoaded', function() {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
             UserManager.logoutUser();
+            
+            // Refresh content cards after logout
+            if (document.getElementById('storeNavigation')) {
+                setTimeout(() => StoreManager.renderContentCards(), 100);
+            }
         });
     }
 
@@ -767,21 +1303,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (adminLink) {
         adminLink.addEventListener('click', function(e) {
             e.preventDefault();
-            if (typeof AdminPanelManager !== 'undefined') {
-                AdminPanelManager.openAdminPanel();
-            }
+            AdminPanelManager.openAdminPanel();
         });
     }
 
-    // Close modal when clicking on close button or outside
-    const closeButtons = document.querySelectorAll('.close, .close-modal');
-    closeButtons.forEach(btn => {
-        btn.addEventListener('click', closeModal);
-    });
-
+    // Close modal when clicking outside
     window.addEventListener('click', function(e) {
-        if (e.target.classList.contains('modal')) {
-            closeModal();
+        if (e.target.classList.contains('rx-modal')) {
+            PaymentManager.closeModal();
         }
     });
 });
@@ -1069,23 +1598,3 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
-
-// ModalManager if not defined
-if (typeof ModalManager === 'undefined') {
-    window.ModalManager = {
-        showModal: (id) => {
-            const modal = document.getElementById(id);
-            if (modal) {
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-        },
-        hideModal: (id) => {
-            const modal = document.getElementById(id);
-            if (modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        }
-    };
-}
