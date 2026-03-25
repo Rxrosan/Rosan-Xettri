@@ -10,7 +10,7 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "ADMIN",
         password: "Ro&@n2061",
-        access: ["file1", "file2", "file3", "file4"],
+        access: ["file1", "file2", "file3", "file4","file5"],
         timedAccessConfig: {},
         dateOfBirth: "2004-07-25",
     },
@@ -45,9 +45,9 @@ const contentCards = [
     },
     {   
         id: "file2", 
-        title: "F2- KOREAN EXAM PRACTICE", 
+        title: "F2- KOREAN EXAM PRACTICE - WEB-APP-MODEL-1", 
         description: "You can practice exam every time auto generate new questions randomly.", 
-        link: "KR-EXAM.html?exam=file2", 
+        link: "RX-KR-EXAM-MODEL-1.html?exam=file2", 
         icon: "fas fa-book",
         prices: { default: "Rs. 999/Month" }
     },
@@ -67,6 +67,14 @@ const contentCards = [
         icon: "fas fa-book",
         prices: { default: "Rs. 100" }
     },
+    {   
+        id: "file5", 
+        title: "F5- KOREAN EXAM PRACTICE - WEB-APP-MODEL-2", 
+        description: "You can practice exam with set question.", 
+        link: "RX-KR-EXAM-MODEL-2.html?exam=file5", 
+        icon: "fas fa-book",
+        prices: { default: "Rs. 100/set" }
+    },
 ];
 
 // Developer-Managed Stores (Fixed - Cannot be edited)
@@ -76,7 +84,7 @@ const stores = [
         content: ["file1"] },
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 
-        content: ["file2"] },
+        content: ["file2","file5"] },
     {   id: "store_3", 
         name: "WEB-SOFTWARE", 
         content: ["file3", "file4"] },

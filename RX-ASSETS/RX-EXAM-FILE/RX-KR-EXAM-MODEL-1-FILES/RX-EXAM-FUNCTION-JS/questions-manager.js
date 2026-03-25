@@ -51,7 +51,7 @@ const QuestionsManager = {
     },
     
     loadQuestionFile: function(questionNumber) {
-        const fileName = `RX-ASSETS/RX-EXAM-FILE/RX-EXAM-QUESTION-JS/qs-no-${questionNumber}.js`;
+        const fileName = `RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-1-FILES/RX-EXAM-QUESTION-JS/qs-no-${questionNumber}.js`;
         
         const script = document.createElement('script');
         script.src = fileName;
