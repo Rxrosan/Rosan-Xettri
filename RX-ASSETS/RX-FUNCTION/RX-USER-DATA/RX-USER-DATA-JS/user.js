@@ -36,7 +36,7 @@ const allUsers = [
         userName: "JIWAN ",
         fullName: "JIWAN SUNAR",
         email: "fuchhayjiwan44@gmail.com",
-        image: "ASSET/WEB-SOFTWARE/USER/IMG/ROHIT-KC.jpg",
+        image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/M-1.jpg",
         phone: "9814499030",
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "MEMBER",
