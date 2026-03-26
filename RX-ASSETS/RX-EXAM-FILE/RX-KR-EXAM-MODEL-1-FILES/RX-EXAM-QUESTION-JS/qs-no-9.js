@@ -2,9 +2,9 @@
 
 const questionsForNumber9 = [
     {
-        id: 9,
+        id: 1,
         instruction: {
-            text: "[QID-1]<br> 9. 다음 단어와 관계있는 것은 무엇입니까?",
+            text: "[Q-ID : 1]<br><br> 9. 다음 단어와 관계있는 것은 무엇입니까?",
             image: null,
             audio: null
         },

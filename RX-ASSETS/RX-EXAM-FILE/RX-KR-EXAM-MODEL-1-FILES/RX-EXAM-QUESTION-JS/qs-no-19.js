@@ -2,9 +2,9 @@
 
 const questionsForNumber19 = [
     {
-        id: 19,
+        id: 1,
         instruction: {
-            text: "[QID-1]<br> 19. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "[Q-ID : 1]<br><br> 19. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },

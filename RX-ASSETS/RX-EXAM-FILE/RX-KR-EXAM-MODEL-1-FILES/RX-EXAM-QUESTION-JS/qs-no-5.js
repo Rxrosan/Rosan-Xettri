@@ -4,7 +4,7 @@ const questionsForNumber5 = [
     {
         id: 1,
         instruction: {
-            text: "[QID-1]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "[Q-ID : 1]<br><br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -24,7 +24,7 @@ const questionsForNumber5 = [
     {
         id: 2,
         instruction: {
-            text: "[QID-2]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "[Q-ID : 2]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -44,7 +44,7 @@ const questionsForNumber5 = [
     {
         id: 3,
         instruction: {
-            text: "[QID-3]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "[Q-ID : 3]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -64,7 +64,7 @@ const questionsForNumber5 = [
     {
         id: 4,
         instruction: {
-            text: "[QID-4]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "[Q-ID : 4]<br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -85,7 +85,7 @@ const questionsForNumber5 = [
     {
         id: 5,
         instruction: {
-            text: "[QID-5]<br> 5. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?",
+            text: "[Q-ID : 5]<br> 5. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?",
             image: null,
             audio: null
         },

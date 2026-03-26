@@ -2,9 +2,9 @@
 
 const questionsForNumber10 = [
     {
-        id: 10,
+        id: 1,
         instruction: {
-            text: "[QID-1]<br> 10. 다음 글을 읽고 물음에 답하십시오.",
+            text: "[Q-ID : 1]<br><br> 10. 다음 글을 읽고 물음에 답하십시오.",
             image: null,
             audio: null
         },

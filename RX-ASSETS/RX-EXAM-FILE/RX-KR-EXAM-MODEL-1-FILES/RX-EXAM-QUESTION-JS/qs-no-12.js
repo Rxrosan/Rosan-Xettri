@@ -2,9 +2,9 @@
 
 const questionsForNumber12 = [
     {
-        id: 12,
+        id: 1,
         instruction: {
-            text: "[QID-1]<br> 12. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            text: "[Q-ID : 1]<br><br> 12. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },

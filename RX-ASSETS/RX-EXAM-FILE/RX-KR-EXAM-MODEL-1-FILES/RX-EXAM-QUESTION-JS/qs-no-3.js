@@ -5,7 +5,7 @@ const questionsForNumber3 = [
         {
         id: 1,
         instruction: {
-            text: "[QID-1]<br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
+            text: "[Q-ID : 1]<br><br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -25,7 +25,7 @@ const questionsForNumber3 = [
     {
         id: 2,
         instruction: {
-            text: "[QID-2]<br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
+            text: "[Q-ID : 2]<br><br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -45,7 +45,7 @@ const questionsForNumber3 = [
     {
         id: 3,
         instruction: {
-            text: "[QID-3]<br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
+            text: "[Q-ID : 3]<br><br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -65,7 +65,7 @@ const questionsForNumber3 = [
     {
         id: 3,
         instruction: {
-            text: "[QID-4]<br> 3. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
+            text: "[Q-ID : 4]<br><br> 3. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
             image: null,
             audio: null
         },

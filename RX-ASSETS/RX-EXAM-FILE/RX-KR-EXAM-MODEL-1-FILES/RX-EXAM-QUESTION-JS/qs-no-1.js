@@ -4,7 +4,7 @@ const questionsForNumber1 = [
     {
         id: 1,
         instruction: {
-            text: "[QID-1]<br> 1. 다음 단어와 관계있는 무엇입니까 ?",
+            text: "[Q-ID : 1]<br><br> 1. 다음 단어와 관계있는 무엇입니까 ?",
             image: null,
             audio: null
         },
@@ -24,7 +24,7 @@ const questionsForNumber1 = [
     {
         id: 2,
         instruction: {
-            text: "[QID-2]<br> 1. 다음 단어와 관계있는 것은 무엇입니까 ?",
+            text: "[Q-ID : 2]<br><br> 1. 다음 단어와 관계있는 것은 무엇입니까 ?",
             image: null,
             audio: null
         },
@@ -44,7 +44,7 @@ const questionsForNumber1 = [
     {
         id: 3,
         instruction: {
-            text: "[QID-3]<br> 1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
+            text: "[Q-ID : 3]<br><br> 1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -64,7 +64,7 @@ const questionsForNumber1 = [
     {
         id: 4,
         instruction: {
-            text: "[QID4]<br> 1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
+            text: "[Q-ID : 4]<br><br> 1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -84,7 +84,7 @@ const questionsForNumber1 = [
         {
         id: 5,
         instruction: {
-            text: "[QID-5]<br> 1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
+            text: "[Q-ID : 5]<br><br> 1. 다음 단어와 관계있는 맞는 문장을 고르십시오.",
             image: null,
             audio: null
         },
@@ -104,7 +104,7 @@ const questionsForNumber1 = [
     {
         id: 5,
         instruction: {
-            text: "[QID-6]<br> 1. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
+            text: "[Q-ID : 6]<br><br> 1. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
             image: null,
             audio: null
         },

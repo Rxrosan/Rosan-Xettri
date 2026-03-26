@@ -2,9 +2,9 @@
 
 const questionsForNumber21 = [
     {
-        id: 21,
+        id: 1,
         instruction: {
-            text: "21. 들은 것을 고르십시오.",
+            text: "[Q-ID : 1]<br><br> 21. 들은 것을 고르십시오.",
             image: null,
             audio: null
         },

@@ -2,9 +2,9 @@
 
 const questionsForNumber35 = [
     {
-        id: 35,
+        id: 1,
         instruction: {
-            text: "[~]",
+            text: "[Q-ID : 1]<br><br> 35.",
             image: null,
             audio: null
         },
@@ -21,46 +21,7 @@ const questionsForNumber35 = [
         ],
         answer: 4
     },
-    {
-        id: 35,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 35,
-        instruction: {
-            text: "[~]",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
-        ],
-        answer: 3
-    }
+   
 ];
 
 // Register these questions with the manager

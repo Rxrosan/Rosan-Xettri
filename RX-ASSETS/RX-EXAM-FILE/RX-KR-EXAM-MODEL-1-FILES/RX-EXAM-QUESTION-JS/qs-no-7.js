@@ -2,9 +2,9 @@
 
 const questionsForNumber7 = [
     {
-        id: 7,
+        id: 1,
         instruction: {
-            text: "[QID-1]<br> 7. 이 병원이 문을 여는 시간은 언제입니까?",
+            text: "[Q-ID : 1]<br><br> 7. 이 병원이 문을 여는 시간은 언제입니까?",
             image: null,
             audio: null
         },

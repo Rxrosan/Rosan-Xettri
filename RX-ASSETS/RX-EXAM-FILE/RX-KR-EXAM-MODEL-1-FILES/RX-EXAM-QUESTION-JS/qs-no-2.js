@@ -4,7 +4,7 @@ const questionsForNumber2 = [
     {
         id: 1,
         instruction: {
-            text: "[QID-1]<br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            text: "[Q-ID : 1]<br><br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -24,7 +24,7 @@ const questionsForNumber2 = [
     {
         id: 2,
         instruction: {
-            text: "[QID-2]<br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            text: "[Q-ID : 2]<br><br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -44,7 +44,7 @@ const questionsForNumber2 = [
     {
         id: 3,
         instruction: {
-            text: "[QID-3]<br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            text: "[Q-ID : 3]<br><br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
@@ -64,7 +64,7 @@ const questionsForNumber2 = [
     {
         id: 3,
         instruction: {
-            text: "[QID-4]<br> 2.다음 그림을 보고 맞는 단어나 문장을 고르십시오",
+            text: "[Q-ID : 4]<br><br> 2.다음 그림을 보고 맞는 단어나 문장을 고르십시오",
             image: null,
             audio: null
         },
