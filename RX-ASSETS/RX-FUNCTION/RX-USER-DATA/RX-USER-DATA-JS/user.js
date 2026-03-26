@@ -31,6 +31,23 @@ const allUsers = [
         },
         dateOfBirth: "2005-11-17",
     },
+    {
+        id: "RX-M-01",
+        userName: "JIWAN ",
+        fullName: "JIWAN SUNAR",
+        email: "fuchhayjiwan44@gmail.com",
+        image: "ASSET/WEB-SOFTWARE/USER/IMG/ROHIT-KC.jpg",
+        phone: "9814499030",
+        address: "BANGANGA-10, KAPILVASTU",
+        accountType: "MEMBER",
+        password: "RX9814499030",
+        access: ["file3", "file4"],
+        timedAccessConfig: {
+            //"file1": { startDate: "2026-03-09", duration: 23 },
+           // "file2": { startDate: "2026-03-09", duration: 23 },
+        },
+        dateOfBirth: "2006-09-08",
+    },
 ];
 
 // Content Cards Database
