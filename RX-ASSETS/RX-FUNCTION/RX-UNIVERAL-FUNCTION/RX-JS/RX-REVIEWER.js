@@ -15,17 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add RX-REVIEWER content to your section
     reviewSection.innerHTML = `
         <div class="rx-reviews-container">
-            <div class="rx-review-card" data-image="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-5.jpg">
-                <div class="rx-quote-icon">"</div>
-                <p class="rx-review-text">"Rosan Khattri Chettri is a highly skilled graphic designer with an amazing eye for detail. His logo and branding designs stand out with creativity and professionalism. A true expert in his field!"</p>
-                <div class="rx-reviewer">
-                    <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-5.jpg" alt="Reviewer" class="rx-reviewer-img">
-                    <div class="rx-reviewer-info">
-                        <h4>Rohit Xettri</h4>
-                        <p>Banganga-10, Kapilvastu</p>
-                    </div>
-                </div>
-            </div>
             <div class="rx-review-card" data-image="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-3.jpg">
                 <div class="rx-quote-icon">"</div>
                 <p class="rx-review-text">Rosan Khattri Chettri is a talented and reliable graphic designer with a strong eye for detail. He specializes in logos, business cards, and branding, always delivering creative and high-quality work. Highly recommended!</p>

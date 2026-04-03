@@ -15,23 +15,6 @@ const allUsers = [
         dateOfBirth: "2004-07-25",
     },
     {
-        id: "RX-P-01",
-        userName: "ROHIT",
-        fullName: "Rohit kc",
-        email: "rohitchattri71@gmail.com",
-        image: "ASSET/WEB-SOFTWARE/USER/IMG/ROHIT-KC.jpg",
-        phone: "9821948199",
-        address: "BANGANGA-10, KAPILVASTU",
-        accountType: "PARTNER",
-        password: "RX9821948199",
-        access: ["file1", "file2", "file3", "file4"],
-        timedAccessConfig: {
-            //"file1": { startDate: "2026-03-09", duration: 23 },
-           // "file2": { startDate: "2026-03-09", duration: 23 },
-        },
-        dateOfBirth: "2005-11-17",
-    },
-    {
         id: "RX-M-01",
         userName: "JIWAN ",
         fullName: "JIWAN SUNAR",
