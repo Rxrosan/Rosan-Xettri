@@ -1,4 +1,5 @@
-// submit-handler.js - Simplified submission handler
+// submit-handler.js - Updated with review mode instead of results modal
+
 const ExamSubmit = {
     submitExam: function() {
         this.showConfirmationModal();
@@ -155,12 +156,30 @@ const ExamSubmit = {
     },
     
     processSubmission: function() {
-        ExamTimer.stop();
+        if (typeof ExamTimer !== 'undefined') ExamTimer.stop();
+        
         const score = this.calculateScore();
         this.saveResults(score);
-        this.showResultsModal(score);
         
-        // Only clear exam data
+        // Get all questions data for review
+        const questionsData = {};
+        for (let i = 1; i <= 40; i++) {
+            const q = typeof QuestionsManager !== 'undefined' ? QuestionsManager.getQuestion(i) : null;
+            questionsData[i] = (q && !q.hasError) ? q : { hasError: true };
+        }
+        
+        // Go directly to review mode (no results modal)
+        if (typeof ExamReview !== 'undefined') {
+            ExamReview.initReview(score, UserState.userAnswers, questionsData);
+        } else {
+            // Fallback if review handler not loaded
+            console.warn('ExamReview not found, showing alert instead');
+            alert(`Exam Submitted!\n\nYour Score: ${score.percentage}% (${score.correct}/40)\n\nReview mode not available.`);
+            this.clearExamData();
+            window.location.reload();
+        }
+        
+        // Clear exam data
         this.clearExamData();
     },
     
@@ -205,226 +224,9 @@ const ExamSubmit = {
         });
         
         console.log('✅ Exam data cleared (login preserved)');
-        QuestionsManager.markExamSubmitted();
-    },
-    
-    showResultsModal: function(score) {
-        this.removeExistingModals();
-        
-        const modalOverlay = document.createElement('div');
-        modalOverlay.id = 'results-modal';
-        modalOverlay.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10000;
-            padding: 20px;
-            box-sizing: border-box;
-        `;
-        
-        let gradeColor = '#2ecc71';
-        if (score.percentage < 50) gradeColor = '#e74c3c';
-        else if (score.percentage < 70) gradeColor = '#f39c12';
-        else if (score.percentage < 90) gradeColor = '#3498db';
-        
-        const modalContent = document.createElement('div');
-        modalContent.style.cssText = `
-            background: white;
-            border-radius: 20px;
-            padding: 40px 30px;
-            max-width: 450px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 25px 70px rgba(0,0,0,0.6);
-            animation: slideUp 0.4s ease;
-        `;
-        
-        modalContent.innerHTML = `
-            <h2 style="
-                color: #2c3e50;
-                margin: 0 0 10px 0;
-                font-size: 28px;
-                font-weight: 700;
-            ">Exam Submitted!</h2>
-            
-            <p style="
-                color: #7f8c8d;
-                margin-bottom: 30px;
-                font-size: 16px;
-                line-height: 1.5;
-            ">
-                Congratulations! You have successfully completed the exam.
-            </p>
-            
-            <div style="
-                background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-                border-radius: 15px;
-                padding: 25px;
-                margin-bottom: 30px;
-                border: 2px solid ${gradeColor};
-            ">
-                <div style="
-                    color: #2c3e50;
-                    font-size: 18px;
-                    margin-bottom: 15px;
-                    font-weight: 600;
-                ">Your Result</div>
-                
-                <div style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 15px;
-                    padding-bottom: 15px;
-                    border-bottom: 1px solid #e9ecef;
-                ">
-                    <span style="color: #7f8c8d; font-size: 16px;">Total Questions</span>
-                    <span style="color: #2c3e50; font-weight: 700; font-size: 18px;">${score.totalQuestions}</span>
-                </div>
-                
-                <div style="
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                ">
-                    <span style="color: #7f8c8d; font-size: 16px;">Your Score</span>
-                    <div style="text-align: right;">
-                        <div style="
-                            color: ${gradeColor};
-                            font-size: 42px;
-                            font-weight: 800;
-                            line-height: 1;
-                        ">${score.percentage}%</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div style="display: flex; gap: 15px;">
-                <button id="retake-btn" style="
-                    flex: 1;
-                    background: #3498db;
-                    color: white;
-                    border: none;
-                    padding: 16px;
-                    border-radius: 12px;
-                    font-weight: 600;
-                    font-size: 16px;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                ">
-                    <span></span>
-                    New Exam
-                </button>
-                
-                <button id="exit-btn" style="
-                    flex: 1;
-                    background: #6c757d;
-                    color: white;
-                    border: none;
-                    padding: 16px;
-                    border-radius: 12px;
-                    font-weight: 600;
-                    font-size: 16px;
-                    cursor: pointer;
-                    transition: all 0.3s;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    gap: 8px;
-                ">
-                    <span></span>
-                    Exit
-                </button>
-
-                <button onclick="window.location.href='history.html'"
-                style="
-                  flex: 1;
-                  background: #0ed118;
-                  color: white;
-                  border: none;
-                  padding: 16px;
-                  border-radius: 12px;
-                  font-weight: 600;
-                  font-size: 16px;
-                  cursor: pointer;
-                  transition: all 0.3s;
-                 display: flex;
-                 align-items: center;
-                 justify-content: center;
-                  gap: 8px;
-                ">
-                  <span></span>
-                     Review
-                </button>
-            </div>
-        `;
-        
-        modalOverlay.appendChild(modalContent);
-        document.body.appendChild(modalOverlay);
-        
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideUp {
-                from { opacity: 0; transform: translateY(30px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            
-            #retake-btn:hover {
-                background: #2980b9;
-                transform: translateY(-2px);
-            }
-            
-            #exit-btn:hover {
-                background: #5a6268;
-                transform: translateY(-2px);
-            }
-            
-            @media (max-width: 500px) {
-                #results-modal > div {
-                    padding: 30px 20px !important;
-                    max-width: 95% !important;
-                }
-                
-                #results-modal h2 {
-                    font-size: 24px !important;
-                }
-                
-                #results-modal .score-percentage {
-                    font-size: 36px !important;
-                }
-                
-                #results-modal button {
-                    padding: 14px !important;
-                    font-size: 15px !important;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        document.getElementById('retake-btn').addEventListener('click', () => {
-            this.clearExamData();
-            window.location.reload();
-        });
-        
-        document.getElementById('exit-btn').addEventListener('click', () => {
-            window.location.href = 'Resource.html';
-        });
-        
-        modalOverlay.addEventListener('click', (e) => {
-            if (e.target === modalOverlay) {
-                window.location.href = 'Resource.html';
-            }
-        });
+        if (typeof QuestionsManager !== 'undefined') {
+            QuestionsManager.markExamSubmitted();
+        }
     },
     
     removeExistingModals: function() {
@@ -436,9 +238,9 @@ const ExamSubmit = {
         
         const styles = document.querySelectorAll('style');
         styles.forEach(style => {
-            if (style.textContent.includes('modal') || 
+            if (style.textContent && (style.textContent.includes('modal') || 
                 style.textContent.includes('fadeIn') || 
-                style.textContent.includes('slideUp')) {
+                style.textContent.includes('slideUp'))) {
                 document.head.removeChild(style);
             }
         });
