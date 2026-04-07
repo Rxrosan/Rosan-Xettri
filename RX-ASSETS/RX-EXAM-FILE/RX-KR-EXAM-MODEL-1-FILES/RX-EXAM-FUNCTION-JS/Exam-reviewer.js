@@ -353,9 +353,9 @@ const ExamReview = {
                             ${this.getMediaHTMLWithAudio(option)}
                         </div>
                         <div style="display:flex; gap:8px;">
-                            ${isCorrectAnswer ? '<span style="background:#27ae60; color:white; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:bold;"> Correct Answer</span>' : ''}
-                            ${isUserSelected && !isCorrectAnswer ? '<span style="background:#e74c3c; color:white; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:bold;">Your Answer</span>' : ''}
-                            ${isUserSelected && isCorrectAnswer ? '<span style="background:#27ae60; color:white; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:bold;">Your Answer (Correct)</span>' : ''}
+                            ${isCorrectAnswer ? '<span style="background:#27ae60; color:white; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:bold;"> ✔️</span>' : ''}
+                            ${isUserSelected && !isCorrectAnswer ? '<span style="background:#e74c3c; color:white; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:bold;">❌</span>' : ''}
+                            ${isUserSelected && isCorrectAnswer ? '<span style="background:#27ae60; color:white; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:bold;">✔️</span>' : ''}
                         </div>
                     </div>
                 </div>
