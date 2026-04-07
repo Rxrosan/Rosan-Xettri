@@ -39,7 +39,7 @@ const questionsForNumber2 = [
             { text: "어부", image: null, audio: null },
             { text: "부산시", image: null, audio: null }
         ],
-        answer: 3
+        answer: 2
     },
     {
         id: 3,
