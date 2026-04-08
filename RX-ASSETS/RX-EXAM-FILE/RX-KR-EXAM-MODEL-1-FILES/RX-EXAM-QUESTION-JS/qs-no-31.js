@@ -4,20 +4,20 @@ const questionsForNumber31 = [
     {
         id: 1,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 31.",
+            text: "[Q-ID : 1]<br><br> 31.다음을 듣고 질문에 알맞은 대답을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: null
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-11.mp3"
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "아니요, 가본적이 있어요.", image: null, audio: null },
+            { text: "네, 제주도에서 먹어봤어요.", image: null, audio: null },
+            { text: "아니요, 제주도는 멀어요.", image: null, audio: null },
+            { text: "아니요, 가본적이 없어요.", image: null, audio: null }
         ],
         answer: 4
     },

@@ -4,22 +4,22 @@ const questionsForNumber25 = [
     {
         id: 1,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 25.",
+            text: "[Q-ID : 1]<br><br> 25.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: null
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-5.mp3"
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-17.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-19.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-18.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-16.jpg", audio: null }
         ],
-        answer: 4
+        answer: 1
     },
     
 ];

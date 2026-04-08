@@ -70,7 +70,7 @@ const questionsForNumber4 = [
         },
         questionBody: {
             text: null,
-            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-5.png",
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-5.jpg",
             audio: null
         },
         options: [

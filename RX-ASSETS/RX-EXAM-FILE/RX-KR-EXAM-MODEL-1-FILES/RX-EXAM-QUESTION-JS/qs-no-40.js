@@ -4,20 +4,20 @@ const questionsForNumber40 = [
     {
         id: 1,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 40.",
+            text: "[Q-ID : 1]<br><br> 40.다음을 잘 듣고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text: "제주도에 대한 알맞은 것을 고르십시오.",
             image: null,
-            audio: null
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-24.mp3"
         },
         options: [
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null },
-            { text: "", image: null, audio: null }
+            { text: "제주도는 동쪽에 있습니다.", image: null, audio: null },
+            { text: "제주도는 한국의 제일 작은 섬입니다.", image: null, audio: null },
+            { text: "제주도는 하와이보다 큽니다.", image: null, audio: null },
+            { text: "제주도는 한국의 큰 섬입니다.", image: null, audio: null }
         ],
         answer: 4
     },
