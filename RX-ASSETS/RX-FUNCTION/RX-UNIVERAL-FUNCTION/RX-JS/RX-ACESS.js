@@ -24,6 +24,11 @@
             description: 'Access to EXAM QUESTIONS content',
             requiresAccess: true
         },
+        'file5': {
+            title: 'EXAM QUESTIONS',
+            description: 'You can practice exam with set question.',
+            requiresAccess: true
+        },
     };
 
     // PROTECT ALL ACCESS - This will block the page for any user without access

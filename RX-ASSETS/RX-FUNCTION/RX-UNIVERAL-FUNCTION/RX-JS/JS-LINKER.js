@@ -24,11 +24,7 @@
             type: 'js',
             title: 'TEXT TO IMAGE'
         },
-        'file5': {
-            path: 'RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/KR-EXAM-QM-1/QUESTION/KR-EXAM-QM-1.js',
-            type: 'js',
-            title: 'TEXT TO IMAGE'
-        },
+        
     };
 
     const LOCAL_STORAGE_CONTENT_KEY = 'activeContentId';

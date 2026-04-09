@@ -1,98 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="RX-ASSETS/RX-OTHER-SOFTWARE-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
-  <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-2.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>RX | Korean Language Exam</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-CSS-MODEL-2/RX-KR-EXAM-CSS-MODEL-2.css">
+    <meta charset="UTF-8">
+    <script src="RX-ASSETS/RX-OTHER-SOFTWARE-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-3.png">
+    <title>RX | EPS-TOPIK UBT TRAIL EXAM</title>
+    <link rel="stylesheet" href="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-CSS-MODEL-2/RX-KR-EXAM-CSS-MODEL-2.css">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#3498db">
+    <meta name="msapplication-navbutton-color" content="#3498db">
+    <meta name="apple-mobile-web-app-title" content="RX Exam">
 </head>
 <body>
 
-  <!-- Main Exam Container -->
-  <div class="exam-container">
-    <!-- Left Panel - Question Navigator -->
-    <div class="left-panel">
-      <div class="panel-header">
-        <div class="panel-title-group">
-          <h3>Rosan Xettri Studio</h3>
+    <header class="main-header">
+        <div class="header-left">ROSAN XETTRI STUDIO</div>
+        <div class="header-right">ROSAN KC </div>
+    </header>
+
+    <div class="stats-bar">
+        <span>Total Questions: 40</span>
+        <span>Solved: <span id="solved-count">0</span></span>
+        <span>Unsolved: <span id="unsolved-count">40</span></span>
+        <span>Time Remaining: <span id="timer">50:00</span></span>
+    </div>
+
+    <main class="main-wrapper">
+        <!-- GRID OVERVIEW SCREEN -->
+        <div id="menuScreen" class="view-container">
+            <div class="grid-dual-pane">
+                <div class="grid-column">
+                    <h3 class="pane-title">Reading Questions</h3>
+                    <div id="readGrid" class="q-grid"></div>
+                </div>
+                <div class="grid-column">
+                    <h3 class="pane-title">Listening Questions</h3>
+                    <div id="listenGrid" class="q-grid"></div>
+                </div>
+            </div>
+            <button class="btn-finish" onclick="ExamSubmit.submitExam()">SUBMIT AND FINISH EXAM</button>
         </div>
-        <!-- UPDATED: Profile image now acts as a button to open the modal -->
-        <div id="user-profile-display" class="user-profile-display">
-          <img id="user-profile-image" src="" alt="User" class="user-profile-image">
+
+        <!-- INDEPENDENT SCROLL QUESTION SCREEN -->
+        <div id="questionScreen" class="view-container" style="display:none">
+            <div class="split-pane-container">
+                <!-- LEFT SIDE SCROLLABLE -->
+                <div class="pane left-pane" id="questionContent">
+                   <!-- Questions will be injected here -->
+                </div>
+
+                <!-- RIGHT SIDE SCROLLABLE -->
+                <div class="pane right-pane" id="optionsContainer">
+                    <!-- Options will be injected here -->
+                </div>
+            </div>
         </div>
-      </div>
-      
-      <div class="number-grid-container">
-        <div class="section-label"><i class="fas fa-book-open"></i> Reading (1-20)</div>
-        <div class="number-grid" id="reading-questions"></div>
-        <div class="section-label"><i class="fas fa-headphones"></i> Listening (21-40)</div>
-        <div class="number-grid" id="listening-questions"></div>
-      </div>
-    </div>
+    </main>
 
-    <!-- Right Panel (No changes) -->
-    <div class="right-panel">
-      <div id="content-display">
-        <div class="welcome-message">
-          <img src="RX-ASSETS/RX-IMAGE/RX-LOGO/L-6.gif" alt="RX Logo" class="welcome-logo">
-          <h2 id="welcome-user-name">Welcome!</h2>
-          <p>Select a question number to begin the exam.</p>
-        </div>
-      </div>
-      <div class="navigation-controls">
-        <button onclick="goToPrevious()" class="nav-btn prev-btn"><i class="fas fa-chevron-left"></i> Previous</button>
-        <button onclick="markForReview()" class="nav-btn mark-btn"><i class="far fa-flag"></i> Mark</button>
-        <button onclick="goToNext()" class="nav-btn next-btn">Next <i class="fas fa-chevron-right"></i></button>
-        <button type="button" class="nav-btn submit-btn"><i class="fas fa-paper-plane"></i> Submit</button>
-      </div>
-    </div>
+   <footer id="navFooter" style="display: none; visibility: hidden;">
+    <button class="nav-btn" onclick="QuestionNav.prevQ()"><span>❮ PREVIOUS</span></button>
+    <button class="nav-btn" onclick="QuestionNav.toggleView()"><span>QUESTION MENU </span></button>
+    <button class="nav-btn" onclick="QuestionNav.nextQ()"><span>NEXT ❯</span></button>
+</footer>
 
-    <!-- Timer and Overlays (No changes) -->
-    <div id="floating-timer" class="timer-box">
-        <div class="timer-header"><span><i class="fas fa-clock"></i> Exam Timer</span><div class="timer-controls"><button id="minimize-btn" class="timer-btn"><i class="fas fa-minus"></i></button></div></div>
-        <div id="countdown" class="timer-display">50:00</div>
-        <div class="timer-progress"><div id="timer-progress-bar"></div></div>
-    </div>
-    <div id="minimized-timer" class="minimized-timer hidden"><i class="fas fa-clock"></i><span id="minimized-time">50:00</span></div>
-    <div id="lock-overlay" class="time-up-overlay hidden">
-        <div class="time-up-modal"><div class="time-up-icon"><i class="fas fa-hourglass-end"></i></div><h3>Time's Up!</h3><p>Your exam time has ended. Your answers will be submitted automatically.</p><button id="submit-now-btn" class="btn-primary"><i class="fas fa-check-circle"></i> Submit Now</button></div>
-    </div>
-  </div>
-
-  <!-- NEW: User Profile Modal -->
-  <div id="profile-modal-overlay" class="profile-modal-overlay">
-    <div class="profile-modal-content">
-      <button id="profile-modal-close-btn" class="profile-modal-close-btn">&times;</button>
-      <img id="modal-profile-image" src="" alt="User" class="modal-profile-image">
-      <h3 id="modal-profile-name"></h3>
-      <div class="modal-profile-details">
-        <p><i class="fas fa-user"></i> <span id="modal-profile-username"></span></p>
-        <p><i class="fas fa-id-card"></i> <span id="modal-profile-examid"></span></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Exit Confirmation Modal -->
-<div id="exit-confirm-modal" class="exit-confirm-modal">
-  <div class="exit-confirm-content">
-      <div class="exit-confirm-icon">
-          <i class="fas fa-exclamation-triangle"></i>
-      </div>
-      <p id="exit-confirm-message" class="exit-confirm-message"></p>
-      <div class="exit-confirm-buttons">
-          <button class="exit-confirm-btn exit" onclick="handleExitChoice(true)">Yes, Exit</button>
-          <button class="exit-confirm-btn stay" onclick="handleExitChoice(false)">No, Continue Exam</button>
-      </div>
-  </div>
-</div>
-
-  <!-- Script Loading Order -->
-<script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/JS-LINKER.js"></script>
-<script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/RX-KR-EXAM-JS-MODEL-2.js"></script> 
-  
-  
+    <!-- Core Libraries - CRITICAL ORDER -->
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/user-state.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/media-helper.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/media-controller.js"></script>
+    
+    <!-- Questions Manager MUST load first -->
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/questions-manager.js"></script>
+    
+    <!-- Other modules -->
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/grid-renderer.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/question-loader.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/selection-handler.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/question-nav.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/timer.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/submit-handler.js"></script>
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/app-loader.js"></script> 
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-JS-MODEL-2/Exam-reviewer.js"></script> 
+    <script src="RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-1.js"></script> 
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-ACESS.js"></script>
 </body>
 </html>
