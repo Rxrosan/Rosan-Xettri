@@ -31,6 +31,23 @@ const allUsers = [
         },
         dateOfBirth: "2006-09-08",
     },
+    {
+        id: "RX-U-01",
+        userName: "MIRAI",
+        fullName: "mirai international language center",
+        email: "Mirailanguage280@gmail.com",
+        image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/U-1.jpg",
+        phone: "9867134971",
+        address: "BANGANGA-4, KAPILVASTU",
+        accountType: "USER",
+        password: "MIRAI@123",
+        access: [],
+        timedAccessConfig: {
+            //"file1": { startDate: "2026-03-09", duration: 23 },
+            "file2": { startDate: "2026-04-09", duration: 7 },
+        },
+        dateOfBirth: null,
+    },
 ];
 
 // Content Cards Database
