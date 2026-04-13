@@ -35,7 +35,7 @@ const allUsers = [
         id: "RX-U-01",
         userName: "MIRAI",
         fullName: "mirai international language center",
-        email: "Mirailanguage280@gmail.com",
+        email: "mirailanguage280@gmail.com",
         image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/U-1.jpg",
         phone: "9867134971",
         address: "BANGANGA-4, KAPILVASTU",
@@ -44,7 +44,7 @@ const allUsers = [
         access: [],
         timedAccessConfig: {
             //"file1": { startDate: "2026-03-09", duration: 23 },
-            "file2": { startDate: "2026-04-09", duration: 7 },
+            "file5": { startDate: "2026-04-09", duration: 7 },
         },
         dateOfBirth: null,
     },
@@ -62,7 +62,7 @@ const contentCards = [
     },
     {   
         id: "file2", 
-        title: "F2- KOREAN EXAM PRACTICE - WEB-APP-MODEL-1", 
+        title: "F2- KOREAN EXAM PRACTICE - WEB-APP | COMBINE SETS ", 
         description: "You can practice exam every time auto generate new questions randomly.", 
         link: "RX-KR-EXAM-MODEL-1.html?exam=file2", 
         icon: "fas fa-book",
@@ -86,7 +86,7 @@ const contentCards = [
     },
     {   
         id: "file5", 
-        title: "F5- KOREAN EXAM PRACTICE - WEB-APP-MODEL-2", 
+        title: "F5- KOREAN EXAM PRACTICE - WEB-APP | SET-1", 
         description: "You can practice exam with set question.", 
         link: "RX-KR-EXAM-MODEL-2.html?exam=file5", 
         icon: "fas fa-book",
