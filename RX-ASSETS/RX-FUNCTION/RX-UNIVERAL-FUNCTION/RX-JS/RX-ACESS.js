@@ -34,6 +34,14 @@
             path: 'RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-1.js',
             type: 'js'
         },
+        'file6': {
+            path: 'RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-2.js',
+            type: 'js'
+        },
+        'file7': {
+            path: 'RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-3.js',
+            type: 'js'
+        },
 
         // HTML content files - add your HTML content mappings here
         // 'html-content-1': {

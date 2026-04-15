@@ -10,7 +10,7 @@ const allUsers = [
         address: "BANGANGA-10, KAPILVASTU",
         accountType: "ADMIN",
         password: "Ro&@n2061",
-        access: ["file1", "file2", "file3", "file4","file5"],
+        access: ["file1", "file2", "file3", "file4","file5","file6","file7"],
         timedAccessConfig: {},
         dateOfBirth: "2004-07-25",
     },
@@ -73,7 +73,7 @@ const contentCards = [
         title: "F3- QR SCANNER", 
         description: "", 
         link: "RX-S-QR.html?exam=file3", 
-        icon: "fas fa-pencil",
+        icon: "fas fa-qrcode",
         prices: { default: "Rs. 100" }
     },
     {   
@@ -81,7 +81,7 @@ const contentCards = [
         title: "F4- TEXT TO IMAGE ", 
         description: "LOGIN PASSWORD = RX2061", 
         link: "RX-IMG-CONVERTER.html?exam=file4", 
-        icon: "fas fa-book",
+        icon: "fas fa-pen",
         prices: { default: "Rs. 100" }
     },
     {   
@@ -89,6 +89,22 @@ const contentCards = [
         title: "F5- KOREAN EXAM PRACTICE - WEB-APP | SET-1", 
         description: "You can practice exam with set question.", 
         link: "RX-KR-EXAM-MODEL-2.html?exam=file5", 
+        icon: "fas fa-book",
+        prices: { default: "Rs. 100/set" }
+    },
+    {   
+        id: "file6", 
+        title: "F6- KOREAN EXAM PRACTICE - WEB-APP | SET-2 COMING SOON....", 
+        description: "You can practice exam with set question.", 
+        link: "RX-KR-EXAM-MODEL-2.html?exam=file6", 
+        icon: "fas fa-book",
+        prices: { default: "Rs. 100/set" }
+    },
+    {   
+        id: "file7", 
+        title: "F7- KOREAN EXAM PRACTICE - WEB-APP | SET-3 COMING SOON....", 
+        description: "You can practice exam with set question.", 
+        link: "RX-KR-EXAM-MODEL-2.html?exam=file7", 
         icon: "fas fa-book",
         prices: { default: "Rs. 100/set" }
     },
@@ -101,7 +117,7 @@ const stores = [
         content: ["file1"] },
     {   id: "store_2", 
         name: "EPS-EXAM-QUESTION", 
-        content: ["file2","file5"] },
+        content: ["file2","file5","file6","file7",] },
     {   id: "store_3", 
         name: "WEB-SOFTWARE", 
         content: ["file3", "file4"] },
