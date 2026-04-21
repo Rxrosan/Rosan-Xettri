@@ -402,382 +402,382 @@ window.questions = [
     {
         id: 21,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 21. 들은 것을 고르십시오.",
+            text: "21. 다음을 듣고 질문에 알맞은 대답을 고르십시오",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text:  null,
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-1.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-25.mp3"
         },
         options: [
-            { text: "끓다", image: null, audio: null},
-            { text: "신다", image: null, audio: null},
-            { text: "삶다", image: null, audio: null},
-            { text: "싫다", image: null, audio: null}
+            { text: "기구", image: null, audio: null},
+            { text: "거기", image: null, audio: null},
+            { text: "가게", image: null, audio: null},
+            { text: "가구", image: null, audio: null}
         ],
-        answer: 4
+        answer: 1
     },
     {
         id: 22,
-        instruction: {
-            text: "[Q-ID : 1]<br><br> 22. 들은 것을 고르십시오.",
+       instruction: {
+            text: "22. 다음을 듣고 질문에 알맞은 대답을 고르십시오",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "저는 - - - - - - - - - -  채팅을 하고 있습니다.",
+            text:  null,
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-2.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-26.mp3"
         },
         options: [
-            { text: "화상", image: null, audio: null},
-            { text: "축산", image: null, audio: null},
-            { text: "화장", image: null, audio: null},
-            { text: "책상", image: null, audio: null}
+            { text: "적재", image: null, audio: null},
+            { text: "적정", image: null, audio: null},
+            { text: "정전", image: null, audio: null},
+            { text: "직장", image: null, audio: null}
         ],
         answer: 1
     },
     {
         id: 23,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 23.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            text: "23. 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
             image: null,
             audio: null,
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-3.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-27.mp3"
         },
         options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-10.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-9.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-11.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-1.jpg", audio: null }
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-52.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-53.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-54.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-55.jpg", audio: null }
         ],
-        answer: 4
+        answer: 3
     },
     {
         id: 24,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 24.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            text: "24. 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
             image: null,
             audio: null,
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-4.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-28.mp3"
         },
         options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-12.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-14.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-15.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-13.jpg", audio: null }
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-56.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-57.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-58.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-59.jpg", audio: null }
         ],
         answer: 2
     },
     {
         id: 25,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 25.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            text: "25. 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-5.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-29.mp3"
         },
         options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-17.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-19.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-18.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-16.jpg", audio: null }
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-60.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-61.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-62.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-63.jpg", audio: null }
         ],
         answer: 1
     },
     {
         id: 26,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 26.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            text: "26. 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-6.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-30.mp3"
         },
         options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-23.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-22.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-21.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-20.jpg", audio: null }
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-64.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-65.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-66.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-67.jpg", audio: null }
         ],
-        answer: 3
+        answer: 1
     },
     {
         id: 27,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 27.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            text: "27. 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-7.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-31.mp3"
         },
         options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-25.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-26.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-24.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-27.jpg", audio: null }
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-68.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-69.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-70.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-71.jpg", audio: null }
         ],
-        answer: 4
+        answer: 3
     },
     {
         id: 28,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 28.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            text: "28. 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-8.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-32.mp3"
         },
         options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-29.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-30.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-31.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-28.jpg", audio: null }
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-72.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-73.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-74.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-75.jpg", audio: null }
         ],
         answer: 1
     },
     {
         id: 29,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 29.다음을 듣고 질문에 알맞은 대답을 고르십시오.",
+            text: "29. 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-9.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-33.mp3"
         },
         options: [
-            { text: "십분 남아요.", image: null, audio: null },
-            { text: "회사예요.", image: null, audio: null },
-            { text: "아버지세요.", image: null, audio: null },
-            { text: "두명 있어요.", image: null, audio: null }
-        ],
-        answer: 3
-    },
-    {
-        id: 30,
-        instruction: {
-            text: "[Q-ID : 1]<br><br> 30.다음을 듣고 질문에 알맞은 대답을 고르십시오.",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-10.mp3"
-        },
-        options: [
-            { text: "네, 신분증이 있어요.", image: null, audio: null },
-            { text: "아니요, 지갑에 들어 있어요.", image: null, audio: null },
-            { text: "네, 신분증이에요.", image: null, audio: null },
-            { text: "아니요, 가방에 없어요.", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 31,
-        instruction: {
-            text: "[Q-ID : 1]<br><br> 31.다음을 듣고 질문에 알맞은 대답을 고르십시오.",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-11.mp3"
-        },
-        options: [
-            { text: "아니요, 가본적이 있어요.", image: null, audio: null },
-            { text: "네, 제주도에서 먹어봤어요.", image: null, audio: null },
-            { text: "아니요, 제주도는 멀어요.", image: null, audio: null },
-            { text: "아니요, 가본적이 없어요.", image: null, audio: null }
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-34.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-35.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-36.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-37.mp3" }
         ],
         answer: 4
     },
     {
-        id: 32,
+        id: 30,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 32.다음을 듣고 질문에 알맞은 대답을 고르십시오.",
+            text: "30. 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-12.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-38.mp3"
         },
         options: [
-            { text: "아니요, 좋아하지 않아요.", image: null, audio: null },
-            { text: "네, 미여국이 아주 맛있어요.", image: null, audio: null },
-            { text: "아니요, 김치가 많아요.", image: null, audio: null },
-            { text: "네, 기침을 해요.", image: null, audio: null }
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-39.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-40.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-41.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-42.mp3" }
+        ],
+        answer: 3
+    },
+    {
+        id: 31,
+        instruction: {
+            text: "31. 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "",
+            image: null,
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-43.mp3"
+        },
+        options: [
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-44.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-45.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-46.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-47.mp3" }
+        ],
+        answer: 3
+    },
+    {
+        id: 32,
+        instruction: {
+            text: "32. 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "",
+            image: null,
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-48.mp3"
+        },
+        options: [
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-49.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-50.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-51.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-52.mp3" }
         ],
         answer: 1
     },
     {
         id: 33,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 33.다음을 듣고 질문에 알맞은 대답을 고르십시오.",
+            text: "33. 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-13.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-53.mp3"
         },
         options: [
-            { text: "일년 쫌 댔어요.", image: null, audio: null },
-            { text: "지난 주에 갔어요.", image: null, audio: null },
-            { text: "다음 주에 가려고 했어요.", image: null, audio: null },
-            { text: "어제 방문을 했어요.", image: null, audio: null }
-        ],
-        answer: 3
-    },
-    {
-        id: 34,
-        instruction: {
-            text: "[Q-ID : 1]<br><br> 34.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-14.mp3"
-        },
-        options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-33.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-32.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-34.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-35.jpg", audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 35,
-        instruction: {
-            text: "[Q-ID : 1]<br><br> 35.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "",
-            image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-15.mp3"
-        },
-        options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-37.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-38.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-39.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-36.jpg", audio: null }
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-54.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-55.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-56.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-57.mp3" }
         ],
         answer: 4
     },
     {
-        id: 36,
+        id: 34,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 36.다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            text: "34.  다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-16.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-58.mp3"
         },
         options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-42.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-41.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-43.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-40.jpg", audio: null }
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-76.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-77.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-78.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-79.jpg", audio: null }
         ],
         answer: 1
+    },
+    {
+        id: 35,
+        instruction: {
+            text: "35. 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "",
+            image: null,
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-59.mp3"
+        },
+        options: [
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-80.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-81.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-82.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-83.jpg", audio: null }
+        ],
+        answer: 2
+    },
+    {
+        id: 36,
+        instruction: {
+            text: "36. 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "",
+            image: null,
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-60.mp3"
+        },
+        options: [
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-84.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-85.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-86.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-87.jpg", audio: null }
+        ],
+        answer: 3
     },
     {
         id: 37,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 37.다음을 듣고 질문에 알맞은 대답을 고르십시오",
+            text: "37. 다음을 듣고 질문에 알맞은 대답을 고르십시오",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "미용실은 어디에 있습니까 ?",
-            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-44.jpg",
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-17.mp3"
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-88.jpg",
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-61.mp3"
         },
         options: [
-            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-20.mp3" },
-            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-18.mp3" },
-            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-19.mp3" },
-            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-21.mp3" }
+            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-62.mp3" },
+            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-63.mp3" },
+            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-64.mp3" },
+            { text: "", image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-65.mp3" }
         ],
-        answer: 1
+        answer: 4
     },
     {
         id: 38,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 38.다음을 잘 듣고 내용과 같은 것을 고르십시오.",
+            text: "38. 다음을 잘 듣고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
+            text: "남자가 이곳에 온 이유는 무엇입니까?",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-22.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-66.mp3"
         },
         options: [
-            { text: "작업자이 위험하니까 안전모를 써야 합니다.", image: null, audio: null },
-            { text: "작업장이 위험하니까 보호복을 착용해야 합니다.", image: null, audio: null },
-            { text: "작업장이 소음이 심하니까 청력보호구를 착용해야 합니다.", image: null, audio: null },
-            { text: "작업장이 소음이 심하니까 귀를 보호하지 않아도 됩니다.", image: null, audio: null }
+            { text: "노트북 수리를 맡기려고", image: null, audio: null },
+            { text: "지하철 표를 구입하려고", image: null, audio: null },
+            { text: "잃어버린 가방을 찾으려고", image: null, audio: null },
+            { text: "내려야 할 역을 물어보려고", image: null, audio: null }
         ],
         answer: 3
     },
     {
         id: 39,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 39.다음을 잘 듣고 내용과 같은 것을 고르십시오.",
+            text: "39. 다음을 잘 듣고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "내일부터 연장 근무를 하는 이유가 무엇입니까?",
+            text: "점심시간 전까지 포장 작업을 끝내야 하는 이유는 무엇입니까?",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-23.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-67.mp3"
         },
         options: [
-            { text: "두시간이 걸려서.", image: null, audio: null },
-            { text: "주문이 밀려서.", image: null, audio: null },
-            { text: "일이 밀려서.", image: null, audio: null },
-            { text: "주문이 취소해서.", image: null, audio: null }
+            { text: "작업 시간이 많이 걸려서.", image: null, audio: null },
+            { text: "포장할 물건이 너무 많아서.", image: null, audio: null },
+            { text: "오후에 라벨을 붙여야 해서.", image: null, audio: null },
+            { text: "오후에 제품을 출고해야 해서.", image: null, audio: null }
         ],
-        answer: 2
+        answer: 4
     },
     {
         id: 40,
@@ -787,17 +787,17 @@ window.questions = [
             audio: null
         },
         questionBody: {
-            text: "제주도에 대한 알맞은 것을 고르십시오.",
+            text: "다음 중 들은 내용과 같은 것은 무엇입니까?",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-24.mp3"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-68.mp3"
         },
         options: [
-            { text: "제주도는 동쪽에 있습니다.", image: null, audio: null },
-            { text: "제주도는 한국의 제일 작은 섬입니다.", image: null, audio: null },
-            { text: "제주도는 하와이보다 큽니다.", image: null, audio: null },
-            { text: "제주도는 한국의 큰 섬입니다.", image: null, audio: null }
+            { text: "남자는 여자와 같은 공장에서 일합니다.", image: null, audio: null },
+            { text: "남자는 아직 공장장님을 못 만났습니다.", image: null, audio: null },
+            { text: "남자는 새 회사 사람들이 마음에 듭니다.", image: null, audio: null },
+            { text: "남자는 이전 공장에서와 같은 일을 합니다.", image: null, audio: null }
         ],
-        answer: 4
+        answer: 3
     },
   
   ]
