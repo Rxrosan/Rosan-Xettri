@@ -102,7 +102,7 @@ const contentCards = [
     },
     {   
         id: "file7", 
-        title: "F7- KOREAN EXAM PRACTICE - WEB-APP | SET-3 COMING SOON....", 
+        title: "F7- KOREAN EXAM PRACTICE - WEB-APP | SET-3", 
         description: "You can practice exam with set question.", 
         link: "RX-KR-EXAM-MODEL-2.html?exam=file7", 
         icon: "fas fa-book",

@@ -2,400 +2,400 @@ window.questions = [
   {
     id: 1,
     instruction: {
-        text: "[Q-ID : 1]<br><br> 1. 다음 단어와 관계있는 무엇입니까 ?",
+        text: "1. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
         image: null,
         audio: null
     },
     questionBody: {
-        text: "나라",
-        image: null,
+        text: null,
+        image:"RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-89.jpg",
         audio: null
     },
     options: [
-        { text: "네팔", image:null , audio: null },
-        { text: "남자", image: null, audio: null },
-        { text: "30세", image: null, audio: null },
-        { text: "회사원", image: null, audio: null }
+        { text: "세탁기.", image:null , audio: null },
+        { text: "냉장고.", image: null, audio: null },
+        { text: "예초기.", image: null, audio: null },
+        { text: "청소기.", image: null, audio: null }
     ],
-    answer: 1
+    answer: 3
     },
     {
         id: 2,
         instruction: {
-            text: "[Q-ID : 2]<br><br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            text: "2. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "국적 - - - - - - - - - -",
-            image: null,
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-90.jpg",
             audio: null
         },
         options: [
-            { text: "남자", image: null, audio: null },
-            { text: "베트남", image: null, audio: null },
-            { text: "어부", image: null, audio: null },
-            { text: "부산시", image: null, audio: null }
+            { text: "착암기 – 바위를 뚫어요.", image: null, audio: null },
+            { text: "착암기 – 광석을 운반해요.", image: null, audio: null },
+            { text: "컨베이어 – 바위를 뚫어요.", image: null, audio: null },
+            { text: "컨베이어 – 광석을 운반해요.", image: null, audio: null }
         ],
-        answer: 2
+        answer: 1
     },
     {
         id: 3,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 3. 다음 중 밑출 친 부분이 맞는 문장을 고르십시오.",
+            text: "1. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
-            image: null,
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-91.jpg",
             audio: null
         },
         options: [
-            { text: "방에 옷장<u>가</u> 없어요.", image: null, audio: null },
-            { text: "저는 농부<u>이</u> 아니에요.", image: null, audio: null },
-            { text: "유수프는 식당<u>에</u> 밥을 먹어요.", image: null, audio: null },
-            { text: "다라 씨는 회사<u>에</u> 있어요.", image: null, audio: null }
+            { text: "위험한 곳이니까 조심하세요.", image: null, audio: null },
+            { text: " 다칠 수 있으니까 조심하세요.", image: null, audio: null },
+            { text: "바닥에 장애물이 있으니까 조심하세요.", image: null, audio: null },
+            { text: "방사능이 나오는 물질이 있으니까 조심하세요.", image: null, audio: null }
         ],
-        answer: 4
+        answer: 1
     },
     {
         id: 4,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 4. 다음 중 밑출 친 부분이 맞는 것을 고르십시오.",
+            text: "4. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "",
-            image: null,
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-92.jpg",
             audio: null
         },
         options: [
-            { text: "열쇠<u>은</u> 책상 위에 있어요.", image: null, audio: null },
-            { text: "지갑<u>는</u> 없어요.", image: null, audio: null },
-            { text: "달력<u>이</u> 아니예요", image: null, audio: null },
-            { text: "동생<u>가</u> 운전기사에요.", image: null, audio: null }
+            { text: "로", image: null, audio: null },
+            { text: "리", image: null, audio: null },
+            { text: "르", image: null, audio: null },
+            { text: "러", image: null, audio: null }
         ],
         answer: 3
     },
     {
         id: 5,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 5. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "5. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "한국 사람들은 자신보다 나이가 많거나 지위가 높은 사람에게 인사할 때 허리를 굽혀 인사합니다. 자신보다 어리거나 친한 사람에게는 손을 흔들어 인사합니다. 공적인 상항에서는 주로 악수를 하며 인사합니다. 이때 자신보다 나이가 훨씬 많거나 지위가 높은 사람이라면 왼손으로 오른팔을 받치고 악수해야 합니다.",
+            text: null,
             image: null,
             audio: null
         },
         options: [
-            { text: "자신보다 나이가 많은 사람과는 악수를 하지 않습니다", image: null, audio: null },
-            { text: "지위가 높은 사람과 악수할 때는 왼손으로 오른팔을 받칩니다.", image: null, audio: null },
-            { text: "공적인 상항에서는 인사할 때는 주로 손을 흔듭니다.", image: null, audio: null },
-            { text: "친한 친구에게는 허리를 굽혀 인사해야 합니다.", image: null, audio: null }
+            { text: "버스에서 교통카드를 <u>짝어요</u>.", image: null, audio: null },
+            { text: "지하철을 타고 학교에 <u>답니다</u>.", image: null, audio: null },
+            { text: "지하철역에서 사람들을 <u>먼났습니다</u>.", image: null, audio: null },
+            { text: "정류장에서 버스를 기다리고 <u>있습니다</u>.", image: null, audio: null }
         ],
-        answer: 2
+        answer: 4
     },
     {
         id: 6,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 6. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?", 
+            text: "6. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?", 
             image: null, 
             audio: null
         },
         questionBody: {
-            text: "", 
+            text: null, 
             image: null, 
             audio: null
         },
         options: [
-            { text: "친구한테서 선물을 <u>받았어요</u>.", image: null, audio: null },
-            { text: "퇴근할 때 문을 <u>달으세요</u>.", image: null, audio: null },
-            { text: "심심하면 한국 노래를 <u>듣어요</u>.", image: null, audio: null },
-            { text: "오늘 시내에서 많이 <u>걷었어요</u>.", image: null, audio: null }
+            { text: "집에서 </u>쉬었습니다.", image: null, audio: null },
+            { text: "<u>가족와 </u>외식했어요.", image: null, audio: null },
+            { text: "<u>공원아서 </u>산책했어요..", image: null, audio: null },
+            { text: "<u>친구과 </u>영화를 봤어요.", image: null, audio: null }
         ],
         answer: 1
     },
     {
         id: 7,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 7. 이 병원이 문을 여는 시간은 언제입니까?",
+            text: "7. 다음 글을 읽고 물음에 답하십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: null,
-            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-6.jpg",
+            text: "이 학원의 소장은 누구입니까?",
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-93.jpg",
             audio: null
         },
         options: [
-            { text: "튼튼치과입니다.", image: null, audio: null },
-            { text: "김미소입니다.", image: null, audio: null },
-            { text: "오전 아홉 시입니다.", image: null, audio: null },
-            { text: "부천시입니다.", image: null, audio: null }
-        ],
-        answer: 3
-    },
-    {
-        id: 8,
-        instruction: {
-            text: "[Q-ID : 1]<br><br> 8. 다음 단어와 관계있는 것은 무엇입니까?",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "복장",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "작업복", image: null, audio: null },
-            { text: "컴퓨터", image: null, audio: null },
-            { text: "비빔밥", image: null, audio: null },
-            { text: "기차표", image: null, audio: null }
+            { text: "김세연입니다.", image: null, audio: null },
+            { text: "서울특별시입니다.", image: null, audio: null },
+            { text: "비즈니스 영어입니다.", image: null, audio: null },
+            { text: "오전 10시 ~ 오후 9시.", image: null, audio: null }
         ],
         answer: 1
     },
     {
-        id: 9,
+        id: 8,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 9. 다음 단어와 관계있는 것은 무엇입니까?",
+            text: "8. 다음 단어와 관계있는 것은 무엇입니까?",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "작업장",
+            text: "병원",
             image: null,
             audio: null
         },
         options: [
-            { text: "근로자가 운동하는 곳이에요.", image: null, audio: null },
-            { text: "근로자가 상담하는 곳이에요.", image: null, audio: null },
-            { text: "근로자가 일하는 곳이에요.", image: null, audio: null },
-            { text: "근로자가 거주하는 곳이에요.", image: null, audio: null }
+            { text: "우산", image: null, audio: null },
+            { text: "의사 ", image: null, audio: null },
+            { text: "청바지", image: null, audio: null },
+            { text: "자전거", image: null, audio: null }
         ],
-        answer: 3
+        answer: 2
+    },
+    {
+        id: 9,
+        instruction: {
+            text: "9. 다음 단어의 비슷한 말은 무엇입니까 ? ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "잔존 ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 남다 ", image: null, audio: null },
+            { text: " 줄다 ", image: null, audio: null },
+            { text: " 빠지다 ", image: null, audio: null },
+            { text: " 사라지다", image: null, audio: null }
+        ],
+        answer: 1
     },
     {
         id: 10,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 10. 다음 글을 읽고 물음에 답하십시오.",
+            text: "10. 다음 작업에 대한 올바른 순서를 선택하세요.",
             image: null,
             audio: null
         },
         questionBody: {
             text: " 한국의 수산물 수입 현황에 대한 설명으로 맞는 것은 무엇입니까?",
-            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-7.jpg",
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-94.jpg",
             audio: null
         },
         options: [
-            { text: "한국이 수산물을 수입하는 국가 중 2위는 노르웨이입니다.", image: null, audio: null },
-            { text: "한국이 수입하는 수산물 중 베트남산은 5% 미만입니다.", image: null, audio: null },
-            { text: "한국은 수산물을 중국에서 가장 많이 수입합니다.", image: null, audio: null },
-            { text: "한국은 미국보다 러시아에서 수산물을 더 많이 수입합니다.", image: null, audio: null }
+            { text: "a-c-b", image: null, audio: null },
+            { text: "a-b-c", image: null, audio: null },
+            { text: "c-a-b", image: null, audio: null },
+            { text: "c-b-a", image: null, audio: null }
         ],
         answer: 4
     },
     {
         id: 11,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 11. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            text: "11. 다음 글을 읽고 물음에 답하십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "지급 방법 - - - - - - ",
-            image: null,
+            text: "다음은 경상남도 지역에 살고 있는 외국인 근로자들의 일하는 시간을 조사한 것입니다. 표에 대한 설명으로 맞는 것을 고르십시오.",
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-95.jpg",
             audio: null
         },
         options: [
-            { text: "생일 선물", image: null, audio: null },
-            { text: "통장 입금", image: null, audio: null },
-            { text: "가족 모임", image: null, audio: null },
-            { text: "출근 시간", image: null, audio: null }
-        ],
-        answer: 2
-    },
-    {
-        id: 12,
-        instruction: {
-            text: "[Q-ID : 1]<br><br> 12. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "한국어를 배우고 싶지만 학원에 갈 시간이 없습니다. 그래서 퇴근 후에 인터넷 강의를 - - - - - 한국어를 공부하고 있습니다.",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "들으면서", image: null, audio: null },
-            { text: "듣자마자", image: null, audio: null },
-            { text: "들으려고", image: null, audio: null },
-            { text: "듣느라고", image: null, audio: null }
-        ],
-        answer: 1
-    },
-    {
-        id: 13,
-        instruction: {
-            text: "[Q-ID : 1]<br><br> 13. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "오늘은 다른 날보다 길이 많이 막힙니다. - - - - - 가지 않으면 회사에 늦을 것 같습니다.",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "서두르게", image: null, audio: null },
-            { text: "조심해서", image: null, audio: null },
-            { text: "조심하게", image: null, audio: null },
-            { text: "서둘러서", image: null, audio: null }
+            { text: "대부분의 사람들은 하루 8시간 일하는 것을 좋아합니다.", image: null, audio: null },
+            { text: "하루 10시간 일하는 것이 하루 8시간 일하는 것보다 적습니다.", image: null, audio: null },
+            { text: "하루 12시간 이상 일하는 것과 하루 12시간 일하는 것은 같은 인원이다.", image: null, audio: null },
+            { text: "대부분의 사람들은 다른 사람들보다 더 많은 하루 12시간 일하는 것을 좋아합니다.", image: null, audio: null }
         ],
         answer: 4
     },
     {
-        id: 14,
+        id: 12,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 14. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            text: "12. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "오늘은 날씨가 너무 덥습니다. 집에 오자마자 선풍기를 - - - - - 시원한 물을 마셨습니다.",
+            text: "예약 시간: _____________",
             image: null,
             audio: null
         },
         options: [
-            { text: "틀려고", image: null, audio: null },
-            { text: "틀고", image: null, audio: null },
-            { text: "틀려면", image: null, audio: null },
-            { text: "틀면", image: null, audio: null }
+            { text: "작업", image: null, audio: null },
+            { text: "오후 3시", image: null, audio: null },
+            { text: "통장 입금", image: null, audio: null },
+            { text: "생일 선물", image: null, audio: null }
         ],
         answer: 2
     },
     {
-        id: 15,
+        id: 13,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 15. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            text: "13. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "못에 찔렸을 때는 상처가 가벼워도 바로 소독을 해야 합니다. 그리고 병원에 가서 진료를 받고 주사를 - - - - - .",
+            text: "요즘 스트레스를 많이 받아서 퇴근 후에 공원에서 산책을 ________ 마음이 좀 편해졌어요.",
             image: null,
             audio: null
         },
         options: [
-            { text: "놓는 것이 좋습니다", image: null, audio: null },
-            { text: "맞지 않도록 합니다", image: null, audio: null },
-            { text: "맞는 것이 좋습니다", image: null, audio: null },
-            { text: "놓지 않도록 합니다", image: null, audio: null }
-        ],
-        answer: 3
-    },
-    {
-        id: 16,
-        instruction: {
-            text: "[Q-ID : 1]<br><br> 16. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
-            image: null,
-            audio: null
-        },
-        questionBody: {
-            text: "어두운 곳에서 작업할 때는 가시성이 높은 - - - - - . 이것을 입으면 멀리서도 잘 보여 사고를 막을 수 있습니다.",
-            image: null,
-            audio: null
-        },
-        options: [
-            { text: "반사 조끼를 착용해야 합니다", image: null, audio: null },
-            { text: "환기 장치를 작동해야 합니다", image: null, audio: null },
-            { text: "비상 계단을 이용해야 합니다", image: null, audio: null },
-            { text: "보호 장갑을 구매해야 합니다", image: null, audio: null }
+            { text: "하면서 ", image: null, audio: null },
+            { text: "하려고", image: null, audio: null },
+            { text: "하자마자", image: null, audio: null },
+            { text: "하느라고", image: null, audio: null }
         ],
         answer: 1
     },
     {
-        id: 17,
+        id: 14,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 17. 다음 설명에 알맞은 어휘를 고르십시오.",
+            text: "14. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "손에 쥐고 철사를 끊거나 구부릴 때 쓰는 도구입니다. 전선이나 작은 부품을 잡을 때도 사용합니다.",
+            text: "설날에는 가족들이 모여서 떡국을 ________ 한 해의 건강과 행복을 기원합니다.",
             image: null,
             audio: null
         },
         options: [
-            { text: "쇠톱", image: null, audio: null },
-            { text: "망치", image: null, audio: null },
-            { text: "토치", image: null, audio: null },
-            { text: "펜치", image: null, audio: null }
+            { text: "먹으려고", image: null, audio: null },
+            { text: "먹자마자", image: null, audio: null },
+            { text: "먹느라고", image: null, audio: null },
+            { text: "먹으면서 ", image: null, audio: null }
+        ],
+        answer: 4
+    },
+    {
+        id: 15,
+        instruction: {
+            text: "15. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "비가 많이 와서 옷이 다 젖었습니다. 집에 들어가자마자 옷을 ________ 따뜻한 물로 샤워를 했습니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "벗고 ", image: null, audio: null },
+            { text: "벗으면", image: null, audio: null },
+            { text: "벗으려고", image: null, audio: null },
+            { text: "벗느라고", image: null, audio: null }
+        ],
+        answer: 1
+    },
+    {
+        id: 16,
+        instruction: {
+            text: "16. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "아침에 늦잠을 자서 급하게 나왔습니다. 지하철에 ________ 회사에 전화를 했습니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "타면", image: null, audio: null },
+            { text: "타고 ", image: null, audio: null },
+            { text: "타려고", image: null, audio: null },
+            { text: "타느라고", image: null, audio: null }
+        ],
+        answer: 2
+    },
+    {
+        id: 17,
+        instruction: {
+            text: "17. 다음 설명에 알맞은 어휘를 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "음식 재료를 갈거나 으깨는 데 사용하는 도구입니다. 주로 마늘이나 생강을 다질 때 사용하며, 손으로 눌러 사용하는 경우가 많습니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "칼", image: null, audio: null },
+            { text: "냄비", image: null, audio: null },
+            { text: "국자", image: null, audio: null },
+            { text: "다지기 ", image: null, audio: null }
         ],
         answer: 4
     },
     {
         id: 18,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 18. 다음 글을 읽고 무엇에 대한 글인지 고르십시오.",
+            text: "18. 다음 글을 읽고 무엇에 대한 글인지 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "한국 사람들은 계절마다 즐겨 먹는 음식이 있습니다. 여름에는 차갑고 시원한 냉면, 콩국수, 팥빙수 등을 많이 먹습니다. 겨울에는 뜨거운 국이나 따뜻한 팥죽, 군고구마, 호떡 등을 자주 먹습니다.",
+            text: "위험한 화학물질은 라벨을 부착하여 보관하세요. 잘못 사용할 경우 큰 사고가 발생할 수 있습니다. ",
             image: null,
             audio: null
         },
         options: [
-            { text: "음식 재료", image: null, audio: null },
-            { text: "계절 음식", image: null, audio: null },
-            { text: "조리 시기", image: null, audio: null },
-            { text: "조리 방법", image: null, audio: null }
+            { text: " 경고  ", image: null, audio: null },
+            { text: " 안내 ", image: null, audio: null },
+            { text: " 칭찬 ", image: null, audio: null },
+            { text: " 소개", image: null, audio: null }
         ],
-        answer: 2
+        answer: 1
     },
     {
         id: 19,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 19. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "19. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
             text: null,
-            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-8.jpg",
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-96.jpg",
             audio: null
         },
         options: [
-            { text: "회사 직원은 누구나 휴게실을 이용할 수 있습니다.", image: null, audio: null },
-            { text: "휴게실 이용 후에는 문을 열어 두고 나가야 합니다.", image: null, audio: null },
-            { text: "점심 도시락을 싸 가서 휴게실에서 먹을 수 있습니다.", image: null, audio: null },
-            { text: "사내 휴게실의 출입문 비밀번호는 따로 없습니다.", image: null, audio: null }
+            { text: "특정 직원만 복사기를 사용할 수 있습니다.", image: null, audio: null },
+            { text: "문서가 분실되었을 수 있으니 꼭 확인하세요.", image: null, audio: null },
+            { text: "복사기는 개인적인 용도로 사용할 수 있습니다.", image: null, audio: null },
+            { text: "용지나 토너가 부족하면 집에서 가져와야 합니다.", image: null, audio: null }
         ],
-        answer: 1
+        answer: 2
     },
     {
         id: 20,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 20. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            text: "20. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },
         questionBody: {
-            text: "한국에서 일하는 외국인 근로자는 4대 사회보험 혜택을 받습니다. 4대 사회보험 중 산재보험은 사업주만 가입하면 되지만 국민연금, 건강보험, 고용보험은 사업주와 근로자 모두 반드시 가입해야 합니다. 외국인 근로자는 질병, 부상, 상해, 실업 등이 발생하였을 때 가입한 4대 보험의 보험금을 받을 수 있습니다.",
+            text: "가구 제작 전에 필요한 준비 작업에는 도면 작성, 재료 구매, 도구 준비 등이 포함됩니다. 이러한 준비 작업이 끝나면 본격적으로 가구를 만들기 시작할 수 있습니다. ",
             image: null,
             audio: null
         },
         options: [
-            { text: "근로자는 가입하고 싶은 보험을 선택하여 가입할 수 있습니다.", image: null, audio: null },
-            { text: "산재보험은 근로자와 사업주가 모두 가입해야 합니다.", image: null, audio: null },
-            { text: "사업주는 4대 사회보험에 모두 가입해야 합니다.", image: null, audio: null },
-            { text: "사업주는 사고가 발생하면 보험금을 받을 수 있습니다.", image: null, audio: null }
+            { text: "가구 제작은 도면 작성 없이 시작할 수 있습니다.", image: null, audio: null },
+            { text: "가구 제작 전에는 특별한 준비 작업이 필요 없습니다. ", image: null, audio: null },
+            { text: "준비 작업이 끝나면 가구 제작을 시작할 수 있습니다.  ", image: null, audio: null },
+            { text: "재료 구매와 도구 준비는 가구 제작 후에 이루어집니다. ", image: null, audio: null }
         ],
         answer: 3
     },
