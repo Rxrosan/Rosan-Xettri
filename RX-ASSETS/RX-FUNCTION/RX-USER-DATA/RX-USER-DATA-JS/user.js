@@ -61,6 +61,8 @@ const allUsers = [
         access: [],
         timedAccessConfig: {
             "file5": { startDate: "2026-04-23", duration: 31 },
+            "file3": { startDate: "2026-04-23", duration: 31 },
+            "file4": { startDate: "2026-04-23", duration: 31 },
         },
         dateOfBirth: "2003-05-08",
     },
