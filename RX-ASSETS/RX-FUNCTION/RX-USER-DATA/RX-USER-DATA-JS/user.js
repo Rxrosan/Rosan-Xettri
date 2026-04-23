@@ -62,7 +62,7 @@ const allUsers = [
         timedAccessConfig: {
             "file5": { startDate: "2026-04-23", duration: 31 },
         },
-        dateOfBirth: null,
+        dateOfBirth: "2003-05-08",
     },
 ];
 
