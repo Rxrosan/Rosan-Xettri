@@ -48,6 +48,22 @@ const allUsers = [
         },
         dateOfBirth: null,
     },
+    {
+        id: "RX-U-02",
+        userName: "SUNIL",
+        fullName: "Sunil Kumar kewat",
+        email: "sunilkumarnishad123987@gmail.com",
+        image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/SUNIL.jpg",
+        phone: "9826492178",
+        address: "Kapilvastu 10 Pachehara",
+        accountType: "USER",
+        password: "RX9826492178",
+        access: [],
+        timedAccessConfig: {
+            "file5": { startDate: "2026-04-23", duration: 31 },
+        },
+        dateOfBirth: null,
+    },
 ];
 
 // Content Cards Database
