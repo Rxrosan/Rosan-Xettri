@@ -46,7 +46,7 @@
     
     // Custom Colors
     colors: {
-      primary: 'ltransprent',
+      primary: 'transprent',
       headerBg: 'rgba(0,0,0,0.3)',
       inputBg: 'rgba(255,255,255,0.1)',
       botMessageBg: 'transprent',
