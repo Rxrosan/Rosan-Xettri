@@ -66,6 +66,20 @@ const allUsers = [
         },
         dateOfBirth: "2003-05-08",
     },
+    {
+        id: "RX-M-02",
+        userName: "ROHAN",
+        fullName: "Rohan B.K",
+        email: "bkrohan421@gmail.com",
+        image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/ROHAN.jpg",
+        phone: "9809634788",
+        address: "Banganga-10, Pakadiachapa",
+        accountType: "MEMBER",
+        password: "RX9809634788",
+        access: ["file3", "file4","file5", "file7"],
+        timedAccessConfig: {},
+        dateOfBirth: "2007-11-23",
+    },
 ];
 
 // Content Cards Database

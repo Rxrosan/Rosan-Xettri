@@ -19,7 +19,7 @@ const questionsForNumber13 = [
             { text: "조심하게", image: null, audio: null },
             { text: "서둘러서", image: null, audio: null }
         ],
-        answer: 4
+        answer: 1
     },
     
 ];
