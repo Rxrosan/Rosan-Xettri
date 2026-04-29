@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
         blurAmount: 12
     };
 
-    // Enhanced HTML Structure with Navigation and Indicators
+    // Enhanced HTML Structure with Navigation and Indicators (progress bar removed)
     reviewSection.innerHTML = `
         <div class="rx-reviews-wrapper">
             <div class="rx-reviews-header">
@@ -125,14 +125,10 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             
             <div class="rx-dots-container"></div>
-            
-            <div class="rx-progress-bar">
-                <div class="rx-progress-fill"></div>
-            </div>
         </div>
     `;
 
-    // Enhanced CSS Styles - Transparent Background
+    // Enhanced CSS Styles - Transparent Background (progress bar styles removed, overflow fixed)
     const style = document.createElement('style');
     style.textContent = `
         @keyframes rx-fadeInUp {
@@ -149,11 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
         @keyframes rx-glowPulse {
             0%, 100% { opacity: 0.3; transform: scale(0.8); }
             50% { opacity: 0.6; transform: scale(1.2); }
-        }
-        
-        @keyframes rx-progressFill {
-            from { transform: scaleX(0); }
-            to { transform: scaleX(1); }
         }
         
         @keyframes rx-starPulse {
@@ -229,6 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
             position: relative;
             min-height: 450px;
             perspective: 1000px;
+            overflow: hidden;
         }
         
         .rx-review-card {
@@ -251,6 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
             display: flex;
             flex-direction: column;
             transform-style: preserve-3d;
+            overflow-y: auto;
         }
         
         .rx-review-card.active {
@@ -262,17 +255,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         .rx-review-card.prev {
-            transform: translateX(-30%) scale(0.85);
+            transform: translateX(-40%) scale(0.85);
             opacity: 0;
             visibility: hidden;
             filter: blur(4px);
+            pointer-events: none;
         }
         
         .rx-review-card.next {
-            transform: translateX(30%) scale(0.85);
+            transform: translateX(40%) scale(0.85);
             opacity: 0;
             visibility: hidden;
             filter: blur(4px);
+            pointer-events: none;
         }
         
         .rx-review-card:hover {
@@ -323,6 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         .rx-reviewer-avatar {
             position: relative;
+            flex-shrink: 0;
         }
         
         .rx-reviewer-img {
@@ -356,6 +352,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .rx-review-card:hover .rx-reviewer-img {
             border-color: #ff6b6b;
             transform: scale(1.05);
+        }
+        
+        .rx-reviewer-info {
+            flex: 1;
         }
         
         .rx-reviewer-info h4 {
@@ -397,6 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
             color: #333;
             flex-shrink: 0;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 20;
         }
         
         .rx-nav-btn:hover {
@@ -437,24 +438,6 @@ document.addEventListener('DOMContentLoaded', function() {
             transform: scale(1.2);
         }
         
-        .rx-progress-bar {
-            width: 100%;
-            height: 3px;
-            background: rgba(0,0,0,0.1);
-            border-radius: 3px;
-            margin-top: 24px;
-            overflow: hidden;
-        }
-        
-        .rx-progress-fill {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
-            border-radius: 3px;
-            transform-origin: left;
-            transition: transform 0.1s linear;
-        }
-        
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
             .rx-section-title {
@@ -492,9 +475,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .rx-dot {
                 background: rgba(255,255,255,0.3);
             }
-            .rx-progress-bar {
-                background: rgba(255,255,255,0.1);
-            }
         }
         
         /* Mobile Responsive */
@@ -512,8 +492,7 @@ document.addEventListener('DOMContentLoaded', function() {
         @media (prefers-reduced-motion: reduce) {
             .rx-review-card,
             .rx-nav-btn,
-            .rx-dot,
-            .rx-progress-fill {
+            .rx-dot {
                 transition: none !important;
                 animation: none !important;
             }
@@ -527,13 +506,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevBtn = reviewSection.querySelector('.rx-nav-prev');
     const nextBtn = reviewSection.querySelector('.rx-nav-next');
     const dotsContainer = reviewSection.querySelector('.rx-dots-container');
-    const progressFill = reviewSection.querySelector('.rx-progress-fill');
     
     let currentIndex = 0;
     let autoPlayInterval;
-    let progressInterval;
-    let startX = 0;
-    let isDragging = false;
     let isPaused = false;
     let isAnimating = false;
 
@@ -581,10 +556,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentCard = reviewCards[currentIndex];
         const targetCard = reviewCards[targetIndex];
         
-        // Reset progress
-        resetProgress();
-        
-        // Animate transition
+        // Reset styles for animation
         targetCard.style.opacity = '0';
         targetCard.style.visibility = 'visible';
         
@@ -599,7 +571,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 currentIndex = targetIndex;
                 updateCardClasses();
                 updateDots();
-                startProgress();
                 
                 setTimeout(() => {
                     isAnimating = false;
@@ -610,40 +581,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Next slide
     function nextSlide() {
-        if (!isPaused) goToSlide(currentIndex + 1, 'next');
+        if (!isPaused && !isAnimating) {
+            goToSlide(currentIndex + 1, 'next');
+        }
     }
 
     // Previous slide
     function prevSlide() {
-        if (!isPaused) goToSlide(currentIndex - 1, 'prev');
-    }
-
-    // Progress bar animation
-    function startProgress() {
-        if (progressInterval) cancelAnimationFrame(progressInterval);
-        if (!CONFIG.autoPlay) return;
-        
-        let startTime = Date.now();
-        progressFill.style.transform = 'scaleX(0)';
-        
-        function updateProgress() {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min(elapsed / CONFIG.rotationInterval, 1);
-            progressFill.style.transform = `scaleX(${progress})`;
-            
-            if (progress < 1 && !isPaused && CONFIG.autoPlay) {
-                progressInterval = requestAnimationFrame(updateProgress);
-            } else if (progress >= 1) {
-                nextSlide();
-            }
+        if (!isPaused && !isAnimating) {
+            goToSlide(currentIndex - 1, 'prev');
         }
-        
-        progressInterval = requestAnimationFrame(updateProgress);
-    }
-    
-    function resetProgress() {
-        if (progressInterval) cancelAnimationFrame(progressInterval);
-        progressFill.style.transform = 'scaleX(0)';
     }
 
     // Auto rotation control
@@ -651,8 +598,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (autoPlayInterval) clearInterval(autoPlayInterval);
         if (!CONFIG.autoPlay) return;
         
-        resetProgress();
-        startProgress();
         autoPlayInterval = setInterval(() => {
             if (!isPaused && !isAnimating) {
                 nextSlide();
@@ -662,29 +607,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function stopAutoPlay() {
         if (autoPlayInterval) clearInterval(autoPlayInterval);
-        if (progressInterval) cancelAnimationFrame(progressInterval);
     }
     
     function pauseAutoPlay() {
         isPaused = true;
-        if (progressInterval) cancelAnimationFrame(progressInterval);
     }
     
     function resumeAutoPlay() {
         isPaused = false;
-        if (CONFIG.autoPlay) {
-            startProgress();
-        }
     }
 
     // Touch/Swipe support
+    let startX = 0;
+    let isDragging = false;
+    
     function handleTouchStart(e) {
         startX = e.touches[0].clientX;
         isDragging = true;
     }
     
     function handleTouchMove(e) {
-        if (!isDragging) return;
+        if (!isDragging || isAnimating) return;
         const moveX = e.touches[0].clientX - startX;
         if (Math.abs(moveX) > CONFIG.touchThreshold) {
             if (moveX > 0) {
@@ -700,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function() {
         isDragging = false;
     }
 
-    // Background image on hover (enhanced)
+    // Background image on click (enhanced)
     function setupBackgroundToggle() {
         reviewCards.forEach(card => {
             card.addEventListener('click', (e) => {
@@ -727,13 +670,19 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleKeydown(e) {
         if (!CONFIG.keyboardNavigation) return;
         if (e.key === 'ArrowLeft') {
+            e.preventDefault();
             prevSlide();
-            pauseAutoPlay();
-            setTimeout(resumeAutoPlay, 5000);
+            if (CONFIG.autoPlay) {
+                pauseAutoPlay();
+                setTimeout(resumeAutoPlay, 5000);
+            }
         } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
             nextSlide();
-            pauseAutoPlay();
-            setTimeout(resumeAutoPlay, 5000);
+            if (CONFIG.autoPlay) {
+                pauseAutoPlay();
+                setTimeout(resumeAutoPlay, 5000);
+            }
         }
     }
 
