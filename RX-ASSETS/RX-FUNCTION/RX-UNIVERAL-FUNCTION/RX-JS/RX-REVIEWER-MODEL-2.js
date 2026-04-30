@@ -34,10 +34,10 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="rx-reviews-header">
                 <h2 class="rx-section-title">
                     <span class="rx-title-icon">⭐</span>
-                    Client Testimonials
+                    Client Rewiew
                     <span class="rx-title-glow"></span>
                 </h2>
-                <p class="rx-section-subtitle">What people say about my work</p>
+                <p class="rx-section-subtitle">People say about my work</p>
             </div>
             
             <div class="rx-carousel-container">
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="rx-reviewer-info">
                                 <h4>Puja Acharya Shrestha</h4>
                                 <p>Palpa, Nepal</p>
-                                <span class="rx-verified-badge">✓ Verified Client</span>
+                                <span class="rx-verified-badge">REVIEWER</span>
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="rx-reviewer-info">
                                 <h4>कुस्मा तरामु मगर</h4>
                                 <p>Gulmi-Lumpek</p>
-                                <span class="rx-verified-badge">✓ Verified Client</span>
+                                <span class="rx-verified-badge">REVIEWER</span>
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="rx-reviewer-info">
                                 <h4>Rita Magar</h4>
                                 <p>Banganga-5, Kapilvastu</p>
-                                <span class="rx-verified-badge">✓ Verified Client</span>
+                                <span class="rx-verified-badge">REVIEWER</span>
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <div class="rx-reviewer-info">
                                 <h4>Pawana Thapaliya</h4>
                                 <p>Kathmandu, Nepal</p>
-                                <span class="rx-verified-badge">✓ Verified Client</span>
+                                <span class="rx-verified-badge">REVIEWER</span>
                             </div>
                         </div>
                     </div>
