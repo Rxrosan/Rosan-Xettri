@@ -21,6 +21,26 @@ const questionsForNumber12 = [
         ],
         answer: 1
     },
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>12. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "예약 시간: _____________",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "작업", image: null, audio: null },
+            { text: "오후 3시", image: null, audio: null },
+            { text: "통장 입금", image: null, audio: null },
+            { text: "생일 선물", image: null, audio: null }
+        ],
+        answer: 2
+    },
     
 ];
 

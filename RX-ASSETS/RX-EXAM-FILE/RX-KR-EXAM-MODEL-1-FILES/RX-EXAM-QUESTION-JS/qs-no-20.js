@@ -21,6 +21,26 @@ const questionsForNumber20 = [
         ],
         answer: 3
     },
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>20. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "가구 제작 전에 필요한 준비 작업에는 도면 작성, 재료 구매, 도구 준비 등이 포함됩니다. 이러한 준비 작업이 끝나면 본격적으로 가구를 만들기 시작할 수 있습니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "가구 제작은 도면 작성 없이 시작할 수 있습니다.", image: null, audio: null },
+            { text: "가구 제작 전에는 특별한 준비 작업이 필요 없습니다. ", image: null, audio: null },
+            { text: "준비 작업이 끝나면 가구 제작을 시작할 수 있습니다.  ", image: null, audio: null },
+            { text: "재료 구매와 도구 준비는 가구 제작 후에 이루어집니다. ", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 

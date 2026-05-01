@@ -21,7 +21,26 @@ const questionsForNumber10 = [
         ],
         answer: 4
     },
-    
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>10. 다음 작업에 대한 올바른 순서를 선택하세요.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 한국의 수산물 수입 현황에 대한 설명으로 맞는 것은 무엇입니까?",
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-94.jpg",
+            audio: null
+        },
+        options: [
+            { text: "a-c-b", image: null, audio: null },
+            { text: "a-b-c", image: null, audio: null },
+            { text: "c-a-b", image: null, audio: null },
+            { text: "c-b-a", image: null, audio: null }
+        ],
+        answer: 4
+    },
 ];
 
 // Register these questions with the manager

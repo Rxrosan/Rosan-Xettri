@@ -21,6 +21,26 @@ const questionsForNumber23 = [
         ],
         answer: 4
     },
+     {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>23. 다음을 듣고 들은 내용과 관계있는 그림을 고르십시오.",
+            image: null,
+            audio: null,
+        },
+        questionBody: {
+            text: "",
+            image: null,
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-71.WAV"
+        },
+        options: [
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-97.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-98.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-99.jpg", audio: null },
+            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-100.jpg", audio: null }
+        ],
+        answer: 2
+    },
     
 ];
 

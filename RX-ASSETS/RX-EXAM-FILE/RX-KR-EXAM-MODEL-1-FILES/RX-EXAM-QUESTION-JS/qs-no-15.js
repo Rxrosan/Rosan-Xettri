@@ -21,6 +21,26 @@ const questionsForNumber15 = [
         ],
         answer: 3
     },
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>15. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "비가 많이 와서 옷이 다 젖었습니다. 집에 들어가자마자 옷을 ________ 따뜻한 물로 샤워를 했습니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "벗고 ", image: null, audio: null },
+            { text: "벗으면", image: null, audio: null },
+            { text: "벗으려고", image: null, audio: null },
+            { text: "벗느라고", image: null, audio: null }
+        ],
+        answer: 1
+    },
     
 ];
 

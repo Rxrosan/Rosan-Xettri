@@ -63,7 +63,7 @@ const questionsForNumber3 = [
         answer: 3
     },
     {
-        id: 3,
+        id: 4,
         instruction: {
             text: "[Q-ID : 4]<br><br> 3. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
             image: null,
@@ -79,6 +79,26 @@ const questionsForNumber3 = [
             { text: "책을 읽고 있습니다.", image: null, audio: null },
             { text: "밥을 먹고 있습니다.", image: null, audio: null },
             { text: "친구를 만나고 있습니다.", image: null, audio: null }
+        ],
+        answer: 1
+    },
+    {
+        id: 5,
+        instruction: {
+            text: "[Q-ID : 5]<br><br> 3. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-91.jpg",
+            audio: null
+        },
+        options: [
+            { text: "위험한 곳이니까 조심하세요.", image: null, audio: null },
+            { text: " 다칠 수 있으니까 조심하세요.", image: null, audio: null },
+            { text: "바닥에 장애물이 있으니까 조심하세요.", image: null, audio: null },
+            { text: "방사능이 나오는 물질이 있으니까 조심하세요.", image: null, audio: null }
         ],
         answer: 1
     },

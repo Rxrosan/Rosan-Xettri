@@ -21,6 +21,26 @@ const questionsForNumber9 = [
         ],
         answer: 3
     },
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>9. 다음 단어의 비슷한 말은 무엇입니까 ? ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "잔존 ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 남다 ", image: null, audio: null },
+            { text: " 줄다 ", image: null, audio: null },
+            { text: " 빠지다 ", image: null, audio: null },
+            { text: " 사라지다", image: null, audio: null }
+        ],
+        answer: 1
+    },
     
 ];
 

@@ -21,6 +21,26 @@ const questionsForNumber38 = [
         ],
         answer: 3
     },
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>38. 다음을 잘 듣고 내용과 같은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "다음은 무엇에 대해 말하고 있습니까?",
+            image: null,
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-110.mp3"
+        },
+        options: [
+            { text: "취미", image: null, audio: null },
+            { text: "여행", image: null, audio: null },
+            { text: "직업", image: null, audio: null },
+            { text: "고향", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 

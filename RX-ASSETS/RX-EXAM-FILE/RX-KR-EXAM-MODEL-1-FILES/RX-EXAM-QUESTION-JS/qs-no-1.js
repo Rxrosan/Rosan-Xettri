@@ -102,7 +102,7 @@ const questionsForNumber1 = [
         answer: 3
     },
     {
-        id: 5,
+        id: 6,
         instruction: {
             text: "[Q-ID : 6]<br><br> 1. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
             image: null,
@@ -121,6 +121,27 @@ const questionsForNumber1 = [
         ],
         answer: 2
     },
+    {
+    id: 7,
+    instruction: {
+        text: "[Q-ID : 7]<br><br> 1. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
+        image: null,
+        audio: null
+    },
+    questionBody: {
+        text: null,
+        image:"RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-89.jpg",
+        audio: null
+    },
+    options: [
+        { text: "세탁기.", image:null , audio: null },
+        { text: "냉장고.", image: null, audio: null },
+        { text: "예초기.", image: null, audio: null },
+        { text: "청소기.", image: null, audio: null }
+    ],
+    answer: 3
+    },
+    
 ];
 
 // Register these questions with the manager

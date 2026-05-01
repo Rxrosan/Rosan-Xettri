@@ -21,7 +21,26 @@ const questionsForNumber18 = [
         ],
         answer: 2
     },
-    
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>18. 다음 글을 읽고 무엇에 대한 글인지 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "위험한 화학물질은 라벨을 부착하여 보관하세요. 잘못 사용할 경우 큰 사고가 발생할 수 있습니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 경고  ", image: null, audio: null },
+            { text: " 안내 ", image: null, audio: null },
+            { text: " 칭찬 ", image: null, audio: null },
+            { text: " 소개", image: null, audio: null }
+        ],
+        answer: 1
+    },
 ];
 
 // Register these questions with the manager

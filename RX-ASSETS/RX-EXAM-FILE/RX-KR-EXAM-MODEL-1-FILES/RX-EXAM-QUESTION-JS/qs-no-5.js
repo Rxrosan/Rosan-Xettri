@@ -102,6 +102,26 @@ const questionsForNumber5 = [
         ],
         answer: 4
     },
+    {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br>5. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: null,
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "버스에서 교통카드를 <u>짝어요</u>.", image: null, audio: null },
+            { text: "지하철을 타고 학교에 <u>답니다</u>.", image: null, audio: null },
+            { text: "지하철역에서 사람들을 <u>먼났습니다</u>.", image: null, audio: null },
+            { text: "정류장에서 버스를 기다리고 <u>있습니다</u>.", image: null, audio: null }
+        ],
+        answer: 4
+    },
 
 ];
 

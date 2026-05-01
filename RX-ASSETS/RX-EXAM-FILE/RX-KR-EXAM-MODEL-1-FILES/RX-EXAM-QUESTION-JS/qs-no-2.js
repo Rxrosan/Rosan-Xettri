@@ -62,7 +62,7 @@ const questionsForNumber2 = [
         answer: 2
     },
     {
-        id: 3,
+        id: 4,
         instruction: {
             text: "[Q-ID : 4]<br><br> 2.다음 그림을 보고 맞는 단어나 문장을 고르십시오",
             image: null,
@@ -80,6 +80,26 @@ const questionsForNumber2 = [
             { text: "지게차입니다", image: null, audio: null }
         ],
         answer: 4
+    },
+    {
+        id: 5,
+        instruction: {
+            text: "[Q-ID : 5]<br><br> 2. 다음 그림을 보고 맞는 단어나 문장을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-90.jpg",
+            audio: null
+        },
+        options: [
+            { text: "착암기 – 바위를 뚫어요.", image: null, audio: null },
+            { text: "착암기 – 광석을 운반해요.", image: null, audio: null },
+            { text: "컨베이어 – 바위를 뚫어요.", image: null, audio: null },
+            { text: "컨베이어 – 광석을 운반해요.", image: null, audio: null }
+        ],
+        answer: 1
     },
     
 

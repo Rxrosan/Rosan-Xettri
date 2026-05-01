@@ -21,6 +21,26 @@ const questionsForNumber16 = [
         ],
         answer: 1
     },
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>16. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "아침에 늦잠을 자서 급하게 나왔습니다. 지하철에 ________ 회사에 전화를 했습니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "타면", image: null, audio: null },
+            { text: "타고 ", image: null, audio: null },
+            { text: "타려고", image: null, audio: null },
+            { text: "타느라고", image: null, audio: null }
+        ],
+        answer: 2
+    },
     
 ];
 

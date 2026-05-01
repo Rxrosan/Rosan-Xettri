@@ -19,6 +19,26 @@ const questionsForNumber13 = [
             { text: "조심하게", image: null, audio: null },
             { text: "서둘러서", image: null, audio: null }
         ],
+        answer: 4
+    },
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>13. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "요즘 스트레스를 많이 받아서 퇴근 후에 공원에서 산책을 ________ 마음이 좀 편해졌어요.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "하면서 ", image: null, audio: null },
+            { text: "하려고", image: null, audio: null },
+            { text: "하자마자", image: null, audio: null },
+            { text: "하느라고", image: null, audio: null }
+        ],
         answer: 1
     },
     

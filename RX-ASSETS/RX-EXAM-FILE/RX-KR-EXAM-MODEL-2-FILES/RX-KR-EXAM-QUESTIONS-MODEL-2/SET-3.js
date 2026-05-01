@@ -782,7 +782,7 @@ window.questions = [
     {
         id: 40,
         instruction: {
-            text: "[Q-ID : 1]<br><br> 40.다음을 잘 듣고 내용과 같은 것을 고르십시오.",
+            text: "40.다음을 잘 듣고 내용과 같은 것을 고르십시오.",
             image: null,
             audio: null
         },

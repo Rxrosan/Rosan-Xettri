@@ -21,6 +21,26 @@ const questionsForNumber32 = [
         ],
         answer: 1
     },
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>32. 다음을 듣고 질문에 알맞은 대답을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "",
+            image: null,
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-92.mp3"
+        },
+        options: [
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-93.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-94.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-95.mp3" },
+            { text: null, image: null, audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-96.mp3" }
+        ],
+        answer: 4
+    },
    
 ];
 

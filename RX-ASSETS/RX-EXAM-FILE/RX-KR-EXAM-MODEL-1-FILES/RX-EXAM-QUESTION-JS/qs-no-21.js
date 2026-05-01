@@ -21,6 +21,26 @@ const questionsForNumber21 = [
         ],
         answer: 4
     },
+    {
+        id: 2,
+        instruction: {
+            text: "[Q-ID : 2]<br><br>21. 다음을 듣고 질문에 알맞은 대답을 고르십시오",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text:  null,
+            image: null,
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-69.mp3"
+        },
+        options: [
+            { text: "물아요", image: null, audio: null},
+            { text: "물라요", image: null, audio: null},
+            { text: "물어요", image: null, audio: null},
+            { text: "물러요", image: null, audio: null}
+        ],
+        answer: 2
+    },
     
     
 ];

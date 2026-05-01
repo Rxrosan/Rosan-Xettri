@@ -81,6 +81,26 @@ const questionsForNumber4 = [
         ],
         answer: 3
     },
+    {
+        id: 5,
+        instruction: {
+            text: "[Q-ID : 5]<br><br> 4. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: null,
+            image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-92.jpg",
+            audio: null
+        },
+        options: [
+            { text: "로", image: null, audio: null },
+            { text: "리", image: null, audio: null },
+            { text: "르", image: null, audio: null },
+            { text: "러", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 
