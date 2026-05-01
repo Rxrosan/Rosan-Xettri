@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Typing animation class
+    // ==================== TYPING ANIMATION CLASS ====================
     class TypingAnimation {
         constructor(element, fullText, onComplete) {
             this.element = element;
@@ -137,54 +137,77 @@ document.addEventListener('DOMContentLoaded', function() {
         isCompleted() {
             return this.completed;
         }
+        
+        getCurrentProgress() {
+            return this.currentIndex;
+        }
+        
+        setProgress(index) {
+            this.currentIndex = index;
+        }
     }
 
+    // ==================== GLOBAL VARIABLES ====================
     let currentTypingAnimation = null;
     let rotateTimeout = null;
     let isPaused = false;
+    let currentIndex = 0;
+    let isAnimating = false;
+    let isAutoRotateEnabled = true;
 
-    // Function to start typing animation for a card
+    // ==================== CONFIGURATION ====================
+    const config = {
+        animationDuration: 500,
+        verticalOffset: 20,
+        mobileBreakpoint: 768,
+        bgOverlay: 'linear-gradient(rgba(0, 0, 2, 0.3), rgba(6, 0, 10, 0.3))',
+        bgColor: 'transparent',
+        autoRotateDelay: 3000,
+        swipeThreshold: 50,
+        swipeMaxTime: 300,
+        swipeVerticalThreshold: 30
+    };
+
+    // Get DOM elements
+    const reviewCards = document.querySelectorAll('.rx-review-card');
+    const reviewsContainer = document.querySelector('.rx-reviews-container');
+
+    // ==================== TYPING CONTROL FUNCTIONS ====================
+    
     function startTypingForCard(card, onCompleteCallback) {
         const textElement = card.querySelector('.rx-review-text');
         if (!textElement) return;
         
-        // Stop current typing if any
         if (currentTypingAnimation) {
             currentTypingAnimation.stop();
             currentTypingAnimation = null;
         }
         
-        // Clear any pending rotate timeout
         if (rotateTimeout) {
             clearTimeout(rotateTimeout);
             rotateTimeout = null;
         }
         
         const fullText = textElement.getAttribute('data-fulltext') || '';
-        
-        // Clear text content before starting
         textElement.textContent = '';
         
-        // Create new typing animation
         currentTypingAnimation = new TypingAnimation(textElement, fullText, () => {
             currentTypingAnimation = null;
             if (onCompleteCallback) {
                 onCompleteCallback();
-            } else if (!isPaused) {
-                // Auto rotate after 3 seconds when typing completes
+            } else if (!isPaused && isAutoRotateEnabled) {
                 rotateTimeout = setTimeout(() => {
-                    if (!isPaused) {
+                    if (!isPaused && isAutoRotateEnabled) {
                         rotateReviews(1);
                     }
                     rotateTimeout = null;
-                }, 3000);
+                }, config.autoRotateDelay);
             }
         });
         
         currentTypingAnimation.start();
     }
 
-    // Function to reset typing for a card (clear text)
     function resetTypingForCard(card) {
         const textElement = card.querySelector('.rx-review-text');
         if (textElement) {
@@ -195,15 +218,426 @@ document.addEventListener('DOMContentLoaded', function() {
             textElement.textContent = '';
         }
     }
+    
+    function pauseTyping() {
+        if (currentTypingAnimation) {
+            currentTypingAnimation.stop();
+        }
+        if (rotateTimeout) {
+            clearTimeout(rotateTimeout);
+            rotateTimeout = null;
+        }
+    }
+    
+    function resumeTyping() {
+        const currentCard = document.querySelector('.rx-review-card.current');
+        if (currentCard) {
+            const textElement = currentCard.querySelector('.rx-review-text');
+            const fullText = textElement.getAttribute('data-fulltext') || '';
+            const currentTextLength = textElement.textContent.length;
+            
+            if (currentTextLength < fullText.length) {
+                if (currentTypingAnimation) {
+                    currentTypingAnimation.stop();
+                    currentTypingAnimation = null;
+                }
+                
+                currentTypingAnimation = new TypingAnimation(textElement, fullText, () => {
+                    currentTypingAnimation = null;
+                    if (!isPaused && isAutoRotateEnabled) {
+                        rotateTimeout = setTimeout(() => {
+                            if (!isPaused && isAutoRotateEnabled) {
+                                rotateReviews(1);
+                            }
+                            rotateTimeout = null;
+                        }, config.autoRotateDelay);
+                    }
+                });
+                currentTypingAnimation.currentIndex = currentTextLength;
+                currentTypingAnimation.start();
+            } else if (currentTextLength >= fullText.length) {
+                if (!isPaused && isAutoRotateEnabled) {
+                    rotateTimeout = setTimeout(() => {
+                        if (!isPaused && isAutoRotateEnabled) {
+                            rotateReviews(1);
+                        }
+                        rotateTimeout = null;
+                    }, config.autoRotateDelay);
+                }
+            }
+        }
+    }
 
-    // Inject enhanced CSS styles
+    // ==================== CARD ROTATION FUNCTIONS ====================
+    
+    function rotateReviews(direction = 1) {
+        if (isAnimating || isPaused) return;
+        
+        isAnimating = true;
+        const currentCard = reviewCards[currentIndex];
+        const nextIndex = (currentIndex + direction + reviewCards.length) % reviewCards.length;
+        const nextCard = reviewCards[nextIndex];
+        
+        if (rotateTimeout) {
+            clearTimeout(rotateTimeout);
+            rotateTimeout = null;
+        }
+        
+        if (currentTypingAnimation) {
+            currentTypingAnimation.stop();
+            currentTypingAnimation = null;
+        }
+        
+        currentCard.style.opacity = '0';
+        currentCard.style.transform = `translateY(${-direction * config.verticalOffset}px)`;
+        currentCard.classList.remove('current');
+        currentCard.setAttribute('aria-hidden', 'true');
+        currentCard.setAttribute('tabindex', '-1');
+        
+        nextCard.style.display = 'flex';
+        nextCard.style.opacity = '0';
+        nextCard.style.transform = `translateY(${direction * config.verticalOffset}px)`;
+        
+        void nextCard.offsetHeight;
+        
+        setTimeout(() => {
+            nextCard.style.opacity = '1';
+            nextCard.style.transform = 'translateY(0)';
+            nextCard.classList.add('current');
+            nextCard.setAttribute('aria-hidden', 'false');
+            nextCard.setAttribute('tabindex', '0');
+            
+            startTypingForCard(nextCard);
+            
+            setTimeout(() => {
+                currentCard.style.display = 'flex';
+                currentIndex = nextIndex;
+                isAnimating = false;
+            }, 50);
+        }, 50);
+    }
+    
+    function nextReview() {
+        if (!isAnimating && !isPaused) {
+            rotateReviews(1);
+        }
+    }
+    
+    function prevReview() {
+        if (!isAnimating && !isPaused) {
+            rotateReviews(-1);
+        }
+    }
+
+    // ==================== TOGGLE IMAGE BACKGROUND FUNCTION (FIXED FOR MOBILE) ====================
+    
+    function toggleReviewImage(card) {
+        if (isAnimating) return;
+        
+        // Remove active class from all other cards
+        document.querySelectorAll('.rx-review-card.active').forEach(el => {
+            if (el !== card) {
+                el.classList.remove('active');
+                el.style.backgroundImage = '';
+                el.style.backgroundColor = '';
+            }
+        });
+        
+        // Toggle active class on clicked card
+        const isActivating = !card.classList.contains('active');
+        
+        if (isActivating) {
+            card.classList.add('active');
+            const imageUrl = card.getAttribute('data-image');
+            // Apply background image with overlay for better readability
+            card.style.backgroundImage = `${config.bgOverlay}, url('${imageUrl}')`;
+            card.style.backgroundSize = 'cover';
+            card.style.backgroundPosition = 'center';
+            card.style.backgroundRepeat = 'no-repeat';
+        } else {
+            card.classList.remove('active');
+            card.style.backgroundImage = '';
+            card.style.backgroundColor = '';
+        }
+    }
+
+    // ==================== DOUBLE TAP DETECTION (FIXED FOR MOBILE) ====================
+    
+    let lastTapTime = 0;
+    let tapTimeoutId = null;
+    
+    function handleDoubleTap() {
+        isPaused = !isPaused;
+        
+        if (isPaused) {
+            pauseTyping();
+        } else {
+            resumeTyping();
+        }
+    }
+    
+    // Universal click/tap handler for all devices
+    function handleCardInteraction(card, event) {
+        if (!card || isAnimating) return;
+        
+        const currentTime = new Date().getTime();
+        const tapInterval = currentTime - lastTapTime;
+        
+        // Clear any pending single tap timeout
+        if (tapTimeoutId) {
+            clearTimeout(tapTimeoutId);
+            tapTimeoutId = null;
+        }
+        
+        if (tapInterval < 300 && tapInterval > 0 && lastTapTime !== 0) {
+            // DOUBLE TAP detected
+            lastTapTime = 0;
+            handleDoubleTap();
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            // SINGLE TAP - wait to see if double tap follows
+            lastTapTime = currentTime;
+            tapTimeoutId = setTimeout(() => {
+                toggleReviewImage(card);
+                lastTapTime = 0;
+                tapTimeoutId = null;
+            }, 300);
+        }
+    }
+
+    // ==================== SWIPE GESTURE FUNCTIONS (FIXED FOR MOBILE) ====================
+    
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+    let isSwiping = false;
+    let touchMoved = false;
+
+    function handleTouchStart(event) {
+        const touch = event.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        touchStartTime = Date.now();
+        isSwiping = true;
+        touchMoved = false;
+    }
+
+    function handleTouchMove(event) {
+        if (!isSwiping) return;
+        
+        const touch = event.touches[0];
+        const deltaX = touch.clientX - touchStartX;
+        const deltaY = touch.clientY - touchStartY;
+        
+        // Check if this is a horizontal swipe
+        if (Math.abs(deltaX) > 10) {
+            touchMoved = true;
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                event.preventDefault();
+            }
+        }
+    }
+
+    function handleTouchEnd(event) {
+        if (!isSwiping) {
+            // If not swiping, handle as tap on the card
+            const card = event.target.closest('.rx-review-card');
+            if (card && !touchMoved) {
+                handleCardInteraction(card, event);
+            }
+            return;
+        }
+        
+        isSwiping = false;
+        
+        if (!touchMoved) {
+            // This was a tap, not a swipe
+            const card = event.target.closest('.rx-review-card');
+            if (card) {
+                handleCardInteraction(card, event);
+            }
+            touchStartX = 0;
+            touchStartY = 0;
+            touchStartTime = 0;
+            touchMoved = false;
+            return;
+        }
+        
+        const touchEndX = event.changedTouches[0].clientX;
+        const touchEndTime = Date.now();
+        const deltaX = touchEndX - touchStartX;
+        const deltaTime = touchEndTime - touchStartTime;
+        
+        // Check if swipe meets conditions
+        if (Math.abs(deltaX) >= config.swipeThreshold && deltaTime <= config.swipeMaxTime) {
+            if (deltaX > 0) {
+                // Swipe right - go to previous review
+                if (!isAnimating && !isPaused) {
+                    prevReview();
+                }
+            } else {
+                // Swipe left - go to next review
+                if (!isAnimating && !isPaused) {
+                    nextReview();
+                }
+            }
+        }
+        
+        touchStartX = 0;
+        touchStartY = 0;
+        touchStartTime = 0;
+        touchMoved = false;
+    }
+
+    function initSwipeDetection() {
+        reviewsContainer.removeEventListener('touchstart', handleTouchStart);
+        reviewsContainer.removeEventListener('touchmove', handleTouchMove);
+        reviewsContainer.removeEventListener('touchend', handleTouchEnd);
+        
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        if (isTouchDevice) {
+            reviewsContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+            reviewsContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+            reviewsContainer.addEventListener('touchend', handleTouchEnd);
+        }
+    }
+
+    // ==================== PAUSE/RESUME FUNCTIONS ====================
+    
+    function pauseAutoRotate() {
+        if (!isPaused) {
+            isPaused = true;
+            pauseTyping();
+        }
+    }
+    
+    function resumeAutoRotate() {
+        if (isPaused) {
+            isPaused = false;
+            resumeTyping();
+        }
+    }
+    
+    function togglePause() {
+        if (isPaused) {
+            resumeAutoRotate();
+        } else {
+            pauseAutoRotate();
+        }
+    }
+
+    // ==================== RESIZE HANDLER ====================
+    
+    function updateMobileLayout() {
+        const isMobile = window.innerWidth < config.mobileBreakpoint;
+        reviewCards.forEach(card => {
+            if (isMobile) {
+                card.style.minHeight = '280px';
+            } else {
+                card.style.minHeight = '380px';
+            }
+        });
+        
+        if (reviewsContainer) {
+            reviewsContainer.style.minHeight = isMobile ? '320px' : '450px';
+        }
+    }
+    
+    let resizeTimeout;
+    function handleResize() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            if (!isAnimating) {
+                updateMobileLayout();
+                reviewCards.forEach(card => {
+                    card.style.transition = 'none';
+                    card.style.opacity = card.classList.contains('current') ? '1' : '0';
+                    card.style.transform = card.classList.contains('current') ? 'translateY(0)' : `translateY(${config.verticalOffset}px)`;
+                    
+                    void card.offsetHeight;
+                    
+                    card.style.transition = `opacity ${config.animationDuration}ms ease, transform ${config.animationDuration}ms ease`;
+                });
+                
+                initSwipeDetection();
+            }
+        }, 100);
+    }
+
+    // ==================== INITIALIZATION FUNCTION ====================
+    
+    function initializeCards() {
+        reviewCards.forEach((card, index) => {
+            card.style.display = 'flex';
+            card.style.position = 'absolute';
+            card.style.top = '0';
+            card.style.left = '0';
+            card.style.right = '0';
+            card.style.width = '100%';
+            card.style.boxSizing = 'border-box';
+            card.style.minHeight = window.innerWidth < config.mobileBreakpoint ? '280px' : '380px';
+            card.style.opacity = index === 0 ? '1' : '0';
+            card.style.transform = index === 0 ? 'translateY(0)' : `translateY(${config.verticalOffset}px)`;
+            card.style.transition = `opacity ${config.animationDuration}ms ease, transform ${config.animationDuration}ms ease`;
+            card.style.cursor = 'pointer';
+            
+            if (index === 0) {
+                card.classList.add('current');
+                setTimeout(() => startTypingForCard(card), 100);
+            } else {
+                card.classList.remove('current');
+                resetTypingForCard(card);
+            }
+
+            card.setAttribute('aria-hidden', index !== 0);
+            card.setAttribute('tabindex', index === 0 ? '0' : '-1');
+        });
+
+        updateMobileLayout();
+        initSwipeDetection();
+    }
+
+    // ==================== CLICK HANDLER FOR DESKTOP ====================
+    
+    reviewsContainer.addEventListener('click', function(e) {
+        // Only handle clicks on non-touch devices or as fallback
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        if (!isTouchDevice) {
+            const card = e.target.closest('.rx-review-card');
+            if (card && !isAnimating) {
+                handleCardInteraction(card, e);
+            }
+        }
+    });
+
+    // ==================== KEYBOARD NAVIGATION ====================
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.target.closest('.rx-review-card')) {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevReview();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                nextReview();
+            } else if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Space') {
+                e.preventDefault();
+                togglePause();
+            }
+        }
+    });
+
+    // ==================== WINDOW RESIZE ====================
+    window.addEventListener('resize', handleResize);
+
+    // ==================== INJECT CSS STYLES ====================
+    
     const style = document.createElement('style');
     style.textContent = `
         #rx-reviewer {
             padding: 30px 16px;
-            background-image: url('');
-            background-size: cover;
-            background-position: center;
             width: 100%;
             box-sizing: border-box;
         }
@@ -218,6 +652,7 @@ document.addEventListener('DOMContentLoaded', function() {
             min-height: 420px;
             width: 100%;
             box-sizing: border-box;
+            touch-action: pan-y pinch-zoom;
         }
         
         .rx-review-card {
@@ -233,10 +668,7 @@ document.addEventListener('DOMContentLoaded', function() {
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-            box-shadow: 
-                0 4px 30px rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.1),
-                inset 0 0 25px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.1), inset 0 0 25px rgba(255, 255, 255, 0.05);
             cursor: pointer;
             display: flex;
             flex-direction: column;
@@ -250,7 +682,6 @@ document.addEventListener('DOMContentLoaded', function() {
             overflow-y: auto;
         }
         
-        /* Custom scrollbar for review cards */
         .rx-review-card::-webkit-scrollbar {
             width: 4px;
         }
@@ -267,11 +698,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         .rx-review-card.active {
             z-index: 2;
-            box-shadow: 
-                0 10px 40px rgba(0, 0, 0, 0.2),
-                0 0 0 1px rgba(255, 255, 255, 0.15),
-                inset 0 0 35px rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.15), inset 0 0 35px rgba(255, 255, 255, 0.1);
         }
         
         .rx-review-card.current {
@@ -279,15 +706,6 @@ document.addEventListener('DOMContentLoaded', function() {
             transform: translateY(0);
             position: relative;
             z-index: 3;
-        }
-        
-        .rx-review-card:hover {
-            transform: translateY(-5px) scale(1.01) !important;
-            box-shadow: 
-                0 15px 35px rgba(0, 0, 0, 0.2),
-                0 0 0 1px rgba(255, 255, 255, 0.2),
-                inset 0 0 40px rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.12);
         }
         
         .rx-quote-icon {
@@ -340,12 +758,6 @@ document.addEventListener('DOMContentLoaded', function() {
             flex-shrink: 0;
         }
         
-        .rx-review-card:hover .rx-reviewer-img {
-            border-color: rgba(255, 255, 255, 0.8);
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
         .rx-reviewer-info {
             overflow: hidden;
         }
@@ -368,43 +780,35 @@ document.addEventListener('DOMContentLoaded', function() {
             word-wrap: break-word;
         }
         
-        /* Responsive breakpoints */
         @media (min-width: 768px) {
             #rx-reviewer {
                 padding: 40px 20px;
             }
-            
             .rx-reviews-container {
                 min-height: 450px;
             }
-            
             .rx-review-card {
                 padding: 30px;
                 min-height: 380px;
             }
-            
             .rx-quote-icon {
                 font-size: 60px;
                 top: 15px;
                 left: 25px;
             }
-            
             .rx-review-text {
                 font-size: 18px;
                 margin: 55px 0 25px;
                 min-height: 140px;
             }
-            
             .rx-reviewer-img {
                 width: 60px;
                 height: 60px;
                 margin-right: 20px;
             }
-            
             .rx-reviewer-info h4 {
                 font-size: 18px;
             }
-            
             .rx-reviewer-info p {
                 font-size: 14px;
             }
@@ -414,63 +818,39 @@ document.addEventListener('DOMContentLoaded', function() {
             #rx-reviewer {
                 padding: 20px 12px;
             }
-            
             .rx-reviews-container {
                 min-height: 380px;
                 gap: 15px;
             }
-            
             .rx-review-card {
                 padding: 16px;
                 min-height: 280px;
                 border-radius: 16px;
             }
-            
             .rx-quote-icon {
                 font-size: 40px;
                 top: 8px;
                 left: 14px;
             }
-            
             .rx-review-text {
                 font-size: 14px;
                 margin: 38px 0 15px;
                 line-height: 1.5;
                 min-height: 100px;
             }
-            
             .rx-reviewer-img {
                 width: 42px;
                 height: 42px;
                 margin-right: 12px;
             }
-            
             .rx-reviewer-info h4 {
                 font-size: 14px;
             }
-            
             .rx-reviewer-info p {
                 font-size: 11px;
             }
         }
         
-        /* Background image when active */
-        .rx-review-card.active::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-size: cover;
-            background-position: center;
-            opacity: 0.2;
-            z-index: 0;
-            border-radius: 20px;
-            filter: blur(5px);
-        }
-        
-        /* Liquid glass effect overlay */
         .rx-review-card::after {
             content: '';
             position: absolute;
@@ -478,292 +858,27 @@ document.addEventListener('DOMContentLoaded', function() {
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 255, 255, 0.1) 0%,
-                rgba(255, 255, 255, 0.05) 50%,
-                rgba(255, 255, 255, 0.1) 100%
-            );
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 50%, rgba(255, 255, 255, 0.1) 100%);
             border-radius: 20px;
             pointer-events: none;
             z-index: -1;
         }
-        
-        /* Typing animation - no cursor */
-        .rx-review-text.typing {
-            border-right: none;
-        }
     `;
     document.head.appendChild(style);
 
-    // Main functionality
-    const reviewCards = document.querySelectorAll('.rx-review-card');
-    const reviewsContainer = document.querySelector('.rx-reviews-container');
-    let currentIndex = 0;
-    let isAnimating = false;
-
-    const config = {
-        animationDuration: 500,
-        verticalOffset: 20,
-        mobileBreakpoint: 768,
-        bgOverlay: 'linear-gradient(rgba(0, 0, 2, 0), rgba(6, 0, 10, 0))',
-        bgColor: 'transparent'
-    };
-
-    function initializeCards() {
-        reviewCards.forEach((card, index) => {
-            card.style.display = 'flex';
-            card.style.position = 'absolute';
-            card.style.top = '0';
-            card.style.left = '0';
-            card.style.right = '0';
-            card.style.width = '100%';
-            card.style.height = 'auto';
-            card.style.minHeight = window.innerWidth < config.mobileBreakpoint ? '280px' : '380px';
-            card.style.opacity = index === 0 ? '1' : '0';
-            card.style.transform = index === 0 ? 'translateY(0)' : `translateY(${config.verticalOffset}px)`;
-            card.style.transition = `opacity ${config.animationDuration}ms ease, transform ${config.animationDuration}ms ease, background ${config.animationDuration}ms ease`;
-            card.style.pointerEvents = 'auto';
-            
-            const imageUrl = card.getAttribute('data-image');
-            card.style.setProperty('--bg-image', `url(${imageUrl})`);
-            card.style.backgroundSize = 'cover';
-            card.style.backgroundPosition = 'center center';
-            card.style.backgroundRepeat = 'no-repeat';
-            
-            if (index === 0) {
-                card.classList.add('current');
-                // Start typing for initial card
-                setTimeout(() => startTypingForCard(card), 100);
-            } else {
-                card.classList.remove('current');
-                resetTypingForCard(card);
-            }
-
-            card.setAttribute('aria-hidden', index !== 0);
-            card.setAttribute('tabindex', index === 0 ? '0' : '-1');
-        });
-
-        updateMobileLayout();
-    }
-
-    function updateMobileLayout() {
-        const isMobile = window.innerWidth < config.mobileBreakpoint;
-        reviewCards.forEach(card => {
-            if (isMobile) {
-                card.style.minHeight = '280px';
-                card.style.backgroundPosition = 'top center';
-            } else {
-                card.style.minHeight = '380px';
-                card.style.backgroundPosition = 'center center';
-            }
-        });
-        
-        const container = document.querySelector('.rx-reviews-container');
-        if (container) {
-            container.style.minHeight = isMobile ? '320px' : '450px';
-        }
-    }
-
-    function rotateReviews(direction = 1) {
-        if (isAnimating || isPaused) return;
-        
-        isAnimating = true;
-        const currentCard = reviewCards[currentIndex];
-        const nextIndex = (currentIndex + direction + reviewCards.length) % reviewCards.length;
-        const nextCard = reviewCards[nextIndex];
-        
-        // Clear any pending rotate timeout
-        if (rotateTimeout) {
-            clearTimeout(rotateTimeout);
-            rotateTimeout = null;
-        }
-        
-        // Stop current typing
-        if (currentTypingAnimation) {
-            currentTypingAnimation.stop();
-            currentTypingAnimation = null;
-        }
-        
-        nextCard.style.display = 'flex';
-        nextCard.style.opacity = '0';
-        nextCard.style.transform = `translateY(${direction * config.verticalOffset}px)`;
-        
-        currentCard.style.opacity = '0';
-        currentCard.style.transform = `translateY(${-direction * config.verticalOffset}px)`;
-        currentCard.classList.remove('current');
-        currentCard.setAttribute('aria-hidden', 'true');
-        currentCard.setAttribute('tabindex', '-1');
-        
-        setTimeout(() => {
-            nextCard.style.opacity = '1';
-            nextCard.style.transform = 'translateY(0)';
-            nextCard.classList.add('current');
-            nextCard.setAttribute('aria-hidden', 'false');
-            nextCard.setAttribute('tabindex', '0');
-            
-            // Start typing animation for the new card
-            startTypingForCard(nextCard);
-            
-            setTimeout(() => {
-                currentCard.style.display = 'flex';
-                currentIndex = nextIndex;
-                isAnimating = false;
-            }, 50);
-        }, 50);
-    }
-
-    function toggleReviewImage(card) {
-        if (isAnimating) return;
-        
-        document.querySelectorAll('.rx-review-card.active').forEach(el => {
-            if (el !== card) {
-                el.classList.remove('active');
-                el.style.backgroundImage = 'none';
-                el.style.backgroundColor = config.bgColor;
-            }
-        });
-        
-        const isActivating = !card.classList.contains('active');
-        card.classList.toggle('active');
-        
-        if (isActivating) {
-            const imageUrl = card.getAttribute('data-image');
-            card.style.backgroundImage = `${config.bgOverlay}, url(${imageUrl})`;
-        } else {
-            card.style.backgroundImage = 'none';
-            card.style.backgroundColor = config.bgColor;
-        }
-    }
-
-    // Double-tap detection for pause/resume (no visual indicator)
-    let lastTapTime = 0;
-    let tapTimeoutId = null;
-    
-    function handleDoubleTap() {
-        // Toggle pause state without any visual indicator
-        isPaused = !isPaused;
-        
-        if (isPaused) {
-            // Pause: stop typing and clear any pending rotate
-            if (currentTypingAnimation) {
-                currentTypingAnimation.stop();
-            }
-            if (rotateTimeout) {
-                clearTimeout(rotateTimeout);
-                rotateTimeout = null;
-            }
-        } else {
-            // Resume: restart typing for current card from where it left off
-            const currentCard = document.querySelector('.rx-review-card.current');
-            if (currentCard) {
-                const textElement = currentCard.querySelector('.rx-review-text');
-                const fullText = textElement.getAttribute('data-fulltext') || '';
-                const currentTextLength = textElement.textContent.length;
-                
-                if (currentTextLength < fullText.length) {
-                    // Resume typing from current position
-                    if (currentTypingAnimation) {
-                        currentTypingAnimation.stop();
-                        currentTypingAnimation = null;
-                    }
-                    
-                    // Create new animation with current progress
-                    currentTypingAnimation = new TypingAnimation(textElement, fullText, () => {
-                        currentTypingAnimation = null;
-                        if (!isPaused) {
-                            rotateTimeout = setTimeout(() => {
-                                if (!isPaused) {
-                                    rotateReviews(1);
-                                }
-                                rotateTimeout = null;
-                            }, 3000);
-                        }
-                    });
-                    currentTypingAnimation.currentIndex = currentTextLength;
-                    currentTypingAnimation.start();
-                } else if (currentTextLength >= fullText.length) {
-                    // Already completed, wait 3 seconds then rotate
-                    if (!isPaused) {
-                        rotateTimeout = setTimeout(() => {
-                            if (!isPaused) {
-                                rotateReviews(1);
-                            }
-                            rotateTimeout = null;
-                        }, 3000);
-                    }
-                }
-            }
-        }
-    }
-
+    // ==================== START APPLICATION ====================
     initializeCards();
 
-    // Click handler with double-tap detection
-    reviewsContainer.addEventListener('click', function(e) {
-        const card = e.target.closest('.rx-review-card');
-        if (card && !isAnimating) {
-            const currentTime = new Date().getTime();
-            const tapInterval = currentTime - lastTapTime;
-            
-            if (tapInterval < 300 && tapInterval > 0 && lastTapTime !== 0) {
-                // Double tap - pause/resume (no visual indicator)
-                if (tapTimeoutId) {
-                    clearTimeout(tapTimeoutId);
-                    tapTimeoutId = null;
-                }
-                handleDoubleTap();
-                lastTapTime = 0;
-            } else {
-                // Single tap - toggle image background
-                lastTapTime = currentTime;
-                tapTimeoutId = setTimeout(() => {
-                    toggleReviewImage(card);
-                    lastTapTime = 0;
-                    tapTimeoutId = null;
-                }, 300);
-            }
-        }
-    });
-
-    // Hover events - do nothing
-    reviewsContainer.addEventListener('mouseenter', function() {});
-    reviewsContainer.addEventListener('mouseleave', function() {});
-    reviewsContainer.addEventListener('focusin', function() {});
-    reviewsContainer.addEventListener('focusout', function() {});
-
-    let resizeTimeout;
-    window.addEventListener('resize', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            if (!isAnimating) {
-                updateMobileLayout();
-                reviewCards.forEach(card => {
-                    card.style.transition = 'none';
-                    card.style.opacity = card.classList.contains('current') ? '1' : '0';
-                    card.style.transform = card.classList.contains('current') ? 'translateY(0)' : `translateY(${config.verticalOffset}px)`;
-                    card.style.minHeight = window.innerWidth < config.mobileBreakpoint ? '280px' : '380px';
-                    
-                    void card.offsetHeight;
-                    
-                    card.style.transition = `opacity ${config.animationDuration}ms ease, transform ${config.animationDuration}ms ease, background ${config.animationDuration}ms ease`;
-                });
-            }
-        }, 100);
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.target.closest('.rx-review-card')) {
-            if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                rotateReviews(-1);
-            } else if (e.key === 'ArrowRight') {
-                e.preventDefault();
-                rotateReviews(1);
-            } else if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Space') {
-                e.preventDefault();
-                handleDoubleTap();
-            }
-        }
-    });
+    // Expose public API for external control
+    window.RXReviewer = {
+        next: nextReview,
+        prev: prevReview,
+        pause: pauseAutoRotate,
+        resume: resumeAutoRotate,
+        toggle: togglePause,
+        getCurrentIndex: () => currentIndex,
+        getTotalCount: () => reviewCards.length,
+        isPaused: () => isPaused,
+        isAnimating: () => isAnimating
+    };
 });
