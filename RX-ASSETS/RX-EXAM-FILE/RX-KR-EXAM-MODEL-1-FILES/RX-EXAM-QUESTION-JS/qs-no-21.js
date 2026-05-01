@@ -34,9 +34,9 @@ const questionsForNumber21 = [
             audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-69.mp3"
         },
         options: [
-            { text: "물아요", image: null, audio: null},
             { text: "물라요", image: null, audio: null},
-            { text: "물어요", image: null, audio: null},
+            { text: "몰라요", image: null, audio: null},
+            { text: "몰러요", image: null, audio: null},
             { text: "물러요", image: null, audio: null}
         ],
         answer: 2

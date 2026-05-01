@@ -31,7 +31,7 @@ const questionsForNumber23 = [
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-71.WAV"
+            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-71.mp3"
         },
         options: [
             { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-97.jpg", audio: null },
