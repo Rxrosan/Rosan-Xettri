@@ -38,7 +38,7 @@ const questionsForNumber3 = [
             { text: "옷장<u>가</u> 있어요.", image: null, audio: null },
             { text: "선생님<u>은</u> 한국 사람입니다.", image: null, audio: null },
             { text: "저는 농부<u>이</u> 아닙니다.", image: null, audio: null },
-            { text: "저는 텔레비전<u>을</u> 봐요.", image: null, audio: null }
+            { text: "저는 텔레비전<u>이</u> 봐요.", image: null, audio: null }
         ],
         answer: 2
     },
