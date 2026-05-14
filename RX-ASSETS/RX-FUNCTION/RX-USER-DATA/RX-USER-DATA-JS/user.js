@@ -76,8 +76,11 @@ const allUsers = [
         address: "Banganga-10, Pakadiachapa",
         accountType: "MEMBER",
         password: "RX9809634788",
-        access: ["file3", "file4","file5", "file7"],
-        timedAccessConfig: {},
+        access: ["file3", "file4"],
+        timedAccessConfig: {
+            "file5": { startDate: "2026-04-28", duration: 31 },
+            "file7": { startDate: "2026-04-28", duration: 31 },
+        },
         dateOfBirth: "2007-11-23",
     },
 ];
