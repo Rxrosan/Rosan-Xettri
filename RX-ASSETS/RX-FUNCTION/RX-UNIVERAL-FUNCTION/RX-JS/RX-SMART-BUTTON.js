@@ -1,5 +1,6 @@
 // SMART-BTN-ADVANCE-DESIGN-L.js
 // RX-SMART-BUTTON — Rewritten, responsive, fully functional
+// ENHANCED: Custom center logo per theme (blue/silver) with automatic fallback
 (function () {
   'use strict';
 
@@ -11,20 +12,26 @@
   const themes = {
     blue: {
       name: 'blue',
-      centerGradient:
-        'radial-gradient(circle at 30% 30%, rgba(173,216,230,0.9) 0%, rgba(70,130,180,0.7) 100%)',
+      centerGradient: 'radial-gradient(circle at 30% 30%, rgba(173,216,230,0.9) 0%, rgba(70,130,180,0.7) 100%)',
       glow: '0 0 15px rgba(173,216,230,0.6)',
       border: '1px solid rgba(173,216,230,0.4)',
       iconHighlight: 'rgba(173,216,230,0.7)',
+      // Custom center logo URL 
+      centerLogoUrl: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png',
+      // Fallback inline SVG or default style
+      fallbackLogo: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png'
     },
     silver: {
       name: 'silver',
-      centerGradient:
-        'radial-gradient(circle at 30% 30%, rgba(220,220,220,0.9) 0%, rgba(169,169,169,0.7) 100%)',
+      centerGradient: 'radial-gradient(circle at 30% 30%, rgba(220,220,220,0.9) 0%, rgba(169,169,169,0.7) 100%)',
       glow: '0 0 15px rgba(220,220,220,0.6)',
       border: '1px solid rgba(220,220,220,0.4)',
       iconHighlight: 'rgba(220,220,220,0.7)',
-    },
+      // Custom center logo URL for silver theme
+      centerLogoUrl: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png',
+      // Fallback inline SVG or default style
+      fallbackLogo: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png'
+    }
   };
 
   let themeKeys = Object.keys(themes);
@@ -33,6 +40,9 @@
   // Hide timer state
   let hideTimer = null;
   let hideUntil = null;
+
+  // Store current center img element reference
+  let currentCenterImg = null;
 
   /**
    * ===============================
@@ -82,6 +92,7 @@
 
   .RX-SMART-BUTTON-circle:active { transform: scale(0.98); }
 
+  /* Center point now supports image logo */
   .RX-SMART-BUTTON-center-point {
     width: var(--rx-center-size);
     height: var(--rx-center-size);
@@ -90,6 +101,25 @@
     box-shadow: inset 0 0 10px rgba(255,255,255,0.45);
     border: var(--rx-glass-border);
     transition: background 0.3s ease, opacity 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .RX-center-logo-img {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+    transition: opacity 0.2s ease;
   }
 
   .RX-SMART-BUTTON-menu-item {
@@ -229,7 +259,9 @@
   const injectedHTML = `
   <div class="RX-SMART-BUTTON-container" aria-hidden="false">
     <div class="RX-SMART-BUTTON-circle" role="button" aria-label="Smart button">
-      <div class="RX-SMART-BUTTON-center-point" aria-hidden="true"></div>
+      <div class="RX-SMART-BUTTON-center-point" aria-hidden="true">
+        <img class="RX-center-logo-img" id="RX-center-logo-img" alt="center logo" src="">
+      </div>
 
       <!-- Menu items Blue Theme (1-12) -->
       <div class="RX-SMART-BUTTON-menu-item RX-item-1 blue-item" data-link="Contact.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/contact.png" alt="contact"></div>
@@ -296,6 +328,46 @@
 
   /**
    * ===============================
+   * CUSTOM CENTER LOGO HANDLER (BLUE / SILVER) with auto fallback
+   * ===============================
+   */
+  function setCenterLogo(themeName) {
+    const theme = themes[themeName];
+    if (!theme) return;
+    
+    const centerImg = document.getElementById('RX-center-logo-img');
+    if (!centerImg) return;
+    
+    const logoUrl = theme.centerLogoUrl;
+    
+    // Function to apply fallback (SVG or text-based)
+    const applyFallback = () => {
+      centerImg.src = theme.fallbackLogo;
+      centerImg.style.opacity = '1';
+      // Optional: add a small inline style to ensure visibility
+      centerImg.style.background = 'transparent';
+    };
+    
+    if (logoUrl && logoUrl.trim() !== '') {
+      // Set src and handle error event for fallback
+      centerImg.src = logoUrl;
+      centerImg.onload = () => {
+        centerImg.style.opacity = '1';
+        // remove error handler to avoid double fallback
+        centerImg.onerror = null;
+      };
+      centerImg.onerror = () => {
+        console.warn(`[RX Smart Button] Center logo not found: ${logoUrl}, using fallback for ${themeName} theme.`);
+        applyFallback();
+      };
+      // If image loads successfully, great; if already cached, onload triggers.
+    } else {
+      applyFallback();
+    }
+  }
+
+  /**
+   * ===============================
    * Toggle menu items based on theme
    * ===============================
    */
@@ -315,7 +387,7 @@
   /**
    * ===============================
    * Theme functions
-   * - applyTheme(themeName) - applies and saves
+   * - applyTheme(themeName) - applies and saves, updates center logo
    * - cycleTheme() - cycles to next theme
    * ===============================
    */
@@ -329,6 +401,9 @@
 
     // Toggle menu items based on theme
     toggleMenuItems(themeName);
+    
+    // Update center logo with custom image or fallback
+    setCenterLogo(themeName);
 
     localStorage.setItem('RX-SMART-BUTTON-theme', themeName);
     currentThemeIndex = themeKeys.indexOf(themeName);
@@ -374,7 +449,7 @@
       const timeVal = parseInt(hideItem, 10);
       if (!Number.isNaN(timeVal)) {
         hideUntil = timeVal;
-        startHideTimer(); // this will hide if needed
+        startHideTimer();
       } else {
         localStorage.removeItem('RX-SMART-BUTTON-hide-until');
       }
@@ -422,7 +497,6 @@
   }
 
   function startHideTimer() {
-    // Clear any existing timer
     if (hideTimer) {
       clearTimeout(hideTimer);
       hideTimer = null;
@@ -433,7 +507,6 @@
     const left = hideUntil - now;
 
     if (left > 0) {
-      // Immediately hide
       hideSmartButton();
       hideTimer = setTimeout(() => {
         showSmartButton();
@@ -442,7 +515,6 @@
         hideTimer = null;
       }, left);
     } else {
-      // Time already passed
       localStorage.removeItem('RX-SMART-BUTTON-hide-until');
       hideUntil = null;
       showSmartButton();
@@ -452,26 +524,19 @@
   /**
    * ===============================
    * Popup controls (show/hide)
-   * NOTE: overlay click will NOT close popup (per user request)
-   * Popup only closed via Cancel or Save
-   * While circle is expanded, long-press will NOT open popup (per user request)
    * ===============================
    */
   function showHidePopup() {
     const overlay = document.getElementById('RX-popup-overlay');
-    const popup = document.getElementById('RX-hide-settings-popup');
-    if (!overlay || !popup) return;
-
+    if (!overlay) return;
     overlay.classList.add('show');
     overlay.setAttribute('aria-hidden', 'false');
-    // prevent background scrolling while popup open
     document.body.style.overflow = 'hidden';
   }
 
   function closeHidePopup() {
     const overlay = document.getElementById('RX-popup-overlay');
-    const popup = document.getElementById('RX-hide-settings-popup');
-    if (!overlay || !popup) return;
+    if (!overlay) return;
     overlay.classList.remove('show');
     overlay.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
@@ -488,7 +553,6 @@
 
     if (!circle || !container) return;
 
-    // Prevent click vs drag conflict
     let isDragging = false;
     let wasDragging = false;
     let dragStartX = 0;
@@ -496,11 +560,9 @@
     let offsetX = 0;
     let offsetY = 0;
 
-    // Long-press detection
     let longPressTimer = null;
     const LONG_PRESS_MS = 3000;
 
-    // Helper to cancel long press
     function clearLongPressTimer() {
       if (longPressTimer) {
         clearTimeout(longPressTimer);
@@ -508,25 +570,18 @@
       }
     }
 
-    // Click (toggle expand) — avoid if we were dragging or long-press triggered
     circle.addEventListener('click', function (e) {
-      // if dragging just happened, ignore this click
       if (wasDragging) {
         wasDragging = false;
         return;
       }
-
-      // Only toggle when clicking on main circle or center (not on menu item)
       if (e.target.classList.contains('RX-SMART-BUTTON-menu-item') || e.target.closest('.RX-SMART-BUTTON-menu-item')) {
-        // menu item click handled separately
         return;
       }
-
       this.classList.toggle('expanded');
       saveState();
     });
 
-    // Double-click center to cycle theme and change menu items
     const centerPoint = circle.querySelector('.RX-SMART-BUTTON-center-point');
     if (centerPoint) {
       centerPoint.addEventListener('dblclick', (e) => {
@@ -535,35 +590,28 @@
       });
     }
 
-    // Long press to open hide popup — but only if NOT expanded
     function startLongPress() {
       clearLongPressTimer();
       longPressTimer = setTimeout(() => {
-        // If currently expanded, do NOT open popup (per new requirement)
         if (circle.classList.contains('expanded')) return;
         showHidePopup();
       }, LONG_PRESS_MS);
     }
 
-    // Desktop mouse events for long press + drag
     circle.addEventListener('mousedown', function (e) {
-      // start drag preparation
       dragStartX = e.clientX;
       dragStartY = e.clientY;
       const rect = container.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
       offsetY = e.clientY - rect.top;
-
       isDragging = false;
       wasDragging = false;
-
-      // Start long press (only if not expanded)
       if (!circle.classList.contains('expanded')) startLongPress();
 
       function onMouseMove(ev) {
         const dx = ev.clientX - dragStartX;
         const dy = ev.clientY - dragStartY;
-        const moveThreshold = 6; // px
+        const moveThreshold = 6;
         if (!isDragging && Math.hypot(dx, dy) > moveThreshold) {
           isDragging = true;
           wasDragging = true;
@@ -584,7 +632,6 @@
         clearLongPressTimer();
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
-        // mark we were dragging briefly to suppress next click
         if (wasDragging) {
           setTimeout(() => { wasDragging = false; }, 120);
         }
@@ -595,7 +642,6 @@
       window.addEventListener('mouseup', onMouseUp);
     });
 
-    // Touch events for drag + long-press
     circle.addEventListener('touchstart', function (e) {
       if (!e.touches || e.touches.length === 0) return;
       const touch = e.touches[0];
@@ -604,10 +650,8 @@
       const rect = container.getBoundingClientRect();
       offsetX = touch.clientX - rect.left;
       offsetY = touch.clientY - rect.top;
-
       isDragging = false;
       wasDragging = false;
-
       if (!circle.classList.contains('expanded')) startLongPress();
 
       function onTouchMove(ev) {
@@ -646,7 +690,6 @@
       window.addEventListener('touchend', onTouchEnd);
     }, { passive: false });
 
-    // Menu items click handling (open links)
     document.querySelectorAll('.RX-SMART-BUTTON-menu-item').forEach((item) => {
       item.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -660,7 +703,6 @@
       });
     });
 
-    // Accessibility: keyboard toggle (space/enter)
     circle.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -672,9 +714,7 @@
 
   /**
    * ===============================
-   * Popup button wiring (Save & Cancel)
-   * - overlay click will be swallowed (no close)
-   * - only Cancel or Save closes the popup
+   * Popup button wiring
    * ===============================
    */
   function setupPopupControls() {
@@ -684,13 +724,10 @@
 
     if (!saveBtn || !cancelBtn || !overlay) return;
 
-    // overlay should NOT close popup on click (per requirement)
     overlay.addEventListener('click', (e) => {
-      // Do nothing intentionally — prevents accidental closing
       e.stopPropagation();
     });
 
-    // Save & Hide
     saveBtn.addEventListener('click', () => {
       const hours = parseInt(document.getElementById('RX-hide-hours').value || '0', 10) || 0;
       const minutes = parseInt(document.getElementById('RX-hide-minutes').value || '0', 10) || 0;
@@ -701,23 +738,18 @@
         hideUntil = Date.now() + ms;
         localStorage.setItem('RX-SMART-BUTTON-hide-until', hideUntil.toString());
         startHideTimer();
-      } else {
-        // if zero, we don't hide — just close popup
       }
       closeHidePopup();
     });
 
-    // Cancel only closes popup and does NOT change hide timer
     cancelBtn.addEventListener('click', () => {
       closeHidePopup();
     });
 
-    // Prevent keyboard ESC from closing popup to satisfy "only Cancel closes"
     window.addEventListener('keydown', (e) => {
       const overlayVisible = overlay.classList.contains('show');
       if (overlayVisible && e.key === 'Escape') {
         e.preventDefault();
-        // do nothing — require Cancel button
       }
     });
   }
@@ -728,31 +760,25 @@
    * ===============================
    */
   function init() {
-    // Avoid double-init
     if (window.__RX_SMART_BUTTON_INITIALIZED__) return;
     window.__RX_SMART_BUTTON_INITIALIZED__ = true;
 
     injectCSS();
     injectHTML();
 
-    // Small delay so elements exist
     setTimeout(() => {
       loadStateAndApply();
       setupInteractions();
       setupPopupControls();
-
-      // Ensure save on unload
       window.addEventListener('beforeunload', saveState);
     }, 40);
   }
 
-  // DOM Ready or fallback
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
   }
 
-  // Extra safety: run once more shortly after load (no duplication thanks to flag)
   setTimeout(init, 600);
 })();
