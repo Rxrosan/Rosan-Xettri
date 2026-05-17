@@ -1,8 +1,4 @@
-// no need any just add on html code ---> <section id="rx-team-section"></section> <--- this section all automatically added 
-// autor : RX STUDIO
-// www.rosankc.com.np
-
-// RX-TEAM.js - CORRECTED VERSION
+// RX-TEAM.js - CONTINUOUS VERSION (NO PAUSE ANYWHERE)
 document.addEventListener('DOMContentLoaded', function() {
     // Find your existing section
     const teamSection = document.getElementById('rx-team-section');
@@ -32,9 +28,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="rx-team-slide">
                     <div class="rx-team-member">
                         <img src="RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/T-0.jpg" alt="#">
-                        <h3>?</h3>
-                        <p class="rx-position">?</p>
-                        <p>?</p>
+                        <h3>Next Is YOU ?</h3>
+                        <p class="rx-position">Have a business mind or idea !</p>
+                        <p>Contact us for your BUSINESS IDEA .</p>
                         <div class="rx-social-links">
                             <a href="#" aria-label="#"><i class="fab fa-facebook-f"></i></a>
                             <a href="#" aria-label="#"><i class="fab fa-instagram"></i></a>
@@ -44,9 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </div>
     `;
-
-    // REMOVE THIS LINE - DO NOT ADD TO BODY AGAIN
-    // document.body.appendChild(teamSection);
 
     // Inject CSS styles
     const style = document.createElement('style');
@@ -112,13 +105,12 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
 
-    // Team slider functionality
+    // Team slider functionality - CONTINUOUS, NO PAUSE
     const slider = document.querySelector('.rx-team-slider');
     const slides = document.querySelectorAll('.rx-team-slide');
     const totalSlides = slides.length;
     let currentIndex = 0;
     let isAnimating = false;
-    let isPaused = false;
     let slideInterval;
 
     // Configuration object for easy customization
@@ -126,9 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
         slideDuration: 5000,          // Time between slides (ms)
         animationDuration: 800,       // Slide transition duration (ms)
         animationEasing: 'cubic-bezier(0.4, 0, 0.2, 1)', // Smooth easing function
-        pauseOnHover: true,           // Pause on hover
         touchSensitivity: 50,         // Minimum swipe distance (px)
-        responsiveBreakpoint: 768     // Mobile breakpoint (px)
     };
 
     // Initialize slider
@@ -191,37 +181,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }, config.animationDuration);
     }
 
-    // Navigate to next slide
+    // Navigate to next slide (continuous)
     function nextSlide() {
-        if (isPaused) return;
         goToSlide(currentIndex + 1);
     }
 
     // Navigate to previous slide
     function prevSlide() {
-        if (isPaused) return;
         goToSlide(currentIndex - 1);
     }
 
-    // Start auto-sliding
+    // Start auto-sliding - CONTINUOUS, NEVER STOPS
     function startAutoSlide() {
         clearInterval(slideInterval);
         slideInterval = setInterval(nextSlide, config.slideDuration);
     }
 
-    // Pause auto-sliding
-    function pauseAutoSlide() {
-        isPaused = true;
-        clearInterval(slideInterval);
-    }
-
-    // Resume auto-sliding
-    function resumeAutoSlide() {
-        isPaused = false;
-        startAutoSlide();
-    }
-
-    // Handle touch events for swipe navigation
+    // Handle touch events for swipe navigation (does NOT pause auto-slide)
     function setupTouchEvents() {
         let touchStartX = 0;
         let touchStartY = 0;
@@ -231,14 +207,12 @@ document.addEventListener('DOMContentLoaded', function() {
         slider.addEventListener('touchstart', (e) => {
             touchStartX = e.changedTouches[0].screenX;
             touchStartY = e.changedTouches[0].screenY;
-            pauseAutoSlide();
         }, { passive: true });
 
         slider.addEventListener('touchend', (e) => {
             touchEndX = e.changedTouches[0].screenX;
             touchEndY = e.changedTouches[0].screenY;
             handleSwipe();
-            resumeAutoSlide();
         }, { passive: true });
 
         function handleSwipe() {
@@ -262,18 +236,17 @@ document.addEventListener('DOMContentLoaded', function() {
         startAutoSlide();
         setupTouchEvents();
 
-        // Pause on hover if enabled
-        if (config.pauseOnHover) {
-            slider.addEventListener('mouseenter', pauseAutoSlide);
-            slider.addEventListener('mouseleave', resumeAutoSlide);
-        }
+        // NO PAUSE ON HOVER - SLIDER CONTINUES WORKING NORMALLY
+        // The slider continues auto-sliding even when mouse is over it
 
-        // Keyboard navigation
+        // Keyboard navigation (does NOT pause auto-slide)
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowDown') {
                 nextSlide();
+                e.preventDefault();
             } else if (e.key === 'ArrowUp') {
                 prevSlide();
+                e.preventDefault();
             }
         });
 
