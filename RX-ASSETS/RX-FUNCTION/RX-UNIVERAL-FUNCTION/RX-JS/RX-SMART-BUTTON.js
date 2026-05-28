@@ -17,7 +17,7 @@
       border: '1px solid rgba(173,216,230,0.4)',
       iconHighlight: 'rgba(173,216,230,0.7)',
       // Custom center logo URL 
-      centerLogoUrl: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png',
+      centerLogoUrl: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-7.gif',
       // Fallback inline SVG or default style
       fallbackLogo: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png'
     },
@@ -28,7 +28,7 @@
       border: '1px solid rgba(220,220,220,0.4)',
       iconHighlight: 'rgba(220,220,220,0.7)',
       // Custom center logo URL for silver theme
-      centerLogoUrl: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png',
+      centerLogoUrl: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-7.gif',
       // Fallback inline SVG or default style
       fallbackLogo: 'RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png'
     }
