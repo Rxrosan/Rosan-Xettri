@@ -22,31 +22,35 @@
         window.stop();
 
         // मुख्य वेबसाइटलाई तुरुन्तै वास्तविक about:blank मा रिप्लेस (Redirect) गर्ने
-        // .replace() को प्रयोग गर्दा ब्राउजरको 'Back' बटन थिचेर पनि पुरानो कोड वा प्रश्न हेर्न मिल्दैन
         window.location.replace("about:blank");
     }
 
     // डेभलपर टुल खुला छ कि नाइँ निरन्तर निगरानी गर्ने फङ्ग्सन
     function checkDevTools() {
-        // यदि पहिले नै ब्ल्याङ्क पेजमा पुगिसकेको छ भने चेक नगर्ने
         if (window.location.href === "about:blank") return;
 
         const widthThreshold = 160;
         const heightThreshold = 160;
         
-        // विधि १: साइज चेकर (इन्स्पेक्ट एलिमेन्टको साइज नाप्ने)
+        // विधि १: साइज चेकर
         const isSizeMatch = (window.outerWidth - window.innerWidth > widthThreshold || 
                              window.outerHeight - window.innerHeight > heightThreshold);
         
-        // विधि २: डिबगर टाइम चेकर (कन्सोल खुल्दा यो लाइनमा समय ढिलो हुन्छ)
+        // विधि २: डिबगर टाइम चेकर
         const startTime = Date.now();
         debugger;
         const isDebuggerMatch = (Date.now() - startTime > 100);
 
-        // दुई मध्ये कुनै एक तरिकाबाट कन्सोल खुला भएको थाहा पाउने बित्तिकै स्थायी रूपमा ब्ल्याङ्क गर्ने
         if (isSizeMatch || isDebuggerMatch) {
             permanentNuke();
         }
+    }
+
+    // राइट-क्लिक ब्लक गर्ने फङ्ग्सन
+    function blockRightClick() {
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        }, false);
     }
 
     // टेक्स्ट सेलेक्ट र कपि गर्न दिने फङ्ग्सन (नर्मल युजरको सहजताको लागि)
@@ -67,7 +71,10 @@
     }
 
     function initProtection() {
-        // राइट-क्लिक र कपि-पेस्ट सामान्य युजरको लागि खुला रहनेछ
+        // राइट-क्लिक ब्लक गर्ने
+        blockRightClick();
+        
+        // सेलेक्ट र कपि खुल्ला राख्ने
         enableSelectionAndCopy();
         
         // ब्याकग्राउन्डमा कन्सोल चेकर निरन्तर चलाउने

@@ -1,164 +1,321 @@
-// RX-ACESS.js - Optimized Dynamic Content Loader with Redirect
-(function() {
-    "use strict";
+(function () {
+"use strict";
 
-    const contentMapping = {
-        'file1': { path: 'RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js', type: 'js' },
-        'file2': { path: 'RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-1-FILES/RX-EXAM-FUNCTION-JS/questions-manager.js', type: 'js' },
-        'file3': { path: 'RX-ASSETS/RX-OTHER-SOFTWARE-FUNCTION/RX-JS/RX-SMART-QR-GENATOR.js', type: 'js' },
-        'file4': { path: 'RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js', type: 'js' },
-        'file5': { path: 'RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-1.js', type: 'js' },
-        'file6': { path: 'RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-2.js', type: 'js' },
-        'file7': { path: 'RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-3.js', type: 'js' },
-    };
+/* ==========================
+   CONFIG
+========================== */
 
-    const LOCAL_STORAGE_CONTENT_KEY = 'activeContentId';
-    const LOCAL_STORAGE_USER_KEY = 'currentUser';
+const CONTENT_MAP = {
+    file1:{path:"RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js",type:"js",title:"Smart Button"},
+    file2:{path:"RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-1-FILES/RX-EXAM-FUNCTION-JS/questions-manager.js",type:"js",title:"Exam Model 1"},
+    file3:{path:"RX-ASSETS/RX-OTHER-SOFTWARE-FUNCTION/RX-JS/RX-SMART-QR-GENATOR.js",type:"js",title:"QR Generator"},
+    file4:{path:"RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js",type:"js",title:"Functions"},
+    file5:{path:"RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-1.js",type:"js",title:"Set 1"},
+    file6:{path:"RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-2.js",type:"js",title:"Set 2"},
+    file7:{path:"RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-2-FILES/RX-KR-EXAM-QUESTIONS-MODEL-2/SET-3.js",type:"js",title:"Set 3"}
+};
 
-    function getQueryParameter(name) {
-        return new URLSearchParams(window.location.search).get(name);
+const STORE_KEY = "activeContentId";
+const USER_KEY = "currentUser";
+
+/* ==========================
+   SAFE JSON
+========================== */
+
+function safeJSON(data){
+    try{
+        return JSON.parse(data);
+    }catch{
+        return null;
     }
+}
 
-    function loadScript(src) {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = src;
-            script.async = true;
-            script.onload = () => resolve(src);
-            script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-            document.head.appendChild(script);
-        });
-    }
+/* ==========================
+   LOADER
+========================== */
 
-    function loadHTML(src, target) {
-        return fetch(src)
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! ${response.status}`);
-                return response.text();
-            })
-            .then(html => {
-                const container = document.getElementById(target);
-                if (container) {
-                    container.innerHTML = html;
-                    return src;
-                }
-                throw new Error(`Target ${target} not found.`);
-            });
-    }
+function showLoader(){
 
-    /**
-     * DISPLAYS ERROR CENTERED ON SCREEN
-     */
-    function displayError(title, message) {
-        const errHtml = `
-            <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center; z-index: 9999; font-family: 'Segoe UI', Roboto, sans-serif;">
-                <div style="text-align: center; padding: 40px; border: 1px solid #ffcc00; background-color: #fffacd; border-radius: 12px; color: #333; max-width: 500px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <h2 style="color: #da7f00; margin-top: 0;">${title}</h2>
-                    <p style="font-size: 1.2em; line-height: 1.5; color: #444;">${message}</p>
-                    <div style="margin-top: 20px; font-size: 0.9em; color: #777;">
-                        RX STUDIO
-                    </div>
-                </div>
-            </div>`;
-        
-        // Use document.documentElement to ensure it overwrites the whole view immediately
-        document.documentElement.innerHTML = errHtml;
-    }
+    const loader = document.createElement("div");
 
-    function cleanUrl() {
-        if (window.history.replaceState) {
-            const cleanPath = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({ path: cleanPath }, '', cleanPath);
+    loader.id = "rx-loader";
+
+    loader.innerHTML = `
+    <div style="
+        position:fixed;
+        inset:0;
+        background:#f4f4f4;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        z-index:99999;
+        font-family:sans-serif;
+        flex-direction:column;
+    ">
+        <h2>Loading...</h2>
+        <small>Please wait</small>
+    </div>`;
+
+    document.body?.appendChild(loader);
+}
+
+function removeLoader(){
+
+    document
+    .getElementById("rx-loader")
+    ?.remove();
+}
+
+/* ==========================
+   ERROR
+========================== */
+
+function showError(title,msg){
+
+    removeLoader();
+
+    document.body.innerHTML = `
+    <div style="
+        height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:#f4f4f4;
+        font-family:sans-serif;
+    ">
+        <div style="
+            background:white;
+            padding:30px;
+            border-radius:15px;
+            width:min(400px,90%);
+            text-align:center;
+            box-shadow:0 0 20px rgba(0,0,0,.1);
+        ">
+            <h2>${title}</h2>
+            <p>${msg}</p>
+            <footer style="
+                margin-top:20px;
+                font-size:12px;
+                color:#888;
+            ">
+                RX STUDIO
+            </footer>
+        </div>
+    </div>
+    `;
+
+    setTimeout(()=>{
+        location.replace("Resource.html");
+    },2500);
+}
+
+/* ==========================
+   START
+========================== */
+
+const params =
+new URLSearchParams(
+location.search
+);
+
+const activeId =
+params.get("content") ||
+params.get("exam") ||
+localStorage.getItem(
+STORE_KEY
+);
+
+if(!activeId){
+
+    showError(
+        "ACESS NOT GRANTED",
+        "Please select content. or make sure the file you select acess is graneted"
+    );
+
+    return;
+}
+
+const config =
+CONTENT_MAP[activeId];
+
+if(!config){
+
+    localStorage.removeItem(
+        STORE_KEY
+    );
+
+    showError(
+        "Invalid",
+        "Content unavailable."
+    );
+
+    return;
+}
+
+const user =
+safeJSON(
+localStorage.getItem(
+USER_KEY
+)
+);
+
+let allow=false;
+
+if(user){
+
+    allow =
+    user.access?.includes(
+        activeId
+    );
+
+    if(!allow){
+
+        const timed =
+        user.timedAccessConfig
+        ?.[
+            activeId
+        ];
+
+        if(
+            timed?.startDate &&
+            timed?.duration
+        ){
+
+            const expiry =
+            new Date(
+                timed.startDate
+            ).getTime()
+
+            +
+
+            (
+                timed.duration
+                *
+                86400000
+            );
+
+            allow =
+            Date.now()
+            <
+            expiry;
         }
     }
+}
 
-    function getPersistentContentId() {
-        const urlId = getQueryParameter('content') || getQueryParameter('exam');
-        if (urlId) {
-            localStorage.setItem(LOCAL_STORAGE_CONTENT_KEY, urlId);
-            return urlId;
-        }
-        return localStorage.getItem(LOCAL_STORAGE_CONTENT_KEY);
+if(!allow){
+
+    localStorage.removeItem(
+        STORE_KEY
+    );
+
+    showError(
+        "Access Denied",
+        "Subscription expired."
+    );
+
+    return;
+}
+
+localStorage.setItem(
+STORE_KEY,
+activeId
+);
+
+document.title =
+config.title ||
+"RX System";
+
+showLoader();
+
+/* ==========================
+   LOAD FILES
+========================== */
+
+if(config.type==="js"){
+
+    if(
+        !document.querySelector(
+            `[data-rx="${config.path}"]`
+        )
+    ){
+
+        const script =
+        document.createElement(
+            "script"
+        );
+
+        script.src =
+        config.path;
+
+        script.defer =
+        true;
+
+        script.dataset.rx =
+        config.path;
+
+        script.onload =
+        ()=>{
+
+            removeLoader();
+
+            history.replaceState(
+                {},
+                "",
+                location.pathname
+            );
+        };
+
+        script.onerror =
+        ()=>{
+
+            showError(
+                "Load Error",
+                "JS failed loading."
+            );
+        };
+
+        document.head.appendChild(
+            script
+        );
     }
 
-    function clearPersistentContentId() {
-        localStorage.removeItem(LOCAL_STORAGE_CONTENT_KEY);
-    }
+}else{
 
-    function hasAccessToFile(user, fileId) {
-        if (!user) return false;
-        // 1. Permanent Access
-        if (user.access && user.access.includes(fileId)) return true;
-        // 2. Timed Access
-        const cfg = user.timedAccessConfig ? user.timedAccessConfig[fileId] : null;
-        if (cfg && cfg.startDate && cfg.duration) {
-            const start = new Date(`${cfg.startDate}T00:00:00Z`).getTime();
-            const end = start + (cfg.duration * 86400000);
-            return end > Date.now();
-        }
-        return false;
-    }
+fetch(config.path)
 
-    window.clearActiveContent = clearPersistentContentId;
+.then(r=>{
 
-    /**
-     * MAIN LOADER ENGINE
-     */
-    async function startLoading() {
-        const selectedId = getPersistentContentId();
-        
-        if (!selectedId) {
-            displayError("Selection Required", "Please select a valid exam or content to proceed.");
-            setTimeout(() => { window.location.href = 'Resource.html'; }, 3000);
-            return;
-        }
+if(!r.ok)
+throw Error();
 
-        const config = contentMapping[selectedId];
-        if (!config) {
-            displayError("Invalid Content", "The requested content does not exist.");
-            clearPersistentContentId();
-            setTimeout(() => { window.location.href = 'Resource.html'; }, 3000);
-            return;
-        }
+return r.text();
 
-        // --- BLOCK LOGIC FOR NO ACCESS ---
-        const userStr = localStorage.getItem(LOCAL_STORAGE_USER_KEY);
-        const user = userStr ? JSON.parse(userStr) : null;
+})
 
-        if (!user || !hasAccessToFile(user, selectedId)) {
-            // Block and Show Centered Message
-            displayError("Access Denied", "You do not have permission to view this content or your access has expired.");
-            
-            // Clear storage so they don't get stuck in a loop
-            clearPersistentContentId();
+.then(html=>{
 
-            // Redirect after 3 seconds
-            setTimeout(() => {
-                window.location.href = 'Resource.html';
-            }, 3000);
-            
-            return; // Stop execution completely
-        }
+removeLoader();
 
-        // --- LOADING LOGIC ---
-        try {
-            if (config.type === 'js') {
-                await loadScript(config.path);
-            } else if (config.type === 'html') {
-                if (document.readyState === 'loading') {
-                    await new Promise(r => document.addEventListener('DOMContentLoaded', r));
-                }
-                await loadHTML(config.path, config.target);
-            }
-            cleanUrl();
-        } catch (err) {
-            displayError("Load Failure", "The system could not load the requested file.");
-            clearPersistentContentId();
-            setTimeout(() => { window.location.href = 'Resource.html'; }, 3000);
-        }
-    }
+const target =
+document.getElementById(
+config.target
+);
 
-    // Initialize
-    startLoading();
+if(target)
+target.innerHTML =
+html;
+
+})
+
+.catch(()=>{
+
+showError(
+"HTML Error",
+"Content failed loading."
+);
+
+});
+
+}
 
 })();
