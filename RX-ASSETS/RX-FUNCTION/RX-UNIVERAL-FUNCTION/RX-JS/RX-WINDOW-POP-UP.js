@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             {
                 title: "Welcome",
                 text: "Hi, I'm Rosan Xettri, a passionate web designer dedicated to creating stunning and user-friendly websites. Let's build something amazing together!",
-                galleryImages: ["RX-ASSETS/RX-IMAGE/RX-BANNER/B-1.png"]
+                galleryImages: ["RX-ASSETS/RX-IMAGE/RX-BANNER/B-5.gif"]
             },
         ],
 
