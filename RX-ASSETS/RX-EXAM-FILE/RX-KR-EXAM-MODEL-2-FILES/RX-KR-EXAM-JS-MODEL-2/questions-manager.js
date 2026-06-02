@@ -1,86 +1,121 @@
-// questions-manager.js - Ultra-Fast Performance Optimized
+// questions-manager.js - Mobile-First High Performance Optimized
 const QuestionsManager = {
-    questionsByNumber: Array(41).fill(null).map(() => []), // Pre-allocate array
-    selectedQuestions: Array(41).fill(null),
-    questionErrors: {},
+    // Pre-allocate with a simple array. Arrays are faster than Objects on mobile.
+    questionsByNumber: [],
+    selectedQuestions: [],
+    questionErrors: [],
     totalQuestions: 40,
     loadedCount: 0,
 
     init: function() {
-        this.reset();
+        // Use a standard for-loop to initialize. map/fill is slower on older mobile Safari/Chrome.
+        this.questionsByNumber = new Array(41);
+        this.selectedQuestions = new Array(41);
+        this.questionErrors = new Array(41);
+        
+        for (let i = 0; i <= 40; i++) {
+            this.questionsByNumber[i] = [];
+            this.selectedQuestions[i] = null;
+            this.questionErrors[i] = null;
+        }
+
         localStorage.removeItem('examSelections');
         
-        // Direct loading for speed
-        if (window.questions && Array.isArray(window.questions)) {
+        // Execute loading in a "non-blocking" way for mobile
+        // This prevents the mobile browser from freezing during load
+        if (window.questions) {
             this.processQuestionsArray(window.questions);
+            this.finalizeLoading();
         } else {
-            console.error('❌ Questions source missing');
-            // No fallback object created here as requested
+            // Check again in 50ms in case set-3.js is still parsing (common on slow mobile)
+            setTimeout(() => {
+                if (window.questions) {
+                    this.processQuestionsArray(window.questions);
+                    this.finalizeLoading();
+                }
+            }, 50);
         }
         
-        this.finalizeLoading();
         return this;
     },
     
     reset: function() {
-        this.questionsByNumber = Array(41).fill(null).map(() => []);
-        this.selectedQuestions = Array(41).fill(null);
-        this.questionErrors = {};
+        for (let i = 0; i <= 40; i++) {
+            this.questionsByNumber[i] = [];
+            this.selectedQuestions[i] = null;
+            this.questionErrors[i] = null;
+        }
         this.loadedCount = 0;
     },
     
     processQuestionsArray: function(questionsArray) {
-        // Single loop pass is the fastest way to process data
-        for (let i = 0, len = questionsArray.length; i < len; i++) {
+        // Cached length for performance
+        const len = questionsArray.length;
+        const qByNum = this.questionsByNumber;
+        const total = this.totalQuestions;
+
+        for (let i = 0; i < len; i++) {
             const q = questionsArray[i];
             const id = q.id;
-            if (id > 0 && id <= this.totalQuestions) {
-                this.questionsByNumber[id].push(q);
+            // Direct array access is the fastest possible way to sort data
+            if (id > 0 && id <= total) {
+                qByNum[id].push(q);
             }
         }
     },
     
     finalizeLoading: function() {
-        // Map questions and pick variations in one quick pass
-        for (let i = 1; i <= this.totalQuestions; i++) {
-            const variations = this.questionsByNumber[i];
-            if (variations.length > 0) {
-                // Inline selection logic for speed
-                const randomIndex = (variations.length === 1) ? 0 : Math.floor(Math.random() * variations.length);
-                this.selectedQuestions[i] = variations[randomIndex];
-                this.loadedCount++;
+        const qByNum = this.questionsByNumber;
+        const selQ = this.selectedQuestions;
+        const errors = this.questionErrors;
+        let count = 0;
+
+        for (let i = 1; i <= 40; i++) {
+            const variations = qByNum[i];
+            const vLen = variations.length;
+            
+            if (vLen > 0) {
+                // Inline random selection - Optimized for mobile Math.random
+                if (vLen === 1) {
+                    selQ[i] = variations[0];
+                } else {
+                    selQ[i] = variations[(Math.random() * vLen) | 0]; // Bitwise OR is faster than Math.floor
+                }
+                count++;
             } else {
-                this.questionErrors[i] = { message: `Question ${i} missing` };
+                errors[i] = "Question " + i + " missing";
             }
         }
+        this.loadedCount = count;
         this.updateUI();
     },
     
     updateUI: function() {
-        if (window.GridRenderer) {
-            // requestAnimationFrame is faster than setTimeout(100)
-            requestAnimationFrame(() => {
+        // Use a tiny timeout to let the mobile browser finish internal tasks 
+        // before we tell the GridRenderer to draw
+        setTimeout(() => {
+            if (window.GridRenderer) {
                 GridRenderer.updateGridColors();
                 GridRenderer.updateStats();
-            });
-        }
+            }
+        }, 0);
     },
     
     getQuestion: function(num) {
-        if (this.questionErrors[num]) return { id: num, hasError: true, error: this.questionErrors[num] };
+        if (this.questionErrors[num]) return { id: num, hasError: true, error: { message: this.questionErrors[num] } };
         return this.selectedQuestions[num] || { id: num, hasError: true, error: { message: 'Not found' } };
     },
     
     getQuestionStatus: function(num) {
-        if (this.questionErrors[num]) return { status: 'error', message: this.questionErrors[num].message };
+        if (this.questionErrors[num]) return { status: 'error', message: this.questionErrors[num] };
         if (this.selectedQuestions[num]) return { status: 'loaded' };
-        return { status: 'not-loaded', message: 'Empty' };
+        return { status: 'not-loaded' };
     },
     
     reselectQuestion: function(num) {
         const vars = this.questionsByNumber[num];
         if (!vars || vars.length === 0) return false;
-        this.selectedQuestions[num] = vars[Math.floor(Math.random() * vars.length)];
+        this.selectedQuestions[num] = vars[(Math.random() * vars.length) | 0];
         return true;
     },
     
@@ -90,7 +125,7 @@ const QuestionsManager = {
     },
     
     markExamSubmitted: function() {
-        this.selectedQuestions = Array(41).fill(null);
+        this.selectedQuestions.fill(null);
         localStorage.removeItem('examSelections');
     }
 };

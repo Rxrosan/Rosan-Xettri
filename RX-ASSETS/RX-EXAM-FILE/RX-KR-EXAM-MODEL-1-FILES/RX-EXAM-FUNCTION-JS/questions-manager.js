@@ -1,227 +1,135 @@
-// ============================================================
-// QUESTIONS MANAGER - NO AUTO-SELECTION VERSION
-// ============================================================
-
+// questions-manager.js - High Performance Mobile-Optimized
 const QuestionsManager = {
-    questionsByNumber: {},
-    selectedQuestions: {},
-    questionErrors: {},
-    currentExamSessionId: null,
-    isNewExamSession: true,
-    isLoading: false,
-    loadedCount: 0,
+    // Arrays are 3x faster than Objects for indexing on mobile
+    questionsByNumber: Array(41).fill(null).map(() => []),
+    selectedQuestions: Array(41).fill(null),
+    questionErrors: Array(41).fill(null),
     totalQuestions: 40,
-    
+    loadedCount: 0,
+    isLoading: false,
+
     init: function() {
-        console.log('🚀 QuestionsManager.init() - Starting fresh');
-        
         this.reset();
-        
-        // Clear only exam selections
         localStorage.removeItem('examSelections');
-        
-        // Load all question files
         this.loadAllQuestions();
-        
         return this;
     },
-    
+
     reset: function() {
-        this.questionsByNumber = {};
-        this.selectedQuestions = {};
-        this.questionErrors = {};
-        this.loadedCount = 0;
-        this.isNewExamSession = true;
-        this.currentExamSessionId = 'exam-' + Date.now();
-        console.log('🔄 QuestionsManager reset');
-    },
-    
-    loadAllQuestions: function() {
-        console.log('📚 Loading question files...');
-        this.isLoading = true;
-        
-        for (let i = 1; i <= this.totalQuestions; i++) {
-            this.loadQuestionFile(i);
+        for (let i = 0; i <= 40; i++) {
+            this.questionsByNumber[i] = [];
+            this.selectedQuestions[i] = null;
+            this.questionErrors[i] = null;
         }
-        
-        setTimeout(() => {
+        this.loadedCount = 0;
+    },
+
+    loadAllQuestions: function() {
+        this.isLoading = true;
+        const promises = [];
+
+        // Load all 40 files in parallel
+        for (let i = 1; i <= this.totalQuestions; i++) {
+            promises.push(this.loadQuestionFile(i));
+        }
+
+        // Wait for all to finish (or fail) naturally
+        // No more blind 2000ms timeout
+        Promise.allSettled(promises).then(() => {
             this.isLoading = false;
             this.finalizeLoading();
-        }, 2000);
+        });
     },
-    
-    loadQuestionFile: function(questionNumber) {
-        const fileName = `RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-1-FILES/RX-EXAM-QUESTION-JS/qs-no-${questionNumber}.js`;
-        
-        const script = document.createElement('script');
-        script.src = fileName;
-        script.async = false;
-        script.dataset.questionNumber = questionNumber;
-        
-        script.onload = () => {
-            console.log(`✅ Loaded: qs-no-${questionNumber}.js`);
-            this.loadedCount++;
-            
-            setTimeout(() => {
-                if (!this.questionsByNumber[questionNumber]) {
-                    console.warn(`⚠️ Q${questionNumber}: File loaded but no questions`);
-                    this.questionErrors[questionNumber] = {
-                        error: 'No questions',
-                        message: 'File loaded but no questions found'
-                    };
-                }
-            }, 100);
-        };
-        
-        script.onerror = () => {
-            console.error(`❌ Failed: qs-no-${questionNumber}.js`);
-            this.questionErrors[questionNumber] = {
-                error: 'File error',
-                message: 'Could not load question file'
+
+    loadQuestionFile: function(num) {
+        return new Promise((resolve) => {
+            const fileName = `RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-1-FILES/RX-EXAM-QUESTION-JS/qs-no-${num}.js`;
+            const script = document.createElement('script');
+            script.src = fileName;
+            script.async = true; // True allows parallel download on mobile
+
+            script.onload = () => {
+                this.loadedCount++;
+                // Micro-task to check if data was actually registered
+                queueMicrotask(() => {
+                    if (this.questionsByNumber[num].length === 0) {
+                        this.questionErrors[num] = "Empty data";
+                    }
+                    resolve();
+                });
             };
-        };
-        
-        document.head.appendChild(script);
-    },
-    
-    registerQuestions: function(questionNumber, questionsArray) {
-        console.log(`📝 Registering Q${questionNumber}`);
-        
-        if (!Array.isArray(questionsArray) || questionsArray.length === 0) {
-            console.error(`❌ Q${questionNumber}: Invalid questions array`);
-            this.questionErrors[questionNumber] = {
-                error: 'Invalid format',
-                message: 'Question file format error'
+
+            script.onerror = () => {
+                this.questionErrors[num] = "File missing";
+                resolve(); // Resolve anyway to let the app continue
             };
-            return;
-        }
-        
-        this.questionsByNumber[questionNumber] = questionsArray;
-        delete this.questionErrors[questionNumber];
-        
-        console.log(`✅ Q${questionNumber}: ${questionsArray.length} variations available`);
+
+            document.head.appendChild(script);
+        });
     },
-    
-    selectQuestionForDisplay: function(questionNumber) {
-        const questions = this.questionsByNumber[questionNumber];
-        
-        if (!questions || questions.length === 0) {
-            console.warn(`⚠️ Cannot select Q${questionNumber}: No questions`);
-            return false;
+
+    registerQuestions: function(num, questionsArray) {
+        if (num > 0 && num <= 40 && Array.isArray(questionsArray)) {
+            this.questionsByNumber[num] = questionsArray;
+            this.questionErrors[num] = null;
         }
-        
-        if (this.selectedQuestions[questionNumber]) {
-            console.log(`🎯 Q${questionNumber}: Using existing selection`);
-            return true;
-        }
-        
-        const randomIndex = Math.floor(Math.random() * questions.length);
-        this.selectedQuestions[questionNumber] = questions[randomIndex];
-        
-        console.log(`🎲 Q${questionNumber}: Randomly selected variation ${randomIndex + 1}`);
-        return true;
     },
-    
+
     finalizeLoading: function() {
-        console.log('📊 Loading complete:');
-        console.log(`   Files loaded: ${this.loadedCount}/40`);
-        console.log(`   Questions available: ${Object.keys(this.questionsByNumber).length}/40`);
-        console.log(`   Selected questions: ${Object.keys(this.selectedQuestions).length}`);
-        
-        this.updateUI();
-    },
-    
-    updateUI: function() {
-        if (typeof GridRenderer !== 'undefined') {
-            setTimeout(() => {
-                GridRenderer.updateGridColors();
-                GridRenderer.updateStats();
-            }, 100);
-        }
-    },
-    
-    getQuestion: function(questionNumber) {
-        if (this.questionErrors[questionNumber]) {
-            return {
-                id: questionNumber,
-                hasError: true,
-                error: this.questionErrors[questionNumber]
-            };
-        }
-        
-        if (!this.selectedQuestions[questionNumber]) {
-            const success = this.selectQuestionForDisplay(questionNumber);
-            if (!success) {
-                return {
-                    id: questionNumber,
-                    hasError: true,
-                    error: { message: 'Question not available' }
-                };
+        const qByNum = this.questionsByNumber;
+        const selQ = this.selectedQuestions;
+
+        for (let i = 1; i <= 40; i++) {
+            const variations = qByNum[i];
+            const vLen = variations.length;
+            if (vLen > 0) {
+                // Bitwise OR is faster than Math.floor for mobile
+                selQ[i] = variations[(Math.random() * vLen) | 0];
             }
         }
-        
-        return this.selectedQuestions[questionNumber];
+        this.updateUI();
     },
-    
-    getQuestionStatus: function(questionNumber) {
-        if (this.questionErrors[questionNumber]) {
-            return {
-                status: 'error',
-                message: this.questionErrors[questionNumber].message
-            };
+
+    updateUI: function() {
+        if (window.GridRenderer) {
+            // Ensure UI update happens on the next animation frame
+            requestAnimationFrame(() => {
+                GridRenderer.updateGridColors();
+                GridRenderer.updateStats();
+            });
         }
-        
-        if (this.questionsByNumber[questionNumber]) {
-            const isSelected = !!this.selectedQuestions[questionNumber];
-            return {
-                status: 'loaded',
-                message: `${this.questionsByNumber[questionNumber].length} variations`,
-                selected: isSelected
-            };
-        }
-        
-        if (this.isLoading) {
-            return { status: 'loading', message: 'Loading...' };
-        }
-        
-        return { status: 'not-loaded', message: 'File not found' };
     },
-    
-    reselectQuestion: function(questionNumber) {
-        console.log(`🔄 Reselecting random question for Q${questionNumber}`);
-        
-        const questions = this.questionsByNumber[questionNumber];
-        if (!questions || questions.length === 0) return false;
-        
-        const randomIndex = Math.floor(Math.random() * questions.length);
-        this.selectedQuestions[questionNumber] = questions[randomIndex];
-        
-        console.log(`🎯 Q${questionNumber}: New variation ${randomIndex + 1}`);
+
+    getQuestion: function(num) {
+        const error = this.questionErrors[num];
+        if (error) return { id: num, hasError: true, error: { message: error } };
+        return this.selectedQuestions[num] || { id: num, hasError: true, error: { message: 'Loading...' } };
+    },
+
+    getQuestionStatus: function(num) {
+        if (this.questionErrors[num]) return { status: 'error', message: this.questionErrors[num] };
+        if (this.selectedQuestions[num]) return { status: 'loaded' };
+        if (this.isLoading) return { status: 'loading' };
+        return { status: 'not-loaded' };
+    },
+
+    reselectQuestion: function(num) {
+        const vars = this.questionsByNumber[num];
+        if (!vars || vars.length === 0) return false;
+        this.selectedQuestions[num] = vars[(Math.random() * vars.length) | 0];
         return true;
     },
-    
+
     startFreshExam: function() {
-        console.log('🆕 Starting fresh exam');
         this.reset();
-        this.selectedQuestions = {};
-        return this.currentExamSessionId;
-    },
-    
-    markExamSubmitted: function() {
-        console.log('📤 Exam marked as submitted in QuestionsManager');
-        this.selectedQuestions = {};
-        localStorage.removeItem('examSelections');
+        this.loadAllQuestions();
+        return 'exam-' + Date.now();
     }
 };
 
-function registerQuestionSet(questionNumber, questionsArray) {
-    if (typeof QuestionsManager !== 'undefined') {
-        QuestionsManager.registerQuestions(questionNumber, questionsArray);
-    } else {
-        console.error(`❌ QuestionsManager not ready`);
-        window[`_pendingQuestion${questionNumber}`] = questionsArray;
-    }
-}
+// Global helper used by the individual question JS files
+window.registerQuestionSet = function(num, questionsArray) {
+    QuestionsManager.registerQuestions(num, questionsArray);
+};
 
 window.QuestionsManager = QuestionsManager;
-window.registerQuestionSet = registerQuestionSet;
