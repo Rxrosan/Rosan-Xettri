@@ -12,7 +12,7 @@
     const style = document.createElement("style");
 
     style.textContent = `
-        #ui-loader-wrapper{
+        #rxloader-wrapper{
             position:fixed;
             inset:0;
             width:100%;
@@ -30,28 +30,28 @@
             transition:opacity .5s ease;
         }
 
-        .loader-image{
+        .rxloader-image{
             width:clamp(90px,22vw,150px);
             max-width:100%;
             height:auto;
             margin-bottom:15px;
         }
 
-        .brand-name{
+        .rxloader-brand-name{
             color:#fff;
             font-size:clamp(20px,4vw,28px);
             margin:0;
             text-align:center;
         }
 
-        .author-name{
+        .rxloader-author-name{
             color:rgba(255,255,255,.6);
             margin-top:8px;
             text-align:center;
             font-size:14px;
         }
 
-        .loader-hide{
+        .rxloader-hide{
             opacity:0;
             pointer-events:none;
         }
@@ -62,12 +62,12 @@
 
     const loader = document.createElement("div");
 
-    loader.id = "ui-loader-wrapper";
+    loader.id = "rxloader-wrapper";
 
     loader.innerHTML = `
-        <img src="${LOGO_URL}" class="loader-image">
-        <h1 class="brand-name">${PRIMARY_TEXT}</h1>
-        <div class="author-name">${SECONDARY_TEXT}</div>
+        <img src="${LOGO_URL}" class="rxloader-image">
+        <h1 class="rxloader-brand-name">${PRIMARY_TEXT}</h1>
+        <div class="rxloader-author-name">${SECONDARY_TEXT}</div>
     `;
 
     // Wait until body exists
@@ -96,7 +96,7 @@
             setTimeout(() => {
 
                 loader.classList.add(
-                    "loader-hide"
+                    "rxloader-hide"
                 );
 
                 setTimeout(() => {
@@ -118,7 +118,7 @@
 
         if (
             document.getElementById(
-                "ui-loader-wrapper"
+                "rxloader-wrapper"
             )
         ) {
 
