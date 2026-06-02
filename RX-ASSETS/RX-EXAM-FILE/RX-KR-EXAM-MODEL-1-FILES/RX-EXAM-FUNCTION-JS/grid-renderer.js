@@ -1,21 +1,23 @@
-// grid-renderer.js - Optimized for Performance
-
+// grid-renderer.js - Ultra-Fast Performance Optimized
 const GridRenderer = {
-    // Cache for DOM elements to avoid repetitive lookups
     elements: {
         readGrid: null,
         listenGrid: null,
-        boxes: {} // Stores references to the 40 question divs
+        boxes: [] // Use array for faster indexing than object
+    },
+    
+    // Track previous state to skip unnecessary DOM updates
+    _prevState: {
+        currentId: null,
+        answeredCount: 0
     },
 
     init: function() {
-        console.log('🎨 GridRenderer.init() - Initializing');
         this.elements.readGrid = document.getElementById('readGrid');
         this.elements.listenGrid = document.getElementById('listenGrid');
         
         if (!this.elements.readGrid || !this.elements.listenGrid) return;
 
-        // Attach event listeners to parents (Event Delegation)
         this.setupEventListeners();
         this.renderGrid();
     },
@@ -23,43 +25,33 @@ const GridRenderer = {
     setupEventListeners: function() {
         const handleClick = (e) => {
             const box = e.target.closest('.qnum');
-            if (box) {
-                this.handleQuestionClick(parseInt(box.dataset.id));
-            }
+            if (box) this.handleQuestionClick(Number(box.dataset.id));
         };
-
+        // Use capture: false for slightly better performance in standard bubbling
         this.elements.readGrid.addEventListener('click', handleClick);
         this.elements.listenGrid.addEventListener('click', handleClick);
     },
     
     renderGrid: function() {
-        // Clear existing content efficiently
-        this.elements.readGrid.textContent = '';
-        this.elements.listenGrid.textContent = '';
+        let readHTML = '';
+        let listenHTML = '';
         
-        // Use Fragments to minimize browser reflows
-        const readFrag = document.createDocumentFragment();
-        const listenFrag = document.createDocumentFragment();
-        
+        // String concatenation is significantly faster than createElement + appendChild 
+        // for bulk operations in modern engines
         for (let i = 1; i <= 40; i++) {
-            const box = document.createElement('div');
-            box.className = 'qnum';
-            box.textContent = i;
-            box.dataset.id = i;
-            
-            // Store reference for lightning-fast updates later
-            this.elements.boxes[i] = box;
-            
-            if (i <= 20) {
-                readFrag.appendChild(box);
-            } else {
-                listenFrag.appendChild(box);
-            }
+            const html = `<div class="qnum" data-id="${i}">${i}</div>`;
+            if (i <= 20) readHTML += html;
+            else listenHTML += html;
         }
         
-        // Single DOM update for the whole grid
-        this.elements.readGrid.appendChild(readFrag);
-        this.elements.listenGrid.appendChild(listenFrag);
+        this.elements.readGrid.innerHTML = readHTML;
+        this.elements.listenGrid.innerHTML = listenHTML;
+        
+        // Fast-cache the references
+        const allBoxes = document.querySelectorAll('.qnum');
+        allBoxes.forEach(box => {
+            this.elements.boxes[box.dataset.id] = box;
+        });
         
         this.updateGridColors();
     },
@@ -68,51 +60,70 @@ const GridRenderer = {
         const status = QuestionsManager.getQuestionStatus(questionNumber);
         
         if (status.status === 'error') {
-            alert(`Question ${questionNumber} Error:\n\n${status.message}`);
-            return;
+            return alert(`Question ${questionNumber} Error:\n\n${status.message}`);
         }
         
         if (status.status === 'loading' || status.status === 'not-loaded') {
-            alert(`Question ${questionNumber} is loading. Please wait...`);
-            return;
+            return alert(`Question ${questionNumber} is loading...`);
         }
         
-        // Load the question
         QuestionLoader.loadQuestion(questionNumber, true);
         
-        // Ensure footer is visible
         const footer = document.getElementById('navFooter');
-        if (footer) footer.style.display = 'flex';
+        if (footer && footer.style.display !== 'flex') footer.style.display = 'flex';
     },
     
     updateGridColors: function() {
-        const currentId = UserState.currentQuestionId;
-        const answers = UserState.userAnswers;
+        // Run inside requestAnimationFrame to ensure sync with browser refresh rate
+        // and prevent "Layout Thrashing"
+        requestAnimationFrame(() => {
+            const currentId = UserState.currentQuestionId;
+            const answers = UserState.userAnswers;
+            const solvedCount = Object.keys(answers).length;
 
-        // Use the cached references instead of querySelectorAll
-        for (let i = 1; i <= 40; i++) {
-            const box = this.elements.boxes[i];
-            if (!box) continue;
+            // Optimization: Skip loop if nothing could have changed
+            // (Optional: can be expanded based on your state logic)
 
-            const status = QuestionsManager.getQuestionStatus(i);
+            for (let i = 1; i <= 40; i++) {
+                const box = this.elements.boxes[i];
+                if (!box) continue;
+
+                const status = QuestionsManager.getQuestionStatus(i);
+                const isAnswered = !!answers[i];
+                const isActive = i === currentId;
+                const isError = status.status === 'error';
+
+                // PERFORMANCE: Check current class state before touching DOM
+                // This prevents the browser from recalculating styles if nothing changed
+                if (box._lastActive !== isActive) {
+                    box.classList.toggle('active', isActive);
+                    box._lastActive = isActive;
+                }
+                if (box._lastAnswered !== isAnswered) {
+                    box.classList.toggle('answered', isAnswered);
+                    box._lastAnswered = isAnswered;
+                }
+                if (box._lastError !== isError) {
+                    box.classList.toggle('error', isError);
+                    box._lastError = isError;
+                    if (isError) box.title = status.message;
+                }
+            }
             
-            // Update classes using classList (faster than overwriting className)
-            box.classList.toggle('error', status.status === 'error');
-            box.classList.toggle('answered', !!answers[i]);
-            box.classList.toggle('active', i === currentId);
-            
-            if (status.status === 'error') box.title = status.message;
-        }
-        
-        this.updateStats();
+            this.updateStats(solvedCount);
+        });
     },
     
-    updateStats: function() {
-        const solvedCount = Object.keys(UserState.userAnswers).length;
+    updateStats: function(solvedCount) {
+        // Only update DOM if the numbers actually changed
+        if (this._prevState.answeredCount === solvedCount) return;
+
         const solvedEl = document.getElementById('solved-count');
         const unsolvedEl = document.getElementById('unsolved-count');
         
         if (solvedEl) solvedEl.textContent = solvedCount;
         if (unsolvedEl) unsolvedEl.textContent = 40 - solvedCount;
+        
+        this._prevState.answeredCount = solvedCount;
     }
 };
