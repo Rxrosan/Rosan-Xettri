@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <script src="RX-ASSETS/RX-OTHER-SOFTWARE-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
+    <meta charset="UTF-8" />
     <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/loader.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-4.png">
-    <title>RX |Contact</title>
+    <script src="RX-ASSETS/RX-OTHER-SOFTWARE-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-CHAT.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-MUSIC.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png" />
+    <title>RX | ROSAN KC - CONTACT</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-CSS/RX-WEB-MAIN.css">
-    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-CSS/RX-WEB-CONTACT.css">
+    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-CSS/RX-WEB-MAIN.css" />
+    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-CSS/RX-WEB-CONTACT.css" />
+   
 </head>
 <body>
-     <!-- १. जाभास्क्रिप्ट बन्द गर्नेहरूलाई रोक्न यो कोड ठीक यहाँ हाल्नुहोस् -->
+    <!-- १. जाभास्क्रिप्ट बन्द गर्नेहरूलाई रोक्न यो कोड ठीक यहाँ हाल्नुहोस् -->
     <noscript>
         <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#ffffff; color:#ff0000; text-align:center; padding-top:15%; font-family:Arial, sans-serif; font-size:24px; font-weight:bold; z-index:999999;">
             <p>JavaScript is disabled in your browser!</p>
@@ -21,59 +25,56 @@
             </p>
         </div>
     </noscript>
-
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">RX <span>STUDIO</span></div>
+    <!-- HEADER -->
+    <header class="header">
+        <a href="index.html" class="logo-wrapper">
+            <img src="RX-ASSETS/RX-IMAGE/RX-LOGO/L-7.gif" alt="RX STUDIO" class="logo-img" />
+          <!--<span class="logo-text">Rosan <span>Xettri</span></span>-->
+        </a>
         <div class="user-actions">
-            <a  id="menuToggle">
-                ≣
+            <a id="menuToggle" aria-label="Open menu" role="button">
+                ≡
             </a>
         </div>
-    </div>
-    
-    <!-- Side Panel Overlay -->
+    </header>
+
+    <!-- SIDE PANEL OVERLAY -->
     <div class="panel-overlay" id="panelOverlay"></div>
-    
-    <!-- Side Panel Menu -->
-    <div class="side-panel" id="sidePanel">
+
+    <!-- SIDE PANEL -->
+    <aside class="side-panel" id="sidePanel">
         <div class="panel-header">
-            <h3 class="logo">RX <span>STUDIO</span></h3>
-            <button class="close-panel" id="closePanel">
-                ⨉
+            <div class="panel-brand">
+                <!--<img src="RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png" alt="RX STUDIO" class="panel-logo" />-->
+                <span class="panel-brand-name">Rosan <span>Xettri</span></span>
+            </div>
+            <button class="close-panel" id="closePanel" aria-label="Close menu">
+               ✕
             </button>
         </div>
-           <div class="panel-menu">
-                <div class="panel-item">
-                <a href="USER.html" class="panel-link">
-                 PROFILE
-                </a>
+        <nav class="panel-menu">
+            <div class="panel-item">
+                <a href="User.html" class="panel-link">PROFILE</a>
             </div>
             <div class="panel-item">
-                <a href="Resource.html" class="panel-link">
-                 OPEN RESOURCE
-                </a>
+                <a href="Resource.html" class="panel-link">OPEN RESOURCE</a>
             </div>
             <div class="panel-item">
-                <a href="P&P.html" class="panel-link">
-                PRIVACY POLICY
-                </a>
+                <a href="P&P.html" class="panel-link">PRIVACY POLICY</a>
             </div>
             <div class="panel-item">
-                <a href="T&C.html" class="panel-link">
-                 TERMS & CONDITION
-                </a>
+                <a href="T&C.html" class="panel-link">TERMS & CONDITION</a>
             </div>
-        </div>
-        
+            <div class="panel-item">
+                <a href="News.html" class="panel-link">NEWS</a>
+            </div>
+        </nav>
         <div class="panel-footer">
-            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <a href="https://www.rosankc.com.np" target="_blank" rel="noopener">Rosan Xettri</a>. All rights reserved.</p>
         </div>
-    </div>
-    
-    <div class="container">
-        
-        <!-- Contact Section -->
+    </aside>
+
+  <div class="container">
 <!-- Contact Section -->
 <h2 class="section-title">Contact Us</h2>
 
@@ -81,19 +82,15 @@
 <div class="contact-tabs">
     <div class="tab-nav">
         <button class="tab-btn active" data-tab="social">
-            <i class="fas fa-share-alt"></i>
             <span>Social Media</span>
         </button>
         <button class="tab-btn" data-tab="direct">
-            <i class="fas fa-address-book"></i>
             <span>Direct Contact</span>
         </button>
         <button class="tab-btn" data-tab="email">
-            <i class="fas fa-envelope"></i>
             <span>Email Us</span>
         </button>
         <button class="tab-btn" data-tab="map">
-            <i class="fas fa-map-marked-alt"></i>
             <span>Find Us</span>
         </button>
     </div>
@@ -380,29 +377,24 @@
 </div>
 </div>
 </div>
-        <!-- Copyright Section -->
-        <div class="copyright">
-            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
-        </div>
 
-        
-    
-    <!-- Bottom Navbar -->
+        <!-- COPYRIGHT -->
+        <div class="copyright">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" target="_blank" rel="noopener">Rosan Xettri</a></strong>. All Rights Reserved.</p>
+        </div>
+    </main>
+
+    <!-- BOTTOM NAVBAR -->
     <nav class="bottom-navbar">
         <ul class="nav-links">
-            <li><a href="index.html"> Home</a></li>
-            <li><a href="About.html"> About</a></li>
-            <li><a href="Service.html"> Services</a></li>
-            <li><a href="Contact.html" class="active"> Contact</a></li>
-
+            <li><a href="index.html">Home</a></li>
+            <li><a href="About.html">About</a></li>
+            <li><a href="Service.html">Service</a></li>
+            <li><a href="Contact.html" class="active">Contact</a></li>
         </ul>
     </nav>
-    
-    
+
     <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-WEB-MAIN.js"></script>
     <script src="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-JS/RX-WEB-CONTACT.js"></script>
-    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js"></script>
-    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-CHAT.js"></script>
-    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-MUSIC.js"></script>
 </body>
 </html>

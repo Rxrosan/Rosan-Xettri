@@ -1,555 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <script src="RX-ASSETS/RX-OTHER-SOFTWARE-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
     <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/loader.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-2.png">
-    <title>RX | Resource</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-CSS/RX-WEB-MAIN.css">
-    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-CSS/RX-WEB-RESOURCE.css">
-    <style>
-        /* Resource Page Specific Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        .resource-container {
-            width: 100%;
-            max-width: 1400px;
-            margin: 1rem auto;
-            padding: 0 1rem;
-        }
-
-        .section-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            color: #64ffda;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            padding-bottom: 0.8rem;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #64ffda, transparent);
-            border-radius: 2px;
-        }
-
-        /* Store Navigation */
-        .store-navigation {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin: 1rem 0 1.5rem 0;
-            justify-content: center;
-        }
-
-        .store-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            color: #fff;
-            padding: 0.7rem 1.3rem;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            flex: 0 1 auto;
-        }
-
-        .store-btn:hover {
-            background: rgba(100, 255, 218, 0.1);
-            border-color: #64ffda;
-            transform: translateY(-2px);
-        }
-
-        .store-btn.active {
-            background: #64ffda;
-            color: #0a192f;
-            border-color: #64ffda;
-        }
-
-        .store-btn.manage-btn {
-            background: rgba(255, 193, 7, 0.1);
-            border-color: #ffc107;
-            color: #ffc107;
-        }
-
-        .store-btn.manage-btn:hover {
-            background: rgba(255, 193, 7, 0.2);
-        }
-
-        /* Store Title */
-        .store-title {
-            font-size: 1.6rem;
-            color: #fff;
-            margin: 0.5rem 0 1rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding-left: 0.5rem;
-        }
-
-        .store-title i {
-            color: #64ffda;
-        }
-
-        /* Content Cards Grid - Perfect fit layout */
-        .content-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1rem;
-            width: 100%;
-            margin: 0;
-        }
-
-        /* Card with ID attribute for perfect spacing */
-        .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(100, 255, 218, 0.1);
-            border-radius: 10px;
-            padding: 1.2rem;
-            transition: all 0.3s ease;
-            position: relative;
-            backdrop-filter: blur(5px);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 240px;
-            width: 100%;
-            margin: 0;
-            box-sizing: border-box;
-        }
-
-        /* Card ID display for debugging/identification */
-        .card::before {
-            content: attr(id);
-            position: absolute;
-            top: 0.3rem;
-            right: 0.5rem;
-            font-size: 0.7rem;
-            color: rgba(100, 255, 218, 0.3);
-            font-family: monospace;
-            pointer-events: none;
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            border-color: #64ffda;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        }
-
-        .card.locked {
-            opacity: 0.8;
-            border-color: rgba(255, 99, 99, 0.3);
-        }
-
-        .card-icon {
-            font-size: 1.8rem;
-            color: #64ffda;
-            margin-bottom: 0.8rem;
-        }
-
-        .card h3 {
-            color: #fff;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
-            word-break: break-word;
-            padding-right: 1.5rem;
-        }
-
-        .card p {
-            color: #b0b0b0;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            margin-bottom: 0.8rem;
-            flex: 1;
-            word-break: break-word;
-            overflow: hidden;
-            display: -webkit-box;
-           
-        }
-
-        .price {
-            color: #64ffda;
-            font-weight: 600;
-            font-size: 1rem;
-            margin: 0.5rem 0;
-        }
-
-        .lock-icon {
-            position: absolute;
-            top: 0.8rem;
-            right: 0.8rem;
-            color: #ff6b6b;
-            font-size: 1.1rem;
-            z-index: 2;
-        }
-
-        .card a, .card button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            background: linear-gradient(135deg, #64ffda, #4ecdc4);
-            color: #0a192f;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 0.5rem;
-        }
-
-        .card a:hover, .card button:hover {
-            background: transparent;
-            color: #64ffda;
-            border: 1px solid #64ffda;
-            padding: calc(0.5rem - 1px) calc(1rem - 1px);
-        }
-
-        .card button.purchase-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ff4757);
-            color: white;
-        }
-
-        .card button.purchase-btn:hover {
-            background: transparent;
-            color: #ff6b6b;
-            border-color: #ff6b6b;
-        }
-
-        /* Countdown Timer */
-        .countdown-container {
-            margin: 0.5rem 0;
-            padding: 0.5rem;
-            background: rgba(100, 255, 218, 0.1);
-            border-radius: 5px;
-            text-align: center;
-        }
-
-        .countdown {
-            font-family: monospace;
-            font-size: 0.9rem;
-            color: #64ffda;
-        }
-
-        .countdown.expired {
-            color: #ff6b6b;
-        }
-
-        .time-limit-expired {
-            color: #ff6b6b;
-            font-weight: 500;
-            font-size: 0.9rem;
-            margin: 0.5rem 0;
-        }
-
-        /* No Content Message */
-        .no-content {
-            text-align: center;
-            color: #b0b0b0;
-            font-size: 1rem;
-            padding: 2rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 8px;
-            grid-column: 1 / -1;
-        }
-
-        /* Loading State */
-        .loading {
-            text-align: center;
-            grid-column: 1 / -1;
-            padding: 2rem;
-            color: #b0b0b0;
-        }
-
-        .loading i {
-            font-size: 1.8rem;
-            color: #64ffda;
-            margin-bottom: 0.5rem;
-        }
-
-        /* Login Required Screen */
-        .login-container {
-            min-height: 50vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, rgba(10, 25, 47, 0.1) 100%);
-            border-radius: 16px;
-            margin: 1.5rem auto;
-            max-width: 500px;
-        }
-
-        .login-box {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(100, 255, 218, 0.2);
-            border-radius: 16px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            width: 100%;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .login-error-icon {
-            font-size: 4rem;
-            color: #ff6b6b;
-            margin-bottom: 1rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        .login-title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 0.8rem;
-            color: #fff;
-        }
-
-        .login-message {
-            color: #b0b0b0;
-            margin-bottom: 1.5rem;
-            line-height: 1.5;
-            font-size: 1rem;
-        }
-
-        .login-btn-simple {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: linear-gradient(135deg, #64ffda, #4ecdc4);
-            color: #0a192f;
-            padding: 0.8rem 2rem;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .login-btn-simple:hover {
-            background: transparent;
-            color: #64ffda;
-            border-color: #64ffda;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(100, 255, 218, 0.2);
-        }
-
-        .login-btn-simple i {
-            font-size: 1.1rem;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Login status based visibility */
-        body.logged-in #login-screen {
-            display: none !important;
-        }
-
-        body.logged-in #resource-bank {
-            display: block !important;
-        }
-
-        body.logged-out #login-screen {
-            display: flex !important;
-        }
-
-        body.logged-out #resource-bank {
-            display: none !important;
-        }
-
-        /* Floating Action Button */
-        .floating-btn {
-            position: fixed;
-            bottom: 70px;
-            right: 15px;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #64ffda;
-            color: #0a192f;
-            border: none;
-            font-size: 1.4rem;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(100, 255, 218, 0.3);
-            transition: all 0.3s ease;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .floating-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(100, 255, 218, 0.4);
-        }
-
-        .floating-btn.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        /* Responsive Design - Perfect fit at all screen sizes */
-        @media (min-width: 1600px) {
-            .content-cards {
-                grid-template-columns: repeat(5, 1fr);
-            }
-        }
-
-        @media (max-width: 1399px) and (min-width: 1200px) {
-            .content-cards {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        @media (max-width: 1199px) and (min-width: 992px) {
-            .content-cards {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 991px) and (min-width: 768px) {
-            .content-cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 767px) {
-            .resource-container {
-                padding: 0 0.8rem;
-            }
-            
-            .content-cards {
-                grid-template-columns: 1fr;
-                gap: 0.8rem;
-            }
-            
-            .section-title {
-                font-size: 1.8rem;
-                margin-bottom: 1rem;
-            }
-            
-            .store-navigation {
-                gap: 0.5rem;
-            }
-            
-            .store-btn {
-                padding: 0.6rem 1rem;
-                font-size: 0.85rem;
-                flex: 1 1 calc(50% - 0.5rem);
-            }
-            
-            .store-btn.manage-btn {
-                flex: 1 1 100%;
-            }
-            
-            .login-box {
-                padding: 1.5rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 1rem;
-            }
-            
-            .login-title {
-                font-size: 1.5rem;
-            }
-            
-            .login-btn-simple {
-                padding: 0.7rem 1.5rem;
-                font-size: 0.95rem;
-            }
-            
-            .card {
-                padding: 1rem;
-                min-height: 220px;
-            }
-        }
-
-        /* Fix for very small devices */
-        @media (max-width: 360px) {
-            .store-btn {
-                flex: 1 1 100%;
-            }
-            
-            .card h3 {
-                font-size: 1.1rem;
-            }
-            
-            .card p {
-                font-size: 0.85rem;
-            }
-        }
-
-        /* Landscape mode fix */
-        @media (max-height: 600px) and (orientation: landscape) {
-            .login-container {
-                min-height: 70vh;
-            }
-            
-            .content-cards {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            }
-        }
-
-        /* High DPI Screens */
-        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-            .card {
-                backdrop-filter: blur(10px);
-            }
-        }
-    </style>
+    <script src="RX-ASSETS/RX-OTHER-SOFTWARE-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-CHAT.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-MUSIC.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png" />
+    <title>RX | ROSAN KC - RESOURCE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-CSS/RX-WEB-MAIN.css" />
+    <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-CSS/RX-WEB-RESOURCE.css" />
 </head>
 <body>
-     <!-- १. जाभास्क्रिप्ट बन्द गर्नेहरूलाई रोक्न यो कोड ठीक यहाँ हाल्नुहोस् -->
+    <!-- १. जाभास्क्रिप्ट बन्द गर्नेहरूलाई रोक्न यो कोड ठीक यहाँ हाल्नुहोस् -->
     <noscript>
         <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#ffffff; color:#ff0000; text-align:center; padding-top:15%; font-family:Arial, sans-serif; font-size:24px; font-weight:bold; z-index:999999;">
             <p>JavaScript is disabled in your browser!</p>
@@ -558,51 +24,53 @@
             </p>
         </div>
     </noscript>
-
-    <!-- Header -->
-    <div class="header">
-        <div class="logo">RX <span>STUDIO</span></div>
+    <!-- HEADER -->
+    <header class="header">
+        <a href="index.html" class="logo-wrapper">
+            <img src="RX-ASSETS/RX-IMAGE/RX-LOGO/L-7.gif" alt="RX STUDIO" class="logo-img" />
+          <!--<span class="logo-text">Rosan <span>Xettri</span></span>-->
+        </a>
         <div class="user-actions">
-            <a id="menuToggle">≣</a>
+            <a id="menuToggle" aria-label="Open menu" role="button">
+                ≡
+            </a>
         </div>
-    </div>
-    
-    <!-- Side Panel Overlay -->
-    <div class="panel-overlay" id="panelOverlay"></div>
-    
-    <!-- Side Panel Menu -->
-    <div class="side-panel" id="sidePanel">
-        <div class="panel-header">
-            <h3 class="logo">RX <span>STUDIO</span></h3>
-            <button class="close-panel" id="closePanel">⨉</button>
-        </div>
-        <div class="panel-menu">
-             <div class="panel-item">
-                <a href="USER.html" class="panel-link">PROFILE</a>
-            </div>
-            <div class="panel-item">
-                <a href="P&P.html" class="panel-link">
-                PRIVACY POLICY
-                </a>
-            </div>
-            <div class="panel-item">
-                <a href="T&C.html" class="panel-link">
-                 TERMS & CONDITION
-                </a>
-            </div>
-            <div class="panel-item">
-                <a href="NEWS.html" class="panel-link">
-                 NEWS
-                </a>
-            </div>
-        </div>
-        
-        <div class="panel-footer">
-            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
-        </div>
-    </div>
+    </header>
 
-    <div class="resource-container">
+    <!-- SIDE PANEL OVERLAY -->
+    <div class="panel-overlay" id="panelOverlay"></div>
+
+    <!-- SIDE PANEL -->
+    <aside class="side-panel" id="sidePanel">
+        <div class="panel-header">
+            <div class="panel-brand">
+                <!--<img src="RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png" alt="RX STUDIO" class="panel-logo" />-->
+                <span class="panel-brand-name">Rosan <span>Xettri</span></span>
+            </div>
+            <button class="close-panel" id="closePanel" aria-label="Close menu">
+               ✕
+            </button>
+        </div>
+        <nav class="panel-menu">
+            <div class="panel-item">
+                <a href="User.html" class="panel-link">PROFILE</a>
+            </div>
+            <div class="panel-item">
+                <a href="P&P.html" class="panel-link">PRIVACY POLICY</a>
+            </div>
+            <div class="panel-item">
+                <a href="T&C.html" class="panel-link">TERMS & CONDITION</a>
+            </div>
+            <div class="panel-item">
+                <a href="News.html" class="panel-link">NEWS</a>
+            </div>
+        </nav>
+        <div class="panel-footer">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <a href="https://www.rosankc.com.np" target="_blank" rel="noopener">Rosan Xettri</a>. All rights reserved.</p>
+        </div>
+    </aside>
+
+  <main class="resource-container">
         <h2 class="section-title">All Resources</h2>
         
         <!-- Login Required Screen -->
@@ -639,89 +107,28 @@
     </div>
     
     <button id="scroll-to-top" class="floating-btn hidden">⇧</button>
-    
-    <!-- Copyright Section -->
-    <div class="copyright">
-        <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>
-    </div>
-    
-    <!-- Bottom Navbar -->
+
+        <!-- COPYRIGHT -->
+        <div class="copyright">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" target="_blank" rel="noopener">Rosan Xettri</a></strong>. All Rights Reserved.</p>
+        </div>
+    </main>
+
+    <!-- BOTTOM NAVBAR -->
     <nav class="bottom-navbar">
         <ul class="nav-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="About.html">About</a></li>
-            <li><a href="Service.html">Services</a></li>
+            <li><a href="Service.html">Service</a></li>
             <li><a href="Contact.html">Contact</a></li>
-            <li><a href="Resource.html" class="active">RESOURCE</a></li>
+            <li><a href="Resource.html" class="active">Resource</a></li>
         </ul>
     </nav>
-    
-    <!-- Only user.js link -->
+
+    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-WEB-MAIN.js"></script>
+    <script src="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-JS/RX-WEB-RESOURCE.js"></script>
     <script src="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-DATA-JS/user.js"></script>
-    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-SMART-BUTTON.js"></script>
-    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-CHAT.js"></script>
-    <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-MUSIC.js"></script>
-    
+    <script src="RX-ASSETS/RX-FUNCTION/RX-WEBSITE-FUNCTION/RX-JS/RX-WEB-RESOURCE-2.js"></script>
 
-    <script>
-        // Auto-sense user login and initialize stores
-        document.addEventListener('DOMContentLoaded', function() {
-            const scrollBtn = document.getElementById('scroll-to-top');
-            
-            // Check if user is logged in
-            const currentUser = localStorage.getItem('currentUser');
-            
-            if (currentUser) {
-                document.body.classList.add('logged-in');
-                document.body.classList.remove('logged-out');
-                
-                // Initialize stores using StoreManager from user.js
-                if (typeof StoreManager !== 'undefined') {
-                    StoreManager.initializeStores();
-                    StoreManager.renderStoreNavigation();
-                    StoreManager.renderContentCards();
-                }
-            } else {
-                document.body.classList.add('logged-out');
-                document.body.classList.remove('logged-in');
-            }
-            
-            // Scroll to top
-            window.addEventListener('scroll', function() {
-                scrollBtn.classList.toggle('hidden', window.scrollY <= 300);
-            });
-            
-            scrollBtn.addEventListener('click', function() {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
-            // Side panel
-            const menuToggle = document.getElementById('menuToggle');
-            const closePanel = document.getElementById('closePanel');
-            const panelOverlay = document.getElementById('panelOverlay');
-            const sidePanel = document.getElementById('sidePanel');
-            
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function() {
-                    sidePanel.classList.add('active');
-                    panelOverlay.classList.add('active');
-                });
-            }
-            
-            if (closePanel) {
-                closePanel.addEventListener('click', function() {
-                    sidePanel.classList.remove('active');
-                    panelOverlay.classList.remove('active');
-                });
-            }
-            
-            if (panelOverlay) {
-                panelOverlay.addEventListener('click', function() {
-                    sidePanel.classList.remove('active');
-                    panelOverlay.classList.remove('active');
-                });
-            }
-        });
-    </script>
 </body>
 </html>

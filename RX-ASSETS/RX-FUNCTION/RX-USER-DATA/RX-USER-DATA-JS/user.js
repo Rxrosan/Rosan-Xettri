@@ -165,7 +165,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xzznawep';
 const NotificationManager = (() => {
     let timeoutId = null;
     
-    const showNotification = (title, message, type = "warning", duration = 5000) => {
+    const showNotification = (title, message, type = "warning", duration = 3000) => {
         // Try to find notification element
         let notification = document.getElementById('guest-notification');
         
@@ -224,7 +224,7 @@ const NotificationManager = (() => {
                 }
                 @media (max-width: 480px) {
                     .guest-notification {
-                        bottom: 10px;
+                        bottom:100px;
                         right: 10px;
                         left: 10px;
                         max-width: none;
@@ -943,7 +943,7 @@ const UserManager = (() => {
 
             const loginStatus = document.getElementById('loginStatus');
             if (loginStatus) {
-                loginStatus.textContent = 'Login successful!';
+                loginStatus.textContent = '';
                 loginStatus.className = 'login-status success';
             }
             

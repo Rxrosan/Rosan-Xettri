@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
             font-family: 'Times new roman', sans-serif;
             font-size: 1.5rem;
             font-weight: bold;
-            color: #b9f3ff;
+            color: #d10823;
             line-height: 1.5;
         }
     `;
