@@ -1,0 +1,60 @@
+/* ======================================== */
+/* ===== LOGIN PASSWORD TOGGLE & STATES ===== */
+/* ======================================== */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 44px !important; /* बटन सानो भएकोले राइट प्याडिङ मिलाएको */
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #4a6a8a;
+    cursor: pointer;
+    font-size: 14px; /* टगल आइकन थोरै सानो */
+    padding: 4px 6px;
+    transition: all 0.3s ease;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.password-toggle:hover {
+    color: #aa0707;
+    background: rgba(170, 7, 7, 0.08);
+}
+
+.login-btn.verified {
+    background: linear-gradient(135deg, #00c853, #00e676);
+    color: #fff;
+}
+
+.login-btn.verified:hover:not(:disabled) {
+    background: linear-gradient(135deg, #00e676, #00ff88);
+}
+
+.login-btn.cooldown {
+    background: #1a2a4a;
+    color: #6a8aaa;
+}
+
+@media (max-width: 768px) {
+    .password-toggle { font-size: 13px; right: 8px; }
+    .password-wrapper input { padding-right: 36px !important; }
+}
+
+@media (max-width: 480px) {
+    .password-toggle { font-size: 12px; right: 6px; padding: 3px 5px; }
+    .password-wrapper input { padding-right: 32px !important; }
+}

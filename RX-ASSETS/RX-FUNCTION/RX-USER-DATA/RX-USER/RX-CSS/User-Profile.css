@@ -1,0 +1,202 @@
+/* ==========================================================================
+   RX PROFILE GRID & COLOR SYSTEM (THEME MATCHED & CENTERED TITLE)
+   ========================================================================== */
+
+/* मुख्य सेक्सन कन्टेनर */
+.profile-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* मुख्य टाइटल - Center मा र तिम्रो थिम अनुसारको रेड ग्लो */
+.section-title {
+    font-size: 2.2rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+    text-align: center; /* टाइटललाई सेन्टरमा पारिएको */
+    position: relative;
+    padding-bottom: 15px;
+}
+
+/* टाइटलको तल पट्टि प्रिमियम रेड अन्डरलाइन बर्डर */
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: #ff0000; /* तिम्रो ब्रान्डको रेड कलर */
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+}
+
+/* मुख्य बडी ग्रिड (दुवै बक्सलाई समान उचाई र पर्फेक्ट एलाइनमेन्ट) */
+.profile-container {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 30px;
+    align-items: stretch;
+}
+
+/* ==========================================================================
+   BAUYA SIDE: USER AVATAR CARD (थिम म्याच ब्याकग्राउन्ड)
+   ========================================================================== */
+.profile-left {
+    background: rgba(255, 255, 255, 0.03); /* कालो हटाएर तिम्रो बडीको थिम अनुसार सेमी-ट्रान्सपेरेन्ट पारिएको */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px); /* ग्लासमोर्फिजम इफेक्ट */
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.profile-image-container {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 20px auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #ff0000; /* प्रिमियम रेड बर्डर */
+    padding: 5px;
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+}
+
+.profile-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-name {
+    font-size: 1.4rem;
+    color: #ffffff;
+    margin: 10px 0 5px 0;
+    font-weight: 600;
+}
+
+.profile-nickname {
+    font-size: 0.9rem;
+    color: #a0aec0; /* रिडेबिलिटी बढाउन हल्का उज्यालो ग्रे */
+    margin: 0;
+}
+
+/* ==========================================================================
+   DAYA SIDE: PERSONAL INFO CARD (थिम म्याच ब्याकग्राउन्ड)
+   ========================================================================== */
+.profile-right {
+    background: rgba(255, 255, 255, 0.03); /* ब्याकग्राउन्ड तिम्रो थिमसँग म्याच हुने पारिएको */
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 25px 30px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.details-title {
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* २ कोलम ग्रिड लेआउट */
+.profile-right .detail-item-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    flex-grow: 1;
+}
+
+/* प्रत्येक सिंगल डेटा बक्स (भित्री ब्याकग्राउन्ड पनि म्याच पारिएको) */
+.detail-item {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 12px 18px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+/* होभर गर्दा तिम्रो ब्रान्डको रेड बर्डर ग्लो आउने */
+.detail-item:hover {
+    border-color: rgba(255, 0, 0, 0.5);
+    background: rgba(255, 0, 0, 0.02);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.1);
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: #a0aec0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.detail-value {
+    font-size: 0.95rem;
+    color: #ffffff; /* कालो हटाएर टेक्स्ट कलर सेतो पारिएको ताकि डार्क थिममा ट्याक्क देखियोस् */
+    font-weight: 500;
+    word-break: break-all;
+}
+
+/* Member Type र User ID लाई थिमको एक्सेन्ट कलर (Red/Gold) मा हाइलाइट गर्न */
+#dropdown-account-type, #dropdown-user-id {
+    color: #ff3b3b; /* तिम्रो रेड थिम म्याच कलर */
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 992px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+    .profile-left {
+        display: block;
+    }
+}
+
+@media (max-width: 650px) {
+    .profile-right .detail-item-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .profile-section {
+        padding: 10px;
+    }
+    .profile-right {
+        padding: 20px 15px;
+    }
+    .section-title {
+        font-size: 1.8rem;
+    }
+}

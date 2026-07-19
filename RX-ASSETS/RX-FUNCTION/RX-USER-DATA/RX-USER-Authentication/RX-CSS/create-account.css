@@ -1,0 +1,115 @@
+/* ======================================== */
+/* ===== CREATE ACCOUNT FIXED LAYOUT ===== */
+/* ======================================== */
+
+#createSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - 180px);
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+/* JavaScript ले पेज लुकाउन प्रयोग गर्ने क्लास */
+#createSection.page-hidden,
+.page-hidden {
+    display: none !important;
+}
+
+/* पीसीको लागि बक्सको कन्टेनर */
+#createSection .login-container {
+    max-width: 600px; 
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+#createSection .login-title {
+    font-size: 22px;
+    margin-bottom: 25px;
+}
+
+/* इनपुटहरू बस्ने फारमको ग्रिड (PC को लागि) */
+#createSection .login-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* २ बराबर भाग */
+    gap: 16px; 
+}
+
+/* --- ६ वटा इनपुट फिल्डहरूको ग्रिड पोजिसन (३ वटा पर्फेक्ट लाइन) --- */
+#createSection .login-form .input-group:nth-child(1) { grid-column: 1; } /* Name */
+#createSection .login-form .input-group:nth-child(2) { grid-column: 2; } /* Email */
+#createSection .login-form .input-group:nth-child(3) { grid-column: 1; } /* Address */
+#createSection .login-form .input-group:nth-child(4) { grid-column: 2; } /* Phone Number */
+#createSection .login-form .input-group:nth-child(5) { grid-column: 1; } /* Date of Birth */
+#createSection .login-form .input-group:nth-child(6) { grid-column: 2; } /* Password */
+
+/* Date इनपुट फिल्डको क्यालेन्डर आइकनको रङ मिलाउन */
+#createSection input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(13%) sepia(95%) saturate(7408%) hue-rotate(359deg) brightness(89%) contrast(107%);
+    cursor: pointer;
+}
+
+/* Create Account बटन (Full Width - अब यो ७ औं स्थानमा छ) */
+#createSection .login-form .login-btn {
+    grid-column: span 2;
+    margin-top: 8px;
+}
+
+/* Status मेसेज (Full Width) */
+#createSection .login-status {
+    grid-column: span 2;
+}
+
+#createSection .input-group {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+/* ======================================== */
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+/* ======================================== */
+
+@media (max-width: 768px) {
+    #createSection .login-container {
+        max-width: 520px;
+    }
+    #createSection .login-form {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 580px) {
+    #createSection .login-form {
+        grid-template-columns: 1fr !important; /* मोबाइलमा १ लाइनमा १ वटा मात्र */
+        gap: 14px;
+    }
+    
+    /* मोबाइलमा सबै इनपुट र बटनहरूलाई सिंगल कोलममा रिसेट गर्ने */
+    #createSection .login-form .input-group:nth-child(1),
+    #createSection .login-form .input-group:nth-child(2),
+    #createSection .login-form .input-group:nth-child(3),
+    #createSection .login-form .input-group:nth-child(4),
+    #createSection .login-form .input-group:nth-child(5),
+    #createSection .login-form .input-group:nth-child(6),
+    #createSection .login-form .login-btn,
+    #createSection .login-status {
+        grid-column: span 1 !important;
+    }
+    
+    #createSection .login-container {
+        width: 95%;
+    }
+    
+    #createSection .login-title { 
+        font-size: 19px; 
+    }
+}
+/* पपअप खुला हुँदा ब्याकग्राउन्ड स्क्रोल रोक्न */
+body.no-scroll {
+    overflow: hidden !important;
+    height: 100vh !important;
+}
