@@ -166,10 +166,8 @@ const NotificationManager = (() => {
     let timeoutId = null;
     
     const showNotification = (title, message, type = "warning", duration = 3000) => {
-        // Try to find notification element
         let notification = document.getElementById('guest-notification');
         
-        // If notification element doesn't exist, create it
         if (!notification) {
             notification = document.createElement('div');
             notification.id = 'guest-notification';
@@ -183,7 +181,6 @@ const NotificationManager = (() => {
             `;
             document.body.appendChild(notification);
             
-            // Add styles for notification
             const style = document.createElement('style');
             style.textContent = `
                 .guest-notification {
@@ -287,7 +284,6 @@ const NotificationManager = (() => {
 
 // ===== PAYMENT MODULE =====
 const PaymentManager = (() => {
-    // Create the payment modal HTML dynamically
     const createPaymentModal = () => {
         if (document.getElementById('rx-payment-modal')) return;
 
@@ -380,12 +376,9 @@ const PaymentManager = (() => {
         `;
 
         document.body.insertAdjacentHTML('beforeend', modalHTML);
-        
-        // Add modal styles
         addPaymentStyles();
     };
 
-    // Add payment styles
     const addPaymentStyles = () => {
         if (document.getElementById('rx-payment-styles')) return;
 
@@ -660,14 +653,12 @@ const PaymentManager = (() => {
         document.head.appendChild(style);
     };
 
-    // Get price for user
     const getPriceForUser = (card, user) => {
         if (!card || !card.prices) return "Not for sale";
         if (user && card.prices[user.id]) return card.prices[user.id];
         return card.prices.default || "Contact for price";
     };
 
-    // Format current date
     const getCurrentDate = () => {
         const now = new Date();
         return now.toLocaleString('en-US', {
@@ -676,7 +667,6 @@ const PaymentManager = (() => {
         });
     };
 
-    // Show purchase modal
     const showPurchaseModal = (contentId, isRenewal = false) => {
         createPaymentModal();
 
@@ -734,7 +724,6 @@ const PaymentManager = (() => {
         return true;
     };
 
-    // Handle form submission
     const handleFormSubmit = async (e, card, isRenewal) => {
         const form = e.target;
         const submitBtn = document.getElementById('rx-submit-btn');
@@ -797,7 +786,6 @@ const PaymentManager = (() => {
         }
     };
 
-    // Close modal
     const closeModal = () => {
         const modal = document.getElementById('rx-payment-modal');
         if (modal) {
@@ -815,7 +803,6 @@ const PaymentManager = (() => {
 
 // ===== USER MANAGEMENT MODULE =====
 const UserManager = (() => {
-    // Create a guest user
     const createGuestUser = () => {
         return {
             id: "GUEST",
@@ -836,7 +823,6 @@ const UserManager = (() => {
         };
     };
     
-    // Save user data to localStorage
     const saveUserData = (user) => {
         localStorage.setItem('currentUser', JSON.stringify(user));
         if (!user.isGuest) {
@@ -844,25 +830,20 @@ const UserManager = (() => {
         }
     };
 
-    // Get user data from localStorage
     const getUserData = () => {
         const user = localStorage.getItem('currentUser');
         return user ? JSON.parse(user) : null;
     };
 
-    // Check if user has logged in before
     const hasUserLoggedInBefore = () => {
         return localStorage.getItem('hasLoggedInBefore') === 'true';
     };
 
-    // Get current logged-in user
     const getCurrentUser = () => {
         return getUserData();
     };
 
-    // Update UI with user data
     const updateUIWithUserData = (user) => {
-        // Check if we're on USER.html page
         const isUserPage = document.getElementById('profileSection') !== null;
         
         if (isUserPage) {
@@ -911,11 +892,6 @@ const UserManager = (() => {
             if (dropdownAccountTypeEl) dropdownAccountTypeEl.textContent = user.accountType;
         }
 
-        const adminSettingsLink = document.getElementById('admin-settings-link');
-        if (adminSettingsLink) {
-            adminSettingsLink.style.display = user.accountType === "ADMIN" ? 'flex' : 'none';
-        }
-        
         const loginSection = document.getElementById('loginSection');
         const profileSection = document.getElementById('profileSection');
         if (loginSection && profileSection) {
@@ -929,7 +905,6 @@ const UserManager = (() => {
         }
     };
 
-    // Login user with credentials
     const loginUser = (email, password) => {
         const foundUser = allUsers.find(user => user.email === email && user.password === password);
         if (foundUser) {
@@ -961,7 +936,6 @@ const UserManager = (() => {
         }
     };
 
-    // Logout user and return to guest mode
     const logoutUser = () => {
         const guestUser = createGuestUser();
         saveUserData(guestUser);
@@ -969,7 +943,6 @@ const UserManager = (() => {
         NotificationManager.showNotification("Logged Out", "You have been logged out. Please login to access your account.", "warning");
     };
 
-    // Initialize user state
     const initUser = () => {
         let user = getUserData();
         if (!user || user.isGuest) { 
@@ -986,7 +959,6 @@ const UserManager = (() => {
         updateUIWithUserData(user);
     };
 
-    // Check if user has access to a file
     const hasAccessToFile = (userId, fileId) => {
         const user = allUsers.find(u => u.id === userId);
         if (!user) return false;
@@ -1001,7 +973,6 @@ const UserManager = (() => {
         return false;
     };
 
-    // Get remaining time for timed access
     const getRemainingTime = (userId, fileId) => {
         const user = allUsers.find(u => u.id === userId);
         if (!user) return 0;
@@ -1023,100 +994,6 @@ const UserManager = (() => {
         hasUserLoggedInBefore,
         hasAccessToFile,
         getRemainingTime
-    };
-})();
-
-// ===== ADMIN PANEL MODULE =====
-const AdminPanelManager = (() => {
-    const renderMemberList = () => {
-        const memberListUl = document.getElementById('member-list');
-        if (!memberListUl) return;
-        
-        memberListUl.innerHTML = '';
-
-        allUsers.forEach(user => {
-            if (user.accountType !== "ADMIN") {
-                const li = document.createElement('li');
-                li.dataset.userId = user.id;
-                li.innerHTML = `
-                    <img src="${user.image}" alt="${user.fullName}" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-                    <span>${user.fullName} (${user.userName})</span>
-                `;
-                li.addEventListener('click', () => selectUser(user.id));
-                memberListUl.appendChild(li);
-            }
-        });
-    };
-
-    const displayUserDetails = (userId) => {
-        const user = allUsers.find(u => u.id === userId);
-        if (!user) {
-            const header = document.getElementById('selected-user-header');
-            if (header) header.textContent = 'User not found.';
-            const details = document.getElementById('selected-user-details');
-            if (details) details.style.display = 'none';
-            return;
-        }
-
-        const header = document.getElementById('selected-user-header');
-        if (header) header.textContent = `Details for ${user.fullName}`;
-        
-        const details = document.getElementById('selected-user-details');
-        if (details) details.style.display = 'block';
-
-        const userIdEl = document.getElementById('admin-user-id');
-        const fullNameEl = document.getElementById('admin-full-name');
-        const emailEl = document.getElementById('admin-email');
-        const phoneEl = document.getElementById('admin-phone');
-        const addressEl = document.getElementById('admin-address');
-        const accountTypeEl = document.getElementById('admin-account-type');
-        const profileImgEl = document.getElementById('admin-profile-img');
-        
-        if (userIdEl) userIdEl.textContent = user.id;
-        if (fullNameEl) fullNameEl.textContent = user.fullName;
-        if (emailEl) emailEl.textContent = user.email;
-        if (phoneEl) phoneEl.textContent = user.phone;
-        if (addressEl) addressEl.textContent = user.address;
-        if (accountTypeEl) accountTypeEl.textContent = user.accountType;
-        if (profileImgEl) profileImgEl.src = user.image;
-
-        document.querySelectorAll('#member-list li').forEach(item => {
-            item.classList.remove('selected');
-            if (item.dataset.userId === userId) {
-                item.classList.add('selected');
-            }
-        });
-    };
-
-    const selectUser = (userId) => {
-        displayUserDetails(userId);
-    };
-
-    const openAdminPanel = () => {
-        const currentUser = UserManager.getCurrentUser();
-        if (currentUser && currentUser.accountType === "ADMIN") {
-            renderMemberList();
-            const header = document.getElementById('selected-user-header');
-            if (header) header.textContent = 'Select a Member to View Details';
-            const details = document.getElementById('selected-user-details');
-            if (details) details.style.display = 'none';
-            document.querySelectorAll('#member-list li').forEach(item => item.classList.remove('selected'));
-            
-            const modal = document.getElementById('admin-panel-modal');
-            if (modal) modal.style.display = 'block';
-        } else {
-            NotificationManager.showNotification("Access Denied", "You do not have administrative privileges.", "danger", 4000);
-        }
-    };
-
-    const closeAdminPanel = () => {
-        const modal = document.getElementById('admin-panel-modal');
-        if (modal) modal.style.display = 'none';
-    };
-
-    return {
-        openAdminPanel,
-        closeAdminPanel
     };
 })();
 
@@ -1262,7 +1139,6 @@ const StoreManager = (() => {
 function handlePurchaseRequest(contentId, isRenewal) {
     const currentUser = UserManager.getCurrentUser();
     
-    // Check if user is guest
     if (currentUser && (currentUser.isGuest === true || currentUser.id === "GUEST" || currentUser.accountType === "GUEST")) {
         NotificationManager.showNotification(
             "Login Required", 
@@ -1273,7 +1149,6 @@ function handlePurchaseRequest(contentId, isRenewal) {
         return;
     }
     
-    // If not guest, show purchase modal
     PaymentManager.showPurchaseModal(contentId, isRenewal);
 }
 
@@ -1298,22 +1173,18 @@ window.closeModal = closeModal;
 window.PaymentManager = PaymentManager;
 window.UserManager = UserManager;
 window.NotificationManager = NotificationManager;
-window.AdminPanelManager = AdminPanelManager;
 window.StoreManager = StoreManager;
 
 // ===== INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize user state
     UserManager.initUser();
 
-    // Initialize stores if on dashboard
     if (document.getElementById('storeNavigation')) {
         StoreManager.initializeStores();
         StoreManager.renderStoreNavigation();
         StoreManager.renderContentCards();
     }
 
-    // Set up event listeners for USER.html
     const loginBtn = document.getElementById('loginBtn');
     if (loginBtn) {
         loginBtn.addEventListener('click', function() {
@@ -1321,7 +1192,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const password = document.getElementById('password').value;
             UserManager.loginUser(email, password);
             
-            // Refresh content cards after login
             if (document.getElementById('storeNavigation')) {
                 setTimeout(() => StoreManager.renderContentCards(), 100);
             }
@@ -1334,7 +1204,6 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             UserManager.logoutUser();
             
-            // Refresh content cards after logout
             if (document.getElementById('storeNavigation')) {
                 setTimeout(() => StoreManager.renderContentCards(), 100);
             }
@@ -1377,15 +1246,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Admin settings link
-    const adminLink = document.getElementById('admin-settings-link');
-    if (adminLink) {
-        adminLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            AdminPanelManager.openAdminPanel();
-        });
-    }
-
     // Close modal when clicking outside
     window.addEventListener('click', function(e) {
         if (e.target.classList.contains('rx-modal')) {
@@ -1394,7 +1254,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Add CSS for admin panel enhancements and notifications
+// Add CSS for notifications and layout
 const style = document.createElement('style');
 style.textContent = `
 :root {
@@ -1509,7 +1369,6 @@ style.textContent = `
     text-align: center;
 }
 
-/* Mobile First Responsive Design */
 @media (max-width: 768px) {
     .detail-section {
         margin-top: 15px;
@@ -1567,7 +1426,6 @@ style.textContent = `
     }
 }
 
-/* Tablet and Small Desktop */
 @media (min-width: 769px) and (max-width: 1024px) {
     .detail-section {
         padding: 18px;
@@ -1578,7 +1436,6 @@ style.textContent = `
     }
 }
 
-/* Large Desktop */
 @media (min-width: 1025px) {
     .detail-section {
         max-width: 1200px;
@@ -1591,7 +1448,6 @@ style.textContent = `
     }
 }
 
-/* Extra Small Devices */
 @media (max-width: 360px) {
     .detail-section {
         padding: 8px;
@@ -1612,7 +1468,6 @@ style.textContent = `
     }
 }
 
-/* High DPI Screens */
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .detail-section {
         backdrop-filter: blur(20px);
@@ -1628,7 +1483,6 @@ style.textContent = `
     }
 }
 
-/* Landscape Mobile */
 @media (max-width: 768px) and (orientation: landscape) {
     .detail-section {
         padding: 10px;
@@ -1644,7 +1498,6 @@ style.textContent = `
     }
 }
 
-/* Print Styles */
 @media print {
     .detail-section {
         background: white;
