@@ -265,7 +265,7 @@
 
       <!-- Menu items Blue Theme (1-12) -->
       <div class="RX-SMART-BUTTON-menu-item RX-item-1 blue-item" data-link="Contact.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/contact.png" alt="contact"></div>
-      <div class="RX-SMART-BUTTON-menu-item RX-item-2 blue-item" data-link="Profile.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="user"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-2 blue-item" data-link="User-profile.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="user"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-3 blue-item" data-link="https://rosanxettristudio.netlify.app/"><img src="RX-ASSETS/RX-IMAGE/RX-LOGO/L-6.gif" alt="logo"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-4 blue-item" data-link="https://x.com/Rx_Rosan"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/xcorp.png" alt="xcorp"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-5 blue-item" data-link="mailto:rkc242855@gmail.com"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/email.png" alt="email"></div>
