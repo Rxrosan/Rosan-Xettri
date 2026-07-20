@@ -1,4 +1,4 @@
-// RX-POP-UP-WINDOW-ENHANCED.js - Deep Linking, Auto-Open & Force Download Included
+// RX-POP-UP-WINDOW-ENHANCED.js - Outside Click Disabled & Refresh State Persistence Included
 document.addEventListener('DOMContentLoaded', () => {
 
     // =============================================
@@ -331,12 +331,18 @@ document.addEventListener('DOMContentLoaded', () => {
         initGalleryEvents();
         
         setTimeout(() => {
-            // CHECK FOR URL PARAMETERS (AUTO OPEN VIA LINK)
+            // REFRESH STATE CHECK (Keep open if previously open)
+            const isPopupDismissed = localStorage.getItem('rxPopupClosed');
+            const savedLightboxImg = localStorage.getItem('rxLightboxOpenImg');
+
+            // URL Params Check
             const urlParams = new URLSearchParams(window.location.search);
             const targetSlide = parseInt(urlParams.get('popupSlide'), 10);
             const targetImg = urlParams.get('popupImg');
 
-            state.elements.popup.classList.add("show");
+            if (!isPopupDismissed || targetSlide || targetImg || savedLightboxImg) {
+                state.elements.popup.classList.add("show");
+            }
 
             if (!isNaN(targetSlide) && targetSlide >= 0 && targetSlide < POPUP_CONFIG.slides.length) {
                 state.currentIndex = targetSlide;
@@ -347,17 +353,18 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCarouselDisplay();
             loadSlide(state.currentIndex);
 
-            // AUTO OPEN LIGHTBOX IF LINK HAS IMAGE PARAMETER
-            if (targetImg) {
+            // AUTO OPEN LIGHTBOX ON REFRESH OR VIA SHARED LINK
+            const activeImg = targetImg || savedLightboxImg;
+            if (activeImg) {
                 setTimeout(() => {
-                    const matchedImg = document.querySelector(`.${POPUP_CONFIG.baseName}-gallery img[src="${targetImg}"]`);
+                    const matchedImg = document.querySelector(`.${POPUP_CONFIG.baseName}-gallery img[src="${activeImg}"]`);
                     if (matchedImg) {
                         openLightbox(matchedImg);
                     } else {
-                        state.currentActiveImgUrl = targetImg;
-                        state.elements.lightboxImg.src = targetImg;
-                        state.elements.lightboxTitle.textContent = 'Shared Image';
-                        state.elements.lightboxDesc.textContent = 'Image shared directly via link.';
+                        state.currentActiveImgUrl = activeImg;
+                        state.elements.lightboxImg.src = activeImg;
+                        state.elements.lightboxTitle.textContent = localStorage.getItem('rxLightboxTitle') || 'Image Preview';
+                        state.elements.lightboxDesc.textContent = localStorage.getItem('rxLightboxDesc') || 'No description available.';
                         state.elements.lightbox.classList.add('show');
                         pauseAutoSlide();
                     }
@@ -558,57 +565,43 @@ document.addEventListener('DOMContentLoaded', () => {
         state.elements.lightboxTitle.textContent = title;
         state.elements.lightboxDesc.textContent = desc;
         
+        // SAVE LIGHTBOX STATE FOR REFRESH
+        localStorage.setItem('rxLightboxOpenImg', src);
+        localStorage.setItem('rxLightboxTitle', title);
+        localStorage.setItem('rxLightboxDesc', desc);
+
         state.elements.lightbox.classList.add('show');
     }
 
     function closeLightbox() {
         state.elements.lightbox.classList.remove('show');
+        localStorage.removeItem('rxLightboxOpenImg');
+        localStorage.removeItem('rxLightboxTitle');
+        localStorage.removeItem('rxLightboxDesc');
         resumeAutoSlide();
     }
 
-    // FORCE DOWNLOAD FUNCTION (FIXED FOR DIRECT DEVICE DOWNLOAD)
+    // DOWNLOAD FUNCTION WITH LOCAL & LIVE FALLBACK
     async function downloadCurrentImage() {
         if (!state.currentActiveImgUrl) return;
         
         showToast("Downloading image...");
-
         const imgUrl = state.currentActiveImgUrl;
         const fileName = imgUrl.substring(imgUrl.lastIndexOf('/') + 1) || 'downloaded-image.gif';
 
+        if (window.location.protocol === 'file:') {
+            forceDirectAnchorDownload(imgUrl, fileName);
+            return;
+        }
+
         try {
-            // Fetch Image as Blob
             const response = await fetch(imgUrl, { mode: 'cors' });
             if (!response.ok) throw new Error("Fetch failed");
             
             const blob = await response.blob();
             triggerBlobDownload(blob, fileName);
         } catch (error) {
-            // Fallback: Canvas Conversion (For Restricted CORS/Cross-Domain)
-            try {
-                const img = new Image();
-                img.crossOrigin = "Anonymous";
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.naturalWidth;
-                    canvas.height = img.naturalHeight;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-
-                    canvas.toBlob((blob) => {
-                        if (blob) {
-                            triggerBlobDownload(blob, fileName);
-                        } else {
-                            showToast("Download failed.");
-                        }
-                    }, 'image/png');
-                };
-                img.onerror = function() {
-                    showToast("Cannot download image.");
-                };
-                img.src = imgUrl;
-            } catch (e) {
-                showToast("Failed to download image.");
-            }
+            forceDirectAnchorDownload(imgUrl, fileName);
         }
     }
 
@@ -624,7 +617,16 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast("Download completed!");
     }
 
-    // DYNAMIC SHARE LINK GENERATOR
+    function forceDirectAnchorDownload(url, fileName) {
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        showToast("Downloading image...");
+    }
+
     function shareCurrentImage() {
         if (!state.currentActiveImgUrl) return;
 
@@ -675,9 +677,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         state.elements.lightboxClose.addEventListener('click', closeLightbox);
+        
+        // OUTSIDE CLICK DISABLED (NO ACTION ON BACKGROUND CLICK)
         state.elements.lightbox.addEventListener('click', (e) => {
-            if (e.target === state.elements.lightbox) closeLightbox();
+            e.stopPropagation();
         });
+
         state.elements.btnDownload.addEventListener('click', downloadCurrentImage);
         state.elements.btnShare.addEventListener('click', shareCurrentImage);
     }
@@ -819,14 +824,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function bindEventListeners() {
+        // CLOSE MAIN POPUP
         state.elements.closeBtn.addEventListener("click", () => {
             state.elements.popup.classList.remove("show");
+            localStorage.setItem('rxPopupClosed', 'true');
             stopTyping();
             state.isPaused = false;
             if (rotateTimeout) {
                 clearTimeout(rotateTimeout);
                 rotateTimeout = null;
             }
+        });
+
+        // OUTSIDE CLICK DISABLED FOR MAIN POPUP AS WELL
+        state.elements.popup.addEventListener('click', (e) => {
+            e.stopPropagation();
         });
 
         document.addEventListener("keydown", (e) => {
@@ -837,6 +849,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (state.elements.popup.classList.contains("show")) {
                 if (e.key === "Escape") {
                     state.elements.popup.classList.remove("show");
+                    localStorage.setItem('rxPopupClosed', 'true');
                     stopTyping();
                     state.isPaused = false;
                     if (rotateTimeout) {
