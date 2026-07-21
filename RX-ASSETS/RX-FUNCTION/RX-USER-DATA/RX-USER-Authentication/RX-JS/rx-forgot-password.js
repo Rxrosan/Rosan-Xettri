@@ -216,7 +216,7 @@
                         auth.setStatus(el.resetStatus, 'OTP sent to your email successfully!', 'success');
                     } else {
                         console.log("GENERATED OTP:", auth.generatedOtp);
-                        auth.setStatus(el.resetStatus, 'OTP Generated! (Check Console F12)', 'success');
+                        auth.setStatus(el.resetStatus, 'OTP Generated!', 'success');
                     }
 
                     if (el.passwordSection) el.passwordSection.classList.remove('active');
