@@ -6,7 +6,7 @@
     const RESEND_API_KEY = "re_f2ybj582_2GjjosLiXVLAbwBijibwBrNx"; 
 
     // 🔑 Supabase Credentials (तपाईंको सही URL र Publishable Key राखिएको छ)
-    const SUPABASE_URL = "https://xorxoovezlqqcaeyqpdp.supabase.co";
+    const SUPABASE_URL = "https://xorxoovezlgqcaeyqpdp.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_5_yPXUnjJVe3dy13X5nkXQ_afJ7rCvM"; 
 
     // Supabase CDN स्वतः लोड गर्ने फंक्सन
