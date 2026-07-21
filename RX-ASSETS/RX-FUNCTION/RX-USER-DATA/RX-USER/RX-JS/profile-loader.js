@@ -48,11 +48,10 @@
             document.getElementById("detailDOB").innerText = currentUser.dob || '-';
         }
 
-        // सेभ भएको कस्ट्म प्रोफाइल पिक्चर लोड गर्ने (यदि छ भने)
-        const savedAvatar = localStorage.getItem("rx_user_avatar_" + (currentUser.email || 'default'));
+        // सर्भर वा सेसनमा भएको प्रोफाइल पिक्चर लोड गर्ने (Supabase को avatar_url बाट)
         const profileImgElement = document.getElementById("profile-img");
-        if (savedAvatar && profileImgElement) {
-            profileImgElement.src = savedAvatar;
+        if (currentUser.avatar_url && profileImgElement) {
+            profileImgElement.src = currentUser.avatar_url;
         }
 
         // ४. Image Upload & Cropper Logic
@@ -74,7 +73,7 @@
                 if (files && files.length > 0) {
                     const file = files[0];
 
-                    // फाइभ साइज २ MB भन्दा बढी भए नभएको जाँच गर्ने (2MB = 2 * 1024 * 1024 bytes)
+                    // फाइल साइज २ MB भन्दा बढी भए नभएको जाँच गर्ने
                     if (file.size > 2 * 1024 * 1024) {
                         alert("File size exceeds 2MB! Please select an image smaller than 2MB.");
                         imageInput.value = "";
@@ -102,7 +101,7 @@
         }
 
         if (cropSaveBtn) {
-            cropSaveBtn.addEventListener("click", function() {
+            cropSaveBtn.addEventListener("click", async function() {
                 if (cropper) {
                     const canvas = cropper.croppedCanvas || cropper.getCroppedCanvas({
                         width: 300,
@@ -112,19 +111,41 @@
                     if (canvas) {
                         const croppedImageUrl = canvas.toDataURL("image/jpeg");
                         
-                        // प्रोफाइल इमेज अपडेट गर्ने
+                        // युजरलाई देखाउनको लागि तत्काल इमेज चेन्ज गर्ने
                         if (profileImgElement) {
                             profileImgElement.src = croppedImageUrl;
                         }
 
-                        // LocalStorage मा सेभ गर्ने (युजरको इमेल अनुसार)
-                        localStorage.setItem("rx_user_avatar_" + (currentUser.email || 'default'), croppedImageUrl);
+                        // अब Render सर्भर मार्फत Supabase मा इमेज पठाएर सेभ गर्ने
+                        try {
+                            const response = await fetch('https://rosan-xettri.onrender.com/api/update-avatar', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    email: currentUser.email,
+                                    avatarUrl: croppedImageUrl
+                                })
+                            });
+
+                            const result = await response.json();
+
+                            if (response.ok) {
+                                // सेसन डेटा अपडेट गर्ने
+                                currentUser.avatar_url = croppedImageUrl;
+                                sessionStorage.setItem("rxSession", JSON.stringify(currentUser));
+                                alert("Profile picture updated and saved to server successfully!");
+                            } else {
+                                alert(result.error || "Failed to save profile picture on server.");
+                            }
+                        } catch (err) {
+                            console.error("Server connection error:", err);
+                            alert("Server Connection Failed while saving avatar!");
+                        }
 
                         // मोडल बन्द गर्ने
                         cropModal.style.display = "none";
                         cropper.destroy();
                         imageInput.value = "";
-                        alert("Profile picture updated successfully!");
                     }
                 }
             });
