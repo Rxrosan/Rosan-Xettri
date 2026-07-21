@@ -8,7 +8,7 @@
 
         const el = auth.elements;
 
-        function performLoginAction() {
+        async function performLoginAction() {
             const email = el.loginEmail.value.trim();
             const password = el.loginPassword.value.trim();
 
@@ -22,19 +22,29 @@
                 return;
             }
 
-            const user = auth.registeredUsers.find(u => u.email === email && u.password === password);
-            
-            if (user) {
-                auth.setStatus(el.loginStatus, 'Login successful!', 'success');
-                auth.currentUser = user;
-                sessionStorage.setItem('rxSession', JSON.stringify(user));
-                sessionStorage.removeItem('rxPageState');
-                
-                setTimeout(function() {
-                    window.location.href = 'User-profile.html';
-                }, 1500);
-            } else {
-                auth.setStatus(el.loginStatus, 'Invalid email or password.', 'error');
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    auth.setStatus(el.loginStatus, 'Login successful!', 'success');
+                    auth.currentUser = result.user;
+                    sessionStorage.setItem('rxSession', JSON.stringify(result.user));
+                    sessionStorage.removeItem('rxPageState');
+                    
+                    setTimeout(function() {
+                        window.location.href = 'User-profile.html';
+                    }, 1500);
+                } else {
+                    auth.setStatus(el.loginStatus, result.error || 'Invalid email or password.', 'error');
+                }
+            } catch (err) {
+                auth.setStatus(el.loginStatus, 'Server Connection Failed!', 'error');
             }
         }
 

@@ -8,7 +8,6 @@
         otpRemainingSeconds: 0,
         otpStartTimestamp: null,
         otpTotalDuration: 60,
-        registeredUsers: JSON.parse(localStorage.getItem('rxUsers')) || [],
         currentUser: null,
         tempRegistration: null,
         resetIdentifier: '',
@@ -97,7 +96,6 @@
 
             try {
                 const state = JSON.parse(savedState);
-                
                 if (Date.now() - state.timestamp > 1800000) {
                     sessionStorage.removeItem('rxPageState');
                     return null;
@@ -118,13 +116,11 @@
                 if (el.resetConfirmPassword && state.resetConfirmPassword !== undefined) el.resetConfirmPassword.value = state.resetConfirmPassword;
                 if (el.popupPassword && state.popupPassword !== undefined) el.popupPassword.value = state.popupPassword;
 
-                if (state.tempRegistration) {
-                    core.tempRegistration = state.tempRegistration; 
-                }
+                if (state.tempRegistration) core.tempRegistration = state.tempRegistration; 
 
                 if (state.isPopupActive && el.confirmPopup) {
                     el.confirmPopup.classList.add('active');
-                    document.body.classList.add('no-scroll'); // पपअप रिस्टोर हुँदा स्क्रोल लक गर्ने
+                    document.body.classList.add('no-scroll');
                 }
 
                 if (state.isOtpVerified !== undefined) core.isOtpVerified = state.isOtpVerified;
@@ -137,9 +133,7 @@
                 }
                 
                 if (state.otpStartTimestamp && !core.isOtpVerified) {
-                    const now = Date.now();
-                    const elapsedMilliseconds = now - state.otpStartTimestamp;
-                    const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
+                    const elapsedSeconds = Math.floor((Date.now() - state.otpStartTimestamp) / 1000);
                     const remaining = Math.max(0, state.otpTotalDuration - elapsedSeconds);
                     
                     if (remaining > 0 && window._rxForgot) {
@@ -167,16 +161,13 @@
                     }
                 }
 
-                if (!state.isPopupActive) {
-                    core.clearAllStatus();
-                }
+                if (!state.isPopupActive) core.clearAllStatus();
                 setTimeout(core.syncPasswordToggles, 100);
 
                 core.savePageState(); 
                 return state.currentPage;
 
             } catch (e) {
-                console.log('Error restoring page state:', e);
                 sessionStorage.removeItem('rxPageState');
                 return null;
             }
@@ -190,14 +181,11 @@
             const target = document.getElementById(pageId);
             if (target) target.classList.remove('page-hidden');
             
-            const isPopupOpen = el.confirmPopup ? el.confirmPopup.classList.contains('active') : false;
-            if (!isPopupOpen) {
+            if (!el.confirmPopup || !el.confirmPopup.classList.contains('active')) {
                 core.clearAllStatus();
             }
             
-            if (saveState) {
-                core.savePageState();
-            }
+            if (saveState) core.savePageState();
         },
 
         clearAllStatus: function() {
@@ -217,11 +205,7 @@
 
         setStatus: function(element, message, type) {
             if (!element) return;
-            
-            if (core.statusTimeout) {
-                clearTimeout(core.statusTimeout);
-                core.statusTimeout = null;
-            }
+            if (core.statusTimeout) clearTimeout(core.statusTimeout);
             
             element.textContent = message;
             element.className = 'login-status ' + type;
@@ -238,18 +222,6 @@
             }, 3000);
         },
 
-        loadUsers: function() {
-            const stored = localStorage.getItem('rxUsers');
-            if (stored) {
-                try {
-                    core.registeredUsers = JSON.parse(stored);
-                } catch (e) {
-                    core.registeredUsers = [];
-                }
-            }
-            return core.registeredUsers;
-        },
-
         initPasswordToggles: function() {
             document.querySelectorAll('.password-toggle').forEach(function(button) {
                 button.removeEventListener('click', core.handleToggle);
@@ -262,20 +234,16 @@
             e.stopPropagation();
             
             const button = this;
-            const targetId = button.getAttribute('data-target');
-            const input = document.getElementById(targetId);
-            
+            const input = document.getElementById(button.getAttribute('data-target'));
             if (!input) return;
             const icon = button.querySelector('i');
             
             if (input.type === 'password') {
                 input.type = 'text';
                 if (icon) icon.className = 'fas fa-eye-slash';
-                button.setAttribute('aria-label', 'Hide password');
             } else {
                 input.type = 'password';
                 if (icon) icon.className = 'fas fa-eye';
-                button.setAttribute('aria-label', 'Show password');
             }
             
             input.focus();
@@ -288,13 +256,8 @@
                 const toggle = wrapper.querySelector('.password-toggle');
                 if (input && toggle) {
                     const icon = toggle.querySelector('i');
-                    if (input.type === 'text' && icon) {
-                        icon.className = 'fas fa-eye-slash';
-                        toggle.setAttribute('aria-label', 'Hide password');
-                    } else if (input.type === 'password' && icon) {
-                        icon.className = 'fas fa-eye';
-                        toggle.setAttribute('aria-label', 'Show password');
-                    }
+                    if (input.type === 'text' && icon) icon.className = 'fas fa-eye-slash';
+                    else if (input.type === 'password' && icon) icon.className = 'fas fa-eye';
                 }
             });
         },
@@ -303,7 +266,7 @@
             const popup = core.elements.confirmPopup;
             if (popup) {
                 popup.classList.remove('active');
-                document.body.classList.remove('no-scroll'); // 🔒 फिक्स: पपअप बन्द हुँदा ब्याकग्राउन्ड स्क्रोल सुचारु
+                document.body.classList.remove('no-scroll');
                 core.tempRegistration = null; 
                 if (core.elements.popupPassword) core.elements.popupPassword.value = '';
                 if (core.elements.popupStatus) {
@@ -342,27 +305,10 @@
             if (input) input.addEventListener('input', () => core.savePageState());
         });
 
-        const popupClose = core.elements.popupClose;
-        const confirmPopup = core.elements.confirmPopup;
-
-        if (popupClose) {
-            popupClose.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                core.closeConfirmPopup();
-            });
-        }
-
-        if (confirmPopup) {
-            confirmPopup.addEventListener('click', function(e) {
-                if (e.target === confirmPopup) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                }
-            }, true); 
+        if (core.elements.popupClose) {
+            core.elements.popupClose.addEventListener('click', e => { e.preventDefault(); core.closeConfirmPopup(); });
         }
 
         core.initPasswordToggles();
-        core.loadUsers();
     });
 })();

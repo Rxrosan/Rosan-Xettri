@@ -3,74 +3,151 @@
     'use strict';
 
     document.addEventListener("DOMContentLoaded", function () {
-        // १. rx-login.js ले localStorage मा छोडेको ईमेल वा युजर विवरण सेन्स (Read) गर्ने
-        const loggedInEmail = localStorage.getItem("loggedInUserEmail") || localStorage.getItem("userEmail"); 
+        // १. rx-login.js ले सेसनमा राखेको 'rxSession' बाट User Data तान्ने
+        const savedSession = sessionStorage.getItem("rxSession");
+        const currentUser = savedSession ? JSON.parse(savedSession) : null;
 
-        // २. सुरक्षा चेक (Route Guard): यदि युजर लगइन भएको छैन भने सिधै लगइन पेजमा अटो-रिडाइरेक्ट गर्ने
-        if (!loggedInEmail) {
+        // २. यदि युजर लगइन भएको छैन भने सिधै लगइन पेजमा अटो-रिडाइरेक्ट गर्ने
+        if (!currentUser) {
             console.log("No active session found. Redirecting to login portal...");
             window.location.href = "User-Authentication.html";
-            return; // कोडलाई अगाडि बढ्न नदिने
+            return;
         }
 
-        // ३. user.js को allUsers एरेबाट डेटा रीड गरेर UI र फारम भर्ने
-        if (typeof allUsers !== 'undefined' && Array.isArray(allUsers)) {
-            const currentUser = allUsers.find(u => u.email === loggedInEmail);
+        console.log("Active user loaded:", currentUser.name || currentUser.email);
 
-            if (currentUser) {
-                console.log("Active user sensed: " + currentUser.fullName);
+        // ३. HTML का अनुसार Profile Data देखाउने
+        if (document.getElementById("profile-fullname")) {
+            document.getElementById("profile-fullname").innerText = currentUser.name || 'User';
+        }
+        if (document.getElementById("profile-username")) {
+            document.getElementById("profile-username").innerText = currentUser.name || '-';
+        }
+        if (document.getElementById("dropdown-name")) {
+            document.getElementById("dropdown-name").innerText = currentUser.name || '-';
+        }
+        if (document.getElementById("username")) {
+            document.getElementById("username").innerText = currentUser.name || '-';
+        }
+        if (document.getElementById("dropdown-email")) {
+            document.getElementById("dropdown-email").innerText = currentUser.email || '-';
+        }
+        if (document.getElementById("dropdown-phone")) {
+            document.getElementById("dropdown-phone").innerText = currentUser.phone || '-';
+        }
+        if (document.getElementById("dropdown-address")) {
+            document.getElementById("dropdown-address").innerText = currentUser.address || '-';
+        }
+        if (document.getElementById("dropdown-account-type")) {
+            document.getElementById("dropdown-account-type").innerText = currentUser.role || 'Member';
+        }
+        if (document.getElementById("dropdown-user-id")) {
+            document.getElementById("dropdown-user-id").innerText = currentUser.id || '-';
+        }
+        if (document.getElementById("detailDOB")) {
+            document.getElementById("detailDOB").innerText = currentUser.dob || '-';
+        }
 
-                // क) प्रोफाइल सेक्सनमा विवरणहरू स्वतः देखाउने (UI Elements)
-                if(document.getElementById("profileName")) document.getElementById("profileName").innerText = currentUser.fullName;
-                if(document.getElementById("profileEmail")) document.getElementById("profileEmail").innerText = currentUser.email;
-                if(document.getElementById("profilePhone")) document.getElementById("profilePhone").innerText = currentUser.phone || 'N/A';
-                if(document.getElementById("profileAddress")) document.getElementById("profileAddress").innerText = currentUser.address || 'N/A';
-                if(document.getElementById("profileUserId")) document.getElementById("profileUserId").innerText = currentUser.userId;
+        // सेभ भएको कस्ट्म प्रोफाइल पिक्चर लोड गर्ने (यदि छ भने)
+        const savedAvatar = localStorage.getItem("rx_user_avatar_" + (currentUser.email || 'default'));
+        const profileImgElement = document.getElementById("profile-img");
+        if (savedAvatar && profileImgElement) {
+            profileImgElement.src = savedAvatar;
+        }
 
-                // ख) फारम अपलोडर / खरिद फारम (Purchase Form) मा विवरण स्वतः भरिदिने (Auto-fill)
-                // युजरले टाइप गर्नै पर्दैन, सिधै 'Read-Only' हुन्छ
-                const formFields = {
-                    "formFullName": currentUser.fullName,
-                    "formEmail": currentUser.email,
-                    "formPhone": currentUser.phone || '',
-                    "formUserId": currentUser.userId
-                };
+        // ४. Image Upload & Cropper Logic
+        const changeTrigger = document.getElementById("changeProfileTrigger");
+        const imageInput = document.getElementById("profileImageInput");
+        const cropModal = document.getElementById("cropModal");
+        const imageToCrop = document.getElementById("imageToCrop");
+        const cropSaveBtn = document.getElementById("cropSaveBtn");
+        const cropCancelBtn = document.getElementById("cropCancelBtn");
+        let cropper = null;
 
-                for (const [id, value] of Object.entries(formFields)) {
-                    const element = document.getElementById(id);
-                    if (element) {
-                        element.value = value;
-                        element.readOnly = true; // युजरले म्यानुअल्ली एडिट गर्न नमिल्ने बनाउने
+        if (changeTrigger && imageInput) {
+            changeTrigger.addEventListener("click", function() {
+                imageInput.click();
+            });
+
+            imageInput.addEventListener("change", function(e) {
+                const files = e.target.files;
+                if (files && files.length > 0) {
+                    const file = files[0];
+
+                    // फाइभ साइज २ MB भन्दा बढी भए नभएको जाँच गर्ने (2MB = 2 * 1024 * 1024 bytes)
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert("File size exceeds 2MB! Please select an image smaller than 2MB.");
+                        imageInput.value = "";
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        imageToCrop.src = event.target.result;
+                        cropModal.style.display = "flex";
+
+                        if (cropper) {
+                            cropper.destroy();
+                        }
+                        // Cropper इनिसिएट गर्ने (Square ratio मा)
+                        cropper = new Cropper(imageToCrop, {
+                            aspectRatio: 1,
+                            viewMode: 1,
+                            autoCropArea: 0.8,
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        if (cropSaveBtn) {
+            cropSaveBtn.addEventListener("click", function() {
+                if (cropper) {
+                    const canvas = cropper.croppedCanvas || cropper.getCroppedCanvas({
+                        width: 300,
+                        height: 300
+                    });
+
+                    if (canvas) {
+                        const croppedImageUrl = canvas.toDataURL("image/jpeg");
+                        
+                        // प्रोफाइल इमेज अपडेट गर्ने
+                        if (profileImgElement) {
+                            profileImgElement.src = croppedImageUrl;
+                        }
+
+                        // LocalStorage मा सेभ गर्ने (युजरको इमेल अनुसार)
+                        localStorage.setItem("rx_user_avatar_" + (currentUser.email || 'default'), croppedImageUrl);
+
+                        // मोडल बन्द गर्ने
+                        cropModal.style.display = "none";
+                        cropper.destroy();
+                        imageInput.value = "";
+                        alert("Profile picture updated successfully!");
                     }
                 }
-            } else {
-                console.warn("Logged in email not found in allUsers database.");
-            }
-        } else {
-            console.error("Error: 'allUsers' database is missing. Make sure user.js is loaded before profile-loader.js.");
+            });
         }
 
-        // ४. लगआउट ह्यान्डलर र तत्काल अटो-रिडाइरेक्ट
-        // HTML मा भएको लगआउट बटनको सम्भावित ID हरू (logoutBtn, logOut, profileLogout आदि) लाई चेक गर्ने
-        const logoutBtn = document.getElementById("logoutBtn") || 
-                          document.getElementById("logOut") || 
-                          document.getElementById("profileLogout") ||
-                          document.querySelector(".logout-link"); // यदि क्लास छ भने
-        
+        if (cropCancelBtn) {
+            cropCancelBtn.addEventListener("click", function() {
+                cropModal.style.display = "none";
+                if (cropper) {
+                    cropper.destroy();
+                }
+                imageInput.value = "";
+            });
+        }
+
+        // ५. लगआउट (Logout) ह्यान्डल गर्ने
+        const logoutBtn = document.getElementById("logoutBtn");
         if (logoutBtn) {
             logoutBtn.addEventListener("click", function (e) {
-                e.preventDefault(); // डिफल्ट क्लिक एक्सन रोक्ने
-
-                // ब्राउजर मेमोरीमा भएका सबै सेसन र लगइन विवरणहरू सफा गर्ने
-                localStorage.removeItem("loggedInUserEmail");
-                localStorage.removeItem("currentUser");
-                localStorage.removeItem("userEmail");
+                e.preventDefault();
                 sessionStorage.removeItem("rxSession");
                 sessionStorage.removeItem("rxPageState");
-
-                console.log("User logged out successfully. Redirecting to login portal...");
-
-                // तुरुन्तै लगइन पेजमा पुर्‍याउने (Instant Auto-Redirect)
+                console.log("Logged out successfully.");
                 window.location.href = "User-Authentication.html";
             });
         }

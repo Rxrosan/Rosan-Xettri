@@ -1,8 +1,50 @@
-// ===== rx-forgot-password.js ===== //
+// ===== rx-forgot-password.js (Fully Fixed & Complete) ===== //
 (function() {
     'use strict';
 
+    // 🔑 Resend API Key
+    const RESEND_API_KEY = "re_f2ybj582_2GjjosLiXVLAbwBijibwBrNx"; 
+
+    // 🔑 Supabase Credentials (तपाईंको सही URL र Publishable Key राखिएको छ)
+    const SUPABASE_URL = "https://xorxoovezlqqcaeyqpdp.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_5_yPXUnjJVe3dy13X5nkXQ_afJ7rCvM"; 
+
+    // Supabase CDN स्वतः लोड गर्ने फंक्सन
+    function loadSupabaseScript(callback) {
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            callback();
+            return;
+        }
+        const existingScript = document.querySelector('script[src*="supabase-js"]');
+        if (existingScript) {
+            existingScript.onload = callback;
+            return;
+        }
+        const script = document.createElement('script');
+        script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+        script.async = true;
+        script.onload = callback;
+        script.onerror = function() {
+            console.error("Failed to load Supabase CDN script.");
+        };
+        document.head.appendChild(script);
+    }
+
+    // Supabase Client तान्ने/बनाउने Helper Function
+    function getSupabaseClient() {
+        if (window.supabaseClient) return window.supabaseClient;
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            return window.supabaseClient;
+        }
+        return null;
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+        loadSupabaseScript(function() {
+            console.log("Supabase library loaded successfully.");
+        });
+
         const auth = window._rxAuth;
         if (!auth) return;
 
@@ -29,9 +71,7 @@
                 let counter = remainingSeconds;
                 auth.otpRemainingSeconds = counter;
                 
-                if (!auth.otpStartTimestamp) {
-                    auth.otpStartTimestamp = Date.now();
-                }
+                if (!auth.otpStartTimestamp) auth.otpStartTimestamp = Date.now();
                 
                 if (el.sendOtpBtn && !auth.isOtpVerified) {
                     el.sendOtpBtn.disabled = true;
@@ -47,19 +87,15 @@
                         forgotModule.stopOtpTimer();
                         auth.otpRemainingSeconds = 0;
                         auth.otpStartTimestamp = null;
-                        
-                        if (!auth.isOtpVerified) {
-                            forgotModule.resetOtpButtonToResend();
-                        }
-                        auth.savePageState();
+                        if (!auth.isOtpVerified) forgotModule.resetOtpButtonToResend();
+                        if (typeof auth.savePageState === 'function') auth.savePageState();
                         return;
                     }
                     
                     if (el.sendOtpBtn && !auth.isOtpVerified) {
                         el.sendOtpBtn.textContent = 'WAIT ' + counter + 's';
                     }
-                    
-                    auth.savePageState();
+                    if (typeof auth.savePageState === 'function') auth.savePageState();
                 }, 1000);
             },
 
@@ -68,9 +104,38 @@
                 forgotModule.startOtpCountdownFrom(auth.otpTotalDuration);
             },
 
+            sendEmailOTP: async function(toEmail, otpCode) {
+                try {
+                    const response = await fetch("https://api.resend.com/emails", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${RESEND_API_KEY}`
+                        },
+                        body: JSON.stringify({
+                            from: "RX Project <onboarding@resend.dev>",
+                            to: [toEmail],
+                            subject: "Your Password Reset OTP - RX System",
+                            html: `
+                                <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #0f172a; color: #ffffff; border-radius: 10px;">
+                                    <h2 style="color: #38bdf8;">Password Reset Verification</h2>
+                                    <p>You requested to reset your password. Use the OTP code below to verify:</p>
+                                    <div style="background: #1e293b; padding: 15px; font-size: 28px; font-weight: bold; letter-spacing: 5px; color: #4facfe; text-align: center; border-radius: 8px; margin: 20px 0;">
+                                        ${otpCode}
+                                    </div>
+                                    <p style="font-size: 12px; color: #94a3b8;">If you did not request this, please ignore this email.</p>
+                                </div>
+                            `
+                        })
+                    });
+                    return response.ok;
+                } catch(e) {
+                    return false;
+                }
+            },
+
             resetForgotForm: function() {
                 forgotModule.stopOtpTimer();
-                
                 if (el.resetEmail) el.resetEmail.value = '';
                 if (el.resetOtp) {
                     el.resetOtp.value = '';
@@ -96,74 +161,91 @@
                 auth.otpRemainingSeconds = 0;
                 auth.otpStartTimestamp = null;
                 auth.otpTotalDuration = 60;
-                setTimeout(auth.syncPasswordToggles, 100);
-                auth.savePageState();
+                if (typeof auth.syncPasswordToggles === 'function') setTimeout(auth.syncPasswordToggles, 100);
+                if (typeof auth.savePageState === 'function') auth.savePageState();
             }
         };
 
-        // Export module safely into accessible global scope mappings
         window._rxForgot = forgotModule;
 
-        // Broadcast token payload sequences
+        // 1. Send OTP Event
         if (el.sendOtpBtn) {
-            el.sendOtpBtn.addEventListener('click', function() {
+            el.sendOtpBtn.addEventListener('click', async function() {
                 if (auth.isOtpSending) return;
-                
-                const email = el.resetEmail.value.trim();
-                
-                if (!email) {
-                    auth.setStatus(el.resetStatus, 'Please enter your email address.', 'error');
-                    return;
-                }
+                const email = el.resetEmail ? el.resetEmail.value.trim() : '';
 
-                if (!email.includes('@') || !email.includes('.')) {
+                if (!email || !email.includes('@') || !email.includes('.')) {
                     auth.setStatus(el.resetStatus, 'Please enter a valid email address.', 'error');
                     return;
                 }
 
-                const user = auth.registeredUsers.find(u => u.email === email);
-                
-                if (!user) {
-                    auth.setStatus(el.resetStatus, 'No account found with that email.', 'error');
-                    return;
-                }
+                try {
+                    const client = getSupabaseClient();
+                    if (!client) {
+                        auth.setStatus(el.resetStatus, 'Supabase client is loading. Please try again.', 'error');
+                        return;
+                    }
 
-                auth.isOtpSending = true;
-                auth.generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
-                
-                console.log('========================================');
-                console.log('OTP FOR PASSWORD RESET\nEmail: ' + email + '\nOTP: ' + auth.generatedOtp);
-                console.log('========================================');
-                
-                auth.resetIdentifier = email;
-                auth.setStatus(el.resetStatus, 'OTP sent successfully!', 'success');
-                
-                if (el.passwordSection) el.passwordSection.classList.remove('active');
-                auth.isOtpVerified = false;
-                
-                if (el.resetOtp) {
-                    el.resetOtp.value = '';
-                    el.resetOtp.disabled = false;
-                    el.resetOtp.focus();
+                    auth.setStatus(el.resetStatus, 'Checking account...', 'info');
+
+                    // Supabase बाट इमेल चेक गर्ने
+                    const { data, error } = await client
+                        .from('users')
+                        .select('email')
+                        .ilike('email', email);
+
+                    if (error) {
+                        console.error("Supabase Error:", error);
+                        auth.setStatus(el.resetStatus, 'DB Error: ' + error.message, 'error');
+                        return;
+                    }
+
+                    if (!data || data.length === 0) {
+                        auth.setStatus(el.resetStatus, 'No account found with that email.', 'error');
+                        return;
+                    }
+
+                    auth.isOtpSending = true;
+                    auth.setStatus(el.resetStatus, 'Sending OTP to your email...', 'info');
+
+                    // 6 Digit OTP Generate गर्ने
+                    auth.generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
+                    auth.resetIdentifier = email;
+
+                    const isSent = await forgotModule.sendEmailOTP(email, auth.generatedOtp);
+
+                    if (isSent) {
+                        auth.setStatus(el.resetStatus, 'OTP sent to your email successfully!', 'success');
+                    } else {
+                        console.log("GENERATED OTP:", auth.generatedOtp);
+                        auth.setStatus(el.resetStatus, 'OTP Generated! (Check Console F12)', 'success');
+                    }
+
+                    if (el.passwordSection) el.passwordSection.classList.remove('active');
+                    auth.isOtpVerified = false;
+                    
+                    if (el.resetOtp) {
+                        el.resetOtp.value = '';
+                        el.resetOtp.disabled = false;
+                        el.resetOtp.focus();
+                    }
+                    
+                    forgotModule.stopOtpTimer();
+                    auth.otpTotalDuration = 60;
+                    auth.otpRemainingSeconds = auth.otpTotalDuration;
+                    
+                    forgotModule.startOtpCountdown();
+                    setTimeout(() => auth.isOtpSending = false, 500);
+                    if (typeof auth.savePageState === 'function') auth.savePageState();
+
+                } catch (err) {
+                    console.error("Forgot Password Error:", err);
+                    auth.setStatus(el.resetStatus, 'Error connecting to database.', 'error');
                 }
-                
-                forgotModule.stopOtpTimer();
-                auth.otpTotalDuration = 60;
-                auth.otpRemainingSeconds = auth.otpTotalDuration;
-                
-                if (el.sendOtpBtn) {
-                    el.sendOtpBtn.disabled = true;
-                    el.sendOtpBtn.textContent = 'WAIT ' + auth.otpTotalDuration + 's';
-                    el.sendOtpBtn.className = 'login-btn cooldown';
-                }
-                
-                forgotModule.startOtpCountdown();
-                setTimeout(() => auth.isOtpSending = false, 500);
-                auth.savePageState();
             });
         }
 
-        // Real-time direct match parser routines
+        // 2. Real-time OTP Matching
         if (el.resetOtp) {
             el.resetOtp.addEventListener('input', function() {
                 this.value = this.value.replace(/\D/g, '');
@@ -177,7 +259,7 @@
                         
                         if (el.sendOtpBtn) {
                             el.sendOtpBtn.disabled = true;
-                            el.sendOtpBtn.textContent = ' VERIFIED';
+                            el.sendOtpBtn.textContent = 'VERIFIED';
                             el.sendOtpBtn.className = 'login-btn verified';
                         }
                         
@@ -185,31 +267,27 @@
                         auth.otpRemainingSeconds = 0;
                         auth.otpStartTimestamp = null;
                         
-                        if (el.resetNewPassword) {
-                            setTimeout(() => el.resetNewPassword.focus(), 300);
-                        }
-                        setTimeout(auth.syncPasswordToggles, 100);
+                        if (el.resetNewPassword) setTimeout(() => el.resetNewPassword.focus(), 300);
+                        if (typeof auth.syncPasswordToggles === 'function') setTimeout(auth.syncPasswordToggles, 100);
                     } else {
                         auth.setStatus(el.resetStatus, 'Invalid OTP. Please try again.', 'error');
                         if (el.passwordSection) el.passwordSection.classList.remove('active');
                     }
-                } else {
-                    if (el.passwordSection && !auth.isOtpVerified) el.passwordSection.classList.remove('active');
                 }
-                auth.savePageState();
+                if (typeof auth.savePageState === 'function') auth.savePageState();
             });
         }
 
-        // Commit modifications onto local structural storage keys
+        // 3. Reset Password Event
         if (el.resetPasswordBtn) {
-            el.resetPasswordBtn.addEventListener('click', function() {
+            el.resetPasswordBtn.addEventListener('click', async function() {
                 if (!auth.isOtpVerified) {
                     auth.setStatus(el.resetStatus, 'Please verify OTP first.', 'error');
                     return;
                 }
 
-                const newPassword = el.resetNewPassword.value.trim();
-                const confirmPassword = el.resetConfirmPassword.value.trim();
+                const newPassword = el.resetNewPassword ? el.resetNewPassword.value.trim() : '';
+                const confirmPassword = el.resetConfirmPassword ? el.resetConfirmPassword.value.trim() : '';
 
                 if (!newPassword || !confirmPassword) {
                     auth.setStatus(el.resetStatus, 'Please fill in both password fields.', 'error');
@@ -226,57 +304,51 @@
                     return;
                 }
 
-                const userIndex = auth.registeredUsers.findIndex(u => u.email === auth.resetIdentifier);
+                try {
+                    const client = getSupabaseClient();
+                    if (!client) {
+                        auth.setStatus(el.resetStatus, 'Supabase client not loaded.', 'error');
+                        return;
+                    }
 
-                if (userIndex === -1) {
-                    auth.setStatus(el.resetStatus, 'User not found. Please try again.', 'error');
-                    return;
+                    const { error } = await client
+                        .from('users')
+                        .update({ password: newPassword })
+                        .eq('email', auth.resetIdentifier);
+
+                    if (!error) {
+                        auth.setStatus(el.resetStatus, 'Password reset successfully!', 'success');
+
+                        setTimeout(function() {
+                            if (typeof auth.showPage === 'function') auth.showPage('loginSection');
+                            if (el.loginEmail) el.loginEmail.value = auth.resetIdentifier;
+                            if (el.loginPassword) el.loginPassword.value = '';
+                            auth.setStatus(el.loginStatus, 'Password reset! Please login with your new password.', 'success');
+                            
+                            forgotModule.resetForgotForm();
+                            sessionStorage.removeItem('rxPageState');
+                        }, 1500);
+                    } else {
+                        auth.setStatus(el.resetStatus, error.message || 'Password reset failed.', 'error');
+                    }
+                } catch (err) {
+                    console.error("Reset Error:", err);
+                    auth.setStatus(el.resetStatus, 'Error updating password in database.', 'error');
                 }
-
-                auth.registeredUsers[userIndex].password = newPassword;
-                localStorage.setItem('rxUsers', JSON.stringify(auth.registeredUsers));
-                auth.setStatus(el.resetStatus, 'Password reset successfully!', 'success');
-
-                setTimeout(function() {
-                    auth.showPage('loginSection');
-                    if (el.loginEmail) el.loginEmail.value = auth.resetIdentifier;
-                    if (el.loginPassword) el.loginPassword.value = '';
-                    auth.setStatus(el.loginStatus, 'Password reset! Please login.', 'success');
-                    
-                    forgotModule.resetForgotForm();
-                    sessionStorage.removeItem('rxPageState');
-                }, 1500);
             });
         }
 
-        if (el.resetConfirmPassword) el.resetConfirmPassword.addEventListener('keypress', e => { if (e.key === 'Enter') el.resetPasswordBtn.click(); });
-        if (el.resetNewPassword) el.resetNewPassword.addEventListener('keypress', e => { if (e.key === 'Enter') el.resetConfirmPassword.focus(); });
-        if (el.resetEmail) el.resetEmail.addEventListener('keypress', e => { if (e.key === 'Enter') el.sendOtpBtn.click(); });
-
-        // ========================================
-        // ===== INITIALIZATION ORCHESTRATION =====
-        // ========================================
-
-        // 1. Process data metrics reconstruction first and retrieve any existing page histories[cite: 3]
-        const preservedRouteTarget = auth.restorePageState();
-
-        // 2. Default Navigation Routing Checks: Ensure screens stay on the actual active view instead of snapping backward[cite: 3]
-        if (preservedRouteTarget) {
-            auth.showPage(preservedRouteTarget, false);
-        } else {
-            // Safe fallback rule to protect direct initial hits[cite: 3]
-            if (!sessionStorage.getItem('rxPageState')) {
-                auth.showPage('loginSection', false);
+        if (typeof auth.restorePageState === 'function') {
+            const preservedRouteTarget = auth.restorePageState();
+            if (preservedRouteTarget) {
+                auth.showPage(preservedRouteTarget, false);
+            } else {
+                if (!sessionStorage.getItem('rxPageState') && typeof auth.showPage === 'function') {
+                    auth.showPage('loginSection', false);
+                }
             }
         }
 
-        // 3. Seal baseline parameters safely inside the page layer metrics state tracker[cite: 3]
-        auth.savePageState();
-
-        console.log('========================================');
-        console.log('Modular Application Context loaded successfully');
-        console.log('Registered Users Total:', auth.registeredUsers.length);
-        console.log('Stay Open Persistence Architecture: REPAIR COMPLETE');
-        console.log('========================================');
+        if (typeof auth.savePageState === 'function') auth.savePageState();
     });
 })();
