@@ -2,12 +2,9 @@
 (function() {
     'use strict';
 
-    // 🔑 Resend API Key
-    const RESEND_API_KEY = "re_f2ybj582_2GjjosLiXVLAbwBijibwBrNx"; 
-
-    // 🔑 Supabase Credentials (तपाईंको सही URL र Publishable Key राखिएको छ)
+    // 🔑 Supabase Credentials
     const SUPABASE_URL = "https://xorxoovezlgqcaeyqpdp.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_5_yPXUnjJVe3dy13X5nkXQ_afJ7rCvM"; 
+    const SUPABASE_ANON_KEY = "sb_publishable_5_yPXUnjJVe3dy13X5nkXQ_afJ7rCvM";
 
     // Supabase CDN स्वतः लोड गर्ने फंक्सन
     function loadSupabaseScript(callback) {
@@ -104,19 +101,18 @@
                 forgotModule.startOtpCountdownFrom(auth.otpTotalDuration);
             },
 
+            // 🛠️ अब सीधै Resend लाई होइन, आफ्नै Render सर्भरको API मार्फत इमेल पठाउने (CORS फिक्स)
             sendEmailOTP: async function(toEmail, otpCode) {
                 try {
-                    const response = await fetch("https://api.resend.com/emails", {
+                    const response = await fetch("https://rosan-xettri.onrender.com/api/send-email", {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${RESEND_API_KEY}`
+                            "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
-                            from: "RX Project <onboarding@resend.dev>",
-                            to: [toEmail],
+                            email: toEmail,
                             subject: "Your Password Reset OTP - RX System",
-                            html: `
+                            htmlContent: `
                                 <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #0f172a; color: #ffffff; border-radius: 10px;">
                                     <h2 style="color: #38bdf8;">Password Reset Verification</h2>
                                     <p>You requested to reset your password. Use the OTP code below to verify:</p>
@@ -128,8 +124,10 @@
                             `
                         })
                     });
-                    return response.ok;
+                    const result = await response.json();
+                    return response.ok && result.success;
                 } catch(e) {
+                    console.error("Email send error:", e);
                     return false;
                 }
             },
