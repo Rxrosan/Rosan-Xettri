@@ -1,33 +1,22 @@
-// ===== rx-forgot-password.js (Fully Fixed & Complete) ===== //
+// ===== rx-forgot-password.js ===== //
 (function() {
     'use strict';
 
-    // 🔑 Supabase Credentials
     const SUPABASE_URL = "https://xorxoovezlgqcaeyqpdp.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_5_yPXUnjJVe3dy13X5nkXQ_afJ7rCvM";
 
-    // Supabase CDN स्वतः लोड गर्ने फंक्सन
     function loadSupabaseScript(callback) {
         if (window.supabase && typeof window.supabase.createClient === 'function') {
             callback();
-            return;
-        }
-        const existingScript = document.querySelector('script[src*="supabase-js"]');
-        if (existingScript) {
-            existingScript.onload = callback;
             return;
         }
         const script = document.createElement('script');
         script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
         script.async = true;
         script.onload = callback;
-        script.onerror = function() {
-            console.error("Failed to load Supabase CDN script.");
-        };
         document.head.appendChild(script);
     }
 
-    // Supabase Client तान्ने/बनाउने Helper Function
     function getSupabaseClient() {
         if (window.supabaseClient) return window.supabaseClient;
         if (window.supabase && typeof window.supabase.createClient === 'function') {
@@ -39,314 +28,220 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         loadSupabaseScript(function() {
-            console.log("Supabase library loaded successfully.");
+            console.log("Supabase loaded for forgot password.");
         });
 
         const auth = window._rxAuth;
         if (!auth) return;
 
-        const el = auth.elements;
+        const findAccountSection = document.getElementById('findAccountSection');
+        const resetIdentifier = document.getElementById('resetIdentifier');
+        const resetNickname = document.getElementById('resetNickname'); 
+        const findAccountBtn = document.getElementById('findAccountBtn');
 
-        const forgotModule = {
-            stopOtpTimer: function() {
-                if (auth.otpTimerInterval) {
-                    clearInterval(auth.otpTimerInterval);
-                    auth.otpTimerInterval = null;
-                }
-            },
+        const accountVerifiedSection = document.getElementById('accountVerifiedSection');
+        const userAvatarImg = document.getElementById('userAvatarImg'); // Profile Image Element
+        const userProfileLink = document.getElementById('userProfileLink');
+        const foundUserName = document.getElementById('foundUserName');
+        const verifyDOB = document.getElementById('verifyDOB');
+        const processDobBtn = document.getElementById('processDobBtn');
 
-            resetOtpButtonToResend: function() {
-                if (el.sendOtpBtn && !auth.isOtpVerified) {
-                    el.sendOtpBtn.disabled = false;
-                    el.sendOtpBtn.textContent = 'RESEND OTP';
-                    el.sendOtpBtn.className = 'login-btn';
-                }
-            },
+        const passwordSection = document.getElementById('passwordSection');
+        const resetNewPassword = document.getElementById('resetNewPassword');
+        const submitNewPasswordBtn = document.getElementById('submitNewPasswordBtn');
 
-            startOtpCountdownFrom: function(remainingSeconds) {
-                forgotModule.stopOtpTimer();
-                let counter = remainingSeconds;
-                auth.otpRemainingSeconds = counter;
-                
-                if (!auth.otpStartTimestamp) auth.otpStartTimestamp = Date.now();
-                
-                if (el.sendOtpBtn && !auth.isOtpVerified) {
-                    el.sendOtpBtn.disabled = true;
-                    el.sendOtpBtn.textContent = 'WAIT ' + counter + 's';
-                    el.sendOtpBtn.className = 'login-btn cooldown';
-                }
-                
-                auth.otpTimerInterval = setInterval(function() {
-                    counter--;
-                    auth.otpRemainingSeconds = counter;
-                    
-                    if (counter <= 0 || auth.isOtpVerified) {
-                        forgotModule.stopOtpTimer();
-                        auth.otpRemainingSeconds = 0;
-                        auth.otpStartTimestamp = null;
-                        if (!auth.isOtpVerified) forgotModule.resetOtpButtonToResend();
-                        if (typeof auth.savePageState === 'function') auth.savePageState();
-                        return;
-                    }
-                    
-                    if (el.sendOtpBtn && !auth.isOtpVerified) {
-                        el.sendOtpBtn.textContent = 'WAIT ' + counter + 's';
-                    }
-                    if (typeof auth.savePageState === 'function') auth.savePageState();
-                }, 1000);
-            },
+        const confirmPopup = document.getElementById('confirmPopup');
+        const popupPassword = document.getElementById('popupPassword');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        const popupStatus = document.getElementById('popupStatus');
+        const popupClose = document.getElementById('popupClose');
+        const resetStatus = document.getElementById('resetStatus');
 
-            startOtpCountdown: function() {
-                auth.otpStartTimestamp = Date.now();
-                forgotModule.startOtpCountdownFrom(auth.otpTotalDuration);
-            },
+        let verifiedUserData = null;
 
-            // 🛠️ अब सीधै Resend लाई होइन, आफ्नै Render सर्भरको API मार्फत इमेल पठाउने (CORS फिक्स)
-            sendEmailOTP: async function(toEmail, otpCode) {
-                try {
-                    const response = await fetch("https://rosan-xettri.onrender.com/api/send-email", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            email: toEmail,
-                            subject: "Your Password Reset OTP - RX System",
-                            htmlContent: `
-                                <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #0f172a; color: #ffffff; border-radius: 10px;">
-                                    <h2 style="color: #38bdf8;">Password Reset Verification</h2>
-                                    <p>You requested to reset your password. Use the OTP code below to verify:</p>
-                                    <div style="background: #1e293b; padding: 15px; font-size: 28px; font-weight: bold; letter-spacing: 5px; color: #4facfe; text-align: center; border-radius: 8px; margin: 20px 0;">
-                                        ${otpCode}
-                                    </div>
-                                    <p style="font-size: 12px; color: #94a3b8;">If you did not request this, please ignore this email.</p>
-                                </div>
-                            `
-                        })
-                    });
-                    const result = await response.json();
-                    return response.ok && result.success;
-                } catch(e) {
-                    console.error("Email send error:", e);
-                    return false;
-                }
-            },
-
+        window._rxForgot = {
             resetForgotForm: function() {
-                forgotModule.stopOtpTimer();
-                if (el.resetEmail) el.resetEmail.value = '';
-                if (el.resetOtp) {
-                    el.resetOtp.value = '';
-                    el.resetOtp.disabled = false;
-                }
-                if (el.resetNewPassword) el.resetNewPassword.value = '';
-                if (el.resetConfirmPassword) el.resetConfirmPassword.value = '';
-                if (el.passwordSection) el.passwordSection.classList.remove('active');
-                if (el.sendOtpBtn) {
-                    el.sendOtpBtn.disabled = false;
-                    el.sendOtpBtn.textContent = 'SEND OTP';
-                    el.sendOtpBtn.className = 'login-btn';
-                }
-                if (el.resetStatus) {
-                    el.resetStatus.className = 'login-status';
-                    el.resetStatus.style.display = 'none';
-                    el.resetStatus.textContent = '';
-                }
-                auth.generatedOtp = '';
-                auth.isOtpVerified = false;
-                auth.resetIdentifier = '';
-                auth.isOtpSending = false;
-                auth.otpRemainingSeconds = 0;
-                auth.otpStartTimestamp = null;
-                auth.otpTotalDuration = 60;
-                if (typeof auth.syncPasswordToggles === 'function') setTimeout(auth.syncPasswordToggles, 100);
-                if (typeof auth.savePageState === 'function') auth.savePageState();
+                if (resetIdentifier) resetIdentifier.value = '';
+                if (resetNickname) resetNickname.value = '';
+                if (verifyDOB) verifyDOB.value = '';
+                if (resetNewPassword) resetNewPassword.value = '';
+                if (popupPassword) popupPassword.value = '';
+                if (userAvatarImg) { userAvatarImg.src = ''; userAvatarImg.style.display = 'none'; }
+                
+                if (findAccountSection) findAccountSection.classList.remove('page-hidden');
+                if (accountVerifiedSection) accountVerifiedSection.classList.add('page-hidden');
+                if (passwordSection) passwordSection.classList.remove('active');
+                if (resetStatus) { resetStatus.style.display = 'none'; resetStatus.textContent = ''; }
+                verifiedUserData = null;
+                if (typeof auth.syncPasswordToggles === 'function') auth.syncPasswordToggles();
             }
         };
 
-        window._rxForgot = forgotModule;
+        // 1. Find Account Button Click (Email/Phone + Name Match)
+        if (findAccountBtn) {
+            findAccountBtn.addEventListener('click', async function() {
+                const identifier = resetIdentifier.value.trim();
+                const inputName = resetNickname.value.trim();
 
-        // 1. Send OTP Event
-        if (el.sendOtpBtn) {
-            el.sendOtpBtn.addEventListener('click', async function() {
-                if (auth.isOtpSending) return;
-                const email = el.resetEmail ? el.resetEmail.value.trim() : '';
-
-                if (!email || !email.includes('@') || !email.includes('.')) {
-                    auth.setStatus(el.resetStatus, 'Please enter a valid email address.', 'error');
+                if (!identifier || !inputName) {
+                    auth.setStatus(resetStatus, 'Please enter email/phone and your name.', 'error');
                     return;
                 }
 
                 try {
                     const client = getSupabaseClient();
                     if (!client) {
-                        auth.setStatus(el.resetStatus, 'Supabase client is loading. Please try again.', 'error');
+                        auth.setStatus(resetStatus, 'Database client connecting...', 'error');
                         return;
                     }
 
-                    auth.setStatus(el.resetStatus, 'Checking account...', 'info');
+                    auth.setStatus(resetStatus, 'Searching account...', 'info');
 
-                    // Supabase बाट इमेल चेक गर्ने
-                    const { data, error } = await client
-                        .from('users')
-                        .select('email')
-                        .ilike('email', email);
-
-                    if (error) {
-                        console.error("Supabase Error:", error);
-                        auth.setStatus(el.resetStatus, 'DB Error: ' + error.message, 'error');
-                        return;
-                    }
-
-                    if (!data || data.length === 0) {
-                        auth.setStatus(el.resetStatus, 'No account found with that email.', 'error');
-                        return;
-                    }
-
-                    auth.isOtpSending = true;
-                    auth.setStatus(el.resetStatus, 'Sending OTP to your email...', 'info');
-
-                    // 6 Digit OTP Generate गर्ने
-                    auth.generatedOtp = String(Math.floor(100000 + Math.random() * 900000));
-                    auth.resetIdentifier = email;
-
-                    const isSent = await forgotModule.sendEmailOTP(email, auth.generatedOtp);
-
-                    if (isSent) {
-                        auth.setStatus(el.resetStatus, 'OTP sent to your email successfully!', 'success');
+                    let query = client.from('users').select('*');
+                    if (identifier.includes('@')) {
+                        query = query.ilike('email', identifier);
                     } else {
-                        console.log("GENERATED OTP:", auth.generatedOtp);
-                        auth.setStatus(el.resetStatus, 'OTP Generated!', 'success');
+                        query = query.eq('phone', identifier);
                     }
 
-                    if (el.passwordSection) el.passwordSection.classList.remove('active');
-                    auth.isOtpVerified = false;
-                    
-                    if (el.resetOtp) {
-                        el.resetOtp.value = '';
-                        el.resetOtp.disabled = false;
-                        el.resetOtp.focus();
+                    const { data, error } = await query;
+
+                    if (error || !data || data.length === 0) {
+                        auth.setStatus(resetStatus, 'No account found with this information.', 'error');
+                        return;
                     }
+
+                    const user = data[0];
                     
-                    forgotModule.stopOtpTimer();
-                    auth.otpTotalDuration = 60;
-                    auth.otpRemainingSeconds = auth.otpTotalDuration;
-                    
-                    forgotModule.startOtpCountdown();
-                    setTimeout(() => auth.isOtpSending = false, 500);
-                    if (typeof auth.savePageState === 'function') auth.savePageState();
+                    if (!user.name || user.name.trim().toLowerCase() !== inputName.toLowerCase()) {
+                        auth.setStatus(resetStatus, 'Name does not match with this account.', 'error');
+                        return;
+                    }
+
+                    verifiedUserData = user;
+                    auth.setStatus(resetStatus, 'Account found successfully!', 'success');
+
+                    setTimeout(() => {
+                        if (findAccountSection) findAccountSection.classList.add('page-hidden');
+                        if (accountVerifiedSection) accountVerifiedSection.classList.remove('page-hidden');
+                        
+                        // Show Profile Image if avatar_url exists
+                        if (userAvatarImg) {
+                            if (user.avatar_url) {
+                                userAvatarImg.src = user.avatar_url;
+                                userAvatarImg.style.display = 'block';
+                            } else {
+                                userAvatarImg.style.display = 'none';
+                            }
+                        }
+
+                        if (foundUserName) foundUserName.value = user.name || '';
+                        if (userProfileLink) {
+                            userProfileLink.href = `User-profile.html?id=${user.id || ''}`;
+                            userProfileLink.textContent = `Profile Link: ${user.name}`;
+                        }
+                        resetStatus.style.display = 'none';
+                    }, 800);
 
                 } catch (err) {
-                    console.error("Forgot Password Error:", err);
-                    auth.setStatus(el.resetStatus, 'Error connecting to database.', 'error');
+                    console.error("Error:", err);
+                    auth.setStatus(resetStatus, 'Database connection error.', 'error');
                 }
             });
         }
 
-        // 2. Real-time OTP Matching
-        if (el.resetOtp) {
-            el.resetOtp.addEventListener('input', function() {
-                this.value = this.value.replace(/\D/g, '');
-                
-                if (this.value.length === 6) {
-                    if (this.value === auth.generatedOtp) {
-                        auth.isOtpVerified = true;
-                        if (el.passwordSection) el.passwordSection.classList.add('active');
-                        auth.setStatus(el.resetStatus, 'OTP verified! Enter new password.', 'success');
-                        el.resetOtp.disabled = true;
-                        
-                        if (el.sendOtpBtn) {
-                            el.sendOtpBtn.disabled = true;
-                            el.sendOtpBtn.textContent = 'VERIFIED';
-                            el.sendOtpBtn.className = 'login-btn verified';
-                        }
-                        
-                        forgotModule.stopOtpTimer();
-                        auth.otpRemainingSeconds = 0;
-                        auth.otpStartTimestamp = null;
-                        
-                        if (el.resetNewPassword) setTimeout(() => el.resetNewPassword.focus(), 300);
-                        if (typeof auth.syncPasswordToggles === 'function') setTimeout(auth.syncPasswordToggles, 100);
-                    } else {
-                        auth.setStatus(el.resetStatus, 'Invalid OTP. Please try again.', 'error');
-                        if (el.passwordSection) el.passwordSection.classList.remove('active');
-                    }
+        // 2. Process DOB Button Click
+        if (processDobBtn) {
+            processDobBtn.addEventListener('click', function() {
+                const inputDob = verifyDOB.value;
+                if (!inputDob) {
+                    auth.setStatus(resetStatus, 'Please select your Date of Birth.', 'error');
+                    return;
                 }
-                if (typeof auth.savePageState === 'function') auth.savePageState();
+
+                if (!verifiedUserData || verifiedUserData.dob !== inputDob) {
+                    auth.setStatus(resetStatus, 'Date of Birth does not match.', 'error');
+                    return;
+                }
+
+                auth.setStatus(resetStatus, 'DOB verified successfully!', 'success');
+
+                setTimeout(() => {
+                    if (accountVerifiedSection) accountVerifiedSection.classList.add('page-hidden');
+                    if (passwordSection) passwordSection.classList.add('active');
+                    resetStatus.style.display = 'none';
+                    if (typeof auth.syncPasswordToggles === 'function') auth.syncPasswordToggles();
+                }, 800);
             });
         }
 
-        // 3. Reset Password Event
-        if (el.resetPasswordBtn) {
-            el.resetPasswordBtn.addEventListener('click', async function() {
-                if (!auth.isOtpVerified) {
-                    auth.setStatus(el.resetStatus, 'Please verify OTP first.', 'error');
+        // 3. Submit New Password Button Click -> Opens Popup
+        if (submitNewPasswordBtn) {
+            submitNewPasswordBtn.addEventListener('click', function() {
+                const newPass = resetNewPassword.value.trim();
+                if (!newPass || newPass.length < 6) {
+                    auth.setStatus(resetStatus, 'Password must be at least 6 characters.', 'error');
                     return;
                 }
 
-                const newPassword = el.resetNewPassword ? el.resetNewPassword.value.trim() : '';
-                const confirmPassword = el.resetConfirmPassword ? el.resetConfirmPassword.value.trim() : '';
+                if (confirmPopup) {
+                    confirmPopup.classList.add('active');
+                    document.body.classList.add('no-scroll');
+                    if (popupPassword) popupPassword.value = '';
+                    if (popupStatus) { popupStatus.style.display = 'none'; popupStatus.textContent = ''; }
+                    if (typeof auth.syncPasswordToggles === 'function') auth.syncPasswordToggles();
+                }
+            });
+        }
 
-                if (!newPassword || !confirmPassword) {
-                    auth.setStatus(el.resetStatus, 'Please fill in both password fields.', 'error');
+        if (popupClose) {
+            popupClose.addEventListener('click', function() {
+                confirmPopup.classList.remove('active');
+                document.body.classList.remove('no-scroll');
+            });
+        }
+
+        // 4. Change Password inside Popup (Final DB Update)
+        if (changePasswordBtn) {
+            changePasswordBtn.addEventListener('click', async function() {
+                const confirmPass = popupPassword.value.trim();
+                const newPass = resetNewPassword.value.trim();
+
+                if (!confirmPass) {
+                    auth.setStatus(popupStatus, 'Please re-enter your password.', 'error');
                     return;
                 }
-
-                if (newPassword.length < 6) {
-                    auth.setStatus(el.resetStatus, 'Password must be at least 6 characters.', 'error');
-                    return;
-                }
-
-                if (newPassword !== confirmPassword) {
-                    auth.setStatus(el.resetStatus, 'Passwords do not match.', 'error');
+                if (confirmPass !== newPass) {
+                    auth.setStatus(popupStatus, 'Passwords do not match!', 'error');
                     return;
                 }
 
                 try {
                     const client = getSupabaseClient();
-                    if (!client) {
-                        auth.setStatus(el.resetStatus, 'Supabase client not loaded.', 'error');
-                        return;
-                    }
+                    const identifierKey = verifiedUserData.email ? 'email' : 'phone';
+                    const identifierVal = verifiedUserData.email || verifiedUserData.phone;
 
                     const { error } = await client
                         .from('users')
-                        .update({ password: newPassword })
-                        .eq('email', auth.resetIdentifier);
+                        .update({ password: newPass })
+                        .eq(identifierKey, identifierVal);
 
                     if (!error) {
-                        auth.setStatus(el.resetStatus, 'Password reset successfully!', 'success');
-
-                        setTimeout(function() {
-                            if (typeof auth.showPage === 'function') auth.showPage('loginSection');
-                            if (el.loginEmail) el.loginEmail.value = auth.resetIdentifier;
-                            if (el.loginPassword) el.loginPassword.value = '';
-                            auth.setStatus(el.loginStatus, 'Password reset! Please login with your new password.', 'success');
-                            
-                            forgotModule.resetForgotForm();
-                            sessionStorage.removeItem('rxPageState');
+                        auth.setStatus(popupStatus, 'Password changed successfully!', 'success');
+                        setTimeout(() => {
+                            confirmPopup.classList.remove('active');
+                            document.body.classList.remove('no-scroll');
+                            auth.showPage('loginSection');
+                            window._rxForgot.resetForgotForm();
+                            auth.setStatus(auth.elements.loginStatus, 'Password reset! Please login.', 'success');
                         }, 1500);
                     } else {
-                        auth.setStatus(el.resetStatus, error.message || 'Password reset failed.', 'error');
+                        auth.setStatus(popupStatus, error.message || 'Update failed.', 'error');
                     }
                 } catch (err) {
-                    console.error("Reset Error:", err);
-                    auth.setStatus(el.resetStatus, 'Error updating password in database.', 'error');
+                    auth.setStatus(popupStatus, 'Server connection error.', 'error');
                 }
             });
         }
-
-        if (typeof auth.restorePageState === 'function') {
-            const preservedRouteTarget = auth.restorePageState();
-            if (preservedRouteTarget) {
-                auth.showPage(preservedRouteTarget, false);
-            } else {
-                if (!sessionStorage.getItem('rxPageState') && typeof auth.showPage === 'function') {
-                    auth.showPage('loginSection', false);
-                }
-            }
-        }
-
-        if (typeof auth.savePageState === 'function') auth.savePageState();
     });
 })();

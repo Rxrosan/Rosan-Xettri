@@ -3,7 +3,6 @@ const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
 
 const app = express();
-// अनलाइन (Render) र लोकल (Localhost) दुवैमा चल्ने बनाउन यो तरिका अपनाइएको हो
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
@@ -14,10 +13,10 @@ const SUPABASE_URL = 'https://xorxoovezlgqcaeyqpdp.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_5_yPXUnjJVe3dy13X5nkXQ_afJ7rCvM';
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// १. Signup / Register API
+// १. Signup / Register API (ニックネーム समेत)
 app.post('/api/register', async (req, res) => {
   try {
-    const { name, email, address, phone, dob, password, role } = req.body;
+    const { name, email, address, phone, dob, nickname, password, role } = req.body;
 
     const { data: existingUser } = await supabase
       .from('users')
@@ -31,7 +30,7 @@ app.post('/api/register', async (req, res) => {
 
     const { data, error } = await supabase
       .from('users')
-      .insert([{ name, email, address, phone, dob, password, role: role || 'user' }])
+      .insert([{ name, email, address, phone, dob, nickname, password, role: role || 'user' }])
       .select();
 
     if (error) throw error;
@@ -64,36 +63,47 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
-// ३. Check Email API (OTP पठाउन अघि युजर छ/छैन जाँच्न)
-app.post('/api/check-email', async (req, res) => {
+// ३. Find Account API (Email/Phone र Nickname जाँच्नको लागि)
+app.post('/api/find-account', async (req, res) => {
   try {
-    const { email } = req.body;
-    const { data, error } = await supabase
-      .from('users')
-      .select('email')
-      .eq('email', email)
-      .single();
+    const { identifier, nickname } = req.body;
 
-    if (error || !data) {
-      return res.status(404).json({ error: 'यो इमेलबाट कुनै खाता भेटिएन!' });
+    let query = supabase.from('users').select('id, name, email, phone, dob, nickname');
+    if (identifier.includes('@')) {
+      query = query.ilike('email', identifier);
+    } else {
+      query = query.eq('phone', identifier);
     }
 
-    res.json({ exists: true });
+    const { data, error } = await query.single();
+
+    if (error || !data) {
+      return res.status(404).json({ error: 'यो विवरण अनुसार कुनै खाता भेटिएन!' });
+    }
+
+    if (!data.nickname || data.nickname.toLowerCase() !== nickname.toLowerCase()) {
+      return res.status(400).json({ error: 'निकनेम (Nick Name) मिलेन!' });
+    }
+
+    res.json({ success: true, user: data });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// ४. Reset Password API
+// ४. Reset Password API (새로운 비밀번호 업데이트)
 app.post('/api/reset-password', async (req, res) => {
   try {
-    const { email, newPassword } = req.body;
+    const { identifier, newPassword } = req.body;
 
-    const { data, error } = await supabase
-      .from('users')
-      .update({ password: newPassword })
-      .eq('email', email)
-      .select();
+    let query = supabase.from('users').update({ password: newPassword });
+    if (identifier.includes('@')) {
+      query = query.eq('email', identifier);
+    } else {
+      query = query.eq('phone', identifier);
+    }
+
+    const { data, error } = await query.select();
 
     if (error) throw error;
 
