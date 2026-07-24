@@ -70,18 +70,29 @@
                 }
 
                 auth.tempRegistration = { name, email, address, phone, dob, password };
-                el.confirmPopup.classList.add('active');
-                document.body.classList.add('no-scroll');
+                
+                if (el.confirmPopup) {
+                    el.confirmPopup.classList.add('active');
+                    document.body.classList.add('no-scroll');
+                }
 
-                el.popupPassword.value = '';
-                el.popupStatus.style.display = 'none';
+                if (el.popupPassword) el.popupPassword.value = '';
+                if (el.popupStatus) {
+                    el.popupStatus.style.display = 'none';
+                    el.popupStatus.textContent = '';
+                }
+                
+                if (typeof auth.syncPasswordToggles === 'function') {
+                    auth.syncPasswordToggles();
+                }
+                
                 auth.savePageState(); 
             });
         }
 
         if (el.popupConfirmBtn) {
             el.popupConfirmBtn.addEventListener('click', async function() {
-                const confirmPass = el.popupPassword.value.trim();
+                const confirmPass = el.popupPassword ? el.popupPassword.value.trim() : '';
                 
                 if (!auth.tempRegistration) {
                     auth.setStatus(el.popupStatus, 'Error: No registration data found.', 'error');
@@ -122,16 +133,16 @@
                             auth.closeConfirmPopup();
                             auth.showPage('loginSection');
                             
-                            el.loginEmail.value = newUser.email;
-                            el.loginPassword.value = '';
+                            if (el.loginEmail) el.loginEmail.value = newUser.email;
+                            if (el.loginPassword) el.loginPassword.value = '';
                             auth.setStatus(el.loginStatus, 'Account created! Please login.', 'success');
                             
-                            el.regName.value = '';
-                            el.regEmail.value = '';
-                            el.regAddress.value = '';
-                            el.regPhone.value = '';
+                            if (el.regName) el.regName.value = '';
+                            if (el.regEmail) el.regEmail.value = '';
+                            if (el.regAddress) el.regAddress.value = '';
+                            if (el.regPhone) el.regPhone.value = '';
                             if (el.regDOB) el.regDOB.value = ''; 
-                            el.regPassword.value = '';
+                            if (el.regPassword) el.regPassword.value = '';
                             sessionStorage.removeItem('rxPageState');
                         }, 1500);
                     } else {
@@ -145,7 +156,7 @@
 
         if (el.popupPassword) {
             el.popupPassword.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') el.popupConfirmBtn.click();
+                if (e.key === 'Enter' && el.popupConfirmBtn) el.popupConfirmBtn.click();
             });
         }
     });

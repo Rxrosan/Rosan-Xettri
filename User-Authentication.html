@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-Authentication/RX-CSS/login-page.css" />
     <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-Authentication/RX-CSS/reset-password.css" />
     <link rel="stylesheet" href="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-Authentication/RX-CSS/create-account.css" />
-
 </head>
 <body>
     <noscript><div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;color:red;text-align:center;padding-top:15%;font-family:Arial;font-size:24px;font-weight:bold;z-index:999999;"><p>JavaScript is disabled!</p><p style="color:#333;font-size:18px;">Please enable JavaScript.</p></div></noscript>
@@ -79,7 +78,7 @@
             </div>
         </div>
 
-<!-- ===== CREATE ACCOUNT PAGE ===== -->
+        <!-- ===== CREATE ACCOUNT PAGE ===== -->
         <div class="login-section auth-page page-hidden" id="createSection">
             <div class="login-container">
                 <h2 class="login-title">CREATE ACCOUNT</h2>
@@ -101,11 +100,10 @@
                         <input type="text" id="regPhone" placeholder="Phone Number" />
                     </div>
                     
-                <!-- सुरक्षित Date of Birth इनपुट फिल्ड -->
-                <div class="input-group">
-                    <i class="fas fa-calendar-alt input-icon"></i>
-                   <input type="date" id="regDOB" placeholder="Date of Birth" required />
-                </div>
+                    <div class="input-group">
+                        <i class="fas fa-calendar-alt input-icon"></i>
+                        <input type="date" id="regDOB" placeholder="Date of Birth" required />
+                    </div>
                     
                     <div class="input-group">
                         <i class="fas fa-lock input-icon"></i>
@@ -126,74 +124,66 @@
             </div>
         </div>
 
-     <!-- ===== FORGOT PASSWORD PAGE ===== -->
-<div class="login-section auth-page page-hidden" id="forgotSection">
-    <div class="login-container">
-        <h2 class="login-title">RESET PASSWORD</h2>
-        <div class="login-form">
-            
-            <!-- Step 1: Find Account Inputs -->
-            <div id="findAccountSection">
-                <div class="input-group">
-                    <i class="fas fa-envelope input-icon"></i>
-                    <input type="text" id="resetIdentifier" placeholder="Email or Phone Number" />
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-user-tag input-icon"></i>
-                    <input type="text" id="resetNickname" placeholder="Enter your full name" />
-                </div>
-                <button class="login-btn" id="findAccountBtn">FIND MY ACCOUNT</button>
-            </div>
+        <!-- ===== FORGOT PASSWORD PAGE ===== -->
+        <div class="login-section auth-page page-hidden" id="forgotSection">
+            <div class="login-container">
+                <h2 class="login-title">RESET PASSWORD</h2>
+                <div class="login-form">
+                    
+                    <div id="findAccountSection">
+                        <div class="input-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="text" id="resetIdentifier" placeholder="Email or Phone Number" />
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-user-tag input-icon"></i>
+                            <input type="text" id="resetNickname" placeholder="Enter your full name" />
+                        </div>
+                        <button class="login-btn" id="findAccountBtn">FIND MY ACCOUNT</button>
+                    </div>
 
-            <!-- Step 2: Account Found Details, Profile Image & DOB (Initially Hidden) -->
-            <div id="accountVerifiedSection" class="page-hidden" style="margin-top: 5px;">
-                <div id="accountFoundNotice" style="color: #00e676; font-weight: bold; text-align: center; margin-bottom: 10px; font-size: 13px;">ACCOUNT FOUND</div>
-                
-                <!-- Profile Picture Display Box Added -->
-                <div id="userAvatarBox" style="text-align: center; margin-bottom: 12px;">
-                    <img id="userAvatarImg" src="" alt="Profile Picture" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; display: none; margin: 0 auto 8px auto;" />
-                </div>
+                    <div id="accountVerifiedSection" class="page-hidden" style="margin-top: 5px;">
+                        <div id="accountFoundNotice" style="color: #00e676; font-weight: bold; text-align: center; margin-bottom: 10px; font-size: 13px;">ACCOUNT FOUND</div>
+                        
+                        <div id="userAvatarBox" style="text-align: center; margin-bottom: 12px;">
+                            <img id="userAvatarImg" src="" alt="Profile Picture" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; display: none; margin: 0 auto 8px auto;" />
+                        </div>
 
-                <!--<div id="userProfileLinkBox" style="text-align: center; margin-bottom: 10px; font-size: 13px;">
-                    <a id="userProfileLink" href="#" target="_blank" style="color: #38bdf8; text-decoration: underline;">View Profile</a>
-                </div>-->
+                        <div class="input-group" style="margin-bottom: 12px;">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="foundUserName" placeholder="User Name" readonly style="background: rgba(10, 25, 47, 0.4); cursor: not-allowed;" />
+                        </div>
 
-                <div class="input-group" style="margin-bottom: 12px;">
-                    <i class="fas fa-user input-icon"></i>
-                    <input type="text" id="foundUserName" placeholder="User Name" readonly style="background: rgba(10, 25, 47, 0.4); cursor: not-allowed;" />
-                </div>
+                        <div class="input-group" style="margin-bottom: 12px;">
+                            <i class="fas fa-calendar-alt input-icon"></i>
+                            <input type="date" id="verifyDOB" placeholder="Date of Birth (English Format)" required />
+                        </div>
+                        <button class="login-btn" id="processDobBtn">PROCESSED</button>
+                    </div>
 
-                <div class="input-group" style="margin-bottom: 12px;">
-                    <i class="fas fa-calendar-alt input-icon"></i>
-                    <input type="date" id="verifyDOB" placeholder="Date of Birth (English Format)" required />
-                </div>
-                <button class="login-btn" id="processDobBtn">PROCESSED</button>
-            </div>
-
-            <!-- Step 3: Password Section (DOB मिलिसकेपछि खुल्ने) -->
-            <div class="password-section" id="passwordSection">
-                <div class="input-group">
-                    <i class="fas fa-lock input-icon"></i>
-                    <div class="password-wrapper">
-                        <input type="password" id="resetNewPassword" placeholder="Input New Password" />
-                        <button type="button" class="password-toggle" data-target="resetNewPassword" aria-label="Toggle password visibility">
-                            <i class="fas fa-eye"></i>
+                    <div class="password-section" id="passwordSection">
+                        <div class="input-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <div class="password-wrapper">
+                                <input type="password" id="resetNewPassword" placeholder="Input New Password" />
+                                <button type="button" class="password-toggle" data-target="resetNewPassword" aria-label="Toggle password visibility">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="login-btn" id="submitNewPasswordBtn">
+                            <i class="fas fa-paper-plane"></i> SUBMIT
                         </button>
                     </div>
+                    
+                    <div id="resetStatus" class="login-status"></div>
                 </div>
-                <button class="login-btn" id="submitNewPasswordBtn">
-                    <i class="fas fa-paper-plane"></i> SUBMIT
-                </button>
+                <div class="auth-switch">
+                    Remember your password? <a id="gotoLoginFromForgot">Login here</a><br />
+                    Don't have an account? <a id="gotoCreateFromForgot">Create Account</a>
+                </div>
             </div>
-            
-            <div id="resetStatus" class="login-status"></div>
         </div>
-        <div class="auth-switch">
-            Remember your password? <a id="gotoLoginFromForgot">Login here</a><br />
-            Don't have an account? <a id="gotoCreateFromForgot">Create Account</a>
-        </div>
-    </div>
-</div>
 
 <!-- ===== POPUP: CONFIRM PASSWORD ===== -->
 <div class="popup-overlay" id="confirmPopup">
@@ -203,34 +193,17 @@
         <div class="input-group">
             <i class="fas fa-lock input-icon"></i>
             <div class="password-wrapper">
-                <input type="password" id="popupPassword" placeholder="Re-enter New Password" />
+                <!-- यहाँ 'New' शब्दलाई हटाइएको छ -->
+                <input type="password" id="popupPassword" placeholder="Re-enter Password" />
                 <button type="button" class="password-toggle" data-target="popupPassword" aria-label="Toggle password visibility">
                     <i class="fas fa-eye"></i>
                 </button>
             </div>
         </div>
-        <button class="login-btn" id="changePasswordBtn">CHANGE PASSWORD</button>
+        <button class="login-btn" id="popupConfirmBtn">CONFIRM</button>
         <div id="popupStatus" class="login-status"></div>
     </div>
 </div>
-        <!-- ===== POPUP: CONFIRM PASSWORD ===== -->
-        <div class="popup-overlay" id="confirmPopup">
-            <div class="popup-box">
-                <button class="popup-close" id="popupClose">&times;</button>
-                <h3><i class="fas fa-shield-alt"></i> Confirm Password</h3>
-                <div class="input-group">
-                    <i class="fas fa-lock input-icon"></i>
-                    <div class="password-wrapper">
-                        <input type="password" id="popupPassword" placeholder="Re-enter Password" />
-                        <button type="button" class="password-toggle" data-target="popupPassword" aria-label="Toggle password visibility">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                <button class="login-btn" id="popupConfirmBtn"> CONFIRM</button>
-                <div id="popupStatus" class="login-status"></div>
-            </div>
-        </div>
 
         <div class="copyright">
             <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" target="_blank" rel="noopener">Rosan Xettri</a></strong>. All Rights Reserved.</p>
@@ -246,6 +219,7 @@
             <li><a href="User-Authentication.html" class="active">User-Authentication</a></li>
         </ul>
     </nav>
+    
     <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/RX-WEB-MAIN.js"></script>
     <script src="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-Authentication/RX-JS/rx-supabase-config.js"></script>
     <script src="RX-ASSETS/RX-FUNCTION/RX-USER-DATA/RX-USER-Authentication/RX-JS/rx-core.js"></script>
