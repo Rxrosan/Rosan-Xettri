@@ -1,4 +1,4 @@
-// RX-POP-UP-WINDOW-ENHANCED.js - Outside Click Disabled & Refresh State Persistence Included
+// RX-POP-UP-WINDOW-ENHANCED.js - Always Show On Every Refresh / Visit Included
 document.addEventListener('DOMContentLoaded', () => {
 
     // =============================================
@@ -331,8 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         initGalleryEvents();
         
         setTimeout(() => {
-            // REFRESH STATE CHECK (Keep open if previously open)
-            const isPopupDismissed = localStorage.getItem('rxPopupClosed');
+            // ALWAYS SHOW POPUP ON EVERY REFRESH / HOME PAGE VISIT
             const savedLightboxImg = localStorage.getItem('rxLightboxOpenImg');
 
             // URL Params Check
@@ -340,9 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetSlide = parseInt(urlParams.get('popupSlide'), 10);
             const targetImg = urlParams.get('popupImg');
 
-            if (!isPopupDismissed || targetSlide || targetImg || savedLightboxImg) {
-                state.elements.popup.classList.add("show");
-            }
+            // Harek patak popup show garne class add garne
+            state.elements.popup.classList.add("show");
 
             if (!isNaN(targetSlide) && targetSlide >= 0 && targetSlide < POPUP_CONFIG.slides.length) {
                 state.currentIndex = targetSlide;
@@ -353,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
             updateCarouselDisplay();
             loadSlide(state.currentIndex);
 
-            // AUTO OPEN LIGHTBOX ON REFRESH OR VIA SHARED LINK
+            // AUTO OPEN LIGHTBOX VIA SHARED LINK OR SAVED STATE
             const activeImg = targetImg || savedLightboxImg;
             if (activeImg) {
                 setTimeout(() => {
@@ -565,7 +563,6 @@ document.addEventListener('DOMContentLoaded', () => {
         state.elements.lightboxTitle.textContent = title;
         state.elements.lightboxDesc.textContent = desc;
         
-        // SAVE LIGHTBOX STATE FOR REFRESH
         localStorage.setItem('rxLightboxOpenImg', src);
         localStorage.setItem('rxLightboxTitle', title);
         localStorage.setItem('rxLightboxDesc', desc);
@@ -581,7 +578,6 @@ document.addEventListener('DOMContentLoaded', () => {
         resumeAutoSlide();
     }
 
-    // DOWNLOAD FUNCTION WITH LOCAL & LIVE FALLBACK
     async function downloadCurrentImage() {
         if (!state.currentActiveImgUrl) return;
         
@@ -678,7 +674,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         state.elements.lightboxClose.addEventListener('click', closeLightbox);
         
-        // OUTSIDE CLICK DISABLED (NO ACTION ON BACKGROUND CLICK)
         state.elements.lightbox.addEventListener('click', (e) => {
             e.stopPropagation();
         });
@@ -824,10 +819,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function bindEventListeners() {
-        // CLOSE MAIN POPUP
+        // CLOSE MAIN POPUP (Harek patak close garda feri khulna milne gari rakheko xa)
         state.elements.closeBtn.addEventListener("click", () => {
             state.elements.popup.classList.remove("show");
-            localStorage.setItem('rxPopupClosed', 'true');
             stopTyping();
             state.isPaused = false;
             if (rotateTimeout) {
@@ -836,7 +830,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // OUTSIDE CLICK DISABLED FOR MAIN POPUP AS WELL
         state.elements.popup.addEventListener('click', (e) => {
             e.stopPropagation();
         });
@@ -849,7 +842,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (state.elements.popup.classList.contains("show")) {
                 if (e.key === "Escape") {
                     state.elements.popup.classList.remove("show");
-                    localStorage.setItem('rxPopupClosed', 'true');
                     stopTyping();
                     state.isPaused = false;
                     if (rotateTimeout) {
