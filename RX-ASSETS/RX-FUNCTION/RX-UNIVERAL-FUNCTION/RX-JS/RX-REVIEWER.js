@@ -11,46 +11,85 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    // Review data array for easier management and typing animation
+    // Review data array with social media links
     const reviewsData = [
         {
             text: "Rosan Khattri Chettri is a talented and reliable graphic designer with a strong eye for detail. He specializes in logos, business cards, and branding, always delivering creative and high-quality work. Highly recommended!",
             name: "Puja Acharya Shrestha",
             location: "Palpa, Nepal",
-            image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-3.jpg"
+            image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-3.jpg",
+            socials: {
+                facebook: "https://facebook.com",
+                instagram: "https://instagram.com",
+                twitter: "https://twitter.com"
+            }
         },
         {
             text: "Rosan Khattri Chettri is a talented graphic designer with experience, specializing in logos, business cards, and more. He delivers creative and professional work. Highly recommended!",
             name: "कुस्मा तरामु मगर",
             location: "Gulmi-Lumpek",
-            image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-1.jpg"
+            image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-1.jpg",
+            socials: {
+                facebook: "https://facebook.com",
+                instagram: "https://instagram.com",
+                linkedin: "https://linkedin.com"
+            }
         },
         {
             text: "Rosan Xettri is known for his dedication to excellence in graphic design and gaming. His innovative mindset, coupled with his refined skills, allows him to create visually stunning designs and achieve remarkable success in the gaming world.",
             name: "Rita Magar",
             location: "Banganga-5, Kapilvastu",
-            image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-2.jpg"
+            image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-2.jpg",
+            socials: {
+                facebook: "https://facebook.com",
+                twitter: "https://twitter.com",
+                instagram: "https://instagram.com"
+            }
         },
         {
             text: "Rosan Xettri is a talented graphic designer and gamer who seamlessly blends creativity with technical expertise. His innovative approach and attention to detail make his work stand out, consistently delivering high-quality results.",
             name: "Pawana Thapaliya",
             location: "Kathmandu, Nepal",
-            image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-6.jpg"
+            image: "RX-ASSETS/RX-IMAGE/RX-USER-IMAGE/R-6.jpg",
+            socials: {
+                facebook: "https://facebook.com",
+                linkedin: "https://linkedin.com",
+                instagram: "https://instagram.com"
+            }
         }
     ];
 
-    // Generate HTML from reviews data
+    // Generate HTML from reviews data with complete structure
     let cardsHTML = '<div class="rx-reviews-container">';
     reviewsData.forEach((review, index) => {
+        let socialsHTML = '';
+        if (review.socials) {
+            socialsHTML = '<div class="rx-reviewer-socials">';
+            for (let platform in review.socials) {
+                socialsHTML += `<a href="${review.socials[platform]}" target="_blank" rel="noopener noreferrer" class="rx-social-link">${platform}</a>`;
+            }
+            socialsHTML += '</div>';
+        }
+
         cardsHTML += `
             <div class="rx-review-card" data-image="${review.image}" data-index="${index}">
-                <div class="rx-quote-icon">"</div>
-                <p class="rx-review-text" data-fulltext="${escapeHtml(review.text)}"></p>
-                <div class="rx-reviewer">
-                    <img src="${review.image}" alt="Reviewer" class="rx-reviewer-img" loading="lazy">
-                    <div class="rx-reviewer-info">
-                        <h4>${escapeHtml(review.name)}</h4>
-                        <p>${escapeHtml(review.location)}</p>
+                <div class="rx-card-front">
+                    <div class="rx-quote-icon">"</div>
+                    <p class="rx-review-text" data-fulltext="${escapeHtml(review.text)}"></p>
+                    <div class="rx-reviewer">
+                        <img src="${review.image}" alt="Reviewer" class="rx-reviewer-img rx-interactive-avatar" loading="lazy">
+                        <div class="rx-reviewer-info">
+                            <h4>${escapeHtml(review.name)}</h4>
+                            <p>${escapeHtml(review.location)}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="rx-card-info-overlay">
+                    <div class="rx-overlay-content">
+                        <img src="${review.image}" alt="Reviewer" class="rx-overlay-img rx-interactive-avatar">
+                        <h3 class="rx-overlay-name">${escapeHtml(review.name)}</h3>
+                        <p class="rx-overlay-location">${escapeHtml(review.location)}</p>
+                        ${socialsHTML}
                     </div>
                 </div>
             </div>
@@ -278,6 +317,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const nextIndex = (currentIndex + direction + reviewCards.length) % reviewCards.length;
         const nextCard = reviewCards[nextIndex];
         
+        currentCard.classList.remove('show-social-info');
+        nextCard.classList.remove('show-social-info');
+
         if (rotateTimeout) {
             clearTimeout(rotateTimeout);
             rotateTimeout = null;
@@ -329,12 +371,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ==================== TOGGLE IMAGE BACKGROUND FUNCTION (FIXED FOR MOBILE) ====================
+    // ==================== TOGGLE IMAGE BACKGROUND FUNCTION ====================
     
     function toggleReviewImage(card) {
         if (isAnimating) return;
         
-        // Remove active class from all other cards
         document.querySelectorAll('.rx-review-card.active').forEach(el => {
             if (el !== card) {
                 el.classList.remove('active');
@@ -343,13 +384,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Toggle active class on clicked card
         const isActivating = !card.classList.contains('active');
         
         if (isActivating) {
             card.classList.add('active');
             const imageUrl = card.getAttribute('data-image');
-            // Apply background image with overlay for better readability
             card.style.backgroundImage = `${config.bgOverlay}, url('${imageUrl}')`;
             card.style.backgroundSize = 'cover';
             card.style.backgroundPosition = 'center';
@@ -361,42 +400,67 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ==================== DOUBLE TAP DETECTION (FIXED FOR MOBILE) ====================
+    // ==================== CARD INTERACTIONS (SINGLE / DOUBLE TAP) ====================
     
     let lastTapTime = 0;
     let tapTimeoutId = null;
-    
-    function handleDoubleTap() {
+
+    function handleCardTextClick(card) {
         isPaused = !isPaused;
-        
         if (isPaused) {
             pauseTyping();
         } else {
             resumeTyping();
         }
     }
-    
-    // Universal click/tap handler for all devices
-    function handleCardInteraction(card, event) {
+
+    // Double tap on Avatar to show profile details / social links
+    let lastAvatarTapTime = 0;
+    let avatarTapTimeoutId = null;
+
+    function handleAvatarInteraction(card, event) {
+        if (!card || isAnimating) return;
+        
+        const currentTime = new Date().getTime();
+        const tapInterval = currentTime - lastAvatarTapTime;
+        
+        if (avatarTapTimeoutId) {
+            clearTimeout(avatarTapTimeoutId);
+            avatarTapTimeoutId = null;
+        }
+        
+        if (tapInterval < 300 && tapInterval > 0 && lastAvatarTapTime !== 0) {
+            lastAvatarTapTime = 0;
+            card.classList.toggle('show-social-info');
+            event.preventDefault();
+            event.stopPropagation();
+        } else {
+            lastAvatarTapTime = currentTime;
+            avatarTapTimeoutId = setTimeout(() => {
+                toggleReviewImage(card);
+                lastAvatarTapTime = 0;
+                avatarTapTimeoutId = null;
+            }, 300);
+        }
+    }
+
+    function handleCardGeneralInteraction(card, event) {
         if (!card || isAnimating) return;
         
         const currentTime = new Date().getTime();
         const tapInterval = currentTime - lastTapTime;
         
-        // Clear any pending single tap timeout
         if (tapTimeoutId) {
             clearTimeout(tapTimeoutId);
             tapTimeoutId = null;
         }
         
         if (tapInterval < 300 && tapInterval > 0 && lastTapTime !== 0) {
-            // DOUBLE TAP detected
             lastTapTime = 0;
-            handleDoubleTap();
+            handleCardTextClick(card);
             event.preventDefault();
             event.stopPropagation();
         } else {
-            // SINGLE TAP - wait to see if double tap follows
             lastTapTime = currentTime;
             tapTimeoutId = setTimeout(() => {
                 toggleReviewImage(card);
@@ -406,7 +470,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ==================== SWIPE GESTURE FUNCTIONS (FIXED FOR MOBILE) ====================
+    // ==================== SWIPE GESTURE FUNCTIONS ====================
     
     let touchStartX = 0;
     let touchStartY = 0;
@@ -430,7 +494,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaX = touch.clientX - touchStartX;
         const deltaY = touch.clientY - touchStartY;
         
-        // Check if this is a horizontal swipe
         if (Math.abs(deltaX) > 10) {
             touchMoved = true;
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
@@ -441,10 +504,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleTouchEnd(event) {
         if (!isSwiping) {
-            // If not swiping, handle as tap on the card
             const card = event.target.closest('.rx-review-card');
             if (card && !touchMoved) {
-                handleCardInteraction(card, event);
+                if (event.target.closest('.rx-interactive-avatar')) {
+                    handleAvatarInteraction(card, event);
+                } else {
+                    handleCardGeneralInteraction(card, event);
+                }
             }
             return;
         }
@@ -452,10 +518,13 @@ document.addEventListener('DOMContentLoaded', function() {
         isSwiping = false;
         
         if (!touchMoved) {
-            // This was a tap, not a swipe
             const card = event.target.closest('.rx-review-card');
             if (card) {
-                handleCardInteraction(card, event);
+                if (event.target.closest('.rx-interactive-avatar')) {
+                    handleAvatarInteraction(card, event);
+                } else {
+                    handleCardGeneralInteraction(card, event);
+                }
             }
             touchStartX = 0;
             touchStartY = 0;
@@ -469,15 +538,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const deltaX = touchEndX - touchStartX;
         const deltaTime = touchEndTime - touchStartTime;
         
-        // Check if swipe meets conditions
         if (Math.abs(deltaX) >= config.swipeThreshold && deltaTime <= config.swipeMaxTime) {
             if (deltaX > 0) {
-                // Swipe right - go to previous review
                 if (!isAnimating && !isPaused) {
                     prevReview();
                 }
             } else {
-                // Swipe left - go to next review
                 if (!isAnimating && !isPaused) {
                     nextReview();
                 }
@@ -602,12 +668,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==================== CLICK HANDLER FOR DESKTOP ====================
     
     reviewsContainer.addEventListener('click', function(e) {
-        // Only handle clicks on non-touch devices or as fallback
         const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
         if (!isTouchDevice) {
             const card = e.target.closest('.rx-review-card');
             if (card && !isAnimating) {
-                handleCardInteraction(card, e);
+                if (e.target.closest('.rx-interactive-avatar')) {
+                    handleAvatarInteraction(card, e);
+                } else {
+                    handleCardGeneralInteraction(card, e);
+                }
             }
         }
     });
@@ -656,7 +725,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         .rx-review-card {
-            background: rgba(0, 0, 0, 0.1);
+            background:transprent;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             color: #ffffff;
@@ -679,21 +748,102 @@ document.addEventListener('DOMContentLoaded', function() {
             right: 0;
             z-index: 1;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            overflow-y: auto;
+            overflow: hidden;
         }
-        
-        .rx-review-card::-webkit-scrollbar {
-            width: 4px;
+
+        .rx-card-front {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            width: 100%;
+            transition: opacity 0.4s ease;
         }
-        
-        .rx-review-card::-webkit-scrollbar-track {
+
+        .rx-card-info-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transprent;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            z-index: 10;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .rx-review-card.show-social-info .rx-card-front {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .rx-review-card.show-social-info .rx-card-info-overlay {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .rx-overlay-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .rx-overlay-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(241, 6, 6, 0.91);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .rx-overlay-name {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .rx-overlay-location {
+            margin: 0 0 10px 0;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .rx-reviewer-socials {
+            display: flex;
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        .rx-social-link {
+            padding: 6px 14px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: #fff;
+            font-size: 12px;
+            text-decoration: none;
+            text-transform: capitalize;
+            transition: all 0.3s ease;
         }
-        
-        .rx-review-card::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
+
+        .rx-social-link:hover {
+            background: rgba(241, 6, 6, 0.91);
+            border-color: rgba(241, 6, 6, 0.91);
+            transform: translateY(-2px);
         }
         
         .rx-review-card.active {
@@ -756,6 +906,7 @@ document.addEventListener('DOMContentLoaded', function() {
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
             background: rgba(255, 255, 255, 0.1);
             flex-shrink: 0;
+            cursor: pointer;
         }
         
         .rx-reviewer-info {
