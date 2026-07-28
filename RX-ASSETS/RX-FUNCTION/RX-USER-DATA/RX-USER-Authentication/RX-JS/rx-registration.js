@@ -8,6 +8,7 @@
 
         const el = auth.elements;
 
+        // DOB को लागि न्यूनतम र अधिकतम वर्ष सेट गर्ने
         if (el.regDOB) {
             const todayObj = new Date();
             const maxYear = todayObj.getFullYear() - 18;
@@ -17,14 +18,15 @@
             el.regDOB.min = "1900-01-01";
         }
 
+        // 'Create Account' बटन थिच्दा चल्ने फंक्सन
         if (el.createAccountBtn) {
             el.createAccountBtn.addEventListener('click', function() {
-                const name = el.regName.value.trim();
-                const email = el.regEmail.value.trim();
-                const address = el.regAddress.value.trim();
-                const phone = el.regPhone.value.trim();
+                const name = el.regName ? el.regName.value.trim() : '';
+                const email = el.regEmail ? el.regEmail.value.trim() : '';
+                const address = el.regAddress ? el.regAddress.value.trim() : '';
+                const phone = el.regPhone ? el.regPhone.value.trim() : '';
                 const dob = el.regDOB ? el.regDOB.value : ''; 
-                const password = el.regPassword.value.trim();
+                const password = el.regPassword ? el.regPassword.value.trim() : '';
 
                 if (!name || !email || !address || !phone || !dob || !password) {
                     auth.setStatus(el.createStatus, 'Please fill in all fields.', 'error');
@@ -69,6 +71,7 @@
                     return;
                 }
 
+                // अस्थायी रूपमा डेटा सेभ गरेर पपअप खोल्ने
                 auth.tempRegistration = { name, email, address, phone, dob, password };
                 
                 if (el.confirmPopup) {
@@ -90,6 +93,7 @@
             });
         }
 
+        // पपअपमा पासवर्ड कन्फर्म गरेर ब्याकइन्डमा पठाउने फंक्सन
         if (el.popupConfirmBtn) {
             el.popupConfirmBtn.addEventListener('click', async function() {
                 const confirmPass = el.popupPassword ? el.popupPassword.value.trim() : '';
@@ -118,7 +122,7 @@
                 };
 
                 try {
-                    const response = await fetch('https://rosan-xettri.onrender.com/api/register', {
+                    const response = await fetch('https://rx-backend-95ow.onrender.com/api/register', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(newUser)
@@ -137,6 +141,7 @@
                             if (el.loginPassword) el.loginPassword.value = '';
                             auth.setStatus(el.loginStatus, 'Account created! Please login.', 'success');
                             
+                            // फर्म खाली गर्ने
                             if (el.regName) el.regName.value = '';
                             if (el.regEmail) el.regEmail.value = '';
                             if (el.regAddress) el.regAddress.value = '';

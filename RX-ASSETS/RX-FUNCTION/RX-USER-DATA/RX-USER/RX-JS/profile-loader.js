@@ -1,4 +1,4 @@
-// ===== profile-loader.js ===== //
+// ===== profile-loader.js (Updated without citations) ===== //
 (function() {
     'use strict';
 
@@ -14,44 +14,53 @@
             return;
         }
 
-        console.log("Active user loaded:", currentUser.name || currentUser.email);
+        console.log("Active user loaded:", currentUser.user_name || currentUser.full_name || currentUser.email);
 
-        // ३. HTML का अनुसार Profile Data देखाउने
+        // ३. HTML का अनुसार Profile Data देखाउने (Supabase को कोलम नामहरूसँग म्याच गरिएको)
+        const displayName = currentUser.full_name || currentUser.user_name || 'User';
+        const displayEmail = currentUser.email || '-';
+        const displayPhone = currentUser.phone || '-';
+        const displayAddress = currentUser.address || '-';
+        const displayRole = currentUser.account_type || 'Member';
+        const displayId = currentUser.id || '-';
+        const displayDob = currentUser.dateofbirth || currentUser.dob || '-';
+
         if (document.getElementById("profile-fullname")) {
-            document.getElementById("profile-fullname").innerText = currentUser.name || 'User';
+            document.getElementById("profile-fullname").innerText = displayName;
         }
         if (document.getElementById("profile-username")) {
-            document.getElementById("profile-username").innerText = currentUser.name || '-';
+            document.getElementById("profile-username").innerText = displayName;
         }
         if (document.getElementById("dropdown-name")) {
-            document.getElementById("dropdown-name").innerText = currentUser.name || '-';
+            document.getElementById("dropdown-name").innerText = displayName;
         }
         if (document.getElementById("username")) {
-            document.getElementById("username").innerText = currentUser.name || '-';
+            document.getElementById("username").innerText = displayName;
         }
         if (document.getElementById("dropdown-email")) {
-            document.getElementById("dropdown-email").innerText = currentUser.email || '-';
+            document.getElementById("dropdown-email").innerText = displayEmail;
         }
         if (document.getElementById("dropdown-phone")) {
-            document.getElementById("dropdown-phone").innerText = currentUser.phone || '-';
+            document.getElementById("dropdown-phone").innerText = displayPhone;
         }
         if (document.getElementById("dropdown-address")) {
-            document.getElementById("dropdown-address").innerText = currentUser.address || '-';
+            document.getElementById("dropdown-address").innerText = displayAddress;
         }
         if (document.getElementById("dropdown-account-type")) {
-            document.getElementById("dropdown-account-type").innerText = currentUser.role || 'Member';
+            document.getElementById("dropdown-account-type").innerText = displayRole;
         }
         if (document.getElementById("dropdown-user-id")) {
-            document.getElementById("dropdown-user-id").innerText = currentUser.id || '-';
+            document.getElementById("dropdown-user-id").innerText = displayId;
         }
         if (document.getElementById("detailDOB")) {
-            document.getElementById("detailDOB").innerText = currentUser.dob || '-';
+            document.getElementById("detailDOB").innerText = displayDob;
         }
 
-        // सर्भर वा सेसनमा भएको प्रोफाइल पिक्चर लोड गर्ने (Supabase को avatar_url बाट)
+        // सर्भर वा सेसनमा भएको प्रोफाइल पिक्चर लोड गर्ने (Supabase को image बाट)
         const profileImgElement = document.getElementById("profile-img");
-        if (currentUser.avatar_url && profileImgElement) {
-            profileImgElement.src = currentUser.avatar_url;
+        const userImage = currentUser.image || currentUser.avatar_url;
+        if (userImage && profileImgElement) {
+            profileImgElement.src = userImage;
         }
 
         // ४. Image Upload & Cropper Logic
@@ -73,7 +82,6 @@
                 if (files && files.length > 0) {
                     const file = files[0];
 
-                    // फाइल साइज २ MB भन्दा बढी भए नभएको जाँच गर्ने
                     if (file.size > 2 * 1024 * 1024) {
                         alert("File size exceeds 2MB! Please select an image smaller than 2MB.");
                         imageInput.value = "";
@@ -88,7 +96,6 @@
                         if (cropper) {
                             cropper.destroy();
                         }
-                        // Cropper इनिसिएट गर्ने (Square ratio मा)
                         cropper = new Cropper(imageToCrop, {
                             aspectRatio: 1,
                             viewMode: 1,
@@ -111,14 +118,12 @@
                     if (canvas) {
                         const croppedImageUrl = canvas.toDataURL("image/jpeg");
                         
-                        // युजरलाई देखाउनको लागि तत्काल इमेज चेन्ज गर्ने
                         if (profileImgElement) {
                             profileImgElement.src = croppedImageUrl;
                         }
 
-                        // अब Render सर्भर मार्फत Supabase मा इमेज पठाएर सेभ गर्ने
                         try {
-                            const response = await fetch('https://rosan-xettri.onrender.com/api/update-avatar', {
+                            const response = await fetch('https://rx-backend-95ow.onrender.com/api/update-avatar', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({
@@ -130,8 +135,7 @@
                             const result = await response.json();
 
                             if (response.ok) {
-                                // सेसन डेटा अपडेट गर्ने
-                                currentUser.avatar_url = croppedImageUrl;
+                                currentUser.image = croppedImageUrl;
                                 sessionStorage.setItem("rxSession", JSON.stringify(currentUser));
                                 alert("Profile picture updated and saved to server successfully!");
                             } else {
@@ -142,7 +146,6 @@
                             alert("Server Connection Failed while saving avatar!");
                         }
 
-                        // मोडल बन्द गर्ने
                         cropModal.style.display = "none";
                         cropper.destroy();
                         imageInput.value = "";

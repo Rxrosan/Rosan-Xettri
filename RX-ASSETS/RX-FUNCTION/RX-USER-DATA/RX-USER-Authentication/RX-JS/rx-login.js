@@ -23,7 +23,7 @@
             }
 
             try {
-                const response = await fetch('https://rosan-xettri.onrender.com/api/login', {
+               const response = await fetch('https://rx-backend-95ow.onrender.com/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })

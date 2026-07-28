@@ -1,19 +1,12 @@
-// ===== rx-core.js ===== //
+// ===== rx-core.js (Fully Corrected & Aligned) ===== //
 (function() {
     'use strict';
 
     const core = {
-        generatedOtp: '',
-        otpTimerInterval: null,
-        otpRemainingSeconds: 0,
-        otpStartTimestamp: null,
-        otpTotalDuration: 60,
         currentUser: null,
         tempRegistration: null,
         resetIdentifier: '',
-        isOtpVerified: false,
         statusTimeout: null,
-        isOtpSending: false,
 
         elements: {
             loginSection: document.getElementById('loginSection'),
@@ -31,12 +24,13 @@
             regPassword: document.getElementById('regPassword'),
             createAccountBtn: document.getElementById('createAccountBtn'),
             createStatus: document.getElementById('createStatus'),
-            resetEmail: document.getElementById('resetEmail'),
-            resetOtp: document.getElementById('resetOtp'),
-            sendOtpBtn: document.getElementById('sendOtpBtn'),
+            
+            // HTML सँग मिल्ने गरी सही IDs हरू राखिएको
+            resetIdentifier: document.getElementById('resetIdentifier'),
+            resetNickname: document.getElementById('resetNickname'),
+            verifyDOB: document.getElementById('verifyDOB'),
             resetNewPassword: document.getElementById('resetNewPassword'),
-            resetConfirmPassword: document.getElementById('resetConfirmPassword'),
-            resetPasswordBtn: document.getElementById('resetPasswordBtn'),
+            submitNewPasswordBtn: document.getElementById('submitNewPasswordBtn'),
             resetStatus: document.getElementById('resetStatus'),
             passwordSection: document.getElementById('passwordSection'),
             confirmPopup: document.getElementById('confirmPopup'), 
@@ -60,19 +54,11 @@
                 regPhone: el.regPhone ? el.regPhone.value : '',
                 regDOB: el.regDOB ? el.regDOB.value : '', 
                 regPassword: el.regPassword ? el.regPassword.value : '',
-                resetEmail: el.resetEmail ? el.resetEmail.value : '',
-                resetOtp: el.resetOtp ? el.resetOtp.value : '',
+                resetIdentifier: el.resetIdentifier ? el.resetIdentifier.value : '',
                 resetNewPassword: el.resetNewPassword ? el.resetNewPassword.value : '',
-                resetConfirmPassword: el.resetConfirmPassword ? el.resetConfirmPassword.value : '',
                 popupPassword: el.popupPassword ? el.popupPassword.value : '', 
                 isPopupActive: isPopupOpen, 
                 tempRegistration: core.tempRegistration, 
-                isOtpVerified: core.isOtpVerified,
-                resetIdentifier: core.resetIdentifier,
-                generatedOtp: core.generatedOtp,
-                otpRemainingSeconds: core.otpRemainingSeconds,
-                otpStartTimestamp: core.otpStartTimestamp,
-                otpTotalDuration: core.otpTotalDuration,
                 timestamp: Date.now()
             };
             sessionStorage.setItem('rxPageState', JSON.stringify(state));
@@ -90,89 +76,6 @@
             return 'loginSection';
         },
 
-        restorePageState: function() {
-            const savedState = sessionStorage.getItem('rxPageState');
-            if (!savedState) return null;
-
-            try {
-                const state = JSON.parse(savedState);
-                if (Date.now() - state.timestamp > 1800000) {
-                    sessionStorage.removeItem('rxPageState');
-                    return null;
-                }
-
-                const el = core.elements;
-                if (el.loginEmail && state.loginEmail !== undefined) el.loginEmail.value = state.loginEmail;
-                if (el.loginPassword && state.loginPassword !== undefined) el.loginPassword.value = state.loginPassword;
-                if (el.regName && state.regName !== undefined) el.regName.value = state.regName;
-                if (el.regEmail && state.regEmail !== undefined) el.regEmail.value = state.regEmail;
-                if (el.regAddress && state.regAddress !== undefined) el.regAddress.value = state.regAddress;
-                if (el.regPhone && state.regPhone !== undefined) el.regPhone.value = state.regPhone;
-                if (el.regDOB && state.regDOB !== undefined) el.regDOB.value = state.regDOB; 
-                if (el.regPassword && state.regPassword !== undefined) el.regPassword.value = state.regPassword;
-                if (el.resetEmail && state.resetEmail !== undefined) el.resetEmail.value = state.resetEmail;
-                if (el.resetOtp && state.resetOtp !== undefined) el.resetOtp.value = state.resetOtp;
-                if (el.resetNewPassword && state.resetNewPassword !== undefined) el.resetNewPassword.value = state.resetNewPassword;
-                if (el.resetConfirmPassword && state.resetConfirmPassword !== undefined) el.resetConfirmPassword.value = state.resetConfirmPassword;
-                if (el.popupPassword && state.popupPassword !== undefined) el.popupPassword.value = state.popupPassword;
-
-                if (state.tempRegistration) core.tempRegistration = state.tempRegistration; 
-
-                if (state.isPopupActive && el.confirmPopup) {
-                    el.confirmPopup.classList.add('active');
-                    document.body.classList.add('no-scroll');
-                }
-
-                if (state.isOtpVerified !== undefined) core.isOtpVerified = state.isOtpVerified;
-                if (state.resetIdentifier !== undefined) core.resetIdentifier = state.resetIdentifier;
-                if (state.generatedOtp !== undefined) core.generatedOtp = state.generatedOtp;
-                if (state.otpTotalDuration !== undefined) core.otpTotalDuration = state.otpTotalDuration;
-                
-                if (window._rxForgot && typeof window._rxForgot.stopOtpTimer === 'function') {
-                    window._rxForgot.stopOtpTimer();
-                }
-                
-                if (state.otpStartTimestamp && !core.isOtpVerified) {
-                    const elapsedSeconds = Math.floor((Date.now() - state.otpStartTimestamp) / 1000);
-                    const remaining = Math.max(0, state.otpTotalDuration - elapsedSeconds);
-                    
-                    if (remaining > 0 && window._rxForgot) {
-                        core.otpStartTimestamp = state.otpStartTimestamp;
-                        if (el.sendOtpBtn && !core.isOtpVerified) {
-                            el.sendOtpBtn.disabled = true;
-                            el.sendOtpBtn.textContent = 'WAIT ' + remaining + 's';
-                            el.sendOtpBtn.className = 'login-btn cooldown';
-                        }
-                        window._rxForgot.startOtpCountdownFrom(remaining);
-                    } else {
-                        core.otpRemainingSeconds = 0;
-                        core.otpStartTimestamp = null;
-                        if (window._rxForgot) window._rxForgot.resetOtpButtonToResend();
-                    }
-                }
-
-                if (core.isOtpVerified) {
-                    if (el.passwordSection) el.passwordSection.classList.add('active');
-                    if (el.resetOtp) el.resetOtp.disabled = true;
-                    if (el.sendOtpBtn) {
-                        el.sendOtpBtn.disabled = true;
-                        el.sendOtpBtn.textContent = ' VERIFIED';
-                        el.sendOtpBtn.className = 'login-btn verified';
-                    }
-                }
-
-                if (!state.isPopupActive) core.clearAllStatus();
-                setTimeout(core.syncPasswordToggles, 100);
-
-                core.savePageState(); 
-                return state.currentPage;
-
-            } catch (e) {
-                sessionStorage.removeItem('rxPageState');
-                return null;
-            }
-        },
-
         showPage: function(pageId, saveState = true) {
             const el = core.elements;
             [el.loginSection, el.createSection, el.forgotSection].forEach(item => {
@@ -186,6 +89,15 @@
             }
             
             if (saveState) core.savePageState();
+        },
+
+        // पपअप बन्द गर्न र स्क्रोल सक्षम पार्न नयाँ थपिएको फंक्सन
+        closeConfirmPopup: function() {
+            const el = core.elements;
+            if (el.confirmPopup) {
+                el.confirmPopup.classList.remove('active');
+            }
+            document.body.classList.remove('no-scroll');
         },
 
         clearAllStatus: function() {
@@ -260,21 +172,6 @@
                     else if (input.type === 'password' && icon) icon.className = 'fas fa-eye';
                 }
             });
-        },
-
-        closeConfirmPopup: function() {
-            const popup = core.elements.confirmPopup;
-            if (popup) {
-                popup.classList.remove('active');
-                document.body.classList.remove('no-scroll');
-                core.tempRegistration = null; 
-                if (core.elements.popupPassword) core.elements.popupPassword.value = '';
-                if (core.elements.popupStatus) {
-                    core.elements.popupStatus.style.display = 'none';
-                    core.elements.popupStatus.textContent = '';
-                }
-                core.savePageState();
-            }
         }
     };
 
@@ -294,20 +191,6 @@
         if (gotoForgotFromCreate) gotoForgotFromCreate.addEventListener('click', e => { e.preventDefault(); core.showPage('forgotSection'); if(window._rxForgot) window._rxForgot.resetForgotForm(); });
         if (gotoLoginFromForgot) gotoLoginFromForgot.addEventListener('click', e => { e.preventDefault(); core.showPage('loginSection'); });
         if (gotoCreateFromForgot) gotoCreateFromForgot.addEventListener('click', e => { e.preventDefault(); core.showPage('createSection'); });
-
-        const inputsToWatch = [
-            core.elements.loginEmail, core.elements.loginPassword,
-            core.elements.regName, core.elements.regEmail, core.elements.regAddress, core.elements.regPhone, core.elements.regDOB, core.elements.regPassword,
-            core.elements.resetEmail, core.elements.resetOtp, core.elements.resetNewPassword, core.elements.resetConfirmPassword,
-            core.elements.popupPassword
-        ];
-        inputsToWatch.forEach(input => {
-            if (input) input.addEventListener('input', () => core.savePageState());
-        });
-
-        if (core.elements.popupClose) {
-            core.elements.popupClose.addEventListener('click', e => { e.preventDefault(); core.closeConfirmPopup(); });
-        }
 
         core.initPasswordToggles();
     });

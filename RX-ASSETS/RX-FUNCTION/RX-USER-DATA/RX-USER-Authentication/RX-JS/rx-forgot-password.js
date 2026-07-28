@@ -1,4 +1,4 @@
-// ===== rx-forgot-password.js ===== //
+// ===== rx-forgot-password.js (Secure Backend Hashing Version) ===== //
 (function() {
     'use strict';
 
@@ -40,8 +40,7 @@
         const findAccountBtn = document.getElementById('findAccountBtn');
 
         const accountVerifiedSection = document.getElementById('accountVerifiedSection');
-        const userAvatarImg = document.getElementById('userAvatarImg'); // Profile Image Element
-        const userProfileLink = document.getElementById('userProfileLink');
+        const userAvatarImg = document.getElementById('userAvatarImg'); 
         const foundUserName = document.getElementById('foundUserName');
         const verifyDOB = document.getElementById('verifyDOB');
         const processDobBtn = document.getElementById('processDobBtn');
@@ -52,7 +51,7 @@
 
         const confirmPopup = document.getElementById('confirmPopup');
         const popupPassword = document.getElementById('popupPassword');
-        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        const popupConfirmBtn = document.getElementById('popupConfirmBtn');
         const popupStatus = document.getElementById('popupStatus');
         const popupClose = document.getElementById('popupClose');
         const resetStatus = document.getElementById('resetStatus');
@@ -77,11 +76,11 @@
             }
         };
 
-        // 1. Find Account Button Click (Email/Phone + Name Match)
+        // 1. Find Account Button Click (Strict 100% Email Match & Strict 100% Exact Name Match)
         if (findAccountBtn) {
             findAccountBtn.addEventListener('click', async function() {
                 const identifier = resetIdentifier.value.trim();
-                const inputName = resetNickname.value.trim();
+                const inputName = resetNickname ? resetNickname.value.trim() : '';
 
                 if (!identifier || !inputName) {
                     auth.setStatus(resetStatus, 'Please enter email/phone and your name.', 'error');
@@ -98,8 +97,10 @@
                     auth.setStatus(resetStatus, 'Searching account...', 'info');
 
                     let query = client.from('users').select('*');
+
+                    // इमेल वा फोन १००% ठ्याक्कै (Strict Match) खोज्ने
                     if (identifier.includes('@')) {
-                        query = query.ilike('email', identifier);
+                        query = query.eq('email', identifier);
                     } else {
                         query = query.eq('phone', identifier);
                     }
@@ -107,17 +108,24 @@
                     const { data, error } = await query;
 
                     if (error || !data || data.length === 0) {
-                        auth.setStatus(resetStatus, 'No account found with this information.', 'error');
+                        auth.setStatus(resetStatus, 'No account found with this email/phone.', 'error');
                         return;
                     }
 
                     const user = data[0];
-                    
-                    if (!user.name || user.name.trim().toLowerCase() !== inputName.toLowerCase()) {
-                        auth.setStatus(resetStatus, 'Name does not match with this account.', 'error');
+                    // डेटाबेसमा भएको सही र वास्तविक नाम तानेको
+                    const dbName = user.full_name || user.name || user.user_name || '';
+
+                    // नाम पनि १००% (Exact Match) हुनुपर्ने
+                    const cleanDb = dbName.trim().toLowerCase();
+                    const cleanInput = inputName.trim().toLowerCase();
+
+                    if (cleanDb !== cleanInput) {
+                        auth.setStatus(resetStatus, 'Name does not match 100% with this account.', 'error');
                         return;
                     }
 
+                    // इमेल र नाम दुवै १००% म्याच भएपछि मात्र यो युजर प्रमाणित हुनेछ
                     verifiedUserData = user;
                     auth.setStatus(resetStatus, 'Account found successfully!', 'success');
 
@@ -125,21 +133,20 @@
                         if (findAccountSection) findAccountSection.classList.add('page-hidden');
                         if (accountVerifiedSection) accountVerifiedSection.classList.remove('page-hidden');
                         
-                        // Show Profile Image if avatar_url exists
                         if (userAvatarImg) {
-                            if (user.avatar_url) {
-                                userAvatarImg.src = user.avatar_url;
+                            if (user.image) {
+                                userAvatarImg.src = user.image;
                                 userAvatarImg.style.display = 'block';
                             } else {
                                 userAvatarImg.style.display = 'none';
                             }
                         }
 
-                        if (foundUserName) foundUserName.value = user.name || '';
-                        if (userProfileLink) {
-                            userProfileLink.href = `User-profile.html?id=${user.id || ''}`;
-                            userProfileLink.textContent = `Profile Link: ${user.name}`;
+                        // **यहाँ अब ठीक त्यही इमेलवालाको वास्तविक नाम मात्र देखिनेछ**
+                        if (foundUserName) {
+                            foundUserName.value = dbName; 
                         }
+
                         resetStatus.style.display = 'none';
                     }, 800);
 
@@ -153,13 +160,22 @@
         // 2. Process DOB Button Click
         if (processDobBtn) {
             processDobBtn.addEventListener('click', function() {
-                const inputDob = verifyDOB.value;
+                const inputDob = verifyDOB.value ? verifyDOB.value.trim() : '';
                 if (!inputDob) {
                     auth.setStatus(resetStatus, 'Please select your Date of Birth.', 'error');
                     return;
                 }
 
-                if (!verifiedUserData || verifiedUserData.dob !== inputDob) {
+                if (!verifiedUserData) {
+                    auth.setStatus(resetStatus, 'Session expired. Please search account again.', 'error');
+                    return;
+                }
+
+                const dbDobValue = verifiedUserData.dateofbirth || verifiedUserData.dob || '';
+                const dbDob = String(dbDobValue).trim();
+                const userDob = String(inputDob).trim();
+
+                if (dbDob !== userDob) {
                     auth.setStatus(resetStatus, 'Date of Birth does not match.', 'error');
                     return;
                 }
@@ -201,9 +217,9 @@
             });
         }
 
-        // 4. Change Password inside Popup (Final DB Update)
-        if (changePasswordBtn) {
-            changePasswordBtn.addEventListener('click', async function() {
+        // 4. Change Password inside Popup (Backend API मार्फत ठ्याक्कै त्यही युजरको मात्र पासवर्ड अपडेट गर्ने)
+        if (popupConfirmBtn) {
+            popupConfirmBtn.addEventListener('click', async function() {
                 const confirmPass = popupPassword.value.trim();
                 const newPass = resetNewPassword.value.trim();
 
@@ -216,17 +232,27 @@
                     return;
                 }
 
+                if (!verifiedUserData) {
+                    auth.setStatus(popupStatus, 'Session expired. Please start over.', 'error');
+                    return;
+                }
+
                 try {
-                    const client = getSupabaseClient();
-                    const identifierKey = verifiedUserData.email ? 'email' : 'phone';
+                    // ठ्याक्कै प्रमाणित भएको युजरको इमेल वा फोन मात्र ब्याकइन्डमा पठाउने
                     const identifierVal = verifiedUserData.email || verifiedUserData.phone;
 
-                    const { error } = await client
-                        .from('users')
-                        .update({ password: newPass })
-                        .eq(identifierKey, identifierVal);
+                    const response = await fetch('https://rx-backend-95ow.onrender.com/api/reset-password', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            identifier: identifierVal, 
+                            newPassword: newPass 
+                        })
+                    });
 
-                    if (!error) {
+                    const result = await response.json();
+
+                    if (response.ok) {
                         auth.setStatus(popupStatus, 'Password changed successfully!', 'success');
                         setTimeout(() => {
                             confirmPopup.classList.remove('active');
@@ -236,9 +262,10 @@
                             auth.setStatus(auth.elements.loginStatus, 'Password reset! Please login.', 'success');
                         }, 1500);
                     } else {
-                        auth.setStatus(popupStatus, error.message || 'Update failed.', 'error');
+                        auth.setStatus(popupStatus, result.error || 'Password update failed.', 'error');
                     }
                 } catch (err) {
+                    console.error("Error:", err);
                     auth.setStatus(popupStatus, 'Server connection error.', 'error');
                 }
             });
