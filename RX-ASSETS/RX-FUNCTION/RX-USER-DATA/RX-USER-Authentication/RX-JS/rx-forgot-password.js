@@ -1,9 +1,10 @@
-// ===== rx-forgot-password.js (Secure Backend Hashing Version) ===== //
+// ===== rx-forgot-password.js (Fully Corrected & Aligned) ===== //
 (function() {
     'use strict';
 
-    const SUPABASE_URL = "https://xorxoovezlgqcaeyqpdp.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_5_yPXUnjJVe3dy13X5nkXQ_afJ7rCvM";
+    // **सुझाव:** यो URL र Key तपाईंको Supabase ड्यासबोर्ड (Project Settings -> API) बाट ल्याइएको हो।
+    const SUPABASE_URL = "https://svwwbxbyutiieflxnoeb.supabase.co"; 
+    const SUPABASE_ANON_KEY = "sb_publishable_OBPxBVADXRdtjYEC_ZFcEw_95NR5UXA"; // यहाँ आफ्नो सही anon key राख्नुहोला
 
     function loadSupabaseScript(callback) {
         if (window.supabase && typeof window.supabase.createClient === 'function') {
@@ -76,10 +77,10 @@
             }
         };
 
-        // 1. Find Account Button Click (Strict 100% Email Match & Strict 100% Exact Name Match)
+        // 1. Find Account Button Click (Fixed with lowercase and correct database connection)
         if (findAccountBtn) {
             findAccountBtn.addEventListener('click', async function() {
-                const identifier = resetIdentifier.value.trim();
+                const identifier = resetIdentifier.value.trim().toLowerCase();
                 const inputName = resetNickname ? resetNickname.value.trim() : '';
 
                 if (!identifier || !inputName) {
@@ -98,7 +99,6 @@
 
                     let query = client.from('users').select('*');
 
-                    // इमेल वा फोन १००% ठ्याक्कै (Strict Match) खोज्ने
                     if (identifier.includes('@')) {
                         query = query.eq('email', identifier);
                     } else {
@@ -113,10 +113,8 @@
                     }
 
                     const user = data[0];
-                    // डेटाबेसमा भएको सही र वास्तविक नाम तानेको
                     const dbName = user.full_name || user.name || user.user_name || '';
 
-                    // नाम पनि १००% (Exact Match) हुनुपर्ने
                     const cleanDb = dbName.trim().toLowerCase();
                     const cleanInput = inputName.trim().toLowerCase();
 
@@ -125,7 +123,6 @@
                         return;
                     }
 
-                    // इमेल र नाम दुवै १००% म्याच भएपछि मात्र यो युजर प्रमाणित हुनेछ
                     verifiedUserData = user;
                     auth.setStatus(resetStatus, 'Account found successfully!', 'success');
 
@@ -142,7 +139,6 @@
                             }
                         }
 
-                        // **यहाँ अब ठीक त्यही इमेलवालाको वास्तविक नाम मात्र देखिनेछ**
                         if (foundUserName) {
                             foundUserName.value = dbName; 
                         }
@@ -217,7 +213,7 @@
             });
         }
 
-        // 4. Change Password inside Popup (Backend API मार्फत ठ्याक्कै त्यही युजरको मात्र पासवर्ड अपडेट गर्ने)
+        // 4. Change Password inside Popup
         if (popupConfirmBtn) {
             popupConfirmBtn.addEventListener('click', async function() {
                 const confirmPass = popupPassword.value.trim();
@@ -238,7 +234,6 @@
                 }
 
                 try {
-                    // ठ्याक्कै प्रमाणित भएको युजरको इमेल वा फोन मात्र ब्याकइन्डमा पठाउने
                     const identifierVal = verifiedUserData.email || verifiedUserData.phone;
 
                     const response = await fetch('https://rx-backend-95ow.onrender.com/api/reset-password', {
