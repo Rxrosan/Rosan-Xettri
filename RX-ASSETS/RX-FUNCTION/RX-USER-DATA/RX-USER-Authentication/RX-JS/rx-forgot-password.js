@@ -1,4 +1,4 @@
-// ===== rx-forgot-password.js (Fixed Async Flow) ===== //
+// ===== rx-forgot-password.js (Fixed Async Flow & Event Listeners) ===== //
 (function() {
     'use strict';
 
@@ -78,7 +78,10 @@
 
         // 1. Find Account Button Click
         if (findAccountBtn) {
-            findAccountBtn.addEventListener('click', async function() {
+            const newFindBtn = findAccountBtn.cloneNode(true);
+            findAccountBtn.parentNode.replaceChild(newFindBtn, findAccountBtn);
+
+            newFindBtn.addEventListener('click', async function() {
                 const identifier = resetIdentifier.value.trim().toLowerCase();
                 const inputName = resetNickname ? resetNickname.value.trim() : '';
 
@@ -152,7 +155,10 @@
 
         // 2. Process DOB Button Click
         if (processDobBtn) {
-            processDobBtn.addEventListener('click', function() {
+            const newDobBtn = processDobBtn.cloneNode(true);
+            processDobBtn.parentNode.replaceChild(newDobBtn, processDobBtn);
+
+            newDobBtn.addEventListener('click', function() {
                 const inputDob = verifyDOB.value ? verifyDOB.value.trim() : '';
                 if (!inputDob) {
                     auth.setStatus(resetStatus, 'Please select your Date of Birth.', 'error');
@@ -183,7 +189,10 @@
 
         // 3. Submit New Password -> Open Popup
         if (submitNewPasswordBtn) {
-            submitNewPasswordBtn.addEventListener('click', function() {
+            const newSubmitPassBtn = submitNewPasswordBtn.cloneNode(true);
+            submitNewPasswordBtn.parentNode.replaceChild(newSubmitPassBtn, submitNewPasswordBtn);
+
+            newSubmitPassBtn.addEventListener('click', function() {
                 const newPass = resetNewPassword.value.trim();
                 if (!newPass || newPass.length < 6) {
                     auth.setStatus(resetStatus, 'Password must be at least 6 characters.', 'error');
@@ -201,7 +210,10 @@
         }
 
         if (popupClose) {
-            popupClose.addEventListener('click', function() {
+            const newPopupClose = popupClose.cloneNode(true);
+            popupClose.parentNode.replaceChild(newPopupClose, popupClose);
+
+            newPopupClose.addEventListener('click', function() {
                 confirmPopup.classList.remove('active');
                 document.body.classList.remove('no-scroll');
             });
@@ -209,9 +221,16 @@
 
         // 4. Confirm Password inside Popup & Send to Backend
         if (popupConfirmBtn) {
-            popupConfirmBtn.addEventListener('click', async function() {
-                const confirmPass = popupPassword.value.trim();
-                const newPass = resetNewPassword.value.trim();
+            const newPopupBtn = popupConfirmBtn.cloneNode(true);
+            popupConfirmBtn.parentNode.replaceChild(newPopupBtn, popupConfirmBtn);
+
+            let isSubmitting = false;
+
+            newPopupBtn.addEventListener('click', async function() {
+                if (isSubmitting) return;
+
+                const confirmPass = popupPassword ? popupPassword.value.trim() : '';
+                const newPass = resetNewPassword ? resetNewPassword.value.trim() : '';
 
                 if (!confirmPass) {
                     auth.setStatus(popupStatus, 'Please re-enter your password.', 'error');
@@ -226,6 +245,8 @@
                     auth.setStatus(popupStatus, 'Session expired. Please start over.', 'error');
                     return;
                 }
+
+                isSubmitting = true;
 
                 try {
                     auth.setStatus(popupStatus, 'Processing data...', 'info');
@@ -250,15 +271,24 @@
                             auth.showPage('loginSection');
                             window._rxForgot.resetForgotForm();
                             auth.setStatus(auth.elements.loginStatus, 'Password reset! Please login.', 'success');
+                            isSubmitting = false;
                         }, 1500);
                     } else {
+                        isSubmitting = false;
                         auth.setStatus(popupStatus, result.error || 'Password update failed.', 'error');
                     }
                 } catch (err) {
                     console.error("Error:", err);
+                    isSubmitting = false;
                     auth.setStatus(popupStatus, 'Server connection error.', 'error');
                 }
             });
+
+            if (popupPassword) {
+                popupPassword.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') newPopupBtn.click();
+                });
+            }
         }
     });
 })();

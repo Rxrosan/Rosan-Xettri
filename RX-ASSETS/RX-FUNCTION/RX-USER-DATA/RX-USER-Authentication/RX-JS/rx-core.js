@@ -1,12 +1,17 @@
-// ===== rx-core.js (Fully Corrected & Aligned) ===== //
+// ===== rx-core.js (Complete Rewrite - No Duplicate Issues) ===== //
 (function() {
     'use strict';
+
+    // Prevent multiple initialization
+    if (window._rxAuthInitialized) return;
+    window._rxAuthInitialized = true;
 
     const core = {
         currentUser: null,
         tempRegistration: null,
         resetIdentifier: '',
         statusTimeout: null,
+        _initialized: false,
 
         elements: {
             loginSection: document.getElementById('loginSection'),
@@ -24,8 +29,6 @@
             regPassword: document.getElementById('regPassword'),
             createAccountBtn: document.getElementById('createAccountBtn'),
             createStatus: document.getElementById('createStatus'),
-            
-            // HTML सँग मिल्ने गरी सही IDs हरू राखिएको
             resetIdentifier: document.getElementById('resetIdentifier'),
             resetNickname: document.getElementById('resetNickname'),
             verifyDOB: document.getElementById('verifyDOB'),
@@ -41,11 +44,11 @@
         },
 
         savePageState: function() {
-            const el = core.elements;
+            const el = this.elements;
             const isPopupOpen = el.confirmPopup ? el.confirmPopup.classList.contains('active') : false;
 
             const state = {
-                currentPage: core.getCurrentPage(),
+                currentPage: this.getCurrentPage(),
                 loginEmail: el.loginEmail ? el.loginEmail.value : '',
                 loginPassword: el.loginPassword ? el.loginPassword.value : '',
                 regName: el.regName ? el.regName.value : '',
@@ -58,14 +61,14 @@
                 resetNewPassword: el.resetNewPassword ? el.resetNewPassword.value : '',
                 popupPassword: el.popupPassword ? el.popupPassword.value : '', 
                 isPopupActive: isPopupOpen, 
-                tempRegistration: core.tempRegistration, 
+                tempRegistration: this.tempRegistration, 
                 timestamp: Date.now()
             };
             sessionStorage.setItem('rxPageState', JSON.stringify(state));
         },
 
         getCurrentPage: function() {
-            const el = core.elements;
+            const el = this.elements;
             if (el.loginSection && !el.loginSection.classList.contains('page-hidden')) {
                 return 'loginSection';
             } else if (el.createSection && !el.createSection.classList.contains('page-hidden')) {
@@ -77,7 +80,7 @@
         },
 
         showPage: function(pageId, saveState = true) {
-            const el = core.elements;
+            const el = this.elements;
             [el.loginSection, el.createSection, el.forgotSection].forEach(item => {
                 if (item) item.classList.add('page-hidden');
             });
@@ -85,15 +88,14 @@
             if (target) target.classList.remove('page-hidden');
             
             if (!el.confirmPopup || !el.confirmPopup.classList.contains('active')) {
-                core.clearAllStatus();
+                this.clearAllStatus();
             }
             
-            if (saveState) core.savePageState();
+            if (saveState) this.savePageState();
         },
 
-        // पपअप बन्द गर्न र स्क्रोल सक्षम पार्न नयाँ थपिएको फंक्सन
         closeConfirmPopup: function() {
-            const el = core.elements;
+            const el = this.elements;
             if (el.confirmPopup) {
                 el.confirmPopup.classList.remove('active');
             }
@@ -101,7 +103,7 @@
         },
 
         clearAllStatus: function() {
-            const el = core.elements;
+            const el = this.elements;
             [el.loginStatus, el.createStatus, el.resetStatus, el.popupStatus].forEach(item => {
                 if (item) {
                     item.className = 'login-status';
@@ -109,23 +111,23 @@
                     item.textContent = '';
                 }
             });
-            if (core.statusTimeout) {
-                clearTimeout(core.statusTimeout);
-                core.statusTimeout = null;
+            if (this.statusTimeout) {
+                clearTimeout(this.statusTimeout);
+                this.statusTimeout = null;
             }
         },
 
         setStatus: function(element, message, type) {
             if (!element) return;
-            if (core.statusTimeout) clearTimeout(core.statusTimeout);
+            if (this.statusTimeout) clearTimeout(this.statusTimeout);
             
             element.textContent = message;
             element.className = 'login-status ' + type;
             element.style.display = 'block';
             
-            core.savePageState();
+            this.savePageState();
             
-            core.statusTimeout = setTimeout(function() {
+            this.statusTimeout = setTimeout(function() {
                 element.className = 'login-status';
                 element.style.display = 'none';
                 element.textContent = '';
@@ -172,11 +174,30 @@
                     else if (input.type === 'password' && icon) icon.className = 'fas fa-eye';
                 }
             });
+        },
+
+        // Safe event listener attachment
+        safeAddListener: function(element, event, handler) {
+            if (!element) return;
+            // Remove any existing listener
+            element.removeEventListener(event, handler);
+            // Add new listener
+            element.addEventListener(event, handler);
+            return element;
+        },
+
+        // Clean all event listeners from a button (clone technique)
+        cleanButton: function(button) {
+            if (!button) return null;
+            const clone = button.cloneNode(true);
+            button.parentNode.replaceChild(clone, button);
+            return clone;
         }
     };
 
     window._rxAuth = core;
 
+    // Initialize navigation links
     document.addEventListener('DOMContentLoaded', function() {
         const gotoCreate = document.getElementById('gotoCreate');
         const gotoForgot = document.getElementById('gotoForgot');
@@ -193,5 +214,8 @@
         if (gotoCreateFromForgot) gotoCreateFromForgot.addEventListener('click', e => { e.preventDefault(); core.showPage('createSection'); });
 
         core.initPasswordToggles();
+        
+        // Update element references after clone operations
+        console.log('RX Core initialized successfully');
     });
 })();

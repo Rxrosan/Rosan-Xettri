@@ -1,6 +1,9 @@
-// ===== rx-login.js ===== //
+// ===== rx-login.js (Complete Rewrite) ===== //
 (function() {
     'use strict';
+
+    if (window._rxLoginInitialized) return;
+    window._rxLoginInitialized = true;
 
     document.addEventListener('DOMContentLoaded', function() {
         const auth = window._rxAuth;
@@ -8,7 +11,9 @@
 
         const el = auth.elements;
 
-        async function performLoginAction() {
+        async function performLoginAction(e) {
+            if (e) e.preventDefault();
+            
             const email = el.loginEmail.value.trim();
             const password = el.loginPassword.value.trim();
 
@@ -23,7 +28,7 @@
             }
 
             try {
-               const response = await fetch('https://rx-backend-95ow.onrender.com/api/login', {
+                const response = await fetch('https://rx-backend-95ow.onrender.com/api/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
@@ -44,12 +49,40 @@
                     auth.setStatus(el.loginStatus, result.error || 'Invalid email or password.', 'error');
                 }
             } catch (err) {
+                console.error('Login error:', err);
                 auth.setStatus(el.loginStatus, 'Server Connection Failed!', 'error');
             }
         }
 
-        if (el.loginBtn) el.loginBtn.addEventListener('click', performLoginAction);
-        if (el.loginPassword) el.loginPassword.addEventListener('keypress', e => { if (e.key === 'Enter') performLoginAction(); });
-        if (el.loginEmail) el.loginEmail.addEventListener('keypress', e => { if (e.key === 'Enter') performLoginAction(); });
+        // Login button
+        if (el.loginBtn) {
+            const cleanBtn = auth.cleanButton(el.loginBtn);
+            if (cleanBtn) {
+                el.loginBtn = cleanBtn;
+            }
+            el.loginBtn.addEventListener('click', performLoginAction);
+        }
+
+        // Enter key on password field
+        if (el.loginPassword) {
+            const cleanPass = el.loginPassword.cloneNode(true);
+            el.loginPassword.parentNode.replaceChild(cleanPass, el.loginPassword);
+            el.loginPassword = cleanPass;
+            el.loginPassword.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') performLoginAction(e);
+            });
+        }
+
+        // Enter key on email field
+        if (el.loginEmail) {
+            const cleanEmail = el.loginEmail.cloneNode(true);
+            el.loginEmail.parentNode.replaceChild(cleanEmail, el.loginEmail);
+            el.loginEmail = cleanEmail;
+            el.loginEmail.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') performLoginAction(e);
+            });
+        }
+
+        console.log('Login module initialized');
     });
 })();
