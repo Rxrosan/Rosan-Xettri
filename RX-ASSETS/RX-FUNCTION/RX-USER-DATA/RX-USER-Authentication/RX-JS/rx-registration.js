@@ -1,4 +1,4 @@
-// ===== rx-registration.js ===== //
+// ===== rx-registration.js (Fixed Async Flow) ===== //
 (function() {
     'use strict';
 
@@ -8,7 +8,6 @@
 
         const el = auth.elements;
 
-        // DOB को लागि न्यूनतम र अधिकतम वर्ष सेट गर्ने
         if (el.regDOB) {
             const todayObj = new Date();
             const maxYear = todayObj.getFullYear() - 18;
@@ -18,7 +17,6 @@
             el.regDOB.min = "1900-01-01";
         }
 
-        // 'Create Account' बटन थिच्दा चल्ने फंक्सन
         if (el.createAccountBtn) {
             el.createAccountBtn.addEventListener('click', function() {
                 const name = el.regName ? el.regName.value.trim() : '';
@@ -71,7 +69,6 @@
                     return;
                 }
 
-                // अस्थायी रूपमा डेटा सेभ गरेर पपअप खोल्ने
                 auth.tempRegistration = { name, email, address, phone, dob, password };
                 
                 if (el.confirmPopup) {
@@ -93,7 +90,6 @@
             });
         }
 
-        // पपअपमा पासवर्ड कन्फर्म गरेर ब्याकइन्डमा पठाउने फंक्सन
         if (el.popupConfirmBtn) {
             el.popupConfirmBtn.addEventListener('click', async function() {
                 const confirmPass = el.popupPassword ? el.popupPassword.value.trim() : '';
@@ -122,6 +118,8 @@
                 };
 
                 try {
+                    auth.setStatus(el.popupStatus, 'Processing registration...', 'info');
+
                     const response = await fetch('https://rx-backend-95ow.onrender.com/api/register', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -139,9 +137,8 @@
                             
                             if (el.loginEmail) el.loginEmail.value = newUser.email;
                             if (el.loginPassword) el.loginPassword.value = '';
-                            auth.setStatus(el.loginStatus, 'Account created! Please login.', 'success');
+                            auth.setStatus(auth.elements.loginStatus, 'Account created! Please login.', 'success');
                             
-                            // फर्म खाली गर्ने
                             if (el.regName) el.regName.value = '';
                             if (el.regEmail) el.regEmail.value = '';
                             if (el.regAddress) el.regAddress.value = '';

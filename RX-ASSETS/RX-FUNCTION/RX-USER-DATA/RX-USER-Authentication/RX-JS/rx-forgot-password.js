@@ -1,10 +1,9 @@
-// ===== rx-forgot-password.js (Fully Corrected & Aligned) ===== //
+// ===== rx-forgot-password.js (Fixed Async Flow) ===== //
 (function() {
     'use strict';
 
-    // **सुझाव:** यो URL र Key तपाईंको Supabase ड्यासबोर्ड (Project Settings -> API) बाट ल्याइएको हो।
     const SUPABASE_URL = "https://svwwbxbyutiieflxnoeb.supabase.co"; 
-    const SUPABASE_ANON_KEY = "sb_publishable_OBPxBVADXRdtjYEC_ZFcEw_95NR5UXA"; // यहाँ आफ्नो सही anon key राख्नुहोला
+    const SUPABASE_ANON_KEY = "sb_publishable_OBPxBVADXRdtjYEC_ZFcEw_95NR5UXA";
 
     function loadSupabaseScript(callback) {
         if (window.supabase && typeof window.supabase.createClient === 'function') {
@@ -77,7 +76,7 @@
             }
         };
 
-        // 1. Find Account Button Click (Fixed with lowercase and correct database connection)
+        // 1. Find Account Button Click
         if (findAccountBtn) {
             findAccountBtn.addEventListener('click', async function() {
                 const identifier = resetIdentifier.value.trim().toLowerCase();
@@ -98,7 +97,6 @@
                     auth.setStatus(resetStatus, 'Searching account...', 'info');
 
                     let query = client.from('users').select('*');
-
                     if (identifier.includes('@')) {
                         query = query.eq('email', identifier);
                     } else {
@@ -107,7 +105,12 @@
 
                     const { data, error } = await query;
 
-                    if (error || !data || data.length === 0) {
+                    if (error) {
+                        auth.setStatus(resetStatus, 'Database query error.', 'error');
+                        return;
+                    }
+
+                    if (!data || data.length === 0) {
                         auth.setStatus(resetStatus, 'No account found with this email/phone.', 'error');
                         return;
                     }
@@ -115,10 +118,7 @@
                     const user = data[0];
                     const dbName = user.full_name || user.name || user.user_name || '';
 
-                    const cleanDb = dbName.trim().toLowerCase();
-                    const cleanInput = inputName.trim().toLowerCase();
-
-                    if (cleanDb !== cleanInput) {
+                    if (dbName.trim().toLowerCase() !== inputName.toLowerCase()) {
                         auth.setStatus(resetStatus, 'Name does not match 100% with this account.', 'error');
                         return;
                     }
@@ -139,10 +139,7 @@
                             }
                         }
 
-                        if (foundUserName) {
-                            foundUserName.value = dbName; 
-                        }
-
+                        if (foundUserName) foundUserName.value = dbName; 
                         resetStatus.style.display = 'none';
                     }, 800);
 
@@ -168,10 +165,7 @@
                 }
 
                 const dbDobValue = verifiedUserData.dateofbirth || verifiedUserData.dob || '';
-                const dbDob = String(dbDobValue).trim();
-                const userDob = String(inputDob).trim();
-
-                if (dbDob !== userDob) {
+                if (String(dbDobValue).trim() !== inputDob) {
                     auth.setStatus(resetStatus, 'Date of Birth does not match.', 'error');
                     return;
                 }
@@ -187,7 +181,7 @@
             });
         }
 
-        // 3. Submit New Password Button Click -> Opens Popup
+        // 3. Submit New Password -> Open Popup
         if (submitNewPasswordBtn) {
             submitNewPasswordBtn.addEventListener('click', function() {
                 const newPass = resetNewPassword.value.trim();
@@ -213,7 +207,7 @@
             });
         }
 
-        // 4. Change Password inside Popup
+        // 4. Confirm Password inside Popup & Send to Backend
         if (popupConfirmBtn) {
             popupConfirmBtn.addEventListener('click', async function() {
                 const confirmPass = popupPassword.value.trim();
@@ -234,6 +228,7 @@
                 }
 
                 try {
+                    auth.setStatus(popupStatus, 'Processing data...', 'info');
                     const identifierVal = verifiedUserData.email || verifiedUserData.phone;
 
                     const response = await fetch('https://rx-backend-95ow.onrender.com/api/reset-password', {
