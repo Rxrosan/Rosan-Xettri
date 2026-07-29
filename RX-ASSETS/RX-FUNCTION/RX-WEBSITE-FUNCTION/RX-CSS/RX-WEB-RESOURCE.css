@@ -1,0 +1,874 @@
+:root {
+    --primary: #0a192f;
+    --primary-light: #5a75f1;
+    --secondary: #3f37c9;
+    --accent: #64ffda;
+    --accent-dark: #52d1b2;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --gray: #8892b0;
+    --light-gray: #e9ecef;
+    --success: #4cc9f0;
+    --warning: #f8961e;
+    --danger: #ef233c;
+    --border-radius: 8px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --transition: all 0.2s ease;
+}
+
+/* Side Panel User Profile - Keep existing */
+.panel-user-profile {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.panel-profile-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.panel-user-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--accent);
+}
+
+.panel-user-info h4 {
+    margin: 0 0 0.25rem 0;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.panel-user-info p {
+    margin: 0 0 0.5rem 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+}
+
+.panel-user-role {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: var(--accent);
+    color: var(--primary);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Simple Login Screen - 6x4 inch card */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 20vh;
+    padding: 1rem;
+    background: transparent;
+}
+
+.login-box {
+    background: white;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    width: 5in; /* 6 inches wide */
+    min-height: 3in; /* 4 inches tall */
+    max-width: 100%;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Error/Sorry Message */
+.login-error-icon {
+    font-size: 3rem;
+    color: #ff6b6b;
+    margin-bottom: 1rem;
+}
+
+.login-title {
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.login-message {
+    color: #666;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+    font-size: 1rem;
+    max-width: 80%;
+}
+
+/* Simple Login Button */
+.login-btn-simple {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2rem;
+    background: var(--accent);
+    color: var(--primary);
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    min-width: 160px;
+}
+
+.login-btn-simple:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+}
+
+.login-btn-simple i {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+/* Responsive adjustments for the 6x4 card */
+@media (max-width: 768px) {
+    .login-box {
+        width: 90%;
+        min-height: auto;
+        padding: 1.5rem;
+    }
+    
+    .login-error-icon {
+        font-size: 2.5rem;
+    }
+    
+    .login-title {
+        font-size: 1.3rem;
+    }
+    
+    .login-message {
+        font-size: 0.95rem;
+    }
+    
+    .login-btn-simple {
+        padding: 0.65rem 1.5rem;
+        font-size: 0.95rem;
+        min-width: 140px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-box {
+        width: 95%;
+        padding: 1.25rem;
+    }
+    
+    .login-error-icon {
+        font-size: 2rem;
+    }
+    
+    .login-title {
+        font-size: 1.1rem;
+    }
+    
+    .login-message {
+        font-size: 0.9rem;
+        max-width: 90%;
+    }
+    
+    .login-btn-simple {
+        padding: 0.6rem 1.25rem;
+        font-size: 0.9rem;
+        min-width: 120px;
+    }
+}
+
+/* Question Grid */
+.question-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.75rem;
+    margin-top: 1.5rem;
+}
+
+.question-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    position: relative;
+    border-top: 4px solid;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid #e0e0e0;
+}
+
+.question-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.question-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.question-card p {
+    color: var(--gray);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    flex: 1;
+}
+
+.card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    background-color: var(--light-gray);
+    color: var(--dark);
+    font-weight: 500;
+}
+
+.btn-view {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    background-color: var(--accent);
+    color: var(--primary);
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    gap: 0.5rem;
+}
+
+.btn-view:hover {
+    background-color: var(--accent-dark);
+}
+
+.btn-view i {
+    font-size: 0.85rem;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem;
+}
+
+/* Floating action button */
+.floating-btn {
+    position: fixed;
+    bottom: 70px;
+    right: 2rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--box-shadow);
+    cursor: pointer;
+    transition: var(--transition);
+    z-index: 99;
+    border: none;
+    font-size: 1.1rem;
+}
+
+.floating-btn:hover {
+    background: var(--accent-dark);
+}
+
+/* Responsive for floating button */
+@media (max-width: 768px) {
+    .floating-btn {
+        bottom: 80px;
+        right: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-btn {
+        bottom: 85px;
+        right: 1rem;
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+}
+        /* Resource Page Specific Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .resource-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 1rem auto;
+            padding: 0 1rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #64ffda;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding-bottom: 0.8rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #64ffda, transparent);
+            border-radius: 2px;
+        }
+
+        /* Store Navigation */
+        .store-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1rem 0 1.5rem 0;
+            justify-content: center;
+        }
+
+        .store-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            color: #fff;
+            padding: 0.7rem 1.3rem;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            flex: 0 1 auto;
+        }
+
+        .store-btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+            border-color: #64ffda;
+            transform: translateY(-2px);
+        }
+
+        .store-btn.active {
+            background: #64ffda;
+            color: #0a192f;
+            border-color: #64ffda;
+        }
+
+        .store-btn.manage-btn {
+            background: rgba(255, 193, 7, 0.1);
+            border-color: #ffc107;
+            color: #ffc107;
+        }
+
+        .store-btn.manage-btn:hover {
+            background: rgba(255, 193, 7, 0.2);
+        }
+
+        /* Store Title */
+        .store-title {
+            font-size: 1.6rem;
+            color: #fff;
+            margin: 0.5rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .store-title i {
+            color: #64ffda;
+        }
+
+        /* Content Cards Grid - Perfect fit layout */
+        .content-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            width: 100%;
+            margin: 0;
+        }
+
+        /* Card with ID attribute for perfect spacing */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            border-radius: 10px;
+            padding: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 240px;
+            width: 100%;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        /* Card ID display for debugging/identification */
+        .card::before {
+            content: attr(id);
+            position: absolute;
+            top: 0.3rem;
+            right: 0.5rem;
+            font-size: 0.7rem;
+            color: rgba(100, 255, 218, 0.3);
+            font-family: monospace;
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #64ffda;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.locked {
+            opacity: 0.8;
+            border-color: rgba(255, 99, 99, 0.3);
+        }
+
+        .card-icon {
+            font-size: 1.8rem;
+            color: #64ffda;
+            margin-bottom: 0.8rem;
+        }
+
+        .card h3 {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+            word-break: break-word;
+            padding-right: 1.5rem;
+        }
+
+        .card p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.8rem;
+            flex: 1;
+            word-break: break-word;
+            overflow: hidden;
+            display: -webkit-box;
+           
+        }
+
+        .price {
+            color: #64ffda;
+            font-weight: 600;
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .lock-icon {
+            position: absolute;
+            top: 0.8rem;
+            right: 0.8rem;
+            color: #ff6b6b;
+            font-size: 1.1rem;
+            z-index: 2;
+        }
+
+        .card a, .card button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            background: linear-gradient(135deg, #64ffda, #4ecdc4);
+            color: #0a192f;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .card a:hover, .card button:hover {
+            background: transparent;
+            color: #64ffda;
+            border: 1px solid #64ffda;
+            padding: calc(0.5rem - 1px) calc(1rem - 1px);
+        }
+
+        .card button.purchase-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            color: white;
+        }
+
+        .card button.purchase-btn:hover {
+            background: transparent;
+            color: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        /* Countdown Timer */
+        .countdown-container {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .countdown {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #64ffda;
+        }
+
+        .countdown.expired {
+            color: #ff6b6b;
+        }
+
+        .time-limit-expired {
+            color: #ff6b6b;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+
+        /* No Content Message */
+        .no-content {
+            text-align: center;
+            color: #b0b0b0;
+            font-size: 1rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+            grid-column: 1 / -1;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 2rem;
+            color: #b0b0b0;
+        }
+
+        .loading i {
+            font-size: 1.8rem;
+            color: #64ffda;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Login Required Screen */
+        .login-container {
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, rgba(10, 25, 47, 0.1) 100%);
+            border-radius: 16px;
+            margin: 1.5rem auto;
+            max-width: 500px;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-error-icon {
+            font-size: 4rem;
+            color: #ff6b6b;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .login-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: #fff;
+        }
+
+        .login-message {
+            color: #b0b0b0;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            font-size: 1rem;
+        }
+
+        .login-btn-simple {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #64ffda, #4ecdc4);
+            color: #0a192f;
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .login-btn-simple:hover {
+            background: transparent;
+            color: #64ffda;
+            border-color: #64ffda;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(100, 255, 218, 0.2);
+        }
+
+        .login-btn-simple i {
+            font-size: 1.1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Login status based visibility */
+        body.logged-in #login-screen {
+            display: none !important;
+        }
+
+        body.logged-in #resource-bank {
+            display: block !important;
+        }
+
+        body.logged-out #login-screen {
+            display: flex !important;
+        }
+
+        body.logged-out #resource-bank {
+            display: none !important;
+        }
+
+        /* Floating Action Button */
+        .floating-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #64ffda;
+            color: #0a192f;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(100, 255, 218, 0.3);
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(100, 255, 218, 0.4);
+        }
+
+        .floating-btn.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Responsive Design - Perfect fit at all screen sizes */
+        @media (min-width: 1600px) {
+            .content-cards {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        @media (max-width: 1399px) and (min-width: 1200px) {
+            .content-cards {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 1199px) and (min-width: 992px) {
+            .content-cards {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 991px) and (min-width: 768px) {
+            .content-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .resource-container {
+                padding: 0 0.8rem;
+            }
+            
+            .content-cards {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 1rem;
+            }
+            
+            .store-navigation {
+                gap: 0.5rem;
+            }
+            
+            .store-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+                flex: 1 1 calc(50% - 0.5rem);
+            }
+            
+            .store-btn.manage-btn {
+                flex: 1 1 100%;
+            }
+            
+            .login-box {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 1rem;
+            }
+            
+            .login-title {
+                font-size: 1.5rem;
+            }
+            
+            .login-btn-simple {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.95rem;
+            }
+            
+            .card {
+                padding: 1rem;
+                min-height: 220px;
+            }
+        }
+
+        /* Fix for very small devices */
+        @media (max-width: 360px) {
+            .store-btn {
+                flex: 1 1 100%;
+            }
+            
+            .card h3 {
+                font-size: 1.1rem;
+            }
+            
+            .card p {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Landscape mode fix */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .login-container {
+                min-height: 70vh;
+            }
+            
+            .content-cards {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
+        /* High DPI Screens */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .card {
+                backdrop-filter: blur(10px);
+            }
+        }

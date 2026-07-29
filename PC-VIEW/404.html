@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="RX-ASSETS/RX-OTHER-SOFTWARE-FUNCTION/RX-JS/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
+  <script src="RX-ASSETS/RX-FUNCTION/RX-UNIVERAL-FUNCTION/RX-JS/loader.js"></script>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="RX-ASSETS/RX-IMAGE/RX-LOGO/L-1.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 Not Found | Rosan KC</title>
+  <style id="theme-style">
+    /* Matrix background container */
+    #matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .matrix-char {
+      position: absolute;
+      color: rgba(0, 255, 0, 0.35);
+      font-family: 'Courier New', monospace;
+      font-size: 18px;
+      font-weight: bold;
+      user-select: none;
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+      animation: fadeDown 8s linear forwards;
+    }
+    
+    @keyframes fadeDown {
+      0% {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+      5% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
+    
+    body {
+      background-color: #000000;
+      color: #230885;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      line-height: 1.6;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .container {
+      width: 100%;
+      max-width: 800px;
+      border: 1px solid #e70316;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: rgba(0, 0, 0, 0.85);
+      position: relative;
+      z-index: 1;
+    }
+    h1 {
+      color: #d40909;
+      text-align: center;
+    }
+    .terminal {
+      margin-top: 20px;
+      border-top: 1px solid #dd091b;
+      padding-top: 15px;
+    }
+    #output {
+      height: 200px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+      scroll-behavior: smooth;
+    }
+    .command-line {
+      display: flex;
+      align-items: center;
+    }
+    .prompt {
+      margin-right: 10px;
+      color: #e70316;
+    }
+    #input {
+      background: transparent;
+      border: none;
+      color: #00ff00;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      width: 100%;
+      outline: none;
+      flex-grow: 1;
+    }
+    
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    .typing-cursor {
+      animation: blink 1s infinite;
+    }
+    .rainbow-text {
+      background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rainbow 8s linear infinite;
+      background-size: 400% 100%;
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .system-message {
+      color: #5555ff;
+    }
+    .warning-message {
+      color: #ff5555;
+    }
+    .success-message {
+      color: #55ff55;
+    }
+    .tutorial-header {
+      color: #ffaa00;
+      font-weight: bold;
+      border-bottom: 1px solid #ffaa00;
+      margin: 10px 0;
+      padding-bottom: 5px;
+    }
+    .tutorial-message {
+      color: #ffcc66;
+    }
+    .tutorial-command {
+      color: #ffffff;
+      background-color: #333333;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .function-option {
+      color: #ffaa00;
+    }
+  </style>
+</head>
+<body>
+ <!-- १. जाभास्क्रिप्ट बन्द गर्नेहरूलाई रोक्न यो कोड ठीक यहाँ हाल्नुहोस् -->
+    <noscript>
+        <div style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#ffffff; color:#ff0000; text-align:center; padding-top:15%; font-family:Arial, sans-serif; font-size:24px; font-weight:bold; z-index:999999;">
+            <p>JavaScript is disabled in your browser!</p>
+            <p style="color:#333333; font-size:18px; font-weight:normal; margin-top:10px;">
+                Please enable JavaScript to view this website.
+            </p>
+        </div>
+    </noscript>
+
+    
+  <!-- Matrix background container -->
+  <div id="matrix-bg"></div>
+  
+  <div class="container">
+    <h1 id="title"></h1>
+    <p id="message"></p>
+    <div class="terminal">
+      <div id="output"></div>
+      <div class="command-line">
+        <span class="prompt">RX2061 &gt;</span>
+        <input type="text" id="input" placeholder="Initializing terminal..." autofocus disabled />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========== MATRIX BACKGROUND ANIMATION ==========
+    function createMatrixBackground() {
+      const container = document.getElementById('matrix-bg');
+      const specialTexts = ["ROSAN 2061", "ROSAN", "2061","RX","RX STUDIO","ROSAN KC","KC"];
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$#@%&!?*";
+      
+      // Create falling characters
+      function createFallingChar() {
+        const charElement = document.createElement('div');
+        charElement.className = 'matrix-char';
+        
+        // Randomly decide if this should be a special text or random char
+        if (Math.random() < 0.15) { // 15% chance for special text
+          const text = specialTexts[Math.floor(Math.random() * specialTexts.length)];
+          charElement.textContent = text;
+          charElement.style.color = 'rgba(231, 3, 22, 0.5)'; // Red color for special text
+          charElement.style.fontSize = (16 + Math.random() * 8) + 'px';
+        } else {
+          charElement.textContent = chars.charAt(Math.floor(Math.random() * chars.length));
+          // Randomize green shades for normal characters
+          const greenValue = Math.floor(Math.random() * 155) + 100; // 100-255
+          charElement.style.color = `rgba(0, ${greenValue}, 0, ${0.2 + Math.random() * 0.3})`;
+        }
+        
+        // Random position
+        const startPosition = Math.random() * 100;
+        charElement.style.left = startPosition + 'vw';
+        
+        // Random animation delay and duration
+        const delay = Math.random() * 5;
+        const duration = 5 + Math.random() * 10;
+        charElement.style.animationDelay = delay + 's';
+        charElement.style.animationDuration = duration + 's';
+        
+        container.appendChild(charElement);
+        
+        // Remove element after animation completes
+        setTimeout(() => {
+          if (charElement.parentNode === container) {
+            container.removeChild(charElement);
+          }
+        }, (delay + duration) * 1000);
+      }
+      
+      // Create initial characters
+      for (let i = 0; i < 50; i++) {
+        setTimeout(createFallingChar, i * 200);
+      }
+      
+      // Continue creating new characters
+      setInterval(createFallingChar, 150);
+    }
+    
+    // ========== CONFIGURATION SECTION ==========
+    // This section makes it easy to manage functions and commands
+    
+    // Custom function paths - easily add/remove functions here
+    const FUNCTION_CONFIG = {
+    //  "weather": {
+      //  path: "RX weather.html",
+     //   description: "Open Weather detail page."
+    //  },
+     // "qr": {
+     //   path: "SQRC.html",
+     //   description: "Open QR massage reader or generator."
+     // },
+     // "calendar": {
+     //   path: "RX Calendar.html",
+     //   description: "Open english calendar."
+     // },
+     // "korean": {
+     //   path: "KRALL.html",
+     //   description: "Open korean Exam Question bank login page."
+     // }
+    };
+
+    // Contact information
+    const CONTACT_CONFIG = {
+      facebook: {
+        url: "https://facebook.com/Rosan.2061",
+        description: "Message via Facebook"
+      },
+      email: {
+        url: "https://mail.google.com/mail/u/0/#inbox?compose=CllgCHrhTmhrZCVmJJJHmnCtbBCzbGwvqtHTLklCfsFHPtfzWQpzrzFfhTZrCMTjSRhsDhSXdxV",
+        description: "Message via email"
+      }
+    };
+
+    // ========== END CONFIGURATION SECTION ==========
+
+    // Enhanced TypeWriter class with queue system and auto-scroll
+    class TypeWriter {
+      constructor(outputElement) {
+        this.queue = [];
+        this.isTyping = false;
+        this.defaultSpeed = 20;
+        this.lineDelay = 200;
+        this.outputElement = outputElement;
+        this.currentColor = '#00ff00'; // Default green
+        this.rainbowMode = false;
+      }
+
+      addToQueue(element, text, speed = this.defaultSpeed, callback = null, forceColor = null) {
+        this.queue.push({ element, text, speed, callback, forceColor });
+        if (!this.isTyping) this.processQueue();
+      }
+
+      processQueue() {
+        if (this.queue.length === 0) {
+          this.isTyping = false;
+          return;
+        }
+
+        this.isTyping = true;
+        const { element, text, speed, callback, forceColor } = this.queue.shift();
+        this.type(element, text, speed, forceColor, () => {
+          this.scrollToBottom();
+          if (callback) callback();
+          setTimeout(() => this.processQueue(), this.lineDelay);
+        });
+      }
+
+      type(element, text, speed, forceColor, callback) {
+        let i = 0;
+        element.innerHTML = '';
+        
+        // Apply color based on current mode or forced color
+        if (forceColor) {
+          element.style.color = forceColor;
+          element.classList.remove('rainbow-text');
+        } else if (this.rainbowMode) {
+          element.classList.add('rainbow-text');
+          element.style.color = '';
+        } else {
+          element.style.color = this.currentColor;
+          element.classList.remove('rainbow-text');
+        }
+        
+        const cursorSpan = document.createElement('span');
+        cursorSpan.className = 'typing-cursor';
+        cursorSpan.textContent = '|';
+        element.appendChild(cursorSpan);
+
+        const typingInterval = setInterval(() => {
+          if (i < text.length) {
+            cursorSpan.insertAdjacentText('beforebegin', text.charAt(i));
+            i++;
+            if (i % 20 === 0) this.scrollToBottom();
+          } else {
+            clearInterval(typingInterval);
+            element.removeChild(cursorSpan);
+            if (callback) callback();
+          }
+        }, speed);
+      }
+
+      scrollToBottom() {
+        this.outputElement.scrollTop = this.outputElement.scrollHeight;
+      }
+
+      setTextColor(color) {
+        this.currentColor = color;
+        this.rainbowMode = false;
+        this.updateColors();
+      }
+
+      setRainbowMode(enable) {
+        this.rainbowMode = enable;
+        this.updateColors();
+      }
+
+      updateColors() {
+        // Update all existing output
+        document.querySelectorAll('#output div').forEach(el => {
+          if (this.rainbowMode) {
+            el.classList.add('rainbow-text');
+            el.style.color = '';
+          } else {
+            el.classList.remove('rainbow-text');
+            el.style.color = this.currentColor;
+          }
+        });
+        
+        // Update input color
+        if (this.rainbowMode) {
+          document.getElementById('input').classList.add('rainbow-text');
+        } else {
+          document.getElementById('input').classList.remove('rainbow-text');
+          document.getElementById('input').style.color = this.currentColor;
+        }
+      }
+    }
+
+    const output = document.getElementById('output');
+    const writer = new TypeWriter(output);
+    const title = document.getElementById('title');
+    const message = document.getElementById('message');
+    const input = document.getElementById('input');
+    let terminalReady = false;
+
+    // Combine all direct commands (contacts + functions)
+    const directCommands = {
+      ...Object.fromEntries(Object.entries(CONTACT_CONFIG).map(([key, value]) => [key, value.url])),
+      ...Object.fromEntries(Object.entries(FUNCTION_CONFIG).map(([key, value]) => [key, value.path]))
+    };
+
+    const commands = {
+      help: showHelp,
+      home: goHome,
+      contact: showContact,
+      about: showAbout,
+      clear: clearTerminal,
+      color: showColorOptions,
+      //function: showFunctions
+    };
+
+    const colorCommands = {
+      "green": () => {
+        writer.setTextColor('#00ff00');
+        addOutput("Text color changed to green.", '#55ff55');
+      },
+      "red": () => {
+        writer.setTextColor('#ff5555');
+        addOutput("Text color changed to red.", '#ff5555');
+      },
+      "white": () => {
+        writer.setTextColor('#ffffff');
+        addOutput("Text color changed to white.", '#ffffff');
+      },
+      "black": () => {
+        writer.setTextColor('#000000');
+        addOutput("Text color changed to black.", '#000000');
+      },
+      "rainbow": () => {
+        writer.setRainbowMode(true);
+        addOutput("Rainbow mode activated!", null, true);
+      },
+      "normal": () => {
+        writer.setRainbowMode(false);
+        writer.setTextColor('#00ff00');
+        addOutput("Returned to default green color.", '#55ff55');
+      }
+    };
+
+    // Initialize page with appropriate welcome message
+    function initializeTerminal() {
+      // Start matrix background
+      createMatrixBackground();
+      
+      writer.addToQueue(title, "Rosan Xettri 404 - Page Not Found", 80);
+      writer.addToQueue(message, "The page you're looking for doesn't exist or has been moved.", 40, () => {
+        setTimeout(() => {
+          addOutput("=== ROSAN KHATTRI CHETTRI ===", '#5555ff');
+          setTimeout(() => {
+            welcomeUser();
+          }, 1000);
+        }, 500);
+      });
+    }
+
+    function welcomeUser() {
+      addOutput("\nWelcome to RX2061 Terminal!", '#55ff55');
+      addOutput("Type 'help' to see available commands.", '#ffffff');
+      input.placeholder = "Type a command...";
+      input.disabled = false;
+      terminalReady = true;
+    }
+
+    function setupTerminal() {
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          const cmd = this.value.trim().toLowerCase();
+          this.value = ''; // Clear the input field immediately
+          if (cmd) {
+            processCommand(cmd);
+          }
+        }
+      });
+      
+      // Handle paste events to keep the input clean
+      input.addEventListener('paste', function(e) {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        this.value = text.trim();
+      });
+    }
+
+    function processCommand(cmd) {
+      addOutput("→ " + cmd);
+
+      if (commands[cmd]) {
+        commands[cmd]();
+      } 
+      else if (directCommands[cmd]) {
+        addOutput(`Opening ${cmd}...`, '#5555ff');
+        setTimeout(() => {
+          if (cmd in CONTACT_CONFIG) {
+            window.open(directCommands[cmd], '_blank');
+          } else {
+            window.location.href = directCommands[cmd];
+          }
+        }, 500);
+      }
+      else if (cmd.startsWith("color ")) {
+        const colorName = cmd.substring(6);
+        if (colorCommands[colorName]) {
+          colorCommands[colorName]();
+        } else {
+          addOutput(`Color '${colorName}' not available. Type 'color' to see options.`, '#ff5555');
+        }
+      } else if (cmd) {
+        addOutput(`Command not found: ${cmd}`, '#ff5555');
+        addOutput("Type 'help' for available commands", '#ffffff');
+      }
+      
+      // Ensure input is focused for next command
+      input.focus();
+    }
+
+    function addOutput(text, forceColor = null, isRainbow = false, customClass = null) {
+      const newLine = document.createElement('div');
+      if (customClass) {
+        newLine.className = customClass;
+      }
+      output.appendChild(newLine);
+      if (isRainbow) {
+        newLine.classList.add('rainbow-text');
+      }
+      writer.addToQueue(newLine, text, 10, null, forceColor);
+    }
+
+    function clearTerminal() {
+      output.innerHTML = '';
+      writer.scrollToBottom();
+    }
+
+     function showHelp() {
+      addOutput("\nAvailable commands:", '#5555ff');
+      addOutput("help     - Show this help", '#ffffff');
+      addOutput("home     - Go to Wbsite homepage", '#ffffff');
+      addOutput("contact  - Contact options", '#ffffff');
+      addOutput("about    - About Rosan", '#ffffff');
+      addOutput("clear    - Clear terminal", '#ffffff');
+      addOutput("color    - Show color options", '#ffffff');
+      //addOutput("function - Show feature paths", '#ffffff');
+    }
+
+    function showFunctions() {
+      addOutput("\nAvailable functions :", '#5555ff');
+      Object.entries(FUNCTION_CONFIG).forEach(([cmd, {description}]) => {
+        addOutput(`${cmd.padEnd(8)} - ${description}`, '#ffaa00');
+      });
+    }
+
+    function showColorOptions() {
+      addOutput("\nAvailable color options:", '#5555ff');
+      addOutput("color green   - Green text", '#55ff55');
+      addOutput("color red     - Red text", '#ff5555');
+      addOutput("color white   - White text", '#ffffff');
+      addOutput("color black   - Black text", '#000000');
+      addOutput("color rainbow - Rainbow colors", null, true);
+      addOutput("color normal  - Reset to default", '#55ff55');
+    }
+
+    function goHome() {
+      addOutput("Redirecting to homepage...", '#5555ff');
+      setTimeout(() => window.location.href = "https://rosankc.com.np", 1000);
+    }
+
+    function showContact() {
+      addOutput("\nContact methods :", '#5555ff');
+      Object.entries(CONTACT_CONFIG).forEach(([cmd, {description}]) => {
+        addOutput(`${cmd.padEnd(8)} - ${description}`, '#ffffff');
+      });
+    }
+
+    function showAbout() {
+      addOutput("\nRosan Khattri Chettri:", '#5555ff');
+      addOutput("A passionate individual with skills in design, web development, and e-sports gaming.", '#ffffff');
+      addOutput("Currently pursuing BBS and continuously learning in the digital space.", '#ffffff');
+      addOutput("For more details, visit my website.", '#ffffff');
+    }
+
+    // Start the terminal
+    initializeTerminal();
+    setupTerminal();
+  </script>
+</body>
+</html>
