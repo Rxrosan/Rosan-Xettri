@@ -1,0 +1,305 @@
+/* ===== RX STUDIO - PRIVACY & POLICY STYLES (FINAL ENHANCED FOR 2x2 GRID & COMPACT 1-LINE TABS) ===== */
+
+/* main container Section */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 28px;
+    flex: 1;
+    width: 100%;
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+}
+
+/* Privacy Tabs Container - Light Theme */
+.pp-tabs {
+    background-color: #ffffff;
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #d0dbe8;
+    margin-bottom: 60px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* Tab Navigation - ट्याबहरू सधैं १ लाइनमा (Horizontal Scroll) देखाउनको लागि */
+.pp-tabs .tab-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: #f0f4f9;
+    border-bottom: 1px solid #d0dbe8;
+    padding: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.pp-tabs .tab-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.pp-tabs .tab-btn {
+    flex: 1 1 0;
+    min-width: 75px; /* मोबाइलमा सजिलै ४ वटै ट्याबहरू एकै लाइनमा अटाउनको लागि */
+    background: none;
+    border: none;
+    color: #1a4480;
+    padding: 12px 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+    border-right: 1px solid #d0dbe8;
+    text-align: center;
+}
+
+.pp-tabs .tab-btn:last-child {
+    border-right: none;
+}
+
+.pp-tabs .tab-btn:hover {
+    color: #0056b3;
+    background-color: rgba(26, 68, 128, 0.05);
+}
+
+.pp-tabs .tab-btn.active {
+    color: #1a4480;
+    background-color: #ffffff;
+}
+
+.pp-tabs .tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #1a4480;
+}
+
+.pp-tabs .tab-btn i {
+    font-size: 1.1px; /* आइकनको साइज सानो बनाइएको */
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+    color: #1a4480;
+}
+
+.pp-tabs .tab-btn span {
+    font-size: 0.62rem; /* टेक्स्टको फन्ट साइज सानो बनाइएको ताकि ४ वटै मज्जाले देखियोस् */
+    white-space: nowrap;
+}
+
+/* Tab Content Container */
+.pp-tabs .tab-content-container {
+    position: relative;
+    min-height: 500px;
+}
+
+.pp-tabs .tab-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+    padding: 40px;
+}
+
+.pp-tabs .tab-content.active {
+    display: block;
+}
+
+.pp-tabs .tab-content-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Contact Page Style Tab Header & Sub Title */
+.pp-tabs .tab-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.pp-tabs .tab-icon {
+    width: 60px;
+    height: 60px;
+    background: #1a4480;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.pp-tabs .tab-header h3 {
+    font-size: 2.2rem;
+    color: #1a4480;
+    font-weight: 700;
+}
+
+.pp-tabs .tab-description {
+    color: #555555;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 800px;
+}
+
+/* Services Grid (Cards layout) - PC मा ४ कलमसम्म, मोबाइलमा २x2 ग्रिड देखाउने */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.service-card {
+    background-color: #f8fafc;
+    border-radius: 12px;
+    padding: 25px 15px;
+    border: 1px solid #d0dbe8;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    min-height: 260px;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    border-color: #1a4480;
+    background-color: #ffffff;
+    box-shadow: 0 6px 15px rgba(26, 68, 128, 0.1);
+}
+
+.service-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-info h4 {
+    color: #1a4480;
+    margin-bottom: 10px;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.service-info p {
+    color: #666666;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Highlight Note */
+.pp-highlight-note {
+    background: #f0f4f9;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    margin-top: 25px;
+    border: 1px solid #d0dbe8;
+    color: #444444;
+    font-size: 0.95rem;
+}
+
+.pp-highlight-note i {
+    color: #1a4480;
+    margin-right: 10px;
+}
+
+.pp-highlight-note strong {
+    color: #1a4480;
+}
+
+/* Responsive adjustments: ट्याब्लेट र मोबाइल भ्यूमा २x2 Grid (२ कलम्स) मा देखाउने */
+@media (max-width: 1200px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr); /* मोबाइलमा ठ्याक्कै २ कलम्स र २ रोमा (2x2 Grid) देखाउने */
+        gap: 12px;
+    }
+    
+    .service-card {
+        padding: 20px 10px;
+        min-height: 240px;
+    }
+
+    .service-info h4 {
+        font-size: 0.95rem;
+        margin-bottom: 8px;
+    }
+
+    .service-info p {
+        font-size: 0.78rem;
+    }
+    
+    .pp-tabs .tab-content {
+        padding: 20px 15px;
+    }
+    
+    .pp-tabs .tab-header h3 {
+        font-size: 1.4rem;
+    }
+    
+    .pp-tabs .tab-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section Title */
+.section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 6px 0 40px;
+    color: #1a4480;
+    position: relative;
+}
+
+.section-title:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #1a4480;
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 2rem;
+    }
+}

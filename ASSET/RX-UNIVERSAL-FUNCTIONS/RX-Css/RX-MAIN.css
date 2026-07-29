@@ -1,0 +1,210 @@
+ * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', 'Noto Sans', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #e6ecf5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .rx-header {
+            background-color: #1a4480;
+            color: white;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #0d2340;
+            width: 100%;
+        }
+
+        .rx-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: nowrap;
+            overflow: hidden;
+        }
+
+        .rx-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .rx-portal-title-container {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .rx-portal-title {
+            font-weight: bold;
+            font-size: clamp(12px, 3vw, 16px);
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .rx-portal-subtitle {
+            font-size: clamp(9px, 2vw, 11px);
+            color: #d1dfef;
+            white-space: nowrap;
+        }
+
+        .rx-date-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 11px;
+            font-weight: bold;
+            flex-shrink: 0;
+            line-height: 1.3;
+            color: #d1dfef;
+        }
+
+        .rx-subheader {
+            background-color: #d1dfef;
+            padding: 5px 15px;
+            color: #333;
+            border-bottom: 1px solid #deb0b0;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .rx-main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        .rx-sidebar {
+            width: 270px;
+            background-color: #ffffff;
+            border-right: 1px solid #a0b2c6;
+            overflow-y: auto;
+            padding: 10px;
+            font-size: 13px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .rx-sidebar-heading {
+            font-weight: bold;
+            color: #1a4480;
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        ul.rx-tree, ul.rx-tree ul {
+            list-style: none;
+            padding-left: 15px;
+        }
+
+        ul.rx-tree li {
+            margin: 5px 0;
+            cursor: pointer;
+            color: #0056b3;
+        }
+
+        ul.rx-tree li span.rx-folder {
+            font-weight: bold;
+        }
+
+        ul.rx-tree li:hover > span {
+            text-decoration: underline;
+        }
+
+        .rx-nested {
+            display: none;
+        }
+
+        .rx-active-tree {
+            display: block;
+        }
+
+        .rx-content-area {
+            flex: 1;
+            background-color: #ffffff;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            overflow-x: hidden;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .rx-welcome-logo {
+            height: 70px;
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 15px;
+            align-self: center;
+        }
+
+        .rx-content-area h2 {
+            color: #1a4480;
+            font-size: clamp(18px, 4vw, 24px);
+            margin-bottom: 10px;
+        }
+
+        .rx-content-area p {
+            color: #555;
+            font-size: clamp(13px, 3vw, 16px);
+        }
+
+        .rx-footer {
+            background-color: #1a4480;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: clamp(10px, 2vw, 11px);
+            border-top: 1px solid #0d2340;
+        }
+
+        .rx-footer a {
+            color: #2de708;
+            text-decoration: none;
+        }
+
+        .rx-footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media screen and (max-width: 768px) {
+            .rx-menu-btn {
+                display: block;
+            }
+            .rx-sidebar {
+                position: absolute;
+                height: 100%;
+                z-index: 100;
+                transform: translateX(-100%);
+                width: 250px;
+            }
+            .rx-sidebar.show {
+                transform: translateX(0);
+            }
+        }

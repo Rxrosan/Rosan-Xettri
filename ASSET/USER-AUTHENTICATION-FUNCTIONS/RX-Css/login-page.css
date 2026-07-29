@@ -1,0 +1,51 @@
+/* ======================================== */
+/* ===== LOGIN PASSWORD TOGGLE & STATES ===== */
+/* ======================================== */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: 44px !important; 
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #64748b; 
+    cursor: pointer;
+    font-size: 14px; 
+    padding: 4px 6px;
+    transition: all 0.3s ease;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.password-toggle:hover {
+    color: #aa0707;
+    background: rgba(170, 7, 7, 0.08);
+}
+
+.login-btn.verified {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+}
+
+.login-btn.verified:hover:not(:disabled) {
+    background: linear-gradient(135deg, #15803d, #16a34a);
+}
+
+.login-btn.cooldown {
+    background: #e2e8f0;
+    color: #64748b;
+    box-shadow: none;
+}

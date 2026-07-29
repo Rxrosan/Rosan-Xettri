@@ -1,0 +1,429 @@
+/* main container Section */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 28px;
+    flex: 1;
+    width: 100%;
+}
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+}
+
+/* About Container - सेवा पेजको थिम अनुसार सेतो ब्याकग्राउन्ड र सफा बर्डर */
+.about-container {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 40px;
+    border: 1px solid #d0dbe8;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+/* Left Side: Admin Image */
+.about-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.admin-image-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 3px solid #1a4480;
+    box-shadow: 0 10px 25px rgba(26, 68, 128, 0.15);
+}
+
+.admin-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.admin-image-container:hover .admin-image {
+    transform: scale(1.05);
+}
+
+.image-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(26, 68, 128, 0.95), transparent);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.image-overlay h4 {
+    color: #ffffff;
+    font-size: 22px;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.image-overlay p {
+    color: #e2e8f0;
+    font-size: 14px;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.admin-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #d0dbe8;
+    border-radius: 8px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.badge:hover {
+    border-color: #1a4480;
+    transform: translateX(5px);
+    background: #ffffff;
+    box-shadow: 0 4px 10px rgba(26, 68, 128, 0.05);
+}
+
+.badge i {
+    color: #1a4480;
+    font-size: 18px;
+    width: 24px;
+}
+
+.badge span {
+    color: #333333;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Right Side: Bio */
+.about-right h3 {
+    color: #1a4480;
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.about-right h3 .highlight {
+    color: #1a4480;
+    background: linear-gradient(90deg, #1a4480, #0056b3);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.title {
+    color: #666666;
+    font-size: 16px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #d0dbe8;
+}
+
+.bio-section {
+    margin-bottom: 30px;
+}
+
+.bio-section p {
+    color: #444444;
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+
+.skills-section {
+    margin-bottom: 30px;
+}
+
+.skills-section h4 {
+    color: #1a4480;
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.skill-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px solid #d0dbe8;
+    border-radius: 8px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.skill-item:hover {
+    border-color: #1a4480;
+    transform: translateY(-3px);
+    background: #ffffff;
+    box-shadow: 0 5px 15px rgba(26, 68, 128, 0.1);
+}
+
+.skill-item i {
+    color: #1a4480;
+    font-size: 16px;
+    width: 20px;
+}
+
+.skill-item span {
+    color: #333333;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.contact-cta {
+    background: #f0f4f9;
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid #d0dbe8;
+    margin-top: 30px;
+    transition: all 0.3s ease;
+}
+
+.contact-cta:hover {
+    border-color: #1a4480;
+}
+
+.contact-cta h4 {
+    color: #1a4480;
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.contact-cta p {
+    color: #555555;
+    font-size: 15px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.contact-btn, .whatsapp-btn, .email-btn {
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    font-size: 15px;
+}
+
+.contact-btn {
+    background: #1a4480;
+    color: #ffffff;
+    border: none;
+}
+
+.contact-btn:hover {
+    background: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(26, 68, 128, 0.3);
+}
+
+.whatsapp-btn {
+    background: #25D366;
+    color: white;
+    border: none;
+}
+
+.whatsapp-btn:hover {
+    background: #128C7E;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+}
+
+.email-btn {
+    background: transparent;
+    color: #1a4480;
+    border: 1px solid #1a4480;
+}
+
+.email-btn:hover {
+    background: rgba(26, 68, 128, 0.05);
+    transform: translateY(-3px);
+}
+
+/* Mission & Vision */
+.mission-vision {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-top: 40px;
+    padding-top: 40px;
+    border-top: 1px solid #d0dbe8;
+}
+
+.mission-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid #d0dbe8;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.mission-card:hover {
+    border-color: #1a4480;
+    transform: translateY(-5px);
+    background: #ffffff;
+    box-shadow: 0 10px 25px rgba(26, 68, 128, 0.1);
+}
+
+.mission-icon {
+    width: 60px;
+    height: 60px;
+    background: #1a4480;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: #ffffff;
+    font-size: 24px;
+}
+
+.mission-card h4 {
+    color: #1a4480;
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.mission-card p {
+    color: #555555;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Section title */
+.section-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 6px 0 40px;
+    color: #1a4480;
+    position: relative;
+}
+
+.section-title:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #1a4480;
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .about-left {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .mission-vision {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .about-container {
+        padding: 25px;
+    }
+    
+    .about-right h3 {
+        font-size: 28px;
+    }
+    
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+    }
+    
+    .contact-btn, .whatsapp-btn, .email-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .mission-vision {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-container {
+        padding: 20px;
+    }
+    
+    .admin-image-container {
+        max-width: 250px;
+    }
+    
+    .about-right h3 {
+        font-size: 24px;
+    }
+    
+    .skills-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .badge {
+        padding: 12px;
+    }
+    
+    .mission-card {
+        padding: 20px;
+    }
+}

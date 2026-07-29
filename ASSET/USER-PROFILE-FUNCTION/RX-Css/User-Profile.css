@@ -1,0 +1,277 @@
+/* ==========================================================================
+   RX PROFILE GRID & COLOR SYSTEM (CLEAN WHITE THEME)
+   ========================================================================== */
+
+/* मुख्य सेक्सन कन्टेनर */
+.profile-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f8fafc; /* सफा लाइट ब्याकग्राउन्ड */
+}
+
+/* मुख्य टाइटल - सेन्टरमा र प्रिमियम रेड अन्डरलाइन */
+.section-title {
+    font-size: 2.2rem;
+    color: #1e293b; /* गाढा कालो/फरेथ टेक्स्ट कलर */
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+/* टाइटलको तल पट्टि रेड अन्डरलाइन बर्डर */
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: #ff0000;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+}
+
+/* मुख्य बडी ग्रिड */
+.profile-container {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 30px;
+    align-items: stretch;
+}
+
+/* ==========================================================================
+   LEFT SIDE: USER AVATAR CARD (WHITE THEME)
+   ========================================================================== */
+.profile-left {
+    background: #ffffff; /* सेतो कार्ड ब्याकग्राउन्ड */
+    border: 1px solid #e2e8f0; /* हल्का सफा बोर्डर */
+    border-radius: 12px;
+    padding: 40px 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* सफा लाइट स्याडो */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.profile-image-container {
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 20px auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #ff0000;
+    padding: 5px;
+    background: #f1f5f9;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.15);
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.profile-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.profile-name {
+    font-size: 1.4rem;
+    color: #0f172a; /* गाढा टेक्स्ट */
+    margin: 10px 0 5px 0;
+    font-weight: 600;
+}
+
+.profile-nickname {
+    font-size: 0.9rem;
+    color: #64748b; /* म्याचिङ ग्रे टेक्स्ट */
+    margin: 0;
+}
+
+/* ==========================================================================
+   RIGHT SIDE: PERSONAL INFO CARD (WHITE THEME)
+   ========================================================================== */
+.profile-right {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 25px 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.details-title {
+    font-size: 1.25rem;
+    color: #1e293b;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+/* २ कोलम ग्रिड लेआउट */
+.profile-right .detail-item-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    flex-grow: 1;
+}
+
+/* प्रत्येक सिंगल डेटा बक्स */
+.detail-item {
+    background: #f8fafc; /* हल्का ग्रे-ह्वाइट बक्स */
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 12px 18px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+/* होभर गर्दा इफेक्ट */
+.detail-item:hover {
+    border-color: rgba(255, 0, 0, 0.4);
+    background: #fff5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 0, 0, 0.05);
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+}
+
+.detail-label {
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.detail-value {
+    font-size: 0.95rem;
+    color: #0f172a; /* सेतो हटाएर गाढा कालो टेक्स्ट राखिएको ताकि लाइट थिममा स्पष्ट देखियोस् */
+    font-weight: 500;
+    word-break: break-all;
+}
+
+/* Member Type र User ID को लागि हाइलाइट कलर */
+#dropdown-account-type, #dropdown-user-id {
+    color: #e11d48;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   CAMERA OVERLAY & MODAL STYLES (LIGHT THEME MATCHED)
+   ========================================================================== */
+.camera-overlay {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: #ff0000;
+    color: #fff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    z-index: 10;
+    transition: 0.3s;
+}
+
+.camera-overlay:hover {
+    background: #cc0000;
+    transform: scale(1.05);
+}
+
+/* Crop Modal Container */
+#cropModal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6); /* हल्का पारदर्शी डार्क ओभरले (मोडलको लागि मात्र) */
+    z-index: 99999;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.crop-container {
+    width: 90%;
+    max-width: 400px;
+    max-height: 60vh;
+    background: #ffffff; /* मोडल भित्र सेतो ब्याकग्राउन्ड */
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.crop-container img {
+    max-width: 100%;
+    max-height: 50vh;
+}
+
+.crop-actions {
+    margin-top: 15px;
+}
+
+.crop-btn {
+    background: #ff0000;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.crop-btn-cancel {
+    background: #64748b;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+@media (max-width: 992px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+        align-items: start;
+    }
+    .profile-left {
+        display: block;
+    }
+}
+
+@media (max-width: 650px) {
+    .profile-right .detail-item-container {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .profile-section {
+        padding: 10px;
+    }
+    .profile-right {
+        padding: 20px 15px;
+    }
+    .section-title {
+        font-size: 1.8rem;
+    }
+}
