@@ -1,3 +1,5 @@
+/* RX-MAIN.css - Fully Responsive & Fixed Layout */
+
 * {
     margin: 0;
     padding: 0;
@@ -19,6 +21,7 @@ body {
     height: 100dvh;
 }
 
+/* Header Styles */
 .rx-header {
     background-color: #1a4480;
     color: white;
@@ -29,6 +32,7 @@ body {
     border-bottom: 4px solid #0d2340;
     width: 100%;
     flex-shrink: 0;
+    z-index: 103;
 }
 
 .rx-header-left {
@@ -44,7 +48,7 @@ body {
     background: none;
     border: none;
     color: white;
-    font-size: 20px;
+    font-size: 22px;
     cursor: pointer;
     flex-shrink: 0;
     padding: 4px;
@@ -82,6 +86,7 @@ body {
     color: #d1dfef;
 }
 
+/* Subheader Styles */
 .rx-subheader {
     background-color: #d1dfef;
     padding: 5px 15px;
@@ -94,14 +99,17 @@ body {
     flex-shrink: 0;
 }
 
+/* Main Container Layout */
 .rx-main-container {
     display: flex;
     flex: 1;
     overflow: hidden;
     position: relative;
     width: 100%;
+    height: 100%;
 }
 
+/* Sidebar & Tree Menu Styles */
 .rx-sidebar {
     width: 270px;
     background-color: #ffffff;
@@ -111,6 +119,7 @@ body {
     padding: 10px;
     font-size: 13px;
     flex-shrink: 0;
+    transition: transform 0.3s ease;
 }
 
 .rx-sidebar-heading {
@@ -134,8 +143,14 @@ ul.rx-tree li {
     color: #0056b3;
     padding: 6px 8px;
     border-radius: 4px;
+    transition: background-color 0.2s ease;
 }
 
+ul.rx-tree li:hover {
+    background-color: #f0f4f8;
+}
+
+/* Click garda single item matra active/selected dekhine */
 ul.rx-tree li.rx-selected-item {
     background-color: #d1dfef !important;
     color: #1a4480;
@@ -158,6 +173,7 @@ ul.rx-tree li:hover > span {
     display: block;
 }
 
+/* Content Area */
 .rx-content-area {
     flex: 1;
     background-color: #ffffff;
@@ -193,6 +209,7 @@ ul.rx-tree li:hover > span {
     font-size: clamp(13px, 3vw, 16px);
 }
 
+/* Footer Styles (Fixed & Always Visible) */
 .rx-footer {
     background-color: #1a4480;
     color: white;
@@ -214,10 +231,12 @@ ul.rx-tree li:hover > span {
     text-decoration: underline;
 }
 
+/* Mobile Responsive Adjustments (Max Width 768px) */
 @media screen and (max-width: 768px) {
     .rx-menu-btn {
-        display: block;
+        display: block; /* Mobile ma menu button dekhincha ra HTML ko #rx-mobile-menu-btn sanga perfectly kaam garcha */
     }
+    
     .rx-sidebar {
         position: absolute;
         top: 0;
@@ -228,6 +247,7 @@ ul.rx-tree li:hover > span {
         width: 250px;
         box-shadow: 4px 0 15px rgba(0,0,0,0.3);
     }
+
     .rx-sidebar.show {
         transform: translateX(0);
     }
