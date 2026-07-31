@@ -1,4 +1,6 @@
-/* RX-MAIN.css - Fully Responsive & Original Styles Preserved */
+/* ============================================================
+   RX-MAIN.css - Layout Fixed Header/Footer & Slide-Up Menu
+   ============================================================ */
 
 * {
     margin: 0;
@@ -7,21 +9,27 @@
     font-family: 'Roboto', 'Noto Sans', Arial, sans-serif;
 }
 
+/* स्क्रिनको मुख्य भाग स्क्रोल हुन नदिने */
 html, body {
     height: 100%;
+    width: 100%;
     margin: 0;
     background-color: #e6ecf5;
-    overflow: hidden; /* Desktop layout preserve */
+    overflow: hidden; 
 }
 
 body {
     display: flex;
     flex-direction: column;
-    height: 100vh;
 }
 
-/* Header Styles */
+/* Header - सधैं माथि Fixed */
 .rx-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
     background-color: #1a4480;
     color: white;
     padding: 8px 15px;
@@ -29,96 +37,91 @@ body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 4px solid #0d2340;
-    width: 100%;
-    flex-shrink: 0;
-    z-index: 1100;
+    z-index: 1200; /* सबैभन्दा माथि */
 }
 
 .rx-header-left {
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: nowrap;
-    overflow: hidden;
 }
 
 .rx-menu-btn {
-    display: none; /* Hidden by default, shown in media query */
+    display: none; /* डेस्कटपमा लुक्ने */
     background: none;
     border: none;
     color: white;
-    font-size: 22px;
+    font-size: 24px;
     cursor: pointer;
-    flex-shrink: 0;
-    padding: 4px;
 }
 
-.rx-portal-title-container {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.rx-portal-title {
-    font-weight: bold;
-    font-size: clamp(12px, 3vw, 16px);
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.rx-portal-subtitle {
-    font-size: clamp(9px, 2vw, 11px);
-    color: #d1dfef;
-    white-space: nowrap;
-}
+.rx-portal-title-container { display: flex; flex-direction: column; }
+.rx-portal-title { font-weight: bold; font-size: clamp(12px, 3vw, 16px); color: #fff; }
+.rx-portal-subtitle { font-size: clamp(9px, 2vw, 11px); color: #d1dfef; }
 
 .rx-date-section {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     font-size: 11px;
-    font-weight: bold;
-    flex-shrink: 0;
-    line-height: 1.3;
     color: #d1dfef;
 }
 
-/* Subheader Styles */
+/* Subheader - Header को मुनि Fixed */
 .rx-subheader {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 35px;
     background-color: #d1dfef;
     padding: 5px 15px;
     color: #333;
     border-bottom: 1px solid #deb0b0;
     font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    flex-shrink: 0;
-}
-
-/* Main Container Layout */
-.rx-main-container {
+    z-index: 1100;
     display: flex;
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    width: 100%;
-    height: 100%;
+    align-items: center;
 }
 
-/* Sidebar Styling - Original Preserved */
+/* Footer - सधैं मुनि Fixed */
+.rx-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background-color: #1a4480;
+    color: white;
+    text-align: center;
+    padding: 10px 8px;
+    font-size: 11px;
+    border-top: 1px solid #0d2340;
+    z-index: 1200;
+}
+
+.rx-footer a { color: #2de708; text-decoration: none; }
+
+/* Main Container - बीचको भाग मात्र ओगट्ने */
+.rx-main-container {
+    margin-top: 95px; /* Header + Subheader */
+    margin-bottom: 40px; /* Footer */
+    height: calc(100vh - 135px);
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Sidebar - Desktop Style */
 .rx-sidebar {
     width: 270px;
     background-color: #ffffff;
     border-right: 1px solid #a0b2c6;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
     padding: 10px;
     font-size: 13px;
     flex-shrink: 0;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .rx-sidebar-heading {
@@ -131,129 +134,68 @@ body {
     text-align: center;
 }
 
-ul.rx-tree, ul.rx-tree ul {
-    list-style: none;
-    padding-left: 15px;
-}
+/* Tree Menu Style */
+ul.rx-tree, ul.rx-tree ul { list-style: none; padding-left: 15px; }
+ul.rx-tree li { margin: 5px 0; cursor: pointer; color: #0056b3; padding: 6px 8px; border-radius: 4px; }
+ul.rx-tree li:hover { background-color: #f0f4f8; }
+ul.rx-tree li span.rx-folder { font-weight: bold; }
+.rx-nested { display: none; }
+.rx-active-tree { display: block; }
 
-ul.rx-tree li {
-    margin: 5px 0;
-    cursor: pointer;
-    color: #0056b3;
-    padding: 6px 8px;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-}
-
-ul.rx-tree li:hover {
-    background-color: #f0f4f8;
-}
-
-ul.rx-tree li span.rx-folder {
-    font-weight: bold;
-}
-
-.rx-nested {
-    display: none;
-}
-
-.rx-active-tree {
-    display: block;
-}
-
-/* Content Area */
+/* Content Area - मात्र यो भाग स्क्रोल हुन्छ */
 .rx-content-area {
     flex: 1;
     background-color: #ffffff;
-    padding: 30px;
+    padding: 25px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Fixed from center to start for better scrolling */
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    overflow-x: hidden;
-    text-align: center;
-    width: 100%;
+    justify-content: flex-start;
 }
 
-.rx-welcome-logo {
-    height: 70px;
-    width: auto;
-    object-fit: contain;
-    margin-bottom: 15px;
-    align-self: center;
-    flex-shrink: 0;
-}
-
-/* Footer Styles */
-.rx-footer {
-    background-color: #1a4480;
-    color: white;
-    text-align: center;
-    padding: 8px;
-    font-size: clamp(10px, 2vw, 11px);
-    border-top: 1px solid #0d2340;
-    flex-shrink: 0; /* Important: prevents footer from disappearing */
-    width: 100%;
-    z-index: 1000;
-}
-
-.rx-footer a {
-    color: #2de708;
-    text-decoration: none;
-}
+.rx-welcome-logo { height: 70px; margin-bottom: 15px; flex-shrink: 0; }
 
 /* ============================================================
-   RESPONSIVE FIXES (Only for Mobile)
+   MOBILE VIEW (Fixed Nav/Footer & Bottom-Up Menu)
    ============================================================ */
 
 @media screen and (max-width: 768px) {
-    /* Show menu button on mobile */
-    .rx-menu-btn {
-        display: block;
-    }
-    
-    /* Body & Layout fix for mobile scrolling */
-    html, body {
-        overflow: auto; /* Allow scrolling on mobile */
-    }
-    
-    .rx-main-container {
-        overflow: visible;
-    }
+    .rx-menu-btn { display: block; }
 
-    /* Sidebar - Slider from Left */
+    /* Mobile Sidebar - Slide-Up between Header & Footer */
     .rx-sidebar {
         position: fixed;
-        top: 0;
         left: 0;
-        height: 100%;
-        z-index: 2000;
-        transform: translateX(-100%);
-        width: 260px;
-        box-shadow: 4px 0 15px rgba(0,0,0,0.3);
-        padding-top: 20px;
+        bottom: 40px; /* Footer को माथि */
+        width: 100%;
+        height: 0; /* सुरुमा उचाई 0 */
+        z-index: 1050;
+        transform: translateY(100%); /* सुरुमा तल लुकाउने */
+        opacity: 0;
+        visibility: hidden;
+        border-right: none;
+        border-top: 3px solid #1a4480;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+        padding-top: 15px;
     }
 
+    /* मेनु खुल्दा */
     .rx-sidebar.show {
-        transform: translateX(0);
-    }
-    
-    .rx-content-area {
-        padding: 20px 15px;
-        min-height: 70vh; /* Ensure area exists */
+        height: calc(100vh - 135px); /* Header र Footer बीचको एरिया */
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
     }
 
-    .rx-footer {
-        position: relative; /* Ensure it stays at bottom of content */
-        display: block !important;
-    }
+    .rx-content-area { padding: 15px; }
+    .rx-portal-title { font-size: 13px; }
+    .rx-date-section { font-size: 9px; }
 }
 
-/* Small Device Adjustments */
+/* Small Screens */
 @media screen and (max-width: 480px) {
     .rx-welcome-logo { height: 50px; }
-    .rx-content-area { padding: 15px 10px; }
-    .rx-footer { font-size: 9px; padding: 10px 5px; }
+    .rx-footer { font-size: 10px; }
 }
