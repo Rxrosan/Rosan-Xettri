@@ -168,7 +168,13 @@ ul.rx-tree li {
     display: block;
 }
 
-ul.rx-tree li:hover { background-color: #f0f4f8; }
+
+ul.rx-tree li:hover {
+    background-color: transparent !important;
+    color: #1a4480; /* अक्षरको रङ जस्ताको तस्तै रहन्छ */
+    transform: none; /* कुनै animation छैन */
+    box-shadow: none;
+}
 ul.rx-tree li span.rx-folder { font-weight: bold; display: block; }
 .rx-nested { display: none; }
 .rx-active-tree { display: block; }
