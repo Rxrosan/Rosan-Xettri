@@ -1,4 +1,4 @@
-// rx-main.js - Main Application Logic & Routing
+/* RX-MAIN.js - Stable Final Version */
 // author : RX STUDIO
 
 function rxToggleSub(rxElement) {
@@ -23,7 +23,6 @@ function rxLoadHome() {
 }
 
 function rxLoadContent(rxTitleName) {
-    // युजरले क्लिक गरेको हालको पेजलाई LocalStorage मा सेभ गर्ने
     localStorage.setItem('rxCurrentPage', rxTitleName);
     renderContent(rxTitleName);
 
@@ -76,29 +75,24 @@ function renderContent(rxTitleName) {
     }
 }
 
-// ===== FIX: पेज लोड हुँदा HOME content देखाउने =====
 window.addEventListener('DOMContentLoaded', () => {
     const savedPage = localStorage.getItem('rxCurrentPage');
     
-    // If there's a saved page, load it
     if (savedPage) {
         renderContent(savedPage);
     } else {
-        // Otherwise, load Home page by default
         const rxDisplayArea = document.getElementById('rx-display-area');
         if (rxDisplayArea && typeof rxLoadHomePage === 'function') {
             rxLoadHomePage(rxDisplayArea);
         }
-        // Sidebar heading set to HOME
         const sidebarHeading = document.getElementById('rx-sidebar-heading');
         if (sidebarHeading) sidebarHeading.innerText = 'HOME';
     }
     
-    // ===== UPDATE: Mobile menu button (सबै भन्दा सही र स्मूथ भर्सन) =====
+    // ===== क्लिक गर्दा मोबाइल मेनु खोल्ने/बन्द गर्ने (स्थायी कोड) =====
     const mobileMenuBtn = document.getElementById('rx-mobile-menu-btn');
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', function(e) {
-            // Event bubbling रोक्नुहोस् (यसले क्लिकलाई दोहोर्याउन दिँदैन)
             e.stopPropagation();
             const sidebar = document.getElementById('rx-sidebar');
             if (sidebar) {
@@ -106,19 +100,6 @@ window.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    // ================================================================
-
-    // ===== EXTRA SAFETY: Footer Always Visible (अनलाइन र अफलाइन दुबैमा) =====
-    // यसले फुटरलाई अनलाइन वा अफलाइन जहाँ पनि सधैं तल देखिने बनाउँछ
-    const footer = document.querySelector('.rx-footer');
-    if (footer) {
-        footer.style.display = 'block';
-        footer.style.flexShrink = '0';
-        footer.style.position = 'relative';
-        footer.style.zIndex = '1000';
-        footer.style.width = '100%';
-    }
-    // =========================================================================
 });
 
 function updateDateTime() {

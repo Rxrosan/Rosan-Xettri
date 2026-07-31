@@ -1,5 +1,4 @@
-/* RX-MAIN.css - Fully Responsive & Fixed Layout (Preserved Original Styles) */
-
+/* RX-MAIN.css - Stable Final Version */
 * {
     margin: 0;
     padding: 0;
@@ -21,7 +20,7 @@ body {
     height: 100dvh;
 }
 
-/* Header Styles */
+/* Header */
 .rx-header {
     background-color: #1a4480;
     color: white;
@@ -32,7 +31,7 @@ body {
     border-bottom: 4px solid #0d2340;
     width: 100%;
     flex-shrink: 0;
-    z-index: 103;
+    z-index: 1000;
 }
 
 .rx-header-left {
@@ -43,15 +42,22 @@ body {
     overflow: hidden;
 }
 
+/* Mobile Menu Button (हामीले यसलाई सही बनायौं) */
 .rx-menu-btn {
     display: none;
-    background: none;
-    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
-    font-size: 22px;
+    font-size: 24px;
     cursor: pointer;
     flex-shrink: 0;
-    padding: 4px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    line-height: 1;
+    transition: background 0.2s;
+}
+.rx-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .rx-portal-title-container {
@@ -86,7 +92,7 @@ body {
     color: #d1dfef;
 }
 
-/* Subheader Styles */
+/* Subheader */
 .rx-subheader {
     background-color: #d1dfef;
     padding: 5px 15px;
@@ -99,7 +105,7 @@ body {
     flex-shrink: 0;
 }
 
-/* Main Container Layout */
+/* Main Container */
 .rx-main-container {
     display: flex;
     flex: 1;
@@ -109,7 +115,7 @@ body {
     height: 100%;
 }
 
-/* Sidebar & Tree Menu Styles - ORIGINAL STYLE PRESERVED */
+/* Sidebar */
 .rx-sidebar {
     width: 270px;
     background-color: #ffffff;
@@ -150,7 +156,6 @@ ul.rx-tree li:hover {
     background-color: #f0f4f8;
 }
 
-/* Click garda single item matra active/selected dekhine */
 ul.rx-tree li.rx-selected-item {
     background-color: #d1dfef !important;
     color: #1a4480;
@@ -159,10 +164,6 @@ ul.rx-tree li.rx-selected-item {
 
 ul.rx-tree li span.rx-folder {
     font-weight: bold;
-}
-
-ul.rx-tree li:hover > span {
-    text-decoration: underline;
 }
 
 .rx-nested {
@@ -209,7 +210,7 @@ ul.rx-tree li:hover > span {
     font-size: clamp(13px, 3vw, 16px);
 }
 
-/* Footer Styles (Fixed & Always Visible) */
+/* ===== FOOTER (स्थायी रूपमा सुरक्षित) ===== */
 .rx-footer {
     background-color: #1a4480;
     color: white;
@@ -219,7 +220,8 @@ ul.rx-tree li:hover > span {
     border-top: 1px solid #0d2340;
     flex-shrink: 0;
     width: 100%;
-    z-index: 102;
+    z-index: 1000;
+    position: relative;
 }
 
 .rx-footer a {
@@ -231,33 +233,28 @@ ul.rx-tree li:hover > span {
     text-decoration: underline;
 }
 
-/* ============================================================
-   RESPONSIVE - ONLY FOR MOBILE (768px and below)
-   ============================================================ */
-
+/* ===== MOBILE RESPONSIVE (स्थायी रूपमा सही) ===== */
 @media screen and (max-width: 768px) {
-    /* Show menu button on mobile */
     .rx-menu-btn {
         display: block;
     }
     
-    /* Sidebar - Slide in from left */
     .rx-sidebar {
         position: absolute;
         top: 0;
         left: 0;
         height: 100%;
-        z-index: 105;
+        z-index: 999;
         transform: translateX(-100%);
         width: 250px;
         box-shadow: 4px 0 15px rgba(0,0,0,0.3);
+        border-right: none;
     }
-
+    
     .rx-sidebar.show {
         transform: translateX(0);
     }
     
-    /* Fix for header on mobile */
     .rx-header {
         padding: 6px 12px;
     }
@@ -274,7 +271,6 @@ ul.rx-tree li:hover > span {
         font-size: 9px;
     }
     
-    /* Fix for content area on mobile */
     .rx-content-area {
         padding: 20px 15px;
     }
@@ -291,26 +287,25 @@ ul.rx-tree li:hover > span {
         font-size: 14px;
     }
     
-    /* Fix for subheader on mobile */
     .rx-subheader {
         padding: 4px 12px;
         font-size: 12px;
     }
     
-    /* Fix for footer on mobile */
     .rx-footer {
         padding: 6px;
         font-size: 10px;
     }
 }
 
-/* ============================================================
-   EXTRA SMALL MOBILE (480px and below)
-   ============================================================ */
-
 @media screen and (max-width: 480px) {
     .rx-header {
         padding: 5px 10px;
+    }
+    
+    .rx-menu-btn {
+        padding: 4px 10px;
+        font-size: 20px;
     }
     
     .rx-portal-title {
@@ -355,10 +350,6 @@ ul.rx-tree li:hover > span {
         padding: 3px 10px;
     }
 }
-
-/* ============================================================
-   LANDSCAPE MODE FIX (for mobile devices)
-   ============================================================ */
 
 @media screen and (max-height: 500px) and (orientation: landscape) {
     .rx-header {
