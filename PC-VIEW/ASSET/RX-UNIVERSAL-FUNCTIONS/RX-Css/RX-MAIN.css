@@ -1,5 +1,5 @@
 /* ============================================================
-   RX-MAIN.css - ULTIMATE FINAL FIX (Sidebar Heading & Menu Centered)
+   RX-MAIN.css - ADJUSTED SIDEBAR TOP-OFFSET & SCROLLBAR
    ============================================================ */
 
 * {
@@ -102,8 +102,8 @@ body {
 
 /* Main Container */
 .rx-main-container {
-    margin-top: 95px; /* Header(60) + Subheader(35) */
-    margin-bottom: 40px; /* Footer(40) */
+    margin-top: 95px; 
+    margin-bottom: 40px; 
     height: calc(100vh - 135px);
     display: flex;
     width: 100%;
@@ -111,35 +111,50 @@ body {
     position: relative;
 }
 
-/* Sidebar - Desktop Style */
+/* Sidebar - Desktop Style with Custom Scrollbar */
 .rx-sidebar {
     width: 270px;
     background-color: #ffffff;
     border-right: 1px solid #a0b2c6;
-    overflow-y: auto;
+    overflow-y: auto; 
     padding: 10px;
     font-size: 13px;
     flex-shrink: 0;
     transition: transform 0.3s ease-in-out;
 }
 
-/* ===== FIX: Sidebar Heading सधैं देखिने (Center मा) ===== */
+/* Scrollbar Design */
+.rx-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.rx-sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.rx-sidebar::-webkit-scrollbar-thumb {
+    background: #a0b2c6;
+    border-radius: 3px;
+}
+.rx-sidebar::-webkit-scrollbar-thumb:hover {
+    background: #1a4480;
+}
+
+/* Sidebar Heading */
 .rx-sidebar-heading {
     display: block !important;
     font-weight: bold;
     color: #1a4480;
     padding: 8px;
     border-bottom: 1px solid #ddd;
-    margin-bottom: 12px; /* Heading तल मेनुको लागि ठाउँ */
+    margin-bottom: 12px;
     font-size: 14px;
     text-align: center;
 }
 
-/* Tree Menu - अब Center मा देखिने */
+/* Tree Menu */
 ul.rx-tree, ul.rx-tree ul { 
     list-style: none; 
-    padding-left: 0; /* Left padding हटाइयो */
-    text-align: center; /* सबै मेनु Center मा */
+    padding-left: 0; 
+    text-align: center; 
     width: 100%;
 }
 
@@ -147,7 +162,7 @@ ul.rx-tree li {
     margin: 8px 0; 
     cursor: pointer; 
     color: #0056b3; 
-    padding: 8px 0; /* Horizontal padding सन्तुलित */
+    padding: 8px 0; 
     border-radius: 4px; 
     transition: background-color 0.2s ease;
     display: block;
@@ -158,7 +173,6 @@ ul.rx-tree li span.rx-folder { font-weight: bold; display: block; }
 .rx-nested { display: none; }
 .rx-active-tree { display: block; }
 
-/* Nested menu लाई अलि इन्डेन्ट गर्ने तर Center नबिग्रने */
 ul.rx-tree ul.rx-nested { padding-left: 15px; text-align: center; }
 
 /* Content Area */
@@ -179,7 +193,7 @@ ul.rx-tree ul.rx-nested { padding-left: 15px; text-align: center; }
 .rx-welcome-logo { height: 70px; margin-bottom: 15px; flex-shrink: 0; }
 
 /* ============================================================
-   MOBILE VIEW (Half Screen Side Drawer - Center Menu)
+   MOBILE VIEW (Top vanda halka tala - e.g., 25% or 35% placement)
    ============================================================ */
 
 @media screen and (max-width: 768px) {
@@ -198,15 +212,23 @@ ul.rx-tree ul.rx-nested { padding-left: 15px; text-align: center; }
         transform: translateX(-100%);
         border-right: 2px solid #1a4480;
         box-shadow: 5px 0 15px rgba(0,0,0,0.2);
-        padding: 20px; /* यो padding तल मेनु Center गर्नको लागि */
+        padding: 20px;
+        overflow-y: auto; 
+        
         display: flex;
         flex-direction: column;
-        justify-content: center; /* यसले Sidebar को सम्पूर्ण content लाई Center मा ल्याउँछ */
+        
+        /* 
+          यहाँबाट तपाईंले मेनु कति तल राख्ने कन्ट्रोल गर्न सक्नुहुन्छ:
+          - यदि एकदमै माथि (Top) होइन तर हल्का तल (25% वा 35% जति) देखाउन चाहनुहुन्छ भने:
+          'flex-start' राखेर तल 'padding-top' दिन सकिन्छ वा तलको जस्तै मिलाउन सकिन्छ।
+        */
+        justify-content: flex-start; 
+        padding-top: 25vh; /* यो 25% ले मेनुलाई टपबाट अलि तल देखाउँछ। (तपाईंले 35vh वा 20vh पनि बनाउन सक्नुहुन्छ) */
     }
 
     .rx-sidebar.show { transform: translateX(0); }
 
-    /* Mobile Content Padding - Fixed to avoid cut-off */
     .rx-content-area { 
         padding: 15px; 
         padding-top: 0 !important; 

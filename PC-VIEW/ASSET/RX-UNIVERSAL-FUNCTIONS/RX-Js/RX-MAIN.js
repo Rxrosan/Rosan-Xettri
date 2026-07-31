@@ -1,7 +1,6 @@
 /**
- * RX-MAIN.js - FINAL REWRITE
+ * RX-MAIN.js - FINAL REWRITE WITH AUTO RELOAD & SCROLL
  * Author: RX STUDIO
- * Mobile Menu Left to Right, No Outside Close, All Original Functions Preserved
  */
 
 // Tree Menu Toggle
@@ -24,11 +23,12 @@ function rxLoadHome() {
     rxCloseMenu();
 }
 
-// Load Content
+// Load Content with Auto Reload Feature
 function rxLoadContent(rxTitleName) {
     localStorage.setItem('rxCurrentPage', rxTitleName);
-    renderContent(rxTitleName);
-    rxCloseMenu();
+    
+    // यदि तपाईं क्लिक गर्दा ब्राउजर पूर्ण रूपमा reload (refresh) भएको चाहनुहुन्छ भने:
+    location.reload();
 }
 
 // Close Mobile Menu Function
@@ -60,8 +60,7 @@ function renderContent(rxTitleName) {
             if (typeof rxLoadServicePage === 'function') rxLoadServicePage(rxDisplayArea);
             break;
         case 'CONTACT':
-            if (typeof rxLoadContentPage === 'function') rxLoadContactPage(rxDisplayArea);
-            else if (typeof rxLoadContactPage === 'function') rxLoadContactPage(rxDisplayArea);
+            if (typeof rxLoadContactPage === 'function') rxLoadContactPage(rxDisplayArea);
             break;
         case 'NEWS':
             if (typeof rxLoadNewsPage === 'function') rxLoadNewsPage(rxDisplayArea);
