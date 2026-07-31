@@ -1,5 +1,5 @@
 /* ============================================================
-   RX-MAIN.css - Layout Fixed Header/Footer & Left-Side Half Screen Drawer (Fixed for Mobile)
+   RX-MAIN.css - Layout Fixed, Half-Screen Drawer, Transparent Menu Button
    ============================================================ */
 
 * {
@@ -41,19 +41,20 @@ body {
 
 .rx-header-left { display: flex; align-items: center; gap: 10px; }
 
-/* Mobile Menu Button - modified appearance */
+/* ===== TRANSPARENT MENU BUTTON (No Background) ===== */
 .rx-menu-btn {
     display: none;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent !important;  /* पूरा पारदर्शी */
+    border: none !important;             /* कुनै बोर्डर छैन */
     color: white;
     font-size: 24px;
-    padding: 4px 10px;
-    border-radius: 5px;
+    padding: 4px;
     cursor: pointer;
-    transition: background 0.2s;
 }
-.rx-menu-btn:hover { background: rgba(255, 255, 255, 0.2); }
+.rx-menu-btn:hover {
+    background: transparent !important;  /* हल्का भए पनि रङ नदेखिने */
+}
+/* =========================================================== */
 
 .rx-portal-title-container { display: flex; flex-direction: column; }
 .rx-portal-title { font-weight: bold; font-size: clamp(12px, 3vw, 16px); color: #fff; }
@@ -159,7 +160,7 @@ ul.rx-tree li span.rx-folder { font-weight: bold; }
 .rx-welcome-logo { height: 70px; margin-bottom: 15px; flex-shrink: 0; }
 
 /* ============================================================
-   MOBILE VIEW (Half Screen Side Drawer - FIXED NOW)
+   MOBILE VIEW (Half Screen Side Drawer - White)
    ============================================================ */
 
 @media screen and (max-width: 768px) {
@@ -169,11 +170,12 @@ ul.rx-tree li span.rx-folder { font-weight: bold; }
     .rx-sidebar {
         position: fixed;
         left: 0;
-        top: 0;           /* सेफ गणनाको लागि top:0 */
-        bottom: 0;        /* bottom:0 गर्दा footer मुनि जाँदैन */
+        top: 0;
+        bottom: 0;
         height: 100%;
-        width: 50%;       /* यो Right side half screen हुन्छ */
+        width: 50%;       /* Right side half screen */
         max-width: 280px;
+        background-color: #ffffff;
         z-index: 1050;
         transform: translateX(-100%); /* सुरुमा बाहिर लुक्ने */
         border-right: 2px solid #1a4480;
@@ -184,18 +186,6 @@ ul.rx-tree li span.rx-folder { font-weight: bold; }
     /* मेनु खुल्दा Left बाट Right तिर आउने */
     .rx-sidebar.show {
         transform: translateX(0);
-    }
-
-    /* Sidebar Open भएको बेला ब्याकग्राउन्ड ओभरले (कालो धुंवलो) */
-    .rx-sidebar.show::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: -1;
     }
 
     .rx-content-area { padding: 15px; }
