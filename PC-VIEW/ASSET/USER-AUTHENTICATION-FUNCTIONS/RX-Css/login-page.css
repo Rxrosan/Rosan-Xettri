@@ -1,5 +1,5 @@
 /* ======================================== */
-/* ===== LOGIN PASSWORD TOGGLE & STATES ===== */
+/* ===== LOGIN PASSWORD TOGGLE & STATES - FULLY RESPONSIVE ===== */
 /* ======================================== */
 .password-wrapper {
     position: relative;
@@ -8,20 +8,20 @@
 
 .password-wrapper input {
     width: 100%;
-    padding-right: 44px !important; 
+    padding-right: clamp(38px, 5vw, 44px) !important;
 }
 
 .password-toggle {
     position: absolute;
-    right: 10px;
+    right: clamp(8px, 1.5vw, 10px);
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: #64748b; 
+    color: #64748b;
     cursor: pointer;
-    font-size: 14px; 
-    padding: 4px 6px;
+    font-size: clamp(13px, 1.2vw, 14px);
+    padding: clamp(4px, 0.8vw, 6px) clamp(4px, 0.8vw, 6px);
     transition: all 0.3s ease;
     z-index: 2;
     display: flex;
@@ -48,4 +48,32 @@
     background: #e2e8f0;
     color: #64748b;
     box-shadow: none;
+}
+
+/* ======================================== */
+/* ===== MOBILE RESPONSIVE ===== */
+/* ======================================== */
+
+@media (max-width: 576px) {
+    .password-wrapper input {
+        padding-right: 38px !important;
+    }
+    
+    .password-toggle {
+        right: 8px;
+        font-size: 13px;
+        padding: 4px;
+    }
+}
+
+@media (max-width: 360px) {
+    .password-wrapper input {
+        padding-right: 32px !important;
+    }
+    
+    .password-toggle {
+        right: 6px;
+        font-size: 12px;
+        padding: 3px;
+    }
 }

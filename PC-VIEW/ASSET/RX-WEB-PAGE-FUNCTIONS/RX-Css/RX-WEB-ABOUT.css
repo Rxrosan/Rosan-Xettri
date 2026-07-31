@@ -1,3 +1,7 @@
+/* ============================================================
+   RX-WEB-ABOUT.css - ENHANCED RESPONSIVE VERSION
+   ============================================================ */
+
 /* main container Section */
 .container {
     max-width: 1280px;
@@ -5,14 +9,16 @@
     padding: 0 28px;
     flex: 1;
     width: 100%;
+    box-sizing: border-box;
 }
+
 @media (max-width: 480px) {
     .container {
         padding: 0 16px;
     }
 }
 
-/* About Container - सेवा पेजको थिम अनुसार सेतो ब्याकग्राउन्ड र सफा बर्डर */
+/* About Container */
 .about-container {
     background: #ffffff;
     border-radius: 15px;
@@ -20,6 +26,7 @@
     border: 1px solid #d0dbe8;
     margin-bottom: 40px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
 }
 
 .about-content {
@@ -35,6 +42,7 @@
     flex-direction: column;
     align-items: center;
     gap: 25px;
+    width: 100%;
 }
 
 .admin-image-container {
@@ -71,14 +79,14 @@
 
 .image-overlay h4 {
     color: #ffffff;
-    font-size: 22px;
+    font-size: clamp(18px, 2.2vw, 22px);
     margin-bottom: 5px;
     font-weight: 700;
 }
 
 .image-overlay p {
     color: #e2e8f0;
-    font-size: 14px;
+    font-size: clamp(12px, 1.2vw, 14px);
     margin: 0;
     opacity: 0.9;
 }
@@ -112,18 +120,23 @@
     color: #1a4480;
     font-size: 18px;
     width: 24px;
+    flex-shrink: 0;
 }
 
 .badge span {
     color: #333333;
-    font-size: 14px;
+    font-size: clamp(13px, 1.2vw, 14px);
     font-weight: 500;
 }
 
 /* Right Side: Bio */
+.about-right {
+    width: 100%;
+}
+
 .about-right h3 {
     color: #1a4480;
-    font-size: 32px;
+    font-size: clamp(24px, 3vw, 32px);
     margin-bottom: 10px;
     font-weight: 700;
 }
@@ -138,7 +151,7 @@
 
 .title {
     color: #666666;
-    font-size: 16px;
+    font-size: clamp(14px, 1.2vw, 16px);
     margin-bottom: 25px;
     padding-bottom: 15px;
     border-bottom: 2px solid #d0dbe8;
@@ -150,7 +163,7 @@
 
 .bio-section p {
     color: #444444;
-    font-size: 15px;
+    font-size: clamp(14px, 1.2vw, 15px);
     line-height: 1.7;
     margin-bottom: 15px;
 }
@@ -161,7 +174,7 @@
 
 .skills-section h4 {
     color: #1a4480;
-    font-size: 20px;
+    font-size: clamp(18px, 1.8vw, 20px);
     margin-bottom: 20px;
     font-weight: 600;
 }
@@ -194,11 +207,12 @@
     color: #1a4480;
     font-size: 16px;
     width: 20px;
+    flex-shrink: 0;
 }
 
 .skill-item span {
     color: #333333;
-    font-size: 14px;
+    font-size: clamp(12px, 1.2vw, 14px);
     font-weight: 500;
 }
 
@@ -217,14 +231,14 @@
 
 .contact-cta h4 {
     color: #1a4480;
-    font-size: 20px;
+    font-size: clamp(18px, 1.8vw, 20px);
     margin-bottom: 10px;
     font-weight: 600;
 }
 
 .contact-cta p {
     color: #555555;
-    font-size: 15px;
+    font-size: clamp(14px, 1.2vw, 15px);
     margin-bottom: 20px;
     line-height: 1.6;
 }
@@ -242,9 +256,11 @@
     text-decoration: none;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     transition: all 0.3s ease;
-    font-size: 15px;
+    font-size: clamp(13px, 1.1vw, 15px);
+    box-sizing: border-box;
 }
 
 .contact-btn {
@@ -323,21 +339,21 @@
 
 .mission-card h4 {
     color: #1a4480;
-    font-size: 18px;
+    font-size: clamp(16px, 1.5vw, 18px);
     margin-bottom: 15px;
     font-weight: 600;
 }
 
 .mission-card p {
     color: #555555;
-    font-size: 14px;
+    font-size: clamp(13px, 1.1vw, 14px);
     line-height: 1.6;
     margin: 0;
 }
 
 /* Section title */
 .section-title {
-    font-size: 2.5rem;
+    font-size: clamp(28px, 3vw, 40px);
     text-align: center;
     margin: 6px 0 40px;
     color: #1a4480;
@@ -354,7 +370,11 @@
     border-radius: 2px;
 }
 
-/* Responsive Design */
+/* ============================================================
+   RESPONSIVE DESIGN - ALL DEVICES
+   ============================================================ */
+
+/* Tablets & Small Laptops (1024px and below) */
 @media (max-width: 1024px) {
     .about-content {
         grid-template-columns: 1fr;
@@ -369,23 +389,34 @@
     .mission-vision {
         grid-template-columns: repeat(2, 1fr);
     }
+    
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
+/* Tablets (768px and below) */
 @media (max-width: 768px) {
     .about-container {
         padding: 25px;
     }
     
     .about-right h3 {
-        font-size: 28px;
+        font-size: 26px;
     }
     
     .skills-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    
+    .skill-item {
+        padding: 12px;
     }
     
     .cta-buttons {
         flex-direction: column;
+        align-items: stretch;
     }
     
     .contact-btn, .whatsapp-btn, .email-btn {
@@ -394,36 +425,144 @@
     }
     
     .mission-vision {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
     }
-
+    
+    .mission-card {
+        padding: 20px;
+    }
+    
     .section-title {
         font-size: 2rem;
     }
 }
 
+/* Mobile Devices (480px and below) */
 @media (max-width: 480px) {
     .about-container {
-        padding: 20px;
+        padding: 15px;
+        border-radius: 10px;
     }
     
     .admin-image-container {
-        max-width: 250px;
+        max-width: 240px;
     }
     
     .about-right h3 {
-        font-size: 24px;
+        font-size: 22px;
     }
     
-    .skills-grid {
-        grid-template-columns: 1fr;
+    .about-content {
+        gap: 20px;
     }
     
     .badge {
         padding: 12px;
+        font-size: 13px;
+    }
+    
+    .badge i {
+        font-size: 15px;
+        width: 20px;
+    }
+    
+    .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .skill-item {
+        padding: 12px 15px;
+    }
+    
+    .mission-vision {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        margin-top: 25px;
+        padding-top: 25px;
     }
     
     .mission-card {
-        padding: 20px;
+        padding: 18px;
+    }
+    
+    .mission-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    .contact-cta {
+        padding: 18px;
+    }
+    
+    .contact-cta h4 {
+        font-size: 18px;
+    }
+    
+    .contact-btn, .whatsapp-btn, .email-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+    
+    .image-overlay {
+        padding: 12px;
+    }
+    
+    .image-overlay h4 {
+        font-size: 16px;
+    }
+    
+    .image-overlay p {
+        font-size: 11px;
+    }
+    
+    .section-title {
+        font-size: 26px;
+        margin-bottom: 25px;
+    }
+    
+    .section-title:after {
+        width: 60px;
+        height: 3px;
+    }
+}
+
+/* Small Mobile Devices (360px and below) */
+@media (max-width: 360px) {
+    .about-container {
+        padding: 10px;
+    }
+    
+    .admin-image-container {
+        max-width: 180px;
+    }
+    
+    .about-right h3 {
+        font-size: 19px;
+    }
+    
+    .badge {
+        padding: 10px;
+        font-size: 12px;
+        gap: 8px;
+    }
+    
+    .badge span {
+        font-size: 12px;
+    }
+    
+    .bio-section p {
+        font-size: 13px;
+    }
+    
+    .title {
+        font-size: 13px;
+    }
+    
+    .contact-cta p {
+        font-size: 13px;
     }
 }

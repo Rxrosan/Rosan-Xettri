@@ -1,8 +1,10 @@
-/* ===== RX STUDIO - TERMS & CONDITIONS STYLES (LIGHT THEME MATCHED) ===== */
+/* ============================================================
+   RX-WEB-T&C.css - ENHANCED RESPONSIVE VERSION
+   ============================================================ */
 
 /* Section Title */
 .section-title {
-    font-size: 2.5rem;
+    font-size: clamp(28px, 3vw, 40px);
     text-align: center;
     margin: 6px 0 40px;
     color: #1a4480;
@@ -21,7 +23,11 @@
 
 @media (max-width: 768px) {
     .section-title {
-        font-size: 2rem;
+        font-size: 28px;
+    }
+    .section-title:after {
+        width: 60px;
+        height: 3px;
     }
 }
 
@@ -50,7 +56,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Tab Navigation - ट्याबहरू सधैं १ लाइनमा (Horizontal Scroll) देखाउनको लागि */
+/* Tab Navigation - Always 1 line with horizontal scroll */
 .tc-tabs .tab-nav {
     display: flex;
     flex-wrap: nowrap;
@@ -68,12 +74,12 @@
 
 .tc-tabs .tab-btn {
     flex: 1 1 0;
-    min-width: 75px; /* मोबाइलमा सजिलै ४ वटै ट्याबहरू एकै लाइनमा अटाउनको लागि */
+    min-width: 75px;
     background: none;
     border: none;
     color: #1a4480;
     padding: 12px 4px;
-    font-size: 0.7rem;
+    font-size: clamp(10px, 0.7vw, 12px);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.2px;
@@ -113,13 +119,13 @@
 }
 
 .tc-tabs .tab-btn i {
-    font-size: 1.1rem;
+    font-size: clamp(16px, 1.4vw, 20px);
     margin-bottom: 2px;
     color: #1a4480;
 }
 
 .tc-tabs .tab-btn span {
-    font-size: 0.62rem;
+    font-size: clamp(8px, 0.6vw, 10px);
     white-space: nowrap;
 }
 
@@ -150,20 +156,20 @@
 }
 
 .tc-tabs .tab-header h3 {
-    font-size: 2.2rem;
+    font-size: clamp(22px, 2.8vw, 36px);
     color: #1a4480;
     font-weight: 700;
 }
 
 .tc-tabs .tab-description {
     color: #555555;
-    font-size: 1.1rem;
+    font-size: clamp(15px, 1.2vw, 18px);
     line-height: 1.6;
     margin-bottom: 40px;
     max-width: 800px;
 }
 
-/* Services Grid - PC मा ४ कलमसम्म, मोबाइलमा २x2 ग्रिड देखाउने */
+/* Services Grid - 4 columns on PC, 2x2 on mobile */
 .services-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -175,7 +181,7 @@
 .service-card {
     background-color: #f8fafc;
     border-radius: 12px;
-    padding: 25px 15px;
+    padding: clamp(18px, 2vw, 25px);
     border: 1px solid #d0dbe8;
     transition: all 0.3s ease;
     display: flex;
@@ -183,7 +189,7 @@
     align-items: center;
     text-align: center;
     height: 100%;
-    min-height: 260px;
+    min-height: clamp(220px, 25vh, 260px);
 }
 
 .service-card:hover {
@@ -202,13 +208,13 @@
 .service-info h4 {
     color: #1a4480;
     margin-bottom: 10px;
-    font-size: 1.15rem;
+    font-size: clamp(16px, 1.3vw, 19px);
     font-weight: 600;
 }
 
 .service-info p {
     color: #666666;
-    font-size: 0.85rem;
+    font-size: clamp(12px, 0.9vw, 14px);
     line-height: 1.4;
     margin: 0;
 }
@@ -221,7 +227,7 @@
     margin-top: 25px;
     border: 1px solid #d0dbe8;
     color: #444444;
-    font-size: 0.95rem;
+    font-size: clamp(14px, 1vw, 16px);
 }
 
 .tc-highlight-note i {
@@ -233,31 +239,37 @@
     color: #1a4480;
 }
 
-/* Responsive Design - ट्याब्लेट र मोबाइल भ्यूमा २x2 Grid (२ कलम्स) मा देखाउने */
+/* ============================================================
+   RESPONSIVE DESIGN - ALL DEVICES
+   ============================================================ */
+
+/* Large Tablets (1200px and below) */
 @media (max-width: 1200px) {
     .services-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
     }
 }
 
+/* Tablets (768px and below) */
 @media (max-width: 768px) {
     .services-grid {
-        grid-template-columns: repeat(2, 1fr); /* मोबाइलमा ठ्याक्कै २ कलम्स र २ रोमा (2x2 Grid) देखाउने */
+        grid-template-columns: repeat(2, 1fr);
         gap: 12px;
     }
     
     .service-card {
-        padding: 20px 10px;
-        min-height: 240px;
+        padding: 18px 12px;
+        min-height: 220px;
     }
-
+    
     .service-info h4 {
-        font-size: 0.95rem;
+        font-size: clamp(14px, 1.5vw, 16px);
         margin-bottom: 8px;
     }
-
+    
     .service-info p {
-        font-size: 0.78rem;
+        font-size: clamp(11px, 1.2vw, 13px);
     }
     
     .tc-tabs .tab-content {
@@ -265,7 +277,120 @@
     }
     
     .tc-tabs .tab-header h3 {
-        font-size: 1.4rem;
+        font-size: 24px;
+    }
+    
+    .tc-tabs .tab-description {
+        font-size: 14px;
+    }
+    
+    .tc-tabs .tab-btn {
+        min-width: 70px;
+        padding: 10px 3px;
+    }
+    
+    .tc-tabs .tab-btn i {
+        font-size: 16px;
+    }
+    
+    .tc-tabs .tab-btn span {
+        font-size: 8px;
+    }
+}
+
+/* Mobile Devices (480px and below) */
+@media (max-width: 480px) {
+    .tc-tabs .tab-content {
+        padding: 15px 10px;
+    }
+    
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .service-card {
+        padding: 15px 10px;
+        min-height: 200px;
+        border-radius: 8px;
+    }
+    
+    .service-info h4 {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+    
+    .service-info p {
+        font-size: 11px;
+        line-height: 1.4;
+    }
+    
+    .tc-tabs .tab-header h3 {
+        font-size: 20px;
+    }
+    
+    .tc-tabs .tab-description {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+    
+    .tc-tabs .tab-btn {
+        min-width: 60px;
+        padding: 8px 2px;
+    }
+    
+    .tc-tabs .tab-btn i {
+        font-size: 14px;
+    }
+    
+    .tc-tabs .tab-btn span {
+        font-size: 7px;
+    }
+    
+    .tc-highlight-note {
+        padding: 12px 15px;
+        font-size: 13px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+    }
+}
+
+/* Small Mobile Devices (360px and below) */
+@media (max-width: 360px) {
+    .services-grid {
+        gap: 8px;
+    }
+    
+    .service-card {
+        padding: 12px 8px;
+        min-height: 180px;
+    }
+    
+    .service-info h4 {
+        font-size: 12px;
+    }
+    
+    .service-info p {
+        font-size: 10px;
+    }
+    
+    .tc-tabs .tab-btn {
+        min-width: 50px;
+        padding: 6px 2px;
+    }
+    
+    .tc-tabs .tab-btn i {
+        font-size: 12px;
+    }
+    
+    .tc-tabs .tab-btn span {
+        font-size: 6px;
+    }
+    
+    .tc-tabs .tab-header h3 {
+        font-size: 16px;
     }
 }
 

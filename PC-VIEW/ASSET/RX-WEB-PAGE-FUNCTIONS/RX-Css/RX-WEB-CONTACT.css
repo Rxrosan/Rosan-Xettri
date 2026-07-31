@@ -1,3 +1,7 @@
+/* ============================================================
+   RX-WEB-CONTACT.css - ENHANCED RESPONSIVE VERSION
+   ============================================================ */
+
 /* main container Section */
 .container {
     max-width: 1280px;
@@ -30,6 +34,7 @@
     padding: 0;
     overflow-x: auto;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .tab-nav::-webkit-scrollbar {
@@ -43,7 +48,7 @@
     border: none;
     color: #1a4480;
     padding: 20px 15px;
-    font-size: 1rem;
+    font-size: clamp(12px, 1vw, 16px);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -82,13 +87,13 @@
 }
 
 .tab-btn i {
-    font-size: 1.5rem;
+    font-size: clamp(18px, 1.8vw, 24px);
     margin-bottom: 5px;
     color: #1a4480;
 }
 
 .tab-btn span {
-    font-size: 0.85rem;
+    font-size: clamp(10px, 0.8vw, 14px);
 }
 
 /* Tab Content */
@@ -126,26 +131,27 @@
 }
 
 .tab-icon {
-    width: 60px;
-    height: 60px;
+    width: clamp(50px, 5vw, 60px);
+    height: clamp(50px, 5vw, 60px);
     background: #1a4480;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-size: 1.8rem;
+    font-size: clamp(24px, 2.2vw, 30px);
+    flex-shrink: 0;
 }
 
 .tab-header h3 {
-    font-size: 2.2rem;
+    font-size: clamp(24px, 2.8vw, 36px);
     color: #1a4480;
     font-weight: 700;
 }
 
 .tab-description {
     color: #555555;
-    font-size: 1.1rem;
+    font-size: clamp(15px, 1.2vw, 18px);
     line-height: 1.6;
     margin-bottom: 40px;
     max-width: 800px;
@@ -179,14 +185,15 @@
 }
 
 .social-icon {
-    width: 50px;
-    height: 50px;
+    width: clamp(40px, 4vw, 50px);
+    height: clamp(40px, 4vw, 50px);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.3rem;
+    font-size: clamp(18px, 1.6vw, 22px);
     color: white;
+    flex-shrink: 0;
 }
 
 .social-icon.facebook { background-color: #0b57b9; }
@@ -201,12 +208,12 @@
 .social-info h4 {
     color: #1a4480;
     margin-bottom: 5px;
-    font-size: 1.1rem;
+    font-size: clamp(15px, 1.2vw, 18px);
 }
 
 .social-info p {
     color: #666666;
-    font-size: 0.9rem;
+    font-size: clamp(12px, 0.9vw, 14px);
 }
 
 /* ===== Direct Contact Tab ===== */
@@ -259,13 +266,13 @@
 .method-details h4 {
     color: #1a4480;
     margin-bottom: 8px;
-    font-size: 1.2rem;
+    font-size: clamp(17px, 1.3vw, 20px);
 }
 
 .method-details p {
     color: #666666;
     margin-bottom: 15px;
-    font-size: 1rem;
+    font-size: clamp(14px, 1vw, 16px);
 }
 
 .method-action {
@@ -278,7 +285,7 @@
     border: 1px solid #1a4480;
     border-radius: 5px;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-size: clamp(12px, 0.9vw, 14px);
     font-weight: 600;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -289,7 +296,7 @@
     color: #ffffff;
 }
 
-/* ===== Email Us Tab - Simplified ===== */
+/* ===== Email Us Tab ===== */
 .email-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -302,7 +309,7 @@
 .email-form-section h4 {
     color: #1a4480;
     margin-bottom: 20px;
-    font-size: 1.4rem;
+    font-size: clamp(20px, 1.8vw, 24px);
     padding-bottom: 10px;
     border-bottom: 1px solid #d0dbe8;
 }
@@ -326,15 +333,16 @@
 }
 
 .email-icon-main {
-    width: 60px;
-    height: 60px;
+    width: clamp(50px, 5vw, 60px);
+    height: clamp(50px, 5vw, 60px);
     background: #1a4480;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
-    font-size: 1.8rem;
+    font-size: clamp(24px, 2.2vw, 30px);
+    flex-shrink: 0;
 }
 
 .email-details {
@@ -344,13 +352,13 @@
 .email-details h5 {
     color: #1a4480;
     margin-bottom: 5px;
-    font-size: 1.3rem;
+    font-size: clamp(16px, 1.4vw, 22px);
     word-break: break-all;
 }
 
 .email-details p {
     color: #666666;
-    font-size: 0.95rem;
+    font-size: clamp(13px, 0.9vw, 15px);
     margin-bottom: 15px;
 }
 
@@ -372,6 +380,7 @@
     align-items: center;
     gap: 8px;
     transition: all 0.2s ease;
+    font-size: clamp(12px, 0.9vw, 14px);
 }
 
 .direct-mail-btn:hover {
@@ -391,6 +400,7 @@
     align-items: center;
     gap: 8px;
     transition: all 0.2s ease;
+    font-size: clamp(12px, 0.9vw, 14px);
 }
 
 .copy-email-btn:hover {
@@ -425,12 +435,12 @@
 .info-item h6 {
     color: #1a4480;
     margin-bottom: 5px;
-    font-size: 1rem;
+    font-size: clamp(14px, 1vw, 16px);
 }
 
 .info-item p {
     color: #666666;
-    font-size: 0.9rem;
+    font-size: clamp(12px, 0.85vw, 14px);
     margin: 0;
 }
 
@@ -451,7 +461,7 @@
     color: #1a4480;
     margin-bottom: 8px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: clamp(14px, 1vw, 15px);
 }
 
 .form-group-simple input,
@@ -462,8 +472,9 @@
     border: 1px solid #d0dbe8;
     border-radius: 6px;
     color: #333333;
-    font-size: 1rem;
+    font-size: clamp(14px, 1vw, 16px);
     transition: border-color 0.2s ease;
+    box-sizing: border-box;
 }
 
 .form-group-simple input:focus,
@@ -491,7 +502,7 @@
     border: none;
     border-radius: 6px;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: clamp(14px, 1vw, 16px);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -517,150 +528,12 @@
     align-items: center;
     gap: 8px;
     transition: all 0.2s ease;
+    font-size: clamp(13px, 0.9vw, 15px);
 }
 
 .clear-btn:hover {
     border-color: #1a4480;
     color: #1a4480;
-}
-
-/* ===== Subscribe Tab ===== */
-.subscribe-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    margin-top: 30px;
-}
-
-.subscribe-form-section h4,
-.subscribe-benefits h4 {
-    color: #1a4480;
-    margin-bottom: 20px;
-    font-size: 1.4rem;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #d0dbe8;
-}
-
-.subscribe-card {
-    background-color: #f8fafc;
-    border-radius: 10px;
-    padding: 25px;
-    border: 1px solid #d0dbe8;
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.subscribe-icon {
-    width: 70px;
-    height: 70px;
-    background: #1a4480;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    font-size: 2rem;
-    margin: 0 auto 20px;
-}
-
-.subscribe-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.subscribe-input {
-    flex: 1;
-    padding: 12px 15px;
-    background-color: #ffffff;
-    border: 1px solid #d0dbe8;
-    border-radius: 6px;
-    color: #333333;
-    font-size: 1rem;
-}
-
-.subscribe-input:focus {
-    outline: none;
-    border-color: #1a4480;
-}
-
-.subscribe-btn {
-    padding: 12px 25px;
-    background: #1a4480;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    font-weight: 700;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s ease;
-}
-
-.subscribe-btn:hover {
-    background: #0056b3;
-    transform: translateY(-2px);
-}
-
-.subscribe-note {
-    color: #666666;
-    font-size: 0.9rem;
-    margin-top: 10px;
-}
-
-/* Subscribe Options */
-.subscribe-options h5 {
-    color: #1a4480;
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-}
-
-.option-group {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.option-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #555555;
-    cursor: pointer;
-}
-
-.option-item input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #1a4480;
-}
-
-.option-item span {
-    font-size: 0.95rem;
-}
-
-/* Subscribe Benefits */
-.benefits-list-simple {
-    list-style: none;
-}
-
-.benefits-list-simple li {
-    color: #555555;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 12px;
-    background-color: #f8fafc;
-    border-radius: 8px;
-    border: 1px solid #d0dbe8;
-}
-
-.benefits-list-simple li i {
-    color: #1a4480;
-    margin-top: 2px;
-    font-size: 1.1rem;
 }
 
 /* ===== Map Tab ===== */
@@ -672,11 +545,17 @@
 }
 
 .map-container-simple {
-    height: 400px;
+    height: clamp(300px, 45vh, 400px);
     background-color: #f8fafc;
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid #d0dbe8;
+}
+
+.map-container-simple iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
 
 .map-placeholder-simple {
@@ -711,7 +590,7 @@
 .location-details h4 {
     color: #1a4480;
     margin-bottom: 25px;
-    font-size: 1.5rem;
+    font-size: clamp(20px, 1.8vw, 24px);
     padding-bottom: 15px;
     border-bottom: 2px solid #d0dbe8;
 }
@@ -744,12 +623,12 @@
 .location-item h5 {
     color: #1a4480;
     margin-bottom: 5px;
-    font-size: 1.1rem;
+    font-size: clamp(16px, 1.2vw, 18px);
 }
 
 .location-item p {
     color: #666666;
-    font-size: 0.95rem;
+    font-size: clamp(13px, 0.9vw, 15px);
     margin-bottom: 3px;
 }
 
@@ -774,6 +653,7 @@
     justify-content: center;
     gap: 10px;
     transition: all 0.2s ease;
+    font-size: clamp(14px, 1vw, 16px);
 }
 
 .map-btn:hover {
@@ -781,127 +661,9 @@
     transform: translateY(-2px);
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
-    .email-container,
-    .subscribe-container,
-    .map-section-simple {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-    
-    .option-group {
-        grid-template-columns: 1fr;
-    }
-    
-    .tab-content {
-        padding: 30px;
-    }
-    
-    .tab-header h3 {
-        font-size: 1.8rem;
-    }
-    
-    .direct-email-card {
-        flex-direction: column;
-        text-align: center;
-        padding: 20px;
-    }
-    
-    .email-icon-main {
-        width: 70px;
-        height: 70px;
-        font-size: 2rem;
-    }
-    
-    .email-actions {
-        justify-content: center;
-    }
-}
-
-@media (max-width: 768px) {
-    .tab-nav {
-        flex-wrap: wrap;
-    }
-    
-    .tab-btn {
-        min-width: 100px;
-        padding: 15px 10px;
-        font-size: 0.85rem;
-    }
-    
-    .tab-btn i {
-        font-size: 1.2rem;
-    }
-    
-    .social-media-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
-    
-    .contact-methods {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-actions,
-    .subscribe-form,
-    .email-actions {
-        flex-direction: column;
-    }
-    
-    .direct-mail-btn,
-    .copy-email-btn,
-    .submit-btn,
-    .clear-btn,
-    .subscribe-btn,
-    .subscribe-input {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .tab-content {
-        padding: 20px;
-    }
-}
-
-@media (max-width: 576px) {
-    .tab-btn {
-        min-width: 80px;
-        padding: 12px 5px;
-        font-size: 0.75rem;
-    }
-    
-    .tab-btn i {
-        font-size: 1rem;
-    }
-    
-    .tab-icon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
-    }
-    
-    .tab-header h3 {
-        font-size: 1.5rem;
-    }
-    
-    .social-media-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .contact-form-simple,
-    .subscribe-card,
-    .direct-email-card {
-        padding: 20px;
-    }
-    
-    .email-details h5 {
-        font-size: 1.1rem;
-    }
-}
-
 /* Section title */
 .section-title {
-    font-size: 2.5rem;
+    font-size: clamp(28px, 3vw, 40px);
     text-align: center;
     margin: 6px 0 40px;
     color: #1a4480;
@@ -918,8 +680,257 @@
     border-radius: 2px;
 }
 
+/* ============================================================
+   RESPONSIVE DESIGN - ALL DEVICES
+   ============================================================ */
+
+/* Tablets & Small Laptops (992px and below) */
+@media (max-width: 992px) {
+    .email-container,
+    .map-section-simple {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .tab-content {
+        padding: 30px;
+    }
+    
+    .tab-header h3 {
+        font-size: 28px;
+    }
+    
+    .direct-email-card {
+        flex-direction: row;
+        text-align: left;
+        padding: 20px;
+    }
+    
+    .email-icon-main {
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+    }
+    
+    .email-actions {
+        justify-content: flex-start;
+    }
+}
+
+/* Tablets (768px and below) */
 @media (max-width: 768px) {
+    .tab-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    
+    .tab-btn {
+        min-width: 100px;
+        padding: 15px 10px;
+        font-size: 12px;
+    }
+    
+    .tab-btn i {
+        font-size: 20px;
+    }
+    
+    .tab-btn span {
+        font-size: 10px;
+    }
+    
+    .tab-content {
+        padding: 20px;
+    }
+    
+    .tab-header h3 {
+        font-size: 24px;
+    }
+    
+    .tab-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+    }
+    
+    .social-media-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+    
+    .contact-methods {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions,
+    .email-actions {
+        flex-direction: column;
+    }
+    
+    .direct-mail-btn,
+    .copy-email-btn,
+    .submit-btn,
+    .clear-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .map-container-simple {
+        height: 280px;
+    }
+    
     .section-title {
-        font-size: 2rem;
+        font-size: 28px;
+    }
+}
+
+/* Mobile Devices (576px and below) */
+@media (max-width: 576px) {
+    .tab-btn {
+        min-width: 80px;
+        padding: 12px 6px;
+        font-size: 10px;
+    }
+    
+    .tab-btn i {
+        font-size: 16px;
+    }
+    
+    .tab-btn span {
+        font-size: 8px;
+        letter-spacing: 0.5px;
+    }
+    
+    .tab-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+    }
+    
+    .tab-header h3 {
+        font-size: 20px;
+    }
+    
+    .tab-description {
+        font-size: 14px;
+    }
+    
+    .social-media-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .social-card {
+        padding: 15px;
+    }
+    
+    .contact-method {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .method-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 22px;
+    }
+    
+    .direct-email-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .email-icon-main {
+        width: 60px;
+        height: 60px;
+        font-size: 26px;
+    }
+    
+    .email-actions {
+        justify-content: center;
+    }
+    
+    .contact-form-simple {
+        padding: 20px;
+    }
+    
+    .email-details h5 {
+        font-size: 18px;
+    }
+    
+    .map-section-simple {
+        grid-template-columns: 1fr;
+    }
+    
+    .map-container-simple {
+        height: 250px;
+    }
+    
+    .location-details h4 {
+        font-size: 20px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+    }
+    
+    .section-title:after {
+        width: 60px;
+        height: 3px;
+    }
+}
+
+/* Small Mobile Devices (360px and below) */
+@media (max-width: 360px) {
+    .tab-btn {
+        min-width: 65px;
+        padding: 10px 4px;
+        font-size: 9px;
+    }
+    
+    .tab-btn i {
+        font-size: 14px;
+    }
+    
+    .tab-btn span {
+        font-size: 7px;
+    }
+    
+    .tab-content {
+        padding: 15px;
+    }
+    
+    .tab-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .tab-header h3 {
+        font-size: 18px;
+    }
+    
+    .social-card {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .social-info h4 {
+        font-size: 14px;
+    }
+    
+    .direct-email-card {
+        padding: 15px;
+    }
+    
+    .email-details h5 {
+        font-size: 16px;
+    }
+    
+    .contact-method {
+        padding: 15px;
+    }
+    
+    .map-container-simple {
+        height: 200px;
     }
 }

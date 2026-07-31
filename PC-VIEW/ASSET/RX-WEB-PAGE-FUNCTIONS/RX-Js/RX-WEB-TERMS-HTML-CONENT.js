@@ -39,34 +39,34 @@ function rxLoadTermsPage(rxDisplayArea) {
                                 <div class="tab-icon"><i class="fas fa-file-alt"></i></div>
                                 <div><h3>Terms & Conditions Overview</h3></div>
                             </div>
-                            <p class="tab-description">Welcome to RX STUDIO. By accessing or using our services, you agree to be bound by these Terms & Conditions. Please read them carefully before using any of our services including lekhapadi, graphic design, EPS exam platform, QR code generator, and text-to-image tools[cite: 6].</p>
+                            <p class="tab-description">Welcome to RX STUDIO. By accessing or using our services, you agree to be bound by these Terms & Conditions. Please read them carefully before using any of our services including lekhapadi, graphic design, EPS exam platform, QR code generator, and text-to-image tools.</p>
                             
                             <div class="services-grid">
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Acceptance of Terms</h4>
-                                        <p>By using our website and services, you confirm that you accept these terms and agree to comply with them. If you do not agree, please do not use our services[cite: 6].</p>
+                                        <p>By using our website and services, you confirm that you accept these terms and agree to comply with them. If you do not agree, please do not use our services.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Eligibility</h4>
-                                        <p>You must be at least 18 years old to use our services. By using our services, you represent that you meet this eligibility requirement[cite: 6].</p>
+                                        <p>You must be at least 18 years old to use our services. By using our services, you represent that you meet this eligibility requirement.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Account Responsibility</h4>
-                                        <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account[cite: 6].</p>
+                                        <p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Modifications</h4>
-                                        <p>We reserve the right to modify these terms at any time. Changes become effective immediately upon posting. Continued use constitutes acceptance[cite: 6].</p>
+                                        <p>We reserve the right to modify these terms at any time. Changes become effective immediately upon posting. Continued use constitutes acceptance.</p>
                                     </div>
                                 </div>
                             </div>
@@ -80,40 +80,40 @@ function rxLoadTermsPage(rxDisplayArea) {
                                 <div class="tab-icon"><i class="fas fa-cogs"></i></div>
                                 <div><h3>Services & Usage</h3></div>
                             </div>
-                            <p class="tab-description">RX STUDIO provides various professional services. These terms govern your use of all our service offerings[cite: 6].</p>
+                            <p class="tab-description">RX STUDIO provides various professional services. These terms govern your use of all our service offerings.</p>
                             
                             <div class="services-grid">
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Lekhapadi Services</h4>
-                                        <p>Licensed legal documentation services provided within Kapilvastu district. All documents are prepared in accordance with Nepal's legal framework[cite: 6].</p>
+                                        <p>Licensed legal documentation services provided within Kapilvastu district. All documents are prepared in accordance with Nepal's legal framework.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Graphic & Design Services</h4>
-                                        <p>Logo design, poster creation, image editing services. Final deliverables are provided upon full payment. Revisions are subject to agreed terms[cite: 6].</p>
+                                        <p>Logo design, poster creation, image editing services. Final deliverables are provided upon full payment. Revisions are subject to agreed terms.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>EPS Exam Platform</h4>
-                                        <p>Online practice software for EPS-TOPIK exam preparation. Access is provided for learning purposes only. No guarantee of exam results[cite: 6].</p>
+                                        <p>Online practice software for EPS-TOPIK exam preparation. Access is provided for learning purposes only. No guarantee of exam results.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Web Software Tools</h4>
-                                        <p>QR code generator and text-to-image tools are provided "as is" with reasonable functionality. Password-protected features require responsible use[cite: 6].</p>
+                                        <p>QR code generator and text-to-image tools are provided "as is" with reasonable functionality. Password-protected features require responsible use.</p>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="tc-highlight-note">
-                                <i class="fas fa-info-circle"></i> All services are subject to availability. We reserve the right to modify, suspend, or discontinue any service without prior notice[cite: 6].
+                                <i class="fas fa-info-circle"></i> All services are subject to availability. We reserve the right to modify, suspend, or discontinue any service without prior notice.
                             </div>
                         </div>
                     </div>
@@ -125,34 +125,34 @@ function rxLoadTermsPage(rxDisplayArea) {
                                 <div class="tab-icon"><i class="fas fa-user-check"></i></div>
                                 <div><h3>User Obligations</h3></div>
                             </div>
-                            <p class="tab-description">As a user of RX STUDIO services, you agree to the following obligations and responsibilities[cite: 6].</p>
+                            <p class="tab-description">As a user of RX STUDIO services, you agree to the following obligations and responsibilities.</p>
                             
                             <div class="services-grid">
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Accurate Information</h4>
-                                        <p>You must provide accurate, complete, and current information when using our services, especially for lekhapadi documentation and account registration[cite: 6].</p>
+                                        <p>You must provide accurate, complete, and current information when using our services, especially for lekhapadi documentation and account registration.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Prohibited Activities</h4>
-                                        <p>You may not use our services for illegal purposes, harassment, fraud, or any activity that violates applicable laws in Nepal[cite: 6].</p>
+                                        <p>You may not use our services for illegal purposes, harassment, fraud, or any activity that violates applicable laws in Nepal.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Intellectual Property</h4>
-                                        <p>You shall not copy, modify, distribute, or reverse engineer any of our software, designs, or proprietary content without written permission[cite: 6].</p>
+                                        <p>You shall not copy, modify, distribute, or reverse engineer any of our software, designs, or proprietary content without written permission.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Compliance with Laws</h4>
-                                        <p>You agree to comply with all applicable local, national, and international laws and regulations regarding your use of our services[cite: 6].</p>
+                                        <p>You agree to comply with all applicable local, national, and international laws and regulations regarding your use of our services.</p>
                                     </div>
                                 </div>
                             </div>
@@ -166,40 +166,40 @@ function rxLoadTermsPage(rxDisplayArea) {
                                 <div class="tab-icon"><i class="fas fa-wallet"></i></div>
                                 <div><h3>Payments & Fees</h3></div>
                             </div>
-                            <p class="tab-description">Understanding our payment terms, fees, and refund policies for services provided by RX STUDIO[cite: 6].</p>
+                            <p class="tab-description">Understanding our payment terms, fees, and refund policies for services provided by RX STUDIO.</p>
                             
                             <div class="services-grid">
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Service Fees</h4>
-                                        <p>All fees for services are quoted in Nepalese Rupees (NPR) unless otherwise specified. Fees are subject to change with prior notice[cite: 6].</p>
+                                        <p>All fees for services are quoted in Nepalese Rupees (NPR) unless otherwise specified. Fees are subject to change with prior notice.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Payment Methods</h4>
-                                        <p>We accept various payment methods including bank transfer, mobile payments (eSewa, Khalti), and cash payments for in-person services[cite: 6].</p>
+                                        <p>We accept various payment methods including bank transfer, mobile payments (eSewa, Khalti), and cash payments for in-person services.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Refund Policy</h4>
-                                        <p>Refunds are provided on a case-by-case basis. Digital services once delivered are generally non-refundable. Lekhapadi service fees are non-refundable after document processing begins[cite: 6].</p>
+                                        <p>Refunds are provided on a case-by-case basis. Digital services once delivered are generally non-refundable. Lekhapadi service fees are non-refundable after document processing begins.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Late Payments</h4>
-                                        <p>Late payments may result in service suspension. Additional charges may apply for delayed payments beyond agreed terms[cite: 6].</p>
+                                        <p>Late payments may result in service suspension. Additional charges may apply for delayed payments beyond agreed terms.</p>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="tc-highlight-note">
-                                <i class="fas fa-receipt"></i> All transactions are recorded and invoices are provided upon request. Please retain payment receipts for reference[cite: 6].
+                                <i class="fas fa-receipt"></i> All transactions are recorded and invoices are provided upon request. Please retain payment receipts for reference.
                             </div>
                         </div>
                     </div>
@@ -211,54 +211,54 @@ function rxLoadTermsPage(rxDisplayArea) {
                                 <div class="tab-icon"><i class="fas fa-balance-scale"></i></div>
                                 <div><h3>Limitation of Liability</h3></div>
                             </div>
-                            <p class="tab-description">Important limitations on our liability and your responsibilities when using RX STUDIO services[cite: 6].</p>
+                            <p class="tab-description">Important limitations on our liability and your responsibilities when using RX STUDIO services.</p>
                             
                             <div class="services-grid">
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>No Warranty</h4>
-                                        <p>Services are provided "as is" without warranties of any kind. We do not guarantee uninterrupted or error-free operation of digital platforms[cite: 6].</p>
+                                        <p>Services are provided "as is" without warranties of any kind. We do not guarantee uninterrupted or error-free operation of digital platforms.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Limitation of Damages</h4>
-                                        <p>To the maximum extent permitted by law, RX STUDIO shall not be liable for any indirect, incidental, or consequential damages arising from service use[cite: 6].</p>
+                                        <p>To the maximum extent permitted by law, RX STUDIO shall not be liable for any indirect, incidental, or consequential damages arising from service use.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Indemnification</h4>
-                                        <p>You agree to indemnify and hold RX STUDIO harmless from any claims, damages, or expenses arising from your violation of these terms[cite: 6].</p>
+                                        <p>You agree to indemnify and hold RX STUDIO harmless from any claims, damages, or expenses arising from your violation of these terms.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Force Majeure</h4>
-                                        <p>We are not liable for delays or failures in performance resulting from causes beyond our reasonable control, including natural disasters, technical failures, or government actions[cite: 6].</p>
+                                        <p>We are not liable for delays or failures in performance resulting from causes beyond our reasonable control, including natural disasters, technical failures, or government actions.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Governing Law</h4>
-                                        <p>These terms shall be governed by and construed in accordance with the laws of Nepal. Any disputes shall be resolved in Kapilvastu district courts[cite: 6].</p>
+                                        <p>These terms shall be governed by and construed in accordance with the laws of Nepal. Any disputes shall be resolved in Kapilvastu district courts.</p>
                                     </div>
                                 </div>
                                 
                                 <div class="service-card">
                                     <div class="service-info">
                                         <h4>Termination</h4>
-                                        <p>We reserve the right to terminate or suspend access to our services immediately, without prior notice, for violation of these terms[cite: 6].</p>
+                                        <p>We reserve the right to terminate or suspend access to our services immediately, without prior notice, for violation of these terms.</p>
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="tc-highlight-note">
-                                <i class="fas fa-balance-scale"></i> By using RX STUDIO services, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions[cite: 6].
+                                <i class="fas fa-balance-scale"></i> By using RX STUDIO services, you acknowledge that you have read, understood, and agree to be bound by these Terms & Conditions.
                             </div>
                         </div>
                     </div>

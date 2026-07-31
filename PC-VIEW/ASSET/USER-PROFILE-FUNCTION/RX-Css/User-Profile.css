@@ -1,5 +1,5 @@
 /* ==========================================================================
-   RX PROFILE GRID & COLOR SYSTEM (CLEAN WHITE THEME)
+   RX PROFILE GRID & COLOR SYSTEM (CLEAN WHITE THEME) - FULLY RESPONSIVE
    ========================================================================== */
 
 /* मुख्य सेक्सन कन्टेनर */
@@ -7,32 +7,31 @@
     width: 100%;
     max-width: 1200px;
     margin: 40px auto;
-    padding: 20px;
+    padding: clamp(10px, 3vw, 20px);
     box-sizing: border-box;
-    background-color: #f8fafc; /* सफा लाइट ब्याकग्राउन्ड */
+    background-color: #f8fafc;
 }
 
 /* मुख्य टाइटल - सेन्टरमा र प्रिमियम रेड अन्डरलाइन */
 .section-title {
-    font-size: 2.2rem;
-    color: #1e293b; /* गाढा कालो/फरेथ टेक्स्ट कलर */
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    color: #1e293b;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    margin-bottom: 40px;
+    letter-spacing: clamp(1px, 0.3vw, 3px);
+    margin-bottom: clamp(20px, 4vw, 40px);
     text-align: center;
     position: relative;
-    padding-bottom: 15px;
+    padding-bottom: clamp(10px, 1.5vw, 15px);
 }
 
-/* टाइटलको तल पट्टि रेड अन्डरलाइन बर्डर */
 .section-title::after {
     content: '';
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
-    height: 4px;
+    width: clamp(60px, 10vw, 100px);
+    height: clamp(3px, 0.4vw, 4px);
     background: #ff0000;
     border-radius: 2px;
     box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
@@ -41,8 +40,8 @@
 /* मुख्य बडी ग्रिड */
 .profile-container {
     display: grid;
-    grid-template-columns: 320px 1fr;
-    gap: 30px;
+    grid-template-columns: clamp(260px, 30vw, 320px) 1fr;
+    gap: clamp(15px, 3vw, 30px);
     align-items: stretch;
 }
 
@@ -50,25 +49,25 @@
    LEFT SIDE: USER AVATAR CARD (WHITE THEME)
    ========================================================================== */
 .profile-left {
-    background: #ffffff; /* सेतो कार्ड ब्याकग्राउन्ड */
-    border: 1px solid #e2e8f0; /* हल्का सफा बोर्डर */
-    border-radius: 12px;
-    padding: 40px 20px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: clamp(10px, 1.5vw, 12px);
+    padding: clamp(20px, 4vw, 40px) clamp(15px, 2vw, 20px);
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* सफा लाइट स्याडो */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .profile-image-container {
-    width: 140px;
-    height: 140px;
-    margin: 0 auto 20px auto;
+    width: clamp(100px, 18vw, 140px);
+    height: clamp(100px, 18vw, 140px);
+    margin: 0 auto clamp(15px, 2vw, 20px) auto;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #ff0000;
-    padding: 5px;
+    border: clamp(2px, 0.3vw, 3px) solid #ff0000;
+    padding: clamp(3px, 0.5vw, 5px);
     background: #f1f5f9;
     box-shadow: 0 0 15px rgba(255, 0, 0, 0.15);
     position: relative;
@@ -84,15 +83,16 @@
 }
 
 .profile-name {
-    font-size: 1.4rem;
-    color: #0f172a; /* गाढा टेक्स्ट */
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    color: #0f172a;
     margin: 10px 0 5px 0;
     font-weight: 600;
+    word-break: break-word;
 }
 
 .profile-nickname {
-    font-size: 0.9rem;
-    color: #64748b; /* म्याचिङ ग्रे टेक्स्ट */
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+    color: #64748b;
     margin: 0;
 }
 
@@ -102,8 +102,8 @@
 .profile-right {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 25px 30px;
+    border-radius: clamp(10px, 1.5vw, 12px);
+    padding: clamp(15px, 2.5vw, 25px) clamp(15px, 2.5vw, 30px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
@@ -111,10 +111,10 @@
 }
 
 .details-title {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 2vw, 1.25rem);
     color: #1e293b;
     margin-top: 0;
-    margin-bottom: 20px;
+    margin-bottom: clamp(15px, 2vw, 20px);
     padding-bottom: 8px;
     border-bottom: 1px solid #e2e8f0;
 }
@@ -123,22 +123,21 @@
 .profile-right .detail-item-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: clamp(10px, 1.5vw, 15px);
     flex-grow: 1;
 }
 
 /* प्रत्येक सिंगल डेटा बक्स */
 .detail-item {
-    background: #f8fafc; /* हल्का ग्रे-ह्वाइट बक्स */
+    background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    padding: 12px 18px;
+    border-radius: clamp(6px, 1vw, 8px);
+    padding: clamp(10px, 1.2vw, 12px) clamp(12px, 1.5vw, 18px);
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
 }
 
-/* होभर गर्दा इफेक्ट */
 .detail-item:hover {
     border-color: rgba(255, 0, 0, 0.4);
     background: #fff5f5;
@@ -154,7 +153,7 @@
 }
 
 .detail-label {
-    font-size: 0.8rem;
+    font-size: clamp(0.65rem, 1vw, 0.8rem);
     color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -162,13 +161,12 @@
 }
 
 .detail-value {
-    font-size: 0.95rem;
-    color: #0f172a; /* सेतो हटाएर गाढा कालो टेक्स्ट राखिएको ताकि लाइट थिममा स्पष्ट देखियोस् */
+    font-size: clamp(0.8rem, 1.2vw, 0.95rem);
+    color: #0f172a;
     font-weight: 500;
     word-break: break-all;
 }
 
-/* Member Type र User ID को लागि हाइलाइट कलर */
 #dropdown-account-type, #dropdown-user-id {
     color: #e11d48;
     font-weight: 600;
@@ -184,8 +182,8 @@
     background: #ff0000;
     color: #fff;
     border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: clamp(24px, 4vw, 30px);
+    height: clamp(24px, 4vw, 30px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -193,6 +191,7 @@
     box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     z-index: 10;
     transition: 0.3s;
+    font-size: clamp(10px, 1.5vw, 14px);
 }
 
 .camera-overlay:hover {
@@ -205,7 +204,7 @@
     display: none;
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6); /* हल्का पारदर्शी डार्क ओभरले (मोडलको लागि मात्र) */
+    background: rgba(0,0,0,0.6);
     z-index: 99999;
     justify-content: center;
     align-items: center;
@@ -216,9 +215,9 @@
     width: 90%;
     max-width: 400px;
     max-height: 60vh;
-    background: #ffffff; /* मोडल भित्र सेतो ब्याकग्राउन्ड */
-    padding: 20px;
-    border-radius: 12px;
+    background: #ffffff;
+    padding: clamp(15px, 3vw, 20px);
+    border-radius: clamp(10px, 1.5vw, 12px);
     text-align: center;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
@@ -236,11 +235,12 @@
     background: #ff0000;
     color: #fff;
     border: none;
-    padding: 8px 20px;
+    padding: clamp(6px, 1vw, 8px) clamp(15px, 2vw, 20px);
     font-weight: bold;
     border-radius: 4px;
     cursor: pointer;
     margin: 0 5px;
+    font-size: clamp(12px, 1.2vw, 14px);
 }
 
 .crop-btn-cancel {
@@ -248,30 +248,182 @@
 }
 
 /* ==========================================================================
-   RESPONSIVE DESIGN
+   RESPONSIVE DESIGN - ALL DEVICES
    ========================================================================== */
-@media (max-width: 992px) {
+
+/* Tablets & Small Laptops (1024px and below) */
+@media (max-width: 1024px) {
     .profile-container {
         grid-template-columns: 1fr;
         align-items: start;
+        gap: 20px;
     }
     .profile-left {
         display: block;
+        max-width: 400px;
+        margin: 0 auto;
+        width: 100%;
+    }
+    .profile-right {
+        width: 100%;
     }
 }
 
-@media (max-width: 650px) {
-    .profile-right .detail-item-container {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
     .profile-section {
+        margin: 20px auto;
+        padding: 15px;
+    }
+    
+    .profile-right .detail-item-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+    
+    .profile-left {
+        max-width: 350px;
+        padding: 25px 15px;
+    }
+    
+    .profile-image-container {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .section-title {
+        font-size: 1.6rem;
+        margin-bottom: 25px;
+    }
+    
+    .profile-right {
+        padding: 20px;
+    }
+    
+    .detail-item {
+        padding: 10px 14px;
+    }
+}
+
+/* Mobile Devices (576px and below) */
+@media (max-width: 576px) {
+    .profile-section {
+        margin: 10px auto;
         padding: 10px;
     }
-    .profile-right {
+    
+    .profile-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .profile-left {
+        max-width: 100%;
         padding: 20px 15px;
     }
+    
+    .profile-image-container {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .profile-name {
+        font-size: 1.1rem;
+    }
+    
+    .profile-right .detail-item-container {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .profile-right {
+        padding: 15px;
+    }
+    
+    .detail-item {
+        padding: 10px 12px;
+    }
+    
+    .detail-label {
+        font-size: 0.7rem;
+    }
+    
+    .detail-value {
+        font-size: 0.85rem;
+    }
+    
     .section-title {
-        font-size: 1.8rem;
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+    
+    .section-title::after {
+        width: 50px;
+        height: 3px;
+    }
+    
+    .details-title {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    .crop-container {
+        max-width: 95%;
+        padding: 15px;
+    }
+}
+
+/* Small Mobile Devices (360px and below) */
+@media (max-width: 360px) {
+    .profile-section {
+        padding: 8px;
+        margin: 5px auto;
+    }
+    
+    .profile-image-container {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .profile-name {
+        font-size: 0.95rem;
+    }
+    
+    .profile-nickname {
+        font-size: 0.7rem;
+    }
+    
+    .profile-left {
+        padding: 15px 10px;
+    }
+    
+    .profile-right {
+        padding: 12px;
+    }
+    
+    .detail-item {
+        padding: 8px 10px;
+    }
+    
+    .detail-label {
+        font-size: 0.6rem;
+    }
+    
+    .detail-value {
+        font-size: 0.75rem;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+    
+    .section-title::after {
+        width: 40px;
+        height: 2px;
+    }
+    
+    .details-title {
+        font-size: 0.9rem;
     }
 }

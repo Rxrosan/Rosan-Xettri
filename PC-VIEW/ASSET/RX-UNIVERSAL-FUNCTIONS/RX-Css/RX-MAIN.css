@@ -1,4 +1,4 @@
-/* RX-MAIN.css - Fully Responsive & Fixed Layout */
+/* RX-MAIN.css - Fully Responsive & Fixed Layout (Preserved Original Styles) */
 
 * {
     margin: 0;
@@ -109,7 +109,7 @@ body {
     height: 100%;
 }
 
-/* Sidebar & Tree Menu Styles */
+/* Sidebar & Tree Menu Styles - ORIGINAL STYLE PRESERVED */
 .rx-sidebar {
     width: 270px;
     background-color: #ffffff;
@@ -231,12 +231,17 @@ ul.rx-tree li:hover > span {
     text-decoration: underline;
 }
 
-/* Mobile Responsive Adjustments (Max Width 768px) */
+/* ============================================================
+   RESPONSIVE - ONLY FOR MOBILE (768px and below)
+   ============================================================ */
+
 @media screen and (max-width: 768px) {
+    /* Show menu button on mobile */
     .rx-menu-btn {
-        display: block; /* Mobile ma menu button dekhincha ra HTML ko #rx-mobile-menu-btn sanga perfectly kaam garcha */
+        display: block;
     }
     
+    /* Sidebar - Slide in from left */
     .rx-sidebar {
         position: absolute;
         top: 0;
@@ -250,5 +255,170 @@ ul.rx-tree li:hover > span {
 
     .rx-sidebar.show {
         transform: translateX(0);
+    }
+    
+    /* Fix for header on mobile */
+    .rx-header {
+        padding: 6px 12px;
+    }
+    
+    .rx-portal-title {
+        font-size: 13px;
+    }
+    
+    .rx-portal-subtitle {
+        font-size: 9px;
+    }
+    
+    .rx-date-section {
+        font-size: 9px;
+    }
+    
+    /* Fix for content area on mobile */
+    .rx-content-area {
+        padding: 20px 15px;
+    }
+    
+    .rx-welcome-logo {
+        height: 50px;
+    }
+    
+    .rx-content-area h2 {
+        font-size: 20px;
+    }
+    
+    .rx-content-area p {
+        font-size: 14px;
+    }
+    
+    /* Fix for subheader on mobile */
+    .rx-subheader {
+        padding: 4px 12px;
+        font-size: 12px;
+    }
+    
+    /* Fix for footer on mobile */
+    .rx-footer {
+        padding: 6px;
+        font-size: 10px;
+    }
+}
+
+/* ============================================================
+   EXTRA SMALL MOBILE (480px and below)
+   ============================================================ */
+
+@media screen and (max-width: 480px) {
+    .rx-header {
+        padding: 5px 10px;
+    }
+    
+    .rx-portal-title {
+        font-size: 11px;
+    }
+    
+    .rx-portal-subtitle {
+        font-size: 8px;
+    }
+    
+    .rx-date-section {
+        font-size: 8px;
+    }
+    
+    .rx-sidebar {
+        width: 220px;
+    }
+    
+    .rx-content-area {
+        padding: 15px 10px;
+    }
+    
+    .rx-welcome-logo {
+        height: 40px;
+    }
+    
+    .rx-content-area h2 {
+        font-size: 18px;
+    }
+    
+    .rx-content-area p {
+        font-size: 13px;
+    }
+    
+    .rx-footer {
+        font-size: 9px;
+        padding: 5px;
+    }
+    
+    .rx-subheader {
+        font-size: 11px;
+        padding: 3px 10px;
+    }
+}
+
+/* ============================================================
+   LANDSCAPE MODE FIX (for mobile devices)
+   ============================================================ */
+
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .rx-header {
+        padding: 4px 12px;
+        border-bottom-width: 2px;
+    }
+    
+    .rx-portal-title {
+        font-size: 12px;
+    }
+    
+    .rx-portal-subtitle {
+        font-size: 8px;
+    }
+    
+    .rx-date-section {
+        font-size: 8px;
+    }
+    
+    .rx-subheader {
+        padding: 2px 12px;
+        font-size: 10px;
+    }
+    
+    .rx-content-area {
+        padding: 10px 15px;
+    }
+    
+    .rx-welcome-logo {
+        height: 35px;
+        margin-bottom: 8px;
+    }
+    
+    .rx-content-area h2 {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+    
+    .rx-content-area p {
+        font-size: 12px;
+    }
+    
+    .rx-footer {
+        padding: 3px;
+        font-size: 8px;
+    }
+    
+    .rx-sidebar {
+        padding: 6px;
+        font-size: 12px;
+    }
+    
+    .rx-sidebar-heading {
+        padding: 4px;
+        font-size: 12px;
+        margin-bottom: 4px;
+    }
+    
+    ul.rx-tree li {
+        padding: 4px 6px;
+        margin: 2px 0;
     }
 }

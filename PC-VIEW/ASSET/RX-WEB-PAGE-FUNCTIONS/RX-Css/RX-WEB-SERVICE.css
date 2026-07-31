@@ -1,4 +1,7 @@
-/* ===== SERVICES SECTION STYLES ===== */
+/* ============================================================
+   RX-WEB-SERVICE.css - ENHANCED RESPONSIVE VERSION
+   ============================================================ */
+
 /* main container Section */
 .container {
     max-width: 1280px;
@@ -13,7 +16,7 @@
     }
 }
 
-/* Services Tabs Container - निलो background हटाएर सफा सेतो/ट्रान्स παρέरेन्ट बनाइएको छ र सबै सामग्री देखिने गरी मिलाइएको छ */
+/* Services Tabs Container */
 .service-tabs {
     background-color: #ffffff;
     border-radius: 15px;
@@ -32,6 +35,7 @@
     padding: 0;
     overflow-x: auto;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
 }
 
 .tab-nav::-webkit-scrollbar {
@@ -45,7 +49,7 @@
     border: none;
     color: #1a4480;
     padding: 15px;
-    font-size: 0.95rem;
+    font-size: clamp(12px, 0.9vw, 15px);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -84,10 +88,10 @@
 }
 
 .tab-btn span {
-    font-size: 0.85rem;
+    font-size: clamp(10px, 0.8vw, 14px);
 }
 
-/* Tab Content - सबै कन्टेन्ट पूर्ण रूपमा देखाउन र लुक्न नदिन overflow हटाएर auto/visible बनाइएको छ */
+/* Tab Content */
 .tab-content-container {
     position: relative;
     height: auto;
@@ -125,21 +129,21 @@
 }
 
 .tab-header h3 {
-    font-size: 1.8rem;
+    font-size: clamp(22px, 2.5vw, 30px);
     color: #1a4480;
     font-weight: 700;
 }
 
 .tab-description {
     color: #444;
-    font-size: 1.05rem;
+    font-size: clamp(15px, 1.2vw, 17px);
     line-height: 1.6;
     margin-bottom: 30px;
     max-width: 100%;
     text-align: left;
 }
 
-/* ===== SERVICES GRID - PERFECT SPACING ===== */
+/* ===== SERVICES GRID ===== */
 .services-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -151,7 +155,7 @@
 .service-card {
     background-color: #f8fafc;
     border-radius: 10px;
-    padding: 25px 20px;
+    padding: clamp(18px, 2vw, 25px);
     border: 1px solid #d0dbe8;
     transition: all 0.3s ease;
     display: flex;
@@ -177,26 +181,52 @@
 .service-info h4 {
     color: #1a4480;
     margin-bottom: 10px;
-    font-size: 1.15rem;
+    font-size: clamp(16px, 1.3vw, 19px);
     font-weight: 600;
     text-align: left;
 }
 
 .service-info p {
     color: #555;
-    font-size: 0.9rem;
+    font-size: clamp(13px, 1vw, 15px);
     line-height: 1.5;
     margin: 0;
     text-align: left;
 }
 
-/* Responsive Breakpoints */
+/* Section Title */
+.section-title {
+    font-size: clamp(28px, 3vw, 40px);
+    text-align: center;
+    margin: 6px 0 40px;
+    color: #1a4480;
+    position: relative;
+    width: 100%;
+}
+
+.section-title:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: #1a4480;
+    margin: 15px auto 0;
+    border-radius: 2px;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN - ALL DEVICES
+   ============================================================ */
+
+/* Large Tablets (1200px and below) */
 @media (max-width: 1200px) {
     .services-grid {
         grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
     }
 }
 
+/* Tablets & Small Laptops (992px and below) */
 @media (max-width: 992px) {
     .tab-content {
         padding: 20px;
@@ -208,39 +238,135 @@
     }
 }
 
+/* Tablets (768px and below) */
 @media (max-width: 768px) {
     .tab-nav {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        overflow-x: auto;
     }
     
     .tab-btn {
-        min-width: 50%;
+        min-width: 100px;
         padding: 12px 10px;
-        font-size: 0.8rem;
+        font-size: 11px;
+    }
+    
+    .tab-btn span {
+        font-size: 10px;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    
+    .service-card {
+        padding: 18px 15px;
+    }
+    
+    .service-info h4 {
+        font-size: 16px;
+    }
+    
+    .service-info p {
+        font-size: 13px;
+    }
+    
+    .tab-header h3 {
+        font-size: 22px;
+    }
+    
+    .tab-description {
+        font-size: 14px;
+    }
+    
+    .section-title {
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+}
+
+/* Mobile Devices (576px and below) */
+@media (max-width: 576px) {
+    .tab-btn {
+        min-width: 80px;
+        padding: 10px 8px;
+        font-size: 10px;
+    }
+    
+    .tab-btn span {
+        font-size: 8px;
+        letter-spacing: 0.5px;
+    }
+    
+    .tab-content {
+        padding: 15px;
     }
     
     .services-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 12px;
+    }
+    
+    .service-card {
+        padding: 18px;
+    }
+    
+    .service-info h4 {
+        font-size: 16px;
+    }
+    
+    .service-info p {
+        font-size: 14px;
+    }
+    
+    .tab-header h3 {
+        font-size: 20px;
+    }
+    
+    .tab-description {
+        font-size: 14px;
+    }
+    
+    .section-title {
+        font-size: 24px;
+    }
+    
+    .section-title:after {
+        width: 60px;
+        height: 3px;
     }
 }
 
-/* Section Title */
-.section-title {
-    font-size: 2rem;
-    text-align: center;
-    margin: 30px 0 25px;
-    color: #1a4480;
-    position: relative;
-    width: 100%;
-}
-
-.section-title:after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 3px;
-    background: #1a4480;
-    margin: 10px auto 0;
-    border-radius: 2px;
+/* Small Mobile Devices (360px and below) */
+@media (max-width: 360px) {
+    .tab-btn {
+        min-width: 65px;
+        padding: 8px 4px;
+        font-size: 8px;
+    }
+    
+    .tab-btn span {
+        font-size: 7px;
+    }
+    
+    .tab-content {
+        padding: 12px;
+    }
+    
+    .service-card {
+        padding: 15px;
+    }
+    
+    .service-info h4 {
+        font-size: 15px;
+    }
+    
+    .service-info p {
+        font-size: 13px;
+    }
+    
+    .tab-header h3 {
+        font-size: 17px;
+    }
 }
