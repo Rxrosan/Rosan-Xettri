@@ -1,5 +1,5 @@
 /* ============================================================
-   RX-MAIN.css - Layout Fixed Header/Footer & Left-Side Drawer
+   RX-MAIN.css - Layout Fixed Header/Footer & Left-Side Half Screen Drawer (Fixed for Mobile)
    ============================================================ */
 
 * {
@@ -9,7 +9,6 @@
     font-family: 'Roboto', 'Noto Sans', Arial, sans-serif;
 }
 
-/* मुख्य स्क्रिन हल्लिन नदिने */
 html, body {
     height: 100%;
     width: 100%;
@@ -42,14 +41,19 @@ body {
 
 .rx-header-left { display: flex; align-items: center; gap: 10px; }
 
+/* Mobile Menu Button - modified appearance */
 .rx-menu-btn {
-    display: none; /* डेस्कटपमा लुक्ने */
-    background: none;
-    border: none;
+    display: none;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     font-size: 24px;
+    padding: 4px 10px;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background 0.2s;
 }
+.rx-menu-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
 .rx-portal-title-container { display: flex; flex-direction: column; }
 .rx-portal-title { font-weight: bold; font-size: clamp(12px, 3vw, 16px); color: #fff; }
@@ -155,29 +159,43 @@ ul.rx-tree li span.rx-folder { font-weight: bold; }
 .rx-welcome-logo { height: 70px; margin-bottom: 15px; flex-shrink: 0; }
 
 /* ============================================================
-   MOBILE VIEW (Half Screen Side Drawer)
+   MOBILE VIEW (Half Screen Side Drawer - FIXED NOW)
    ============================================================ */
 
 @media screen and (max-width: 768px) {
     .rx-menu-btn { display: block; }
 
-    /* Sidebar - Side Drawer (Left to Right) */
+    /* Sidebar - Left Side Drawer (Half Screen) */
     .rx-sidebar {
         position: fixed;
         left: 0;
-        top: 95px; /* Header + Subheader को तलबाट सुरु हुने */
-        bottom: 40px; /* Footer को माथि सकिने */
-        width: 75%; /* आधा भन्दा अलि धेरै (75%) स्क्रिन ओगट्ने */
+        top: 0;           /* सेफ गणनाको लागि top:0 */
+        bottom: 0;        /* bottom:0 गर्दा footer मुनि जाँदैन */
+        height: 100%;
+        width: 50%;       /* यो Right side half screen हुन्छ */
         max-width: 280px;
         z-index: 1050;
-        transform: translateX(-100%); /* सुरुमा बाहिर लुकाउने */
+        transform: translateX(-100%); /* सुरुमा बाहिर लुक्ने */
         border-right: 2px solid #1a4480;
         box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+        padding-top: 60px; /* Header कभर नहोस् भनेर तल सारेको */
     }
 
-    /* मेनु खुल्दा */
+    /* मेनु खुल्दा Left बाट Right तिर आउने */
     .rx-sidebar.show {
-        transform: translateX(0); /* भित्र आउने */
+        transform: translateX(0);
+    }
+
+    /* Sidebar Open भएको बेला ब्याकग्राउन्ड ओभरले (कालो धुंवलो) */
+    .rx-sidebar.show::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: -1;
     }
 
     .rx-content-area { padding: 15px; }
@@ -186,5 +204,5 @@ ul.rx-tree li span.rx-folder { font-weight: bold; }
 }
 
 @media screen and (max-width: 480px) {
-    .rx-sidebar { width: 80%; } /* सानो मोबाइलमा ८०% स्क्रिन */
+    .rx-sidebar { width: 75%; } /* सानो मोबाइलमा ७५% स्क्रिन */
 }

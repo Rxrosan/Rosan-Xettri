@@ -1,7 +1,7 @@
 /**
  * RX-MAIN.js 
  * Author: RX STUDIO
- * All original functionality preserved.
+ * Mobile Menu Fixed to Slide from Left to Right (Half Screen)
  */
 
 // Tree Menu Toggle
@@ -60,7 +60,7 @@ function renderContent(rxTitleName) {
             if (typeof rxLoadServicePage === 'function') rxLoadServicePage(rxDisplayArea);
             break;
         case 'CONTACT':
-            if (typeof rxLoadContentPage === 'function') rxLoadContactPage(rxDisplayArea); // Note: Ensure function name is correct
+            if (typeof rxLoadContentPage === 'function') rxLoadContactPage(rxDisplayArea);
             else if (typeof rxLoadContactPage === 'function') rxLoadContactPage(rxDisplayArea);
             break;
         case 'NEWS':
@@ -91,20 +91,12 @@ window.addEventListener('load', () => {
     
     const mobileMenuBtn = document.getElementById('rx-mobile-menu-btn');
     const sidebar = document.getElementById('rx-sidebar');
-    const displayArea = document.getElementById('rx-display-area');
 
     if (mobileMenuBtn && sidebar) {
         mobileMenuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             sidebar.classList.toggle('show');
         });
-
-        // Content Area मा क्लिक गर्दा मेनु बन्द हुने
-        if (displayArea) {
-            displayArea.addEventListener('click', () => {
-                sidebar.classList.remove('show');
-            });
-        }
     }
 });
 
