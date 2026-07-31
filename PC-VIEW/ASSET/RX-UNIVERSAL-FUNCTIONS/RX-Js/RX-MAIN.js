@@ -1,4 +1,4 @@
-/* RX-MAIN.js - Stable Final Version */
+// rx-main.js - Main Application Logic & Routing
 // author : RX STUDIO
 
 function rxToggleSub(rxElement) {
@@ -15,6 +15,10 @@ function rxLoadHome() {
     if (rxDisplayArea && typeof rxLoadHomePage === 'function') {
         rxLoadHomePage(rxDisplayArea);
     }
+    
+    // Sidebar heading set to HOME
+    const sidebarHeading = document.getElementById('rx-sidebar-heading');
+    if (sidebarHeading) sidebarHeading.innerText = 'HOME';
 
     if (window.innerWidth <= 768) {
         const sidebar = document.getElementById('rx-sidebar');
@@ -23,6 +27,7 @@ function rxLoadHome() {
 }
 
 function rxLoadContent(rxTitleName) {
+    // युजरले क्लिक गरेको हालको पेजलाई LocalStorage मा सेभ गर्ने
     localStorage.setItem('rxCurrentPage', rxTitleName);
     renderContent(rxTitleName);
 
@@ -75,28 +80,35 @@ function renderContent(rxTitleName) {
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+// ===== FIX: पेज लोड हुँदा सुरुमा HOME content देखाउने र मोबाइल मेनु कन्ट्रोल =====
+window.addEventListener('load', () => {
     const savedPage = localStorage.getItem('rxCurrentPage');
-    
+    const rxDisplayArea = document.getElementById('rx-display-area');
+    const sidebarHeading = document.getElementById('rx-sidebar-heading');
+
     if (savedPage) {
         renderContent(savedPage);
     } else {
-        const rxDisplayArea = document.getElementById('rx-display-area');
         if (rxDisplayArea && typeof rxLoadHomePage === 'function') {
             rxLoadHomePage(rxDisplayArea);
+            if (sidebarHeading) sidebarHeading.innerText = 'HOME';
         }
-        const sidebarHeading = document.getElementById('rx-sidebar-heading');
-        if (sidebarHeading) sidebarHeading.innerText = 'HOME';
     }
     
-    // ===== क्लिक गर्दा मोबाइल मेनु खोल्ने/बन्द गर्ने (स्थायी कोड) =====
+    // Mobile menu toggle logic
     const mobileMenuBtn = document.getElementById('rx-mobile-menu-btn');
-    if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function(e) {
+    const sidebar = document.getElementById('rx-sidebar');
+    
+    if (mobileMenuBtn && sidebar) {
+        mobileMenuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const sidebar = document.getElementById('rx-sidebar');
-            if (sidebar) {
-                sidebar.classList.toggle('show');
+            sidebar.classList.toggle('show');
+        });
+
+        // मेनु बाहिर क्लिक गर्दा बन्द हुने
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                sidebar.classList.remove('show');
             }
         });
     }

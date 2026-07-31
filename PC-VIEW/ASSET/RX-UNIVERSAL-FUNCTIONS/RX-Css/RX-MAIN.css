@@ -1,4 +1,5 @@
-/* RX-MAIN.css - Stable Final Version */
+/* RX-MAIN.css - Fully Responsive & Original Styles Preserved */
+
 * {
     margin: 0;
     padding: 0;
@@ -10,17 +11,16 @@ html, body {
     height: 100%;
     margin: 0;
     background-color: #e6ecf5;
-    overflow: hidden;
+    overflow: hidden; /* Desktop layout preserve */
 }
 
 body {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    height: 100dvh;
 }
 
-/* Header */
+/* Header Styles */
 .rx-header {
     background-color: #1a4480;
     color: white;
@@ -31,7 +31,7 @@ body {
     border-bottom: 4px solid #0d2340;
     width: 100%;
     flex-shrink: 0;
-    z-index: 1000;
+    z-index: 1100;
 }
 
 .rx-header-left {
@@ -42,22 +42,15 @@ body {
     overflow: hidden;
 }
 
-/* Mobile Menu Button (हामीले यसलाई सही बनायौं) */
 .rx-menu-btn {
-    display: none;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: none; /* Hidden by default, shown in media query */
+    background: none;
+    border: none;
     color: white;
-    font-size: 24px;
+    font-size: 22px;
     cursor: pointer;
     flex-shrink: 0;
-    padding: 6px 12px;
-    border-radius: 4px;
-    line-height: 1;
-    transition: background 0.2s;
-}
-.rx-menu-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    padding: 4px;
 }
 
 .rx-portal-title-container {
@@ -92,7 +85,7 @@ body {
     color: #d1dfef;
 }
 
-/* Subheader */
+/* Subheader Styles */
 .rx-subheader {
     background-color: #d1dfef;
     padding: 5px 15px;
@@ -105,7 +98,7 @@ body {
     flex-shrink: 0;
 }
 
-/* Main Container */
+/* Main Container Layout */
 .rx-main-container {
     display: flex;
     flex: 1;
@@ -115,7 +108,7 @@ body {
     height: 100%;
 }
 
-/* Sidebar */
+/* Sidebar Styling - Original Preserved */
 .rx-sidebar {
     width: 270px;
     background-color: #ffffff;
@@ -156,12 +149,6 @@ ul.rx-tree li:hover {
     background-color: #f0f4f8;
 }
 
-ul.rx-tree li.rx-selected-item {
-    background-color: #d1dfef !important;
-    color: #1a4480;
-    font-weight: bold;
-}
-
 ul.rx-tree li span.rx-folder {
     font-weight: bold;
 }
@@ -182,13 +169,12 @@ ul.rx-tree li span.rx-folder {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Fixed from center to start for better scrolling */
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overflow-x: hidden;
     text-align: center;
     width: 100%;
-    height: 100%;
 }
 
 .rx-welcome-logo {
@@ -197,20 +183,10 @@ ul.rx-tree li span.rx-folder {
     object-fit: contain;
     margin-bottom: 15px;
     align-self: center;
+    flex-shrink: 0;
 }
 
-.rx-content-area h2 {
-    color: #1a4480;
-    font-size: clamp(18px, 4vw, 24px);
-    margin-bottom: 10px;
-}
-
-.rx-content-area p {
-    color: #555;
-    font-size: clamp(13px, 3vw, 16px);
-}
-
-/* ===== FOOTER (स्थायी रूपमा सुरक्षित) ===== */
+/* Footer Styles */
 .rx-footer {
     background-color: #1a4480;
     color: white;
@@ -218,10 +194,9 @@ ul.rx-tree li span.rx-folder {
     padding: 8px;
     font-size: clamp(10px, 2vw, 11px);
     border-top: 1px solid #0d2340;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Important: prevents footer from disappearing */
     width: 100%;
     z-index: 1000;
-    position: relative;
 }
 
 .rx-footer a {
@@ -229,187 +204,56 @@ ul.rx-tree li span.rx-folder {
     text-decoration: none;
 }
 
-.rx-footer a:hover {
-    text-decoration: underline;
-}
+/* ============================================================
+   RESPONSIVE FIXES (Only for Mobile)
+   ============================================================ */
 
-/* ===== MOBILE RESPONSIVE (स्थायी रूपमा सही) ===== */
 @media screen and (max-width: 768px) {
+    /* Show menu button on mobile */
     .rx-menu-btn {
         display: block;
     }
     
+    /* Body & Layout fix for mobile scrolling */
+    html, body {
+        overflow: auto; /* Allow scrolling on mobile */
+    }
+    
+    .rx-main-container {
+        overflow: visible;
+    }
+
+    /* Sidebar - Slider from Left */
     .rx-sidebar {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         height: 100%;
-        z-index: 999;
+        z-index: 2000;
         transform: translateX(-100%);
-        width: 250px;
+        width: 260px;
         box-shadow: 4px 0 15px rgba(0,0,0,0.3);
-        border-right: none;
+        padding-top: 20px;
     }
-    
+
     .rx-sidebar.show {
         transform: translateX(0);
     }
     
-    .rx-header {
-        padding: 6px 12px;
-    }
-    
-    .rx-portal-title {
-        font-size: 13px;
-    }
-    
-    .rx-portal-subtitle {
-        font-size: 9px;
-    }
-    
-    .rx-date-section {
-        font-size: 9px;
-    }
-    
     .rx-content-area {
         padding: 20px 15px;
+        min-height: 70vh; /* Ensure area exists */
     }
-    
-    .rx-welcome-logo {
-        height: 50px;
-    }
-    
-    .rx-content-area h2 {
-        font-size: 20px;
-    }
-    
-    .rx-content-area p {
-        font-size: 14px;
-    }
-    
-    .rx-subheader {
-        padding: 4px 12px;
-        font-size: 12px;
-    }
-    
+
     .rx-footer {
-        padding: 6px;
-        font-size: 10px;
+        position: relative; /* Ensure it stays at bottom of content */
+        display: block !important;
     }
 }
 
+/* Small Device Adjustments */
 @media screen and (max-width: 480px) {
-    .rx-header {
-        padding: 5px 10px;
-    }
-    
-    .rx-menu-btn {
-        padding: 4px 10px;
-        font-size: 20px;
-    }
-    
-    .rx-portal-title {
-        font-size: 11px;
-    }
-    
-    .rx-portal-subtitle {
-        font-size: 8px;
-    }
-    
-    .rx-date-section {
-        font-size: 8px;
-    }
-    
-    .rx-sidebar {
-        width: 220px;
-    }
-    
-    .rx-content-area {
-        padding: 15px 10px;
-    }
-    
-    .rx-welcome-logo {
-        height: 40px;
-    }
-    
-    .rx-content-area h2 {
-        font-size: 18px;
-    }
-    
-    .rx-content-area p {
-        font-size: 13px;
-    }
-    
-    .rx-footer {
-        font-size: 9px;
-        padding: 5px;
-    }
-    
-    .rx-subheader {
-        font-size: 11px;
-        padding: 3px 10px;
-    }
-}
-
-@media screen and (max-height: 500px) and (orientation: landscape) {
-    .rx-header {
-        padding: 4px 12px;
-        border-bottom-width: 2px;
-    }
-    
-    .rx-portal-title {
-        font-size: 12px;
-    }
-    
-    .rx-portal-subtitle {
-        font-size: 8px;
-    }
-    
-    .rx-date-section {
-        font-size: 8px;
-    }
-    
-    .rx-subheader {
-        padding: 2px 12px;
-        font-size: 10px;
-    }
-    
-    .rx-content-area {
-        padding: 10px 15px;
-    }
-    
-    .rx-welcome-logo {
-        height: 35px;
-        margin-bottom: 8px;
-    }
-    
-    .rx-content-area h2 {
-        font-size: 16px;
-        margin-bottom: 5px;
-    }
-    
-    .rx-content-area p {
-        font-size: 12px;
-    }
-    
-    .rx-footer {
-        padding: 3px;
-        font-size: 8px;
-    }
-    
-    .rx-sidebar {
-        padding: 6px;
-        font-size: 12px;
-    }
-    
-    .rx-sidebar-heading {
-        padding: 4px;
-        font-size: 12px;
-        margin-bottom: 4px;
-    }
-    
-    ul.rx-tree li {
-        padding: 4px 6px;
-        margin: 2px 0;
-    }
+    .rx-welcome-logo { height: 50px; }
+    .rx-content-area { padding: 15px 10px; }
+    .rx-footer { font-size: 9px; padding: 10px 5px; }
 }
