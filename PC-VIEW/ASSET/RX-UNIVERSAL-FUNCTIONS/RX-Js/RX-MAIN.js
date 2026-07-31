@@ -1,10 +1,10 @@
 /**
- * RX-MAIN.js - Fully Functional Version
+ * RX-MAIN.js 
  * Author: RX STUDIO
- * All original logic preserved with fixed mobile/layout updates.
+ * All original functionality preserved.
  */
 
-// Tree Menu Toggle - (Keep original)
+// Tree Menu Toggle
 function rxToggleSub(rxElement) {
     let rxNested = rxElement.nextElementSibling;
     if (rxNested) {
@@ -12,52 +12,46 @@ function rxToggleSub(rxElement) {
     }
 }
 
-// Load Home Logic - (Keep original + close menu)
+// Load Home
 function rxLoadHome() {
     localStorage.removeItem('rxCurrentPage');
-    
     const rxDisplayArea = document.getElementById('rx-display-area');
     if (rxDisplayArea && typeof rxLoadHomePage === 'function') {
         rxLoadHomePage(rxDisplayArea);
     }
-    
     const sidebarHeading = document.getElementById('rx-sidebar-heading');
     if (sidebarHeading) sidebarHeading.innerText = 'HOME';
-
-    rxCloseMenu(); // मेनु बन्द गर्ने
+    rxCloseMenu();
 }
 
-// Load Content Logic - (Keep original + close menu)
+// Load Content
 function rxLoadContent(rxTitleName) {
     localStorage.setItem('rxCurrentPage', rxTitleName);
     renderContent(rxTitleName);
-    rxCloseMenu(); // मेनु बन्द गर्ने
+    rxCloseMenu();
 }
 
-// Mobile Menu Close Function
+// Close Mobile Menu Function
 function rxCloseMenu() {
     const sidebar = document.getElementById('rx-sidebar');
     if (sidebar) sidebar.classList.remove('show');
 }
 
-// Master Render Function - (Keep original structure)
+// Master Render Function
 function renderContent(rxTitleName) {
     const rxDisplayArea = document.getElementById('rx-display-area');
     const sidebarHeading = document.getElementById('rx-sidebar-heading');
-    
     if (sidebarHeading) sidebarHeading.innerText = rxTitleName;
     if (!rxDisplayArea) return;
 
-    // Reset view position
     rxDisplayArea.scrollTo(0, 0);
 
-    // Routing Logic
     if (rxTitleName === 'Home' || rxTitleName === 'HOME') {
         rxLoadHome();
         return;
     } 
 
-    // Switch case for all your other pages
+    // Switching Logic for all pages
     switch (rxTitleName) {
         case 'ABOUT':
             if (typeof rxLoadAboutPage === 'function') rxLoadAboutPage(rxDisplayArea);
@@ -66,7 +60,8 @@ function renderContent(rxTitleName) {
             if (typeof rxLoadServicePage === 'function') rxLoadServicePage(rxDisplayArea);
             break;
         case 'CONTACT':
-            if (typeof rxLoadContactPage === 'function') rxLoadContactPage(rxDisplayArea);
+            if (typeof rxLoadContentPage === 'function') rxLoadContactPage(rxDisplayArea); // Note: Ensure function name is correct
+            else if (typeof rxLoadContactPage === 'function') rxLoadContactPage(rxDisplayArea);
             break;
         case 'NEWS':
             if (typeof rxLoadNewsPage === 'function') rxLoadNewsPage(rxDisplayArea);
@@ -86,23 +81,14 @@ function renderContent(rxTitleName) {
         case 'Resource':
             if (typeof rxLoadResourcePage === 'function') rxLoadResourcePage(rxDisplayArea);
             break;
-        default:
-            // fallback
-            console.log("Page not found: " + rxTitleName);
     }
 }
 
-// Page initialization
+// Initialize
 window.addEventListener('load', () => {
-    // १. सुरुमा कुन पेज देखाउने (LocalStorage check)
-    const savedPage = localStorage.getItem('rxCurrentPage');
-    if (savedPage) {
-        renderContent(savedPage);
-    } else {
-        rxLoadHome();
-    }
+    const savedPage = localStorage.getItem('rxCurrentPage') || 'HOME';
+    renderContent(savedPage);
     
-    // २. मोबाइल मेनु बटन इभेन्ट
     const mobileMenuBtn = document.getElementById('rx-mobile-menu-btn');
     const sidebar = document.getElementById('rx-sidebar');
     const displayArea = document.getElementById('rx-display-area');
@@ -113,7 +99,7 @@ window.addEventListener('load', () => {
             sidebar.classList.toggle('show');
         });
 
-        // ३. मेनु बाहिर (Content area) क्लिक गर्दा मेनु बन्द हुने
+        // Content Area मा क्लिक गर्दा मेनु बन्द हुने
         if (displayArea) {
             displayArea.addEventListener('click', () => {
                 sidebar.classList.remove('show');
@@ -122,25 +108,15 @@ window.addEventListener('load', () => {
     }
 });
 
-// Clock & Date Logic - (Keep original)
+// Date Time Update
 function updateDateTime() {
     const now = new Date();
-    const userLocale = navigator.language || 'en-US';
-
     const timeEl = document.getElementById('rx-time');
     const dateEl = document.getElementById('rx-date');
     const dayEl = document.getElementById('rx-day');
-
-    if (timeEl) timeEl.innerText = now.toLocaleTimeString(userLocale, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const dayNum = String(now.getDate()).padStart(2, '0');
-    if (dateEl) dateEl.innerText = `${year}.${month}.${dayNum}`;
-    
-    if (dayEl) dayEl.innerText = now.toLocaleDateString(userLocale, { weekday: 'long' });
+    if (timeEl) timeEl.innerText = now.toLocaleTimeString();
+    if (dateEl) dateEl.innerText = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+    if (dayEl) dayEl.innerText = now.toLocaleDateString(undefined, {weekday:'long'});
 }
-
-// Intervals
 setInterval(updateDateTime, 1000);
 updateDateTime();

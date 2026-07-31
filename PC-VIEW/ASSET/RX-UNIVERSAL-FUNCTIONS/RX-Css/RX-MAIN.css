@@ -1,5 +1,5 @@
 /* ============================================================
-   RX-MAIN.css - Layout Fixed Header/Footer & Slide-Up Menu
+   RX-MAIN.css - Layout Fixed Header/Footer & Left-Side Drawer
    ============================================================ */
 
 * {
@@ -9,7 +9,7 @@
     font-family: 'Roboto', 'Noto Sans', Arial, sans-serif;
 }
 
-/* स्क्रिनको मुख्य भाग स्क्रोल हुन नदिने */
+/* मुख्य स्क्रिन हल्लिन नदिने */
 html, body {
     height: 100%;
     width: 100%;
@@ -23,7 +23,7 @@ body {
     flex-direction: column;
 }
 
-/* Header - सधैं माथि Fixed */
+/* Header - Fixed at Top */
 .rx-header {
     position: fixed;
     top: 0;
@@ -37,14 +37,10 @@ body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 4px solid #0d2340;
-    z-index: 1200; /* सबैभन्दा माथि */
+    z-index: 1200;
 }
 
-.rx-header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+.rx-header-left { display: flex; align-items: center; gap: 10px; }
 
 .rx-menu-btn {
     display: none; /* डेस्कटपमा लुक्ने */
@@ -67,7 +63,7 @@ body {
     color: #d1dfef;
 }
 
-/* Subheader - Header को मुनि Fixed */
+/* Subheader - Below Header */
 .rx-subheader {
     position: fixed;
     top: 60px;
@@ -84,7 +80,7 @@ body {
     align-items: center;
 }
 
-/* Footer - सधैं मुनि Fixed */
+/* Footer - Fixed at Bottom */
 .rx-footer {
     position: fixed;
     bottom: 0;
@@ -102,14 +98,15 @@ body {
 
 .rx-footer a { color: #2de708; text-decoration: none; }
 
-/* Main Container - बीचको भाग मात्र ओगट्ने */
+/* Main Container */
 .rx-main-container {
-    margin-top: 95px; /* Header + Subheader */
-    margin-bottom: 40px; /* Footer */
+    margin-top: 95px; /* Header(60) + Subheader(35) */
+    margin-bottom: 40px; /* Footer(40) */
     height: calc(100vh - 135px);
     display: flex;
     width: 100%;
     overflow: hidden;
+    position: relative;
 }
 
 /* Sidebar - Desktop Style */
@@ -121,7 +118,7 @@ body {
     padding: 10px;
     font-size: 13px;
     flex-shrink: 0;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.3s ease-in-out;
 }
 
 .rx-sidebar-heading {
@@ -134,15 +131,15 @@ body {
     text-align: center;
 }
 
-/* Tree Menu Style */
+/* Tree Menu */
 ul.rx-tree, ul.rx-tree ul { list-style: none; padding-left: 15px; }
-ul.rx-tree li { margin: 5px 0; cursor: pointer; color: #0056b3; padding: 6px 8px; border-radius: 4px; }
+ul.rx-tree li { margin: 5px 0; cursor: pointer; color: #0056b3; padding: 6px 8px; border-radius: 4px; transition: background-color 0.2s ease; }
 ul.rx-tree li:hover { background-color: #f0f4f8; }
 ul.rx-tree li span.rx-folder { font-weight: bold; }
 .rx-nested { display: none; }
 .rx-active-tree { display: block; }
 
-/* Content Area - मात्र यो भाग स्क्रोल हुन्छ */
+/* Content Area - Middle Scrollable Part */
 .rx-content-area {
     flex: 1;
     background-color: #ffffff;
@@ -158,35 +155,29 @@ ul.rx-tree li span.rx-folder { font-weight: bold; }
 .rx-welcome-logo { height: 70px; margin-bottom: 15px; flex-shrink: 0; }
 
 /* ============================================================
-   MOBILE VIEW (Fixed Nav/Footer & Bottom-Up Menu)
+   MOBILE VIEW (Half Screen Side Drawer)
    ============================================================ */
 
 @media screen and (max-width: 768px) {
     .rx-menu-btn { display: block; }
 
-    /* Mobile Sidebar - Slide-Up between Header & Footer */
+    /* Sidebar - Side Drawer (Left to Right) */
     .rx-sidebar {
         position: fixed;
         left: 0;
-        bottom: 40px; /* Footer को माथि */
-        width: 100%;
-        height: 0; /* सुरुमा उचाई 0 */
+        top: 95px; /* Header + Subheader को तलबाट सुरु हुने */
+        bottom: 40px; /* Footer को माथि सकिने */
+        width: 75%; /* आधा भन्दा अलि धेरै (75%) स्क्रिन ओगट्ने */
+        max-width: 280px;
         z-index: 1050;
-        transform: translateY(100%); /* सुरुमा तल लुकाउने */
-        opacity: 0;
-        visibility: hidden;
-        border-right: none;
-        border-top: 3px solid #1a4480;
-        box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
-        padding-top: 15px;
+        transform: translateX(-100%); /* सुरुमा बाहिर लुकाउने */
+        border-right: 2px solid #1a4480;
+        box-shadow: 5px 0 15px rgba(0,0,0,0.2);
     }
 
     /* मेनु खुल्दा */
     .rx-sidebar.show {
-        height: calc(100vh - 135px); /* Header र Footer बीचको एरिया */
-        transform: translateY(0);
-        opacity: 1;
-        visibility: visible;
+        transform: translateX(0); /* भित्र आउने */
     }
 
     .rx-content-area { padding: 15px; }
@@ -194,8 +185,6 @@ ul.rx-tree li span.rx-folder { font-weight: bold; }
     .rx-date-section { font-size: 9px; }
 }
 
-/* Small Screens */
 @media screen and (max-width: 480px) {
-    .rx-welcome-logo { height: 50px; }
-    .rx-footer { font-size: 10px; }
+    .rx-sidebar { width: 80%; } /* सानो मोबाइलमा ८०% स्क्रिन */
 }
