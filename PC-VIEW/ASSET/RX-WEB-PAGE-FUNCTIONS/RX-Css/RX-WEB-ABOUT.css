@@ -1,5 +1,5 @@
 /* ============================================================
-   RX-WEB-ABOUT.css - ENHANCED RESPONSIVE VERSION
+   RX-WEB-ABOUT.css - FIXED CUT-OFF ISSUE
    ============================================================ */
 
 /* main container Section */
@@ -22,7 +22,7 @@
 .about-container {
     background: #ffffff;
     border-radius: 15px;
-    padding: 40px;
+    padding: 30px; /* यो 40px बाट घटाएर 30px गरियो */
     border: 1px solid #d0dbe8;
     margin-bottom: 40px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -398,7 +398,7 @@
 /* Tablets (768px and below) */
 @media (max-width: 768px) {
     .about-container {
-        padding: 25px;
+        padding: 20px; /* यो 25px बाट घटाएर 20px गरियो */
     }
     
     .about-right h3 {
@@ -441,7 +441,7 @@
 /* Mobile Devices (480px and below) */
 @media (max-width: 480px) {
     .about-container {
-        padding: 15px;
+        padding: 12px; /* यो 15px बाट घटाएर 12px गरियो */
         border-radius: 10px;
     }
     
@@ -533,7 +533,7 @@
 /* Small Mobile Devices (360px and below) */
 @media (max-width: 360px) {
     .about-container {
-        padding: 10px;
+        padding: 8px; /* यो 10px बाट घटाएर 8px गरियो */
     }
     
     .admin-image-container {

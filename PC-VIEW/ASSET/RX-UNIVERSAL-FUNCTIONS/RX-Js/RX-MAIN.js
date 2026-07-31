@@ -1,7 +1,7 @@
 /**
- * RX-MAIN.js 
+ * RX-MAIN.js - FINAL REWRITE
  * Author: RX STUDIO
- * Mobile Menu Fixed to Slide from Left to Right (Half Screen)
+ * Mobile Menu Left to Right, No Outside Close, All Original Functions Preserved
  */
 
 // Tree Menu Toggle

@@ -1,5 +1,5 @@
 /* ============================================================
-   RX-MAIN.css - Layout Fixed, Half-Screen Drawer, Transparent Menu Button
+   RX-MAIN.css - ULTIMATE FINAL FIX (Sidebar Heading & Menu Centered)
    ============================================================ */
 
 * {
@@ -7,6 +7,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Roboto', 'Noto Sans', Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent !important;
 }
 
 html, body {
@@ -41,20 +42,16 @@ body {
 
 .rx-header-left { display: flex; align-items: center; gap: 10px; }
 
-/* ===== TRANSPARENT MENU BUTTON (No Background) ===== */
+/* Transparent Menu Button */
 .rx-menu-btn {
     display: none;
-    background: transparent !important;  /* पूरा पारदर्शी */
-    border: none !important;             /* कुनै बोर्डर छैन */
+    background: transparent !important;
+    border: none !important;
     color: white;
     font-size: 24px;
     padding: 4px;
     cursor: pointer;
 }
-.rx-menu-btn:hover {
-    background: transparent !important;  /* हल्का भए पनि रङ नदेखिने */
-}
-/* =========================================================== */
 
 .rx-portal-title-container { display: flex; flex-direction: column; }
 .rx-portal-title { font-weight: bold; font-size: clamp(12px, 3vw, 16px); color: #fff; }
@@ -126,29 +123,51 @@ body {
     transition: transform 0.3s ease-in-out;
 }
 
+/* ===== FIX: Sidebar Heading सधैं देखिने (Center मा) ===== */
 .rx-sidebar-heading {
+    display: block !important;
     font-weight: bold;
     color: #1a4480;
     padding: 8px;
     border-bottom: 1px solid #ddd;
-    margin-bottom: 8px;
+    margin-bottom: 12px; /* Heading तल मेनुको लागि ठाउँ */
     font-size: 14px;
     text-align: center;
 }
 
-/* Tree Menu */
-ul.rx-tree, ul.rx-tree ul { list-style: none; padding-left: 15px; }
-ul.rx-tree li { margin: 5px 0; cursor: pointer; color: #0056b3; padding: 6px 8px; border-radius: 4px; transition: background-color 0.2s ease; }
+/* Tree Menu - अब Center मा देखिने */
+ul.rx-tree, ul.rx-tree ul { 
+    list-style: none; 
+    padding-left: 0; /* Left padding हटाइयो */
+    text-align: center; /* सबै मेनु Center मा */
+    width: 100%;
+}
+
+ul.rx-tree li { 
+    margin: 8px 0; 
+    cursor: pointer; 
+    color: #0056b3; 
+    padding: 8px 0; /* Horizontal padding सन्तुलित */
+    border-radius: 4px; 
+    transition: background-color 0.2s ease;
+    display: block;
+}
+
 ul.rx-tree li:hover { background-color: #f0f4f8; }
-ul.rx-tree li span.rx-folder { font-weight: bold; }
+ul.rx-tree li span.rx-folder { font-weight: bold; display: block; }
 .rx-nested { display: none; }
 .rx-active-tree { display: block; }
 
-/* Content Area - Middle Scrollable Part */
+/* Nested menu लाई अलि इन्डेन्ट गर्ने तर Center नबिग्रने */
+ul.rx-tree ul.rx-nested { padding-left: 15px; text-align: center; }
+
+/* Content Area */
 .rx-content-area {
     flex: 1;
     background-color: #ffffff;
     padding: 25px;
+    padding-top: 15px;
+    padding-bottom: 20px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     display: flex;
@@ -160,39 +179,42 @@ ul.rx-tree li span.rx-folder { font-weight: bold; }
 .rx-welcome-logo { height: 70px; margin-bottom: 15px; flex-shrink: 0; }
 
 /* ============================================================
-   MOBILE VIEW (Half Screen Side Drawer - White)
+   MOBILE VIEW (Half Screen Side Drawer - Center Menu)
    ============================================================ */
 
 @media screen and (max-width: 768px) {
     .rx-menu-btn { display: block; }
 
-    /* Sidebar - Left Side Drawer (Half Screen) */
     .rx-sidebar {
         position: fixed;
         left: 0;
         top: 0;
         bottom: 0;
         height: 100%;
-        width: 50%;       /* Right side half screen */
+        width: 50%;
         max-width: 280px;
         background-color: #ffffff;
         z-index: 1050;
-        transform: translateX(-100%); /* सुरुमा बाहिर लुक्ने */
+        transform: translateX(-100%);
         border-right: 2px solid #1a4480;
         box-shadow: 5px 0 15px rgba(0,0,0,0.2);
-        padding-top: 60px; /* Header कभर नहोस् भनेर तल सारेको */
+        padding: 20px; /* यो padding तल मेनु Center गर्नको लागि */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* यसले Sidebar को सम्पूर्ण content लाई Center मा ल्याउँछ */
     }
 
-    /* मेनु खुल्दा Left बाट Right तिर आउने */
-    .rx-sidebar.show {
-        transform: translateX(0);
-    }
+    .rx-sidebar.show { transform: translateX(0); }
 
-    .rx-content-area { padding: 15px; }
+    /* Mobile Content Padding - Fixed to avoid cut-off */
+    .rx-content-area { 
+        padding: 15px; 
+        padding-top: 0 !important; 
+    }
     .rx-portal-title { font-size: 13px; }
     .rx-date-section { font-size: 9px; }
 }
 
 @media screen and (max-width: 480px) {
-    .rx-sidebar { width: 75%; } /* सानो मोबाइलमा ७५% स्क्रिन */
+    .rx-sidebar { width: 75%; }
 }

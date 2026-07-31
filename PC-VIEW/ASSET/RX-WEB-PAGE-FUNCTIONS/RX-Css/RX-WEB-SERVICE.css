@@ -1,5 +1,5 @@
 /* ============================================================
-   RX-WEB-SERVICE.css - ENHANCED RESPONSIVE VERSION
+   RX-WEB-SERVICE.css - FIXED CUT-OFF ISSUE
    ============================================================ */
 
 /* main container Section */
@@ -101,7 +101,7 @@
 .tab-content {
     display: none;
     animation: fadeIn 0.3s ease;
-    padding: 30px;
+    padding: 20px; /* यो 30px बाट घटाएर 20px गरियो */
     overflow: visible;
 }
 
@@ -229,7 +229,7 @@
 /* Tablets & Small Laptops (992px and below) */
 @media (max-width: 992px) {
     .tab-content {
-        padding: 20px;
+        padding: 15px; /* यो 20px बाट घटाएर 15px गरियो */
     }
     
     .services-grid {
@@ -300,7 +300,7 @@
     }
     
     .tab-content {
-        padding: 15px;
+        padding: 12px; /* यो 15px बाट घटाएर 12px गरियो */
     }
     
     .services-grid {
@@ -351,7 +351,7 @@
     }
     
     .tab-content {
-        padding: 12px;
+        padding: 10px; /* यो 12px बाट घटाएर 10px गरियो */
     }
     
     .service-card {
