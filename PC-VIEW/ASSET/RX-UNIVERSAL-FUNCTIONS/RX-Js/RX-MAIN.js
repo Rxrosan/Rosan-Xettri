@@ -76,13 +76,25 @@ function renderContent(rxTitleName) {
     }
 }
 
-// पेज रिफ्रेस वा लोड हुँदा LocalStorage चेक गरेर सेभ भएको पेज देखाउने
+// ===== FIX: पेज लोड हुँदा HOME content देखाउने =====
 window.addEventListener('DOMContentLoaded', () => {
     const savedPage = localStorage.getItem('rxCurrentPage');
+    
+    // If there's a saved page, load it
     if (savedPage) {
         renderContent(savedPage);
+    } else {
+        // Otherwise, load Home page by default
+        const rxDisplayArea = document.getElementById('rx-display-area');
+        if (rxDisplayArea && typeof rxLoadHomePage === 'function') {
+            rxLoadHomePage(rxDisplayArea);
+        }
+        // Sidebar heading set to HOME
+        const sidebarHeading = document.getElementById('rx-sidebar-heading');
+        if (sidebarHeading) sidebarHeading.innerText = 'HOME';
     }
     
+    // Mobile menu button
     const mobileMenuBtn = document.getElementById('rx-mobile-menu-btn');
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', function() {
