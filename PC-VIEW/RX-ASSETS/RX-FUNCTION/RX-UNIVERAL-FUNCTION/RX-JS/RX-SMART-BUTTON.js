@@ -278,7 +278,7 @@
       <div class="RX-SMART-BUTTON-menu-item RX-item-12 blue-item" data-link="Service.html"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/service.png" alt="service"></div>
 
       <!-- Menu items Silver Theme (13-24) - Initially hidden -->
-      <div class="RX-SMART-BUTTON-menu-item RX-item-13 silver-item" data-link="https://rosankc.com.np/PC-VIEW/ROSAN.html" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/BOT-PROFILE.png" alt="item13"></div>
+      <div class="RX-SMART-BUTTON-menu-item RX-item-13 silver-item" data-link="https://rosankc.com.np" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/BOT-PROFILE.png" alt="item13"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-14 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item14"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-15 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item15"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-16 silver-item" data-link="#" style="display: none;"><img src="RX-ASSETS/RX-IMAGE/RX-FUNCTION-ICON/user.png" alt="item16"></div>
