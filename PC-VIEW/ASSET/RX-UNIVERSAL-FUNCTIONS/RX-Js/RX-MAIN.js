@@ -1,6 +1,11 @@
-// rx-main.js - Main Application Logic & Routing
-// author : RX STUDIO
+//============================================================
+// RX-MAIN.js 
+//Author: RX STUDIO
+// ============================================================
+// 1. SIDEBAR / MENU TOGGLE FUNCTIONS
+// ============================================================
 
+// Toggle sub-menu (folder open/close)
 function rxToggleSub(rxElement) {
     let rxNested = rxElement.nextElementSibling;
     if (rxNested) {
@@ -8,6 +13,27 @@ function rxToggleSub(rxElement) {
     }
 }
 
+// Closes the mobile menu
+function rxCloseMobileMenu() {
+    const sidebar = document.getElementById('rx-sidebar');
+    if (sidebar && sidebar.classList.contains('show')) {
+        sidebar.classList.remove('show');
+    }
+}
+
+// Toggles the mobile menu open/close
+function rxToggleMobileMenu() {
+    const sidebar = document.getElementById('rx-sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('show');
+    }
+}
+
+// ============================================================
+// 2. CONTENT LOADING & ROUTING LOGIC
+// ============================================================
+
+// Load Home content
 function rxLoadHome() {
     localStorage.removeItem('rxCurrentPage');
     
@@ -16,33 +42,31 @@ function rxLoadHome() {
         rxLoadHomePage(rxDisplayArea);
     }
 
-    if (window.innerWidth <= 768) {
-        const sidebar = document.getElementById('rx-sidebar');
-        if (sidebar) sidebar.classList.remove('show');
-    }
+    // Close menu on mobile if open
+    if (window.innerWidth <= 768) rxCloseMobileMenu();
 }
 
+// Main content loader
 function rxLoadContent(rxTitleName) {
-    // युजरले क्लिक गरेको हालको पेजलाई LocalStorage मा सेभ गर्ने
     localStorage.setItem('rxCurrentPage', rxTitleName);
     renderContent(rxTitleName);
-
-    if (window.innerWidth <= 768) {
-        const sidebar = document.getElementById('rx-sidebar');
-        if (sidebar) sidebar.classList.remove('show');
-    }
+    if (window.innerWidth <= 768) rxCloseMobileMenu();
 }
 
+// Render the correct page based on title
 function renderContent(rxTitleName) {
     const rxDisplayArea = document.getElementById('rx-display-area');
     const sidebarHeading = document.getElementById('rx-sidebar-heading');
-    if (sidebarHeading) sidebarHeading.innerText = rxTitleName;
     
+    // Update sidebar heading
+    if (sidebarHeading) sidebarHeading.innerText = rxTitleName;
     if (!rxDisplayArea) return;
 
+    // Reset content area styling
     rxDisplayArea.style.alignItems = "center";
     rxDisplayArea.style.justifyContent = "flex-start";
 
+    // Route to specific page functions
     if (rxTitleName === 'Home' || rxTitleName === 'HOME') {
         rxLoadHome();
         return;
@@ -76,33 +100,44 @@ function renderContent(rxTitleName) {
     }
 }
 
-// ===== FIX: पेज लोड हुँदा HOME content देखाउने =====
+// ============================================================
+// 3. INITIALIZATION ON PAGE LOAD
+// ============================================================
+
 window.addEventListener('DOMContentLoaded', () => {
     const savedPage = localStorage.getItem('rxCurrentPage');
+    const rxDisplayArea = document.getElementById('rx-display-area');
     
-    // If there's a saved page, load it
+    // 1. Load saved page or default to Home
     if (savedPage) {
         renderContent(savedPage);
     } else {
-        // Otherwise, load Home page by default
-        const rxDisplayArea = document.getElementById('rx-display-area');
         if (rxDisplayArea && typeof rxLoadHomePage === 'function') {
             rxLoadHomePage(rxDisplayArea);
         }
-        // Sidebar heading set to HOME
         const sidebarHeading = document.getElementById('rx-sidebar-heading');
         if (sidebarHeading) sidebarHeading.innerText = 'HOME';
     }
-    
-    // Mobile menu button
+
+    // 2. Mobile Menu Button Listener
     const mobileMenuBtn = document.getElementById('rx-mobile-menu-btn');
     if (mobileMenuBtn) {
-        mobileMenuBtn.addEventListener('click', function() {
-            const sidebar = document.getElementById('rx-sidebar');
-            if (sidebar) sidebar.classList.toggle('show');
+        mobileMenuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            rxToggleMobileMenu();
         });
     }
+
+    // ============================================================
+    // [FIXED] Outside Click Close Function REMOVED completely.
+    // Menu will ONLY open/close by clicking the button.
+    // ============================================================
+
 });
+
+// ============================================================
+// 4. REAL-TIME CLOCK & DATE UPDATE
+// ============================================================
 
 function updateDateTime() {
     const now = new Date();
@@ -122,5 +157,6 @@ function updateDateTime() {
     if (dayEl) dayEl.innerText = now.toLocaleDateString(userLocale, { weekday: 'long' });
 }
 
+// Update clock every second
 setInterval(updateDateTime, 1000);
 updateDateTime();
