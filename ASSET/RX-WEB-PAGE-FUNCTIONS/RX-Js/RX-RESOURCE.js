@@ -9,7 +9,8 @@ const contentCards = [
         description: "ALL DOCUMENT COLLECTION : LOGIN PASSWORD = RX-2061", 
         link: "RX-LEKA-PADI.html?exam=file1", 
         icon: "fas fa-pencil",
-        prices: { default: "Rs. 999/Month" }
+        prices: { default: "Rs. 999/Month" },
+        extraDetails: " This is a comprehensive document collection for LEKHAPADI preparation.\n• Includes all past papers\n• Study materials\n• Practice tests\n• Perfect for exam preparation"
     },
     {   
         id: "file2", 
@@ -17,7 +18,8 @@ const contentCards = [
         description: "You can practice exam every time auto generate new questions randomly.", 
         link: "RX-KR-EXAM-MODEL-1.html?exam=file2", 
         icon: "fas fa-book",
-        prices: { default: "Rs. 999/Month" }
+        prices: { default: "Rs. 999/Month" },
+        extraDetails: " Practice Korean exams with randomly generated questions from combined sets.\n• Covers all topics\n• Varying difficulty levels\n• Track your progress\n• Improve your score"
     },
     {   
         id: "file3", 
@@ -25,7 +27,8 @@ const contentCards = [
         description: "Scan QR codes instantly", 
         link: "RX-S-QR.html?exam=file3", 
         icon: "fas fa-qrcode",
-        prices: { default: "Rs. 100" }
+        prices: { default: "Rs. 100" },
+        extraDetails: " Quick and easy QR code scanner.\n• Supports all QR code formats\n• History tracking\n• Batch scanning features"
     },
     {   
         id: "file4", 
@@ -33,7 +36,8 @@ const contentCards = [
         description: "LOGIN PASSWORD = RX2061", 
         link: "RX-IMG-CONVERTER.html?exam=file4", 
         icon: "fas fa-pen",
-        prices: { default: "Rs. 100" }
+        prices: { default: "Rs. 100" },
+        extraDetails: " Convert text to image with custom fonts, colors, and styles.\n• Multiple export formats\n• Batch conversion available\n• Customizable output"
     },
     {   
         id: "file5", 
@@ -41,7 +45,8 @@ const contentCards = [
         description: "You can practice exam with set question.", 
         link: "RX-KR-EXAM-MODEL-2.html?exam=file5", 
         icon: "fas fa-book",
-        prices: { default: "Rs. 100/set" }
+        prices: { default: "Rs. 100/set" },
+        extraDetails: " Practice Korean exam with Set-1 questions.\n• Focused practice on specific topics\n• Detailed answer explanations\n• Progress tracking"
     },
     {   
         id: "file6", 
@@ -49,7 +54,8 @@ const contentCards = [
         description: "You can practice exam with set question.", 
         link: "RX-KR-EXAM-MODEL-2.html?exam=file6", 
         icon: "fas fa-book",
-        prices: { default: "Rs. 100/set" }
+        prices: { default: "Rs. 100/set" },
+        extraDetails: " Set-2 Korean exam practice coming soon.\n• Advanced questions\n• New topics\n• Stay tuned for updates"
     },
     {   
         id: "file7", 
@@ -57,7 +63,8 @@ const contentCards = [
         description: "You can practice exam with set question.", 
         link: "RX-KR-EXAM-MODEL-2.html?exam=file7", 
         icon: "fas fa-book",
-        prices: { default: "Rs. 100/set" }
+        prices: { default: "Rs. 100/set" },
+        extraDetails: " Set-3 Korean exam practice with comprehensive question bank.\n• Full coverage of all exam topics\n• Multiple question types\n• Performance analytics"
     },
 ];
 
@@ -84,6 +91,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xzznawep';
 const UserSession = {
     currentUser: null,
     userAccess: [],
+    userAccessConfig: {},
 
     getCurrentUser() {
         try {
@@ -113,13 +121,18 @@ const UserSession = {
         const user = this.getCurrentUser();
         if (!user) return [];
         
+        // Check if access is already loaded from Supabase
+        if (this.userAccess && this.userAccess.length > 0) {
+            return this.userAccess;
+        }
+        
         if (user.access && Array.isArray(user.access)) {
             this.userAccess = user.access;
             return user.access;
         }
         
         if (user.accountType === 'ADMIN' || user.account_type === 'Admin' || user.role === 'admin') {
-            this.userAccess = ['file1', 'file2', 'file3', 'file4', 'file5', 'file6', 'file7'];
+            this.userAccess = [];
             return this.userAccess;
         }
         
@@ -132,7 +145,46 @@ const UserSession = {
         if (user && (user.accountType === 'ADMIN' || user.account_type === 'Admin' || user.role === 'admin')) {
             return true;
         }
-        return access.includes(fileId);
+        
+        // Check if file is in access array
+        const hasFileAccess = access.includes(fileId);
+        
+        // If access config exists, check expiry
+        if (hasFileAccess && this.userAccessConfig && this.userAccessConfig[fileId]) {
+            const config = this.userAccessConfig[fileId];
+            if (config && config.purchase_date && config.access_days) {
+                const currentDate = new Date();
+                const purchaseDate = new Date(config.purchase_date);
+                const accessDays = config.access_days || 30;
+                const expiryDate = new Date(purchaseDate);
+                expiryDate.setDate(expiryDate.getDate() + accessDays);
+                
+                if (expiryDate <= currentDate) {
+                    // Access expired
+                    return false;
+                }
+            }
+        }
+        
+        return hasFileAccess;
+    },
+
+    // Update access from Supabase (called by RX-SUPABASE-ACCESS.js)
+    updateAccess(accessData, accessConfig) {
+        this.userAccess = accessData || [];
+        this.userAccessConfig = accessConfig || {};
+        
+        // Update session
+        if (this.currentUser) {
+            this.currentUser.access = this.userAccess;
+            this.currentUser.accessConfig = this.userAccessConfig;
+            sessionStorage.setItem('rxSession', JSON.stringify(this.currentUser));
+        }
+        
+        // Refresh UI
+        if (window.StoreManager) {
+            window.StoreManager.renderContentCards();
+        }
     },
 
     getUserProfile() {
@@ -183,7 +235,7 @@ const UserSession = {
             } else if (accType === 'PREMIUM') {
                 dropdownAccountTypeEl.style.color = '#ffd93d';
             } else {
-                dropdownAccountTypeEl.style.color = '#64ffda'; // Neon
+                dropdownAccountTypeEl.style.color = '#64ffda';
             }
         }
 
@@ -210,7 +262,7 @@ const UserSession = {
         this.getCurrentUser();
         this.getUserAccess();
         this.displayUserInfo();
-        console.log('✅ User Session Manager initialized');
+        console.log(' User Session Manager initialized');
     }
 };
 
@@ -285,6 +337,295 @@ const NotificationManager = {
     }
 };
 
+// ===== EXTRA DETAILS MODAL =====
+const ExtraDetailsManager = {
+    createModal() {
+        if (document.getElementById('rx-extra-details-modal')) return;
+
+        const modalHTML = `
+            <div id="rx-extra-details-modal" class="rx-extra-modal" style="display: none;">
+                <div class="rx-extra-modal-content">
+                    <div class="rx-extra-modal-header">
+                        <h2 id="rx-extra-modal-title">Extra Details</h2>
+                        <span class="rx-extra-close" onclick="ExtraDetailsManager.closeModal()">&times;</span>
+                    </div>
+                    <div class="rx-extra-modal-body" id="rx-extra-modal-body">
+                        <div id="rx-extra-details-content"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        if (!document.getElementById('extra-modal-styles')) {
+            const style = document.createElement('style');
+            style.id = 'extra-modal-styles';
+            style.textContent = `
+                .rx-extra-modal {
+                    display: none;
+                    position: fixed;
+                    z-index: 10001;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0,0,0,0.5);
+                    animation: fadeIn 0.3s ease;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .rx-extra-modal-content {
+                    background-color: #ffffff;
+                    padding: 20px 24px 24px 24px;
+                    border-radius: 12px;
+                    width: 90%;
+                    max-width: 420px;
+                    color: #333333;
+                    animation: slideDown 0.3s ease;
+                    border: 1px solid #d0dbe8;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+                    max-height: 80vh;
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+                    margin: auto;
+                }
+                @keyframes slideDown {
+                    from { transform: translateY(-30px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .rx-extra-modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-bottom: 1px solid #d0dbe8;
+                    padding-bottom: 10px;
+                    margin-bottom: 12px;
+                    flex-shrink: 0;
+                }
+                .rx-extra-modal-header h2 {
+                    color: #1a4480;
+                    font-size: 18px;
+                    margin: 0;
+                    font-weight: 700;
+                }
+                .rx-extra-close {
+                    font-size: 28px;
+                    cursor: pointer;
+                    color: #aaa;
+                    transition: color 0.3s;
+                    line-height: 1;
+                    padding: 0 4px;
+                }
+                .rx-extra-close:hover {
+                    color: #e74c3c;
+                }
+                .rx-extra-modal-body {
+                    flex: 1;
+                    overflow-y: auto;
+                    padding-right: 4px;
+                    max-height: 60vh;
+                }
+                .rx-extra-modal-body::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .rx-extra-modal-body::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 3px;
+                }
+                .rx-extra-modal-body::-webkit-scrollbar-thumb {
+                    background: #1a4480;
+                    border-radius: 3px;
+                }
+                .rx-extra-modal-body::-webkit-scrollbar-thumb:hover {
+                    background: #0056b3;
+                }
+                #rx-extra-details-content {
+                    color: #555555;
+                    line-height: 1.7;
+                    font-size: 14px;
+                }
+                #rx-extra-details-content .detail-icon {
+                    font-size: 32px;
+                    color: #1a4480;
+                    display: block;
+                    margin-bottom: 10px;
+                    text-align: center;
+                }
+                #rx-extra-details-content .detail-title {
+                    font-size: 17px;
+                    font-weight: 700;
+                    color: #1a4480;
+                    margin-bottom: 8px;
+                    text-align: center;
+                }
+                #rx-extra-details-content .detail-description {
+                    color: #555555;
+                    font-size: 14px;
+                    line-height: 1.7;
+                    margin-bottom: 10px;
+                }
+                #rx-extra-details-content .detail-features {
+                    margin-top: 10px;
+                    padding: 10px 14px;
+                    background: #f8fafc;
+                    border-radius: 6px;
+                    border: 1px solid #d0dbe8;
+                    list-style: none;
+                    padding-left: 14px;
+                }
+                #rx-extra-details-content .detail-features li {
+                    margin-bottom: 5px;
+                    color: #555555;
+                    font-size: 13px;
+                    padding-left: 18px;
+                    position: relative;
+                    line-height: 1.6;
+                }
+                #rx-extra-details-content .detail-features li:before {
+                    content: "•";
+                    color: #1a4480;
+                    font-weight: bold;
+                    position: absolute;
+                    left: 0;
+                    font-size: 16px;
+                }
+                #rx-extra-details-content .detail-price-section {
+                    margin-top: 12px;
+                    padding-top: 12px;
+                    border-top: 1px solid #d0dbe8;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex-shrink: 0;
+                }
+                #rx-extra-details-content .detail-price-section strong {
+                    color: #1a4480;
+                    font-size: 14px;
+                }
+                #rx-extra-details-content .detail-price-section span {
+                    color: #0056b3;
+                    font-weight: bold;
+                    font-size: 15px;
+                }
+                @media (max-width: 600px) {
+                    .rx-extra-modal-content {
+                        padding: 16px 18px 18px 18px;
+                        max-width: 95%;
+                        max-height: 85vh;
+                    }
+                    .rx-extra-modal-header h2 {
+                        font-size: 16px;
+                    }
+                    .rx-extra-modal-body {
+                        max-height: 55vh;
+                    }
+                    #rx-extra-details-content {
+                        font-size: 13px;
+                    }
+                    #rx-extra-details-content .detail-title {
+                        font-size: 16px;
+                    }
+                    #rx-extra-details-content .detail-icon {
+                        font-size: 28px;
+                    }
+                    #rx-extra-details-content .detail-features li {
+                        font-size: 12px;
+                    }
+                }
+                @media (max-width: 400px) {
+                    .rx-extra-modal-content {
+                        padding: 12px 14px 14px 14px;
+                        max-width: 98%;
+                    }
+                    .rx-extra-modal-header h2 {
+                        font-size: 15px;
+                    }
+                    .rx-extra-modal-body {
+                        max-height: 50vh;
+                    }
+                    #rx-extra-details-content {
+                        font-size: 12px;
+                    }
+                    #rx-extra-details-content .detail-title {
+                        font-size: 15px;
+                    }
+                    #rx-extra-details-content .detail-features li {
+                        font-size: 12px;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    },
+
+    showModal(cardId) {
+        this.createModal();
+        const card = contentCards.find(c => c.id === cardId);
+        if (!card) {
+            NotificationManager.showNotification("Error", "Content not found!", "danger");
+            return;
+        }
+
+        const content = document.getElementById('rx-extra-details-content');
+        if (!content) return;
+
+        // Check if user has access
+        const hasAccess = UserSession.hasAccess(cardId);
+
+        // Build features HTML
+        let featuresHtml = '';
+        if (card.extraDetails) {
+            const lines = card.extraDetails.split('\n').filter(line => line.trim());
+            if (lines.length > 1) {
+                featuresHtml = `
+                    <ul class="detail-features">
+                        ${lines.map(line => `<li>${line.trim()}</li>`).join('')}
+                    </ul>
+                `;
+            } else {
+                featuresHtml = `<p class="detail-description">${card.extraDetails}</p>`;
+            }
+        }
+
+        // Only show description if user has access
+        let descriptionHtml = '';
+        if (hasAccess) {
+            descriptionHtml = `<p class="detail-description">${card.description || ''}</p>`;
+        }
+
+        content.innerHTML = `
+            <div class="detail-icon">
+                <i class="${card.icon || 'fas fa-file'}"></i>
+            </div>
+            <div class="detail-title">${card.title}</div>
+            ${descriptionHtml}
+            ${featuresHtml}
+            <div class="detail-price-section">
+                <strong>Price:</strong> 
+                <span>${card.prices?.default || 'Contact for price'}</span>
+            </div>
+        `;
+
+        document.getElementById('rx-extra-modal-title').textContent = `Details :`;
+        const modal = document.getElementById('rx-extra-details-modal');
+        modal.style.display = 'flex';
+        
+        // Reset scroll position
+        const body = document.getElementById('rx-extra-modal-body');
+        if (body) body.scrollTop = 0;
+    },
+
+    closeModal() {
+        const modal = document.getElementById('rx-extra-details-modal');
+        if (modal) modal.style.display = 'none';
+    }
+};
+
 // ===== PAYMENT MODULE =====
 const PaymentManager = {
     createPaymentModal() {
@@ -294,33 +635,62 @@ const PaymentManager = {
             <div id="rx-payment-modal" class="rx-modal" style="display: none;">
                 <div class="rx-modal-content">
                     <div class="rx-modal-header">
-                        <h2 id="rx-modal-title">Purchase Access</h2>
+                        <h2 id="rx-modal-title" class="rx-modal-title-left">Purchase Access</h2>
                         <span class="rx-close" onclick="PaymentManager.closeModal()">&times;</span>
                     </div>
                     <div class="rx-modal-body">
-                        <form id="rx-payment-form" action="${FORMSPREE_ENDPOINT}" method="POST">
+                        <form id="rx-payment-form" action="${FORMSPREE_ENDPOINT}" method="POST" onsubmit="return PaymentManager.handleFormSubmit(event)">
                             <input type="hidden" name="_subject" id="rx-form-subject" value="New Purchase Request">
                             <input type="hidden" name="_template" value="table">
                             <input type="hidden" name="_gotcha" style="display:none !important">
-                            <div class="rx-section">
-                                <h3><i class="fas fa-file-alt"></i> File Information</h3>
-                                <div class="rx-form-grid">
-                                    <div class="rx-form-group"><label>File Name</label><input type="text" id="rx-file-name" name="file_name" readonly class="rx-auto-field"></div>
-                                    <div class="rx-form-group"><label>Price</label><input type="text" id="rx-file-price" name="file_price" readonly class="rx-auto-field"></div>
+                            
+                            <!-- File Information - Single Line -->
+                            <div class="rx-file-info">
+                                <div class="rx-file-info-item">
+                                    <label><i class="fas fa-file-alt"></i> File:</label>
+                                    <span id="rx-file-name-display">---</span>
                                 </div>
                             </div>
-                            <div class="rx-section">
+
+                            <!-- User Information - Center with Scroll -->
+                            <div class="rx-section rx-user-section">
                                 <h3><i class="fas fa-user"></i> Your Information</h3>
-                                <div class="rx-form-grid">
-                                    <div class="rx-form-group"><label>Full Name</label><input type="text" id="rx-user-name" name="user_name" readonly class="rx-auto-field"></div>
-                                    <div class="rx-form-group"><label>User ID</label><input type="text" id="rx-user-id" name="user_id" readonly class="rx-auto-field"></div>
-                                    <div class="rx-form-group"><label>Email</label><input type="email" id="rx-user-email" name="user_email" readonly class="rx-auto-field"></div>
-                                    <div class="rx-form-group"><label>Phone</label><input type="text" id="rx-user-phone" name="user_phone" readonly class="rx-auto-field"></div>
+                                <div class="rx-user-details-scroll">
+                                    <div class="rx-form-grid">
+                                        <div class="rx-form-group">
+                                            <label>Full Name</label>
+                                            <input type="text" id="rx-user-name" name="user_name" readonly class="rx-auto-field">
+                                        </div>
+                                        <div class="rx-form-group">
+                                            <label>User ID</label>
+                                            <input type="text" id="rx-user-id" name="user_id" readonly class="rx-auto-field">
+                                        </div>
+                                        <div class="rx-form-group">
+                                            <label>Email</label>
+                                            <input type="email" id="rx-user-email" name="user_email" readonly class="rx-auto-field">
+                                        </div>
+                                        <div class="rx-form-group">
+                                            <label>Phone</label>
+                                            <input type="text" id="rx-user-phone" name="user_phone" readonly class="rx-auto-field">
+                                        </div>
+                                        <div class="rx-form-group rx-form-group-full">
+                                            <label>Address</label>
+                                            <input type="text" id="rx-user-address" name="user_address" readonly class="rx-auto-field" value="-">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="rx-form-actions">
-                                <button type="submit" id="rx-submit-btn" class="rx-btn rx-btn-submit"><i class="fas fa-paper-plane"></i> Submit Request</button>
-                                <button type="button" class="rx-btn rx-btn-cancel" onclick="PaymentManager.closeModal()"><i class="fas fa-times"></i> Cancel</button>
+
+                            <!-- Bottom Section: Price Left, Buttons Right -->
+                            <div class="rx-form-footer">
+                                <div class="rx-price-display">
+                                    <span class="rx-price-label">Price:</span>
+                                    <span id="rx-file-price" class="rx-price-value">---</span>
+                                </div>
+                                <div class="rx-form-actions">
+                                    <button type="button" class="rx-btn rx-btn-cancel" onclick="PaymentManager.closeModal()"><i class="fas fa-times"></i> Cancel</button>
+                                    <button type="submit" id="rx-submit-btn" class="rx-btn rx-btn-submit"><i class="fas fa-paper-plane"></i> Submit</button>
+                                </div>
                             </div>
                         </form>
                     </div>
@@ -332,31 +702,572 @@ const PaymentManager = {
         if (!document.getElementById('modal-styles')) {
             const style = document.createElement('style');
             style.id = 'modal-styles';
-            // CHANGE 1: Notification/Payment Modal को Background र Text आदि White/Blue भयो
             style.textContent = `
-                .rx-modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-                .rx-modal-content { background-color: #ffffff; margin: 5% auto; padding: 20px; border-radius: 10px; width: 90%; max-width: 600px; color: #333333; animation: slideDown 0.3s ease; border: 1px solid #d0dbe8; }
-                @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-                .rx-modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #d0dbe8; padding-bottom: 15px; }
-                .rx-close { font-size: 28px; cursor: pointer; color: #aaa; transition: color 0.3s; }
-                .rx-close:hover { color: #e74c3c; }
-                .rx-modal-body { padding: 20px 0; }
-                .rx-section { margin-bottom: 20px; }
-                .rx-section h3 { margin-bottom: 15px; color: #1a4480; font-size: 18px; }
-                .rx-form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-                .rx-form-group { display: flex; flex-direction: column; }
-                .rx-form-group label { margin-bottom: 5px; font-size: 14px; color: #666666; }
-                .rx-form-group input { padding: 10px; border: 1px solid #d0dbe8; border-radius: 5px; background: #ffffff; color: #333333; font-size: 14px; }
-                .rx-form-group input:focus { outline: none; border-color: #1a4480; }
-                .rx-form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-                .rx-btn { padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: all 0.3s; }
-                .rx-btn-submit { background: #1a4480; color: #ffffff; font-weight: bold; }
-                .rx-btn-submit:hover { background: #0056b3; transform: scale(1.02); }
-                .rx-btn-cancel { background: #f8fafc; color: #1a4480; border: 1px solid #d0dbe8; }
-                .rx-btn-cancel:hover { background: #ffffff; border-color: #1a4480; }
-                @media (max-width: 600px) { .rx-form-grid { grid-template-columns: 1fr; } }
+                .rx-modal {
+                    display: none;
+                    position: fixed;
+                    z-index: 9999;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0,0,0,0.5);
+                    justify-content: center;
+                    align-items: center;
+                    animation: fadeIn 0.3s ease;
+                }
+                .rx-modal.show {
+                    display: flex !important;
+                }
+                .rx-modal-content {
+                    background-color: #ffffff;
+                    padding: 0;
+                    border-radius: 12px;
+                    width: 92%;
+                    max-width: 560px;
+                    color: #333333;
+                    animation: slideDown 0.3s ease;
+                    border: 1px solid #d0dbe8;
+                    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+                    max-height: 90vh;
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+                    margin: auto;
+                    overflow: hidden;
+                }
+                @keyframes slideDown {
+                    from { transform: translateY(-30px) scale(0.95); opacity: 0; }
+                    to { transform: translateY(0) scale(1); opacity: 1; }
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                
+                /* Header: File Name Left, Close Right */
+                .rx-modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 16px 20px;
+                    border-bottom: 1px solid #d0dbe8;
+                    background: #f8fafc;
+                    flex-shrink: 0;
+                }
+                .rx-modal-title-left {
+                    color: #1a4480;
+                    font-size: 16px;
+                    margin: 0;
+                    font-weight: 700;
+                    flex: 1;
+                    word-break: break-word;
+                    padding-right: 10px;
+                    line-height: 1.3;
+                }
+                .rx-close {
+                    font-size: 28px;
+                    cursor: pointer;
+                    color: #aaa;
+                    transition: color 0.3s;
+                    line-height: 1;
+                    padding: 0 4px;
+                    flex-shrink: 0;
+                }
+                .rx-close:hover {
+                    color: #e74c3c;
+                }
+
+                /* Modal Body */
+                .rx-modal-body {
+                    padding: 16px 20px 0 20px;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                }
+
+                /* File Info - Single Line */
+                .rx-file-info {
+                    background: #f0f4f9;
+                    border-radius: 6px;
+                    padding: 8px 14px;
+                    margin-bottom: 12px;
+                    border: 1px solid #d0dbe8;
+                    flex-shrink: 0;
+                }
+                .rx-file-info-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    font-size: 13px;
+                    flex-wrap: wrap;
+                }
+                .rx-file-info-item label {
+                    color: #1a4480;
+                    font-weight: 600;
+                    margin: 0;
+                    white-space: nowrap;
+                }
+                .rx-file-info-item label i {
+                    margin-right: 4px;
+                }
+                .rx-file-info-item span {
+                    color: #333333;
+                    font-weight: 500;
+                    word-break: break-word;
+                }
+
+                /* User Section with Scroll - 2 Columns Always */
+                .rx-user-section {
+                    flex: 1;
+                    min-height: 0;
+                    display: flex;
+                    flex-direction: column;
+                    margin-bottom: 12px;
+                }
+                .rx-user-section h3 {
+                    color: #1a4480;
+                    font-size: 15px;
+                    margin: 0 0 8px 0;
+                    font-weight: 600;
+                    flex-shrink: 0;
+                }
+                .rx-user-section h3 i {
+                    margin-right: 6px;
+                }
+                .rx-user-details-scroll {
+                    flex: 1;
+                    overflow-y: auto;
+                    padding-right: 4px;
+                    max-height: 220px;
+                    min-height: 120px;
+                }
+                .rx-user-details-scroll::-webkit-scrollbar {
+                    width: 5px;
+                }
+                .rx-user-details-scroll::-webkit-scrollbar-track {
+                    background: #f1f1f1;
+                    border-radius: 3px;
+                }
+                .rx-user-details-scroll::-webkit-scrollbar-thumb {
+                    background: #1a4480;
+                    border-radius: 3px;
+                }
+                .rx-user-details-scroll::-webkit-scrollbar-thumb:hover {
+                    background: #0056b3;
+                }
+                
+                /* Always 2 columns - even on mobile */
+                .rx-form-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 10px;
+                }
+                .rx-form-group-full {
+                    grid-column: 1 / -1;
+                }
+                .rx-form-group {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .rx-form-group label {
+                    margin-bottom: 3px;
+                    font-size: 12px;
+                    color: #666666;
+                    font-weight: 500;
+                }
+                .rx-form-group input {
+                    padding: 8px 10px;
+                    border: 1px solid #d0dbe8;
+                    border-radius: 5px;
+                    background: #f8fafc;
+                    color: #333333;
+                    font-size: 13px;
+                    transition: border-color 0.3s;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+                .rx-form-group input:focus {
+                    outline: none;
+                    border-color: #1a4480;
+                    background: #ffffff;
+                }
+                .rx-form-group input[readonly] {
+                    cursor: default;
+                    background: #f8fafc;
+                }
+
+                /* Footer: Price Left, Buttons Right */
+                .rx-form-footer {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 0 16px 0;
+                    border-top: 1px solid #d0dbe8;
+                    margin-top: 4px;
+                    flex-shrink: 0;
+                    gap: 12px;
+                    flex-wrap: wrap;
+                }
+                .rx-price-display {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    background: #f0f4f9;
+                    padding: 6px 14px;
+                    border-radius: 6px;
+                    border: 1px solid #d0dbe8;
+                }
+                .rx-price-label {
+                    color: #666666;
+                    font-size: 13px;
+                    font-weight: 500;
+                }
+                .rx-price-value {
+                    color: #0056b3;
+                    font-size: 16px;
+                    font-weight: 700;
+                }
+                .rx-form-actions {
+                    display: flex;
+                    gap: 8px;
+                    flex-wrap: wrap;
+                }
+                .rx-btn {
+                    padding: 8px 18px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 14px;
+                    font-weight: 600;
+                    transition: all 0.3s;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                }
+                .rx-btn-submit {
+                    background: #1a4480;
+                    color: #ffffff;
+                }
+                .rx-btn-submit:hover {
+                    background: #0056b3;
+                    transform: scale(1.02);
+                    box-shadow: 0 4px 12px rgba(26, 68, 128, 0.3);
+                }
+                .rx-btn-submit:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
+                    transform: none;
+                }
+                .rx-btn-cancel {
+                    background: #f8fafc;
+                    color: #1a4480;
+                    border: 1px solid #d0dbe8;
+                }
+                .rx-btn-cancel:hover {
+                    background: #ffffff;
+                    border-color: #1a4480;
+                    transform: scale(1.02);
+                }
+
+                /* Success Popup Styles */
+                .rx-success-popup-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    z-index: 10002;
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    animation: fadeIn 0.3s ease;
+                }
+                .rx-success-popup-overlay.show {
+                    display: flex;
+                }
+                .rx-success-popup {
+                    background: #ffffff;
+                    border-radius: 12px;
+                    padding: 30px 35px;
+                    max-width: 450px;
+                    width: 90%;
+                    text-align: center;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                    animation: popIn 0.4s ease;
+                    position: relative;
+                    border-top: 4px solid #2ecc71;
+                }
+                @keyframes popIn {
+                    0% { transform: scale(0.8) translateY(-20px); opacity: 0; }
+                    100% { transform: scale(1) translateY(0); opacity: 1; }
+                }
+                .rx-success-popup .success-icon {
+                    font-size: 52px;
+                    color: #2ecc71;
+                    margin-bottom: 12px;
+                    display: block;
+                    animation: bounceIn 0.6s ease;
+                }
+                @keyframes bounceIn {
+                    0% { transform: scale(0); }
+                    50% { transform: scale(1.2); }
+                    70% { transform: scale(0.9); }
+                    100% { transform: scale(1); }
+                }
+                .rx-success-popup h3 {
+                    color: #1a4480;
+                    font-size: 20px;
+                    margin-bottom: 8px;
+                    font-weight: 700;
+                }
+                .rx-success-popup .success-message {
+                    color: #555555;
+                    font-size: 15px;
+                    line-height: 1.6;
+                    margin-bottom: 4px;
+                }
+                .rx-success-popup .success-message strong {
+                    color: #1a4480;
+                    font-weight: 700;
+                }
+                .rx-success-popup .success-sub-message {
+                    color: #888888;
+                    font-size: 13px;
+                    line-height: 1.5;
+                    margin-top: 6px;
+                    padding-top: 10px;
+                    border-top: 1px solid #d0dbe8;
+                }
+                .rx-success-popup .success-timer {
+                    margin-top: 12px;
+                    color: #999;
+                    font-size: 12px;
+                }
+
+                /* Responsive - Keep 2 columns on mobile */
+                @media (max-width: 600px) {
+                    .rx-modal-content {
+                        width: 95%;
+                        max-width: 100%;
+                        max-height: 92vh;
+                        border-radius: 10px;
+                    }
+                    .rx-modal-header {
+                        padding: 12px 16px;
+                    }
+                    .rx-modal-title-left {
+                        font-size: 14px;
+                    }
+                    .rx-modal-body {
+                        padding: 12px 16px 0 16px;
+                    }
+                    .rx-user-details-scroll {
+                        max-height: 180px;
+                        min-height: 100px;
+                    }
+                    /* Keep 2 columns on mobile */
+                    .rx-form-grid {
+                        grid-template-columns: 1fr 1fr;
+                        gap: 8px;
+                    }
+                    .rx-form-group label {
+                        font-size: 11px;
+                    }
+                    .rx-form-group input {
+                        font-size: 12px;
+                        padding: 6px 8px;
+                    }
+                    .rx-form-footer {
+                        flex-direction: column;
+                        align-items: stretch;
+                        gap: 10px;
+                        padding: 10px 0 14px 0;
+                    }
+                    .rx-price-display {
+                        justify-content: center;
+                        padding: 6px 12px;
+                    }
+                    .rx-form-actions {
+                        justify-content: center;
+                    }
+                    .rx-btn {
+                        padding: 8px 16px;
+                        font-size: 13px;
+                        justify-content: center;
+                        flex: 1;
+                    }
+                    .rx-success-popup {
+                        padding: 25px 20px;
+                        max-width: 95%;
+                    }
+                    .rx-success-popup .success-icon {
+                        font-size: 42px;
+                    }
+                    .rx-success-popup h3 {
+                        font-size: 18px;
+                    }
+                    .rx-success-popup .success-message {
+                        font-size: 14px;
+                    }
+                }
+                @media (max-width: 400px) {
+                    .rx-modal-header {
+                        padding: 10px 12px;
+                    }
+                    .rx-modal-title-left {
+                        font-size: 13px;
+                    }
+                    .rx-modal-body {
+                        padding: 10px 12px 0 12px;
+                    }
+                    .rx-user-details-scroll {
+                        max-height: 150px;
+                        min-height: 80px;
+                    }
+                    /* Keep 2 columns on very small screens */
+                    .rx-form-grid {
+                        grid-template-columns: 1fr 1fr;
+                        gap: 6px;
+                    }
+                    .rx-file-info {
+                        padding: 6px 10px;
+                    }
+                    .rx-file-info-item {
+                        font-size: 12px;
+                    }
+                    .rx-form-group input {
+                        font-size: 11px;
+                        padding: 5px 6px;
+                    }
+                    .rx-form-group label {
+                        font-size: 10px;
+                    }
+                    .rx-price-value {
+                        font-size: 14px;
+                    }
+                    .rx-btn {
+                        font-size: 12px;
+                        padding: 6px 12px;
+                    }
+                    .rx-success-popup {
+                        padding: 20px 16px;
+                    }
+                    .rx-success-popup .success-icon {
+                        font-size: 36px;
+                    }
+                    .rx-success-popup h3 {
+                        font-size: 16px;
+                    }
+                    .rx-success-popup .success-message {
+                        font-size: 13px;
+                    }
+                }
             `;
             document.head.appendChild(style);
+        }
+
+        // Create success popup HTML if it doesn't exist
+        if (!document.getElementById('rx-success-popup-overlay')) {
+            const popupHTML = `
+                <div id="rx-success-popup-overlay" class="rx-success-popup-overlay">
+                    <div class="rx-success-popup">
+                        <i class="fas fa-check-circle success-icon"></i>
+                        <h3>Request Submitted Successfully!</h3>
+                        <div class="success-message" id="rx-success-message">
+                            The file: <strong id="rx-success-file-name">---</strong> has been submitted for <strong id="rx-success-action-type">purchase</strong>.
+                        </div>
+                        <div class="success-sub-message">
+                            Please wait until an authorized person contacts you back.
+                        </div>
+                        <div class="success-timer">Closing in <span id="rx-success-timer">3</span> seconds...</div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', popupHTML);
+        }
+    },
+
+    handleFormSubmit(event) {
+        event.preventDefault();
+        const form = document.getElementById('rx-payment-form');
+        const formData = new FormData(form);
+        const fileDisplay = document.getElementById('rx-file-name-display');
+        const fileTitle = fileDisplay ? fileDisplay.textContent : 'Unknown File';
+        const modalTitle = document.getElementById('rx-modal-title');
+        const actionType = modalTitle ? modalTitle.textContent : 'purchase';
+        const actionText = actionType.toLowerCase().includes('renew') ? 'renew' : 'purchase';
+
+        // Show loading state
+        const submitBtn = document.getElementById('rx-submit-btn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+
+        // Send form data using fetch
+        fetch(FORMSPREE_ENDPOINT, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Show success popup
+                this.showSuccessPopup(fileTitle, actionText);
+                this.closeModal();
+            } else {
+                throw new Error('Form submission failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting form:', error);
+            NotificationManager.showNotification('Error', 'Failed to submit request. Please try again.', 'danger', 4000);
+        })
+        .finally(() => {
+            // Reset button state
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
+
+        return false;
+    },
+
+    showSuccessPopup(fileName, actionType) {
+        this.createPaymentModal();
+        
+        const overlay = document.getElementById('rx-success-popup-overlay');
+        const fileNameSpan = document.getElementById('rx-success-file-name');
+        const actionSpan = document.getElementById('rx-success-action-type');
+        const timerSpan = document.getElementById('rx-success-timer');
+
+        if (fileNameSpan) fileNameSpan.textContent = fileName || 'Unknown File';
+        if (actionSpan) actionSpan.textContent = actionType || 'purchase';
+        if (overlay) {
+            overlay.classList.add('show');
+        }
+
+        // Auto close after 3 seconds
+        let countdown = 6;
+        if (timerSpan) timerSpan.textContent = countdown;
+
+        const timerInterval = setInterval(() => {
+            countdown--;
+            if (timerSpan) timerSpan.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(timerInterval);
+                this.closeSuccessPopup();
+            }
+        }, 1000);
+    },
+
+    closeSuccessPopup() {
+        const overlay = document.getElementById('rx-success-popup-overlay');
+        if (overlay) {
+            overlay.classList.remove('show');
         }
     },
 
@@ -380,20 +1291,46 @@ const PaymentManager = {
             return;
         }
 
-        document.getElementById('rx-modal-title').textContent = isRenewal ? `Renew Access: ${card.title}` : `Purchase Access: ${card.title}`;
-        document.getElementById('rx-file-name').value = card.title;
-        document.getElementById('rx-file-price').value = this.getPriceForUser(card, currentUser);
-        document.getElementById('rx-user-name').value = currentUser.full_name || currentUser.fullName || currentUser.name || 'GUEST';
-        document.getElementById('rx-user-id').value = currentUser.id || 'GUEST';
-        document.getElementById('rx-user-email').value = currentUser.email || '-';
-        document.getElementById('rx-user-phone').value = currentUser.phone || '-';
+        // Set modal title
+        const titleEl = document.getElementById('rx-modal-title');
+        const actionText = isRenewal ? 'Renew' : 'Purchase';
+        if (titleEl) titleEl.textContent = `${actionText}: ${card.title}`;
 
-        document.getElementById('rx-payment-modal').style.display = 'block';
+        // Set file name display
+        const fileDisplay = document.getElementById('rx-file-name-display');
+        if (fileDisplay) fileDisplay.textContent = card.title;
+
+        // Set price
+        const priceEl = document.getElementById('rx-file-price');
+        if (priceEl) priceEl.textContent = this.getPriceForUser(card, currentUser);
+
+        // Set user info
+        const userName = document.getElementById('rx-user-name');
+        const userId = document.getElementById('rx-user-id');
+        const userEmail = document.getElementById('rx-user-email');
+        const userPhone = document.getElementById('rx-user-phone');
+        const userAddress = document.getElementById('rx-user-address');
+
+        if (userName) userName.value = currentUser.full_name || currentUser.fullName || currentUser.name || 'GUEST';
+        if (userId) userId.value = currentUser.id || 'GUEST';
+        if (userEmail) userEmail.value = currentUser.email || '-';
+        if (userPhone) userPhone.value = currentUser.phone || '-';
+        if (userAddress) userAddress.value = currentUser.address || '-';
+
+        // Show modal
+        const modal = document.getElementById('rx-payment-modal');
+        if (modal) {
+            modal.style.display = 'flex';
+            modal.classList.add('show');
+        }
     },
 
     closeModal() {
         const modal = document.getElementById('rx-payment-modal');
-        if (modal) modal.style.display = 'none';
+        if (modal) {
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+        }
     }
 };
 
@@ -451,73 +1388,245 @@ const StoreManager = {
             return;
         }
 
+        // ===== CLEAR OLD TIMER SO IT DOESN'T STACK UP =====
+        if (window.activeTimerRef) {
+            clearTimeout(window.activeTimerRef);
+            window.activeTimerRef = null;
+        }
+
         storeContent.forEach(card => {
             const hasAccess = UserSession.hasAccess(card.id);
+            const price = PaymentManager.getPriceForUser(card, currentUser);
+            
             const cardElement = document.createElement('div');
             cardElement.className = `card ${hasAccess ? '' : 'locked'}`;
             
             let detailsHtml = '';
-            let buttonHtml = '';
+            let actionHtml = '';
 
             if (hasAccess) {
-                detailsHtml = `<p>${card.description || ''}</p>`;
-                buttonHtml = `<a href="${card.link}"><i class="fas fa-external-link-alt"></i> Open</a>`;
-            } else {
-                const price = PaymentManager.getPriceForUser(card, currentUser);
-                detailsHtml = `
-                    <p>${card.description || 'Purchase to get access.'}</p>
-                    <div class="price">${price}</div>
-                `;
-                
-                if (isLoggedIn) {
-                    buttonHtml = `<button class="purchase-btn" onclick="handlePurchaseRequest('${card.id}', false)"><i class="fas fa-shopping-cart"></i> Purchase Access</button>`;
-                } else {
-                    buttonHtml = `<button class="purchase-btn login-required" onclick="NotificationManager.showNotification('Login Required', 'Please login first to view file details and purchase.', 'warning', 4000)"><i class="fas fa-lock"></i> Login to View Details</button>`;
+                // ==========================================================
+                // NO ICON, NO SECONDS, STATIC EVERY 60 SECONDS
+                // ==========================================================
+                let expiryDate = null;
+                let isActiveTimer = false;
+
+                if (UserSession.userAccessConfig && UserSession.userAccessConfig[card.id]) {
+                    const config = UserSession.userAccessConfig[card.id];
+                    if (config && config.purchase_date && config.access_days) {
+                        const currentDate = new Date();
+                        const purchaseDate = new Date(config.purchase_date);
+                        const accessDays = config.access_days || 30;
+                        expiryDate = new Date(purchaseDate);
+                        expiryDate.setDate(expiryDate.getDate() + accessDays);
+                        
+                        if (expiryDate > currentDate) {
+                            isActiveTimer = true;
+                        }
+                    }
                 }
+
+                let timerHtml = '';
+                
+                if (isActiveTimer && expiryDate) {
+                    // Calculate difference
+                    const now = new Date().getTime();
+                    const distance = expiryDate.getTime() - now;
+                    
+                    // NO SECONDS HERE
+                    const minutes = Math.floor((distance / (1000 * 60)) % 60);
+                    const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+
+                    let timeString = '';
+                    if (days > 0) timeString += days + 'd ';
+                    timeString += String(hours).padStart(2, '0') + 'h ' + 
+                                 String(minutes).padStart(2, '0') + 'm';
+
+                    // REMOVED THE ⏳ ICON
+                    timerHtml = `
+                        <span style="font-family: monospace; font-weight:700; color:#1a4480; font-size:14px;">
+                            ${timeString}
+                        </span>
+                    `;
+                } else {
+                    timerHtml = `<span style="color:#856404; font-size:13px; font-weight:600;">Unlimited</span>`;
+                }
+
+                detailsHtml = `
+                    <p class="card-description">${card.description || ''}</p>
+                    <div class="card-access-info" style="padding: 8px 12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="color:#2ecc71;font-weight:600;">
+                                <i class="fas fa-check-circle"></i> Access Granted
+                            </span>
+                            ${timerHtml}
+                        </div>
+                        <span style="color:#555555;font-size:12px;display:block;margin-top:4px; border-top:1px solid #f0f0f0; padding-top:4px;">
+                            <i class="fas fa-user"></i> ${currentUser?.full_name || currentUser?.name || 'User'}
+                            <span style="display:block;font-size:11px;color:#888;">ID: ${currentUser?.id || 'N/A'}</span>
+                        </span>
+                    </div>
+                `;
+
+                actionHtml = `
+                    <div class="card-actions">
+                        <span class="card-price">${price}</span>
+                        <a href="${card.link}" class="open-btn"><i class="fas fa-external-link-alt"></i> Open</a>
+                    </div>
+                `;
+            } else if (isLoggedIn) {
+                detailsHtml = `
+                    <div class="card-access-info">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="color:#e74c3c;font-weight:600;">
+                                <i class="fas fa-lock"></i> Purchase Required
+                            </span>
+                        </div>
+                        <span style="color:#555555;font-size:12px;display:block;margin-top:4px;">
+                            <i class="fas fa-info-circle"></i> Purchase to access
+                        </span>
+                    </div>
+                `;
+                actionHtml = `
+                    <div class="card-actions">
+                        <span class="card-price">${price}</span>
+                        <button class="purchase-btn" onclick="handlePurchaseRequest('${card.id}', false)"><i class="fas fa-shopping-cart"></i> Purchase</button>
+                    </div>
+                `;
+            } else {
+                detailsHtml = `
+                    <div class="card-access-info">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="color:#e74c3c;font-weight:600;">
+                                <i class="fas fa-lock"></i> Login Required
+                            </span>
+                        </div>
+                        <span style="color:#555555;font-size:12px;display:block;margin-top:4px;">
+                            <i class="fas fa-info-circle"></i> Login to view details
+                        </span>
+                    </div>
+                `;
+                actionHtml = `
+                    <div class="card-actions">
+                        <span class="card-price">${price}</span>
+                        <button class="purchase-btn login-required" onclick="NotificationManager.showNotification('Login Required', 'Please login first to view file details and purchase.', 'warning', 4000)">
+                            <i class="fas fa-lock"></i> Login
+                        </button>
+                    </div>
+                `;
             }
 
+            // Build card
             cardElement.innerHTML = `
-                <i class="${card.icon || 'fas fa-file'} card-icon"></i>
+                <div class="card-header">
+                    <div class="card-header-left">
+                        <i class="${card.icon || 'fas fa-file'} card-icon"></i>
+                        <button class="extra-details-btn" onclick="ExtraDetailsManager.showModal('${card.id}')" title="View Extra Details">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
+                    ${!hasAccess ? '<div class="lock-icon"><i class="fas fa-lock"></i></div>' : ''}
+                </div>
                 <h3>${card.title}</h3>
                 ${detailsHtml}
-                ${!hasAccess ? '<div class="lock-icon"><i class="fas fa-lock"></i></div>' : ''}
-                ${buttonHtml}
+                ${actionHtml}
             `;
             cardsContainer.appendChild(cardElement);
         });
+
+        // ==========================================================
+        // REFRESH EVERY 60 SECONDS (1 Minute)
+        // ==========================================================
+        window.activeTimerRef = setTimeout(() => {
+            if (typeof StoreManager !== 'undefined' && StoreManager.renderContentCards) {
+                StoreManager.renderContentCards();
+            }
+        }, 60000); // 60000 milliseconds = 1 minute
     },
 
     initializeStores() {
         if (!document.getElementById('store-styles')) {
             const style = document.createElement('style');
             style.id = 'store-styles';
-            // CHANGE 2: Card र Store Buttons को Dark Theme लाई White/Blue Theme मा बदलियो
             style.textContent = `
-                .store-navigation { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; padding: 10px; }
-                .store-btn { padding: 12px 24px; background: #f8fafc; color: #1a4480; border: 1px solid #d0dbe8; border-radius: 8px; cursor: pointer; transition: all 0.3s; font-size: 16px; font-weight: 600; }
+                .store-navigation { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; justify-content: center; padding: 8px 0; }
+                .store-btn { padding: 10px 20px; background: #f8fafc; color: #1a4480; border: 1px solid #d0dbe8; border-radius: 6px; cursor: pointer; transition: all 0.3s; font-size: 14px; font-weight: 600; }
                 .store-btn:hover { background: #ffffff; border-color: #1a4480; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(26, 68, 128, 0.1); }
                 .store-btn.active { background: #1a4480; color: #ffffff; border-color: #1a4480; font-weight: bold; box-shadow: 0 4px 12px rgba(26, 68, 128, 0.25); }
-                .store-title { text-align: center; margin: 20px 0; color: #1a4480; font-size: 24px; }
-                .content-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
-                .card { background: #ffffff; padding: 20px; border-radius: 10px; border: 1px solid #d0dbe8; transition: all 0.3s; position: relative; }
-                .card:hover { transform: translateY(-5px); border-color: #1a4480; box-shadow: 0 10px 30px rgba(26, 68, 128, 0.08); }
-                .card.locked { opacity: 0.8; }
+                .store-title { text-align: center; margin: 15px 0; color: #1a4480; font-size: 22px; }
+                .content-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 15px 0; }
+                
+                .card { background: #ffffff; padding: 16px; border-radius: 10px; border: 1px solid #d0dbe8; transition: all 0.3s; position: relative; display: flex; flex-direction: column; min-height: 180px; }
+                .card:hover { transform: translateY(-4px); border-color: #1a4480; box-shadow: 0 8px 25px rgba(26, 68, 128, 0.08); }
+                .card.locked { opacity: 0.85; }
                 .card.locked:hover { opacity: 1; }
-                .card-icon { font-size: 40px; color: #1a4480; margin-bottom: 15px; display: block; }
-                .card h3 { color: #1a4480; margin-bottom: 10px; font-size: 18px; font-weight: 700; }
-                .card p { color: #555555; font-size: 14px; margin-bottom: 10px; line-height: 1.5; }
-                .card .price { color: #0056b3; font-weight: bold; font-size: 18px; margin: 10px 0; padding: 5px 10px; background: rgba(26, 68, 128, 0.06); border-radius: 5px; display: inline-block; border: 1px solid rgba(26, 68, 128, 0.1); }
-                .lock-icon { position: absolute; top: 15px; right: 15px; color: #e74c3c; font-size: 20px; }
-                .purchase-btn { background: #1a4480; color: #ffffff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; transition: all 0.3s; width: 100%; font-size: 16px; }
+                
+                .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; width: 100%; }
+                .card-header-left { display: flex; align-items: center; gap: 8px; }
+                .card-icon { font-size: 28px; color: #1a4480; display: block; }
+                .extra-details-btn { background: transparent; border: none; color: #1a4480; font-size: 18px; cursor: pointer; padding: 2px 4px; transition: all 0.3s; border-radius: 50%; z-index: 10; position: relative; display: flex; align-items: center; justify-content: center; }
+                .extra-details-btn:hover { background: #f0f4f9; transform: scale(1.1); color: #0056b3; }
+                
+                .lock-icon { color: #e74c3c; font-size: 16px; background: #fff; padding: 2px; border-radius: 50%; z-index: 5; flex-shrink: 0; }
+                
+                .card h3 { color: #1a4480; margin-bottom: 6px; font-size: 15px; font-weight: 700; word-break: break-word; line-height: 1.3; }
+                .card .card-description { color: #555555; font-size: 13px; margin-bottom: 8px; line-height: 1.5; flex-grow: 1; }
+                .card .card-access-info { margin: 6px 0 10px; padding: 8px 12px; background: #f8fafc; border-radius: 6px; border: 1px solid #d0dbe8; font-size: 13px; }
+                .card .card-access-info i { margin-right: 4px; }
+                
+                .card-actions { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px solid #d0dbe8; flex-wrap: wrap; }
+                .card-actions .card-price { font-size: 14px; font-weight: 700; color: #0056b3; white-space: nowrap; }
+                
+                .purchase-btn { background: #1a4480; color: #ffffff; border: none; padding: 6px 14px; border-radius: 5px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 12px; white-space: nowrap; }
                 .purchase-btn:hover { background: #0056b3; transform: scale(1.02); box-shadow: 0 4px 12px rgba(26, 68, 128, 0.3); }
                 .purchase-btn.login-required { background: #f8fafc; color: #1a4480; border: 1px solid #d0dbe8; }
                 .purchase-btn.login-required:hover { background: #e74c3c; color: #ffffff; border-color: #e74c3c; }
-                .card a { display: inline-block; background: #1a4480; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; width: 100%; text-align: center; transition: all 0.3s; }
-                .card a:hover { background: #0056b3; transform: scale(1.02); }
-                .card a i { margin-right: 8px; }
-                @media (max-width: 768px) { 
-                    .content-cards { grid-template-columns: 1fr; padding: 10px; }
-                    .store-btn { padding: 10px 16px; font-size: 14px; }
+                
+                .open-btn { display: inline-block; background: #1a4480; color: #ffffff; padding: 6px 14px; border-radius: 5px; text-decoration: none; font-weight: 600; transition: all 0.3s; font-size: 12px; white-space: nowrap; }
+                .open-btn:hover { background: #0056b3; transform: scale(1.02); }
+                .open-btn i { margin-right: 4px; }
+                
+                /* Responsive */
+                @media (max-width: 1024px) {
+                    .content-cards { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+                }
+                @media (max-width: 900px) {
+                    .content-cards { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+                    .card { padding: 14px; min-height: 160px; }
+                    .card h3 { font-size: 14px; }
+                    .card .card-description { font-size: 12px; }
+                    .card .card-access-info { font-size: 12px; }
+                    .card-icon { font-size: 24px; }
+                    .extra-details-btn { font-size: 16px; }
+                }
+                @media (max-width: 600px) {
+                    .content-cards { grid-template-columns: 1fr; gap: 12px; padding: 10px 0; }
+                    .card { padding: 14px; min-height: auto; }
+                    .store-btn { padding: 8px 14px; font-size: 13px; }
+                    .store-title { font-size: 19px; }
+                    .card h3 { font-size: 15px; }
+                    .card .card-description { font-size: 13px; }
+                    .card .card-access-info { font-size: 13px; }
+                    .card-actions .card-price { font-size: 14px; }
+                    .purchase-btn, .open-btn { padding: 6px 14px; font-size: 12px; }
+                    .card-icon { font-size: 26px; }
+                    .extra-details-btn { font-size: 18px; }
+                    .lock-icon { font-size: 16px; }
+                }
+                @media (max-width: 400px) {
+                    .content-cards { gap: 10px; padding: 5px 0; }
+                    .card { padding: 12px; }
+                    .card h3 { font-size: 14px; }
+                    .card .card-description { font-size: 12px; }
+                    .card .card-access-info { font-size: 12px; }
+                    .card-actions .card-price { font-size: 13px; }
+                    .purchase-btn, .open-btn { padding: 5px 12px; font-size: 11px; }
+                    .card-icon { font-size: 22px; }
+                    .extra-details-btn { font-size: 16px; }
+                    .store-btn { padding: 6px 12px; font-size: 12px; }
+                    .store-title { font-size: 17px; }
+                    .lock-icon { font-size: 14px; }
                 }
             `;
             document.head.appendChild(style);
@@ -540,18 +1649,16 @@ function rxLoadResourcePage(rxDisplayArea) {
         return;
     }
 
-    // Clear and setup display area
     rxDisplayArea.style.alignItems = "center";
     rxDisplayArea.style.justifyContent = "flex-start";
-    rxDisplayArea.style.padding = "20px";
-    rxDisplayArea.style.background = "#ffffff"; // CHANGE 3: Background लाई White (सेतो) बनाइयो
+    rxDisplayArea.style.padding = "15px";
+    rxDisplayArea.style.background = "#ffffff";
     rxDisplayArea.style.width = "100%";
     rxDisplayArea.style.minHeight = "100vh";
     
-    // Inject HTML directly
     rxDisplayArea.innerHTML = `
         <div style="width: 100%; max-width: 1200px; margin: 0 auto; text-align: left;">
-            <h2 style="width: 100%; text-align: center; margin-bottom: 20px; color: #1a4480;">
+            <h2 style="width: 100%; text-align: center; margin-bottom: 15px; color: #1a4480; font-size: clamp(22px, 2.5vw, 32px);">
                 <i class="fas fa-cubes" style="color: #1a4480;"></i> Resources & Assets
             </h2>
             <div id="storeNavigation" class="store-navigation"></div>
@@ -565,19 +1672,17 @@ function rxLoadResourcePage(rxDisplayArea) {
         </div>
     `;
 
-    // FAST INITIALIZATION - Load immediately
     UserSession.init();
 
-    // Initialize stores immediately
     try {
         if (typeof StoreManager !== 'undefined') {
             StoreManager.initializeStores();
-            console.log("✅ Resources loaded successfully!");
+            console.log(" Resources loaded successfully!");
         } else {
-            console.error("❌ StoreManager not found!");
+            console.error(" StoreManager not found!");
         }
     } catch (error) {
-        console.error("❌ Error initializing stores:", error);
+        console.error(" Error initializing stores:", error);
     }
 }
 
@@ -590,6 +1695,7 @@ window.StoreManager = StoreManager;
 window.UserSession = UserSession;
 window.NotificationManager = NotificationManager;
 window.PaymentManager = PaymentManager;
+window.ExtraDetailsManager = ExtraDetailsManager;
 window.contentCards = contentCards;
 window.stores = stores;
 window.rxLoadResourcePage = rxLoadResourcePage;
@@ -617,4 +1723,4 @@ window.rxLoadResourcePage = rxLoadResourcePage;
     }
 })();
 
-console.log('✅ RX-RESOURCE.js - loaded.');
+console.log(' RX-RESOURCE.js - loaded.');
