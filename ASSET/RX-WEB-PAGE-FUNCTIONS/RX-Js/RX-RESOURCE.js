@@ -198,7 +198,7 @@ const UserSession = {
             address: user.address || '-',
             accountType: user.accountType || user.account_type || user.role || 'USER',
             image: user.image || 'ASSET/WEB-SOFTWARE/USER/IMG/USER.png',
-            access: this.getUserAccess(),
+            access: [],
             isLoggedIn: this.isLoggedIn()
         };
     },
