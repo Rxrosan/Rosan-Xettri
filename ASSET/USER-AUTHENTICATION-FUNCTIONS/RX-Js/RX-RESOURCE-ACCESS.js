@@ -1,3 +1,4 @@
+
 // ===== RX-SUPABASE-ACCESS.js =====
 // This file handles Supabase integration for user access control
 // Load this file AFTER RX-RESOURCE.js
@@ -33,7 +34,7 @@
         }
     }
 
-    // Fetch user access from Supabase
+    // Fetch user access from Supabase (NOW FETCHING THE 'access' COLUMN)
     async function fetchUserAccess(userId) {
         if (!supabaseClient) {
             console.warn('⚠️ Supabase client not available');
@@ -43,14 +44,15 @@
         try {
             console.log('🔄 Fetching access data for user:', userId);
 
+            // 🔥 FIXED: Fetching the correct 'access' column
             const { data, error } = await supabaseClient
                 .from('users')
-                .select('timed_access_config') 
+                .select('access') 
                 .eq('id', userId)
                 .single();
 
             if (error) {
-                console.error('❌ Error fetching user access:', error);
+                console.error('❌ Supabase error fetching user access:', error);
                 return null;
             }
 
@@ -66,65 +68,21 @@
         }
     }
 
-    // Process access data with expiry check (UPDATED FOR ARRAY OF OBJECTS)
+    // Process access data (SIMPLIFIED FOR THE SIMPLE STRING LIST)
     function processAccessData(data) {
         // If null or undefined, return empty defaults
-        if (!data || !data.timed_access_config) {
+        if (!data || !data.access || !Array.isArray(data.access)) {
             return { access: [], config: {} };
         }
 
-        let accessArray = [];     // Stores valid file names
-        let fullConfig = {};      // Stores the original data for reference
-
-        // Extract the raw config (it is now an Array because of your screenshot)
-        const rawConfig = data.timed_access_config;
-
-        // 1. Parse the JSON if it's a string, or use directly if it's already an object
-        let parsedConfig = [];
-        if (typeof rawConfig === 'string') {
-            try {
-                parsedConfig = JSON.parse(rawConfig);
-            } catch (e) {
-                console.warn('❌ Failed to parse timed_access_config JSON:', e);
-                return { access: [], config: {} };
-            }
-        } else if (Array.isArray(rawConfig)) {
-            parsedConfig = rawConfig;
-        }
-
-        // 2. Loop through the array and check expiration dates
-        const currentDate = new Date();
-
-        parsedConfig.forEach((item) => {
-            // Add to full config for reference
-            fullConfig[item.file] = item;
-
-            // Check if the item has the required fields
-            if (item.file && item.access_days) {
-                
-                // Set purchase date (default to today if missing)
-                let purchaseDate = new Date();
-                if (item.purchase_date) {
-                    purchaseDate = new Date(item.purchase_date);
-                }
-
-                const accessDays = item.access_days || 0;
-                const expiryDate = new Date(purchaseDate);
-                expiryDate.setDate(expiryDate.getDate() + accessDays);
-
-                // Check if the file access is still valid
-                if (expiryDate > currentDate) {
-                    accessArray.push(item.file);
-                    console.log(`✅ Access VALID for "${item.file}" (Expires: ${expiryDate.toLocaleDateString()})`);
-                } else {
-                    console.log(`❌ Access EXPIRED for "${item.file}" (Expired: ${expiryDate.toLocaleDateString()})`);
-                }
-            } else {
-                console.warn(`⚠️ Skipping invalid access item:`, item);
-            }
-        });
-
-        return { access: accessArray, config: fullConfig };
+        // Because we are using a simple string list, we just return it directly.
+        // No expiry checks needed. This gives permanent, unlimited access.
+        console.log('✅ Unlimited/Permanent access granted for files:', data.access);
+        
+        return { 
+            access: data.access, 
+            config: {} 
+        };
     }
 
     // Main function to refresh user access
@@ -143,7 +101,7 @@
         const data = await fetchUserAccess(userId);
         
         if (data) {
-            // Process the data with expiry check
+            // Process the data (Now returns the array directly)
             const processed = processAccessData(data);
             
             // Update UserSession with new access data
@@ -160,7 +118,7 @@
                     if (window.NotificationManager && typeof NotificationManager.showNotification === 'function') {
                         NotificationManager.showNotification(
                             'Access Updated',
-                            `You have access to ${processed.access.length} file(s).`,
+                            `You have unlimited access to ${processed.access.length} file(s).`,
                             'info',
                             4000
                         );
@@ -168,7 +126,7 @@
                 }
             }
         } else {
-            console.log('ℹ️ No Supabase data found, using local access');
+            console.log('ℹ️ No Supabase access data found, keeping local access.');
         }
     }
 
