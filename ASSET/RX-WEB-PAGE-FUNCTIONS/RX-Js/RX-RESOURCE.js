@@ -16,7 +16,7 @@ const contentCards = [
         id: "file2", 
         title: "F2- KOREAN EXAM PRACTICE - WEB-APP | COMBINE SETS ", 
         description: "You can practice exam every time auto generate new questions randomly.", 
-        link: "RX-KR-EXAM-MODEL-1.html?exam=file2", 
+        link: "RX-KR-EXAM-MODEL.html", 
         icon: "fas fa-book",
         prices: { default: "Rs. 999/Month" },
         extraDetails: " Practice Korean exams with randomly generated questions from combined sets.\n• Covers all topics\n• Varying difficulty levels\n• Track your progress\n• Improve your score"
@@ -39,33 +39,7 @@ const contentCards = [
         prices: { default: "Rs. 100" },
         extraDetails: " Convert text to image with custom fonts, colors, and styles.\n• Multiple export formats\n• Batch conversion available\n• Customizable output"
     },
-    {   
-        id: "file5", 
-        title: "F5- KOREAN EXAM PRACTICE - WEB-APP | SET-1", 
-        description: "You can practice exam with set question.", 
-        link: "RX-KR-EXAM-MODEL-2.html?exam=file5", 
-        icon: "fas fa-book",
-        prices: { default: "Rs. 100/set" },
-        extraDetails: " Practice Korean exam with Set-1 questions.\n• Focused practice on specific topics\n• Detailed answer explanations\n• Progress tracking"
-    },
-    {   
-        id: "file6", 
-        title: "F6- KOREAN EXAM PRACTICE - WEB-APP | SET-2 COMING SOON....", 
-        description: "You can practice exam with set question.", 
-        link: "RX-KR-EXAM-MODEL-2.html?exam=file6", 
-        icon: "fas fa-book",
-        prices: { default: "Rs. 100/set" },
-        extraDetails: " Set-2 Korean exam practice coming soon.\n• Advanced questions\n• New topics\n• Stay tuned for updates"
-    },
-    {   
-        id: "file7", 
-        title: "F7- KOREAN EXAM PRACTICE - WEB-APP | SET-3", 
-        description: "You can practice exam with set question.", 
-        link: "RX-KR-EXAM-MODEL-2.html?exam=file7", 
-        icon: "fas fa-book",
-        prices: { default: "Rs. 100/set" },
-        extraDetails: " Set-3 Korean exam practice with comprehensive question bank.\n• Full coverage of all exam topics\n• Multiple question types\n• Performance analytics"
-    },
+    
 ];
 
 // Developer-Managed Stores
