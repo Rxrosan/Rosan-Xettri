@@ -14,10 +14,10 @@ const questionsForNumber24 = [
             audio: "ASSET/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-4.mp3"
         },
         options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-12.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-14.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-15.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-13.jpg", audio: null }
+            { text: "", image: "ASSET/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-12.jpg", audio: null },
+            { text: "", image: "ASSET/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-14.jpg", audio: null },
+            { text: "", image: "ASSET/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-15.jpg", audio: null },
+            { text: "", image: "ASSET/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-13.jpg", audio: null }
         ],
         answer: 2
     },
@@ -31,13 +31,13 @@ const questionsForNumber24 = [
         questionBody: {
             text: "",
             image: null,
-            audio: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-72.mp3"
+            audio: "ASSET/RX-EXAM-FILE/RX-EXAM-AUDIO/AUDIO-72.mp3"
         },
         options: [
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-101.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-102.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-103.jpg", audio: null },
-            { text: "", image: "RX-ASSETS/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-104.jpg", audio: null }
+            { text: "", image: "ASSET/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-101.jpg", audio: null },
+            { text: "", image: "ASSET/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-102.jpg", audio: null },
+            { text: "", image: "ASSET/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-103.jpg", audio: null },
+            { text: "", image: "ASSET/RX-EXAM-FILE/RX-EXAM-IMAGE/IMG-104.jpg", audio: null }
         ],
         answer: 3
     },
