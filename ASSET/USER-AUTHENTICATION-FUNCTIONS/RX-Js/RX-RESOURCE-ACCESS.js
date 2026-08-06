@@ -1,4 +1,3 @@
-
 // ===== RX-SUPABASE-ACCESS.js =====
 // This file handles Supabase integration for user access control
 // Load this file AFTER RX-RESOURCE.js
@@ -7,13 +6,13 @@
     'use strict';
 
     // ===== SUPABASE CONFIGURATION =====
-    // REPLACE WITH YOUR ACTUAL SUPABASE CREDENTIALS
     const SUPABASE_URL = 'https://svwwbxbyutiieflxnoeb.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_OBPxBVADXRdtjYEC_ZFcEw_95NR5UXA';
 
     let supabaseClient = null;
+    let autoRefreshInterval = null;
 
-    // Initialize Supabase client
+    // ===== INITIALIZE SUPABASE CLIENT =====
     function initSupabase() {
         try {
             if (typeof supabase !== 'undefined' && supabase.createClient) {
@@ -34,7 +33,7 @@
         }
     }
 
-    // Fetch user access from Supabase (NOW FETCHING THE 'access' COLUMN)
+    // ===== FETCH USER ACCESS FROM SUPABASE =====
     async function fetchUserAccess(userId) {
         if (!supabaseClient) {
             console.warn('⚠️ Supabase client not available');
@@ -44,10 +43,10 @@
         try {
             console.log('🔄 Fetching access data for user:', userId);
 
-            // 🔥 FIXED: Fetching the correct 'access' column
+            // Fetch BOTH access and timed_access_config columns
             const { data, error } = await supabaseClient
                 .from('users')
-                .select('access') 
+                .select('access, timed_access_config') 
                 .eq('id', userId)
                 .single();
 
@@ -68,24 +67,75 @@
         }
     }
 
-    // Process access data (SIMPLIFIED FOR THE SIMPLE STRING LIST)
+    // ===== PROCESS ACCESS DATA =====
     function processAccessData(data) {
-        // If null or undefined, return empty defaults
-        if (!data || !data.access || !Array.isArray(data.access)) {
+        if (!data) {
             return { access: [], config: {} };
         }
 
-        // Because we are using a simple string list, we just return it directly.
-        // No expiry checks needed. This gives permanent, unlimited access.
-        console.log('✅ Unlimited/Permanent access granted for files:', data.access);
-        
+        // 1. Get permanent access array
+        let permanentAccess = [];
+        if (data.access && Array.isArray(data.access)) {
+            permanentAccess = data.access;
+        }
+
+        // 2. Get timed access config
+        let timedConfig = {};
+        let timedFiles = [];
+
+        if (data.timed_access_config) {
+            let configData = data.timed_access_config;
+            
+            // Parse if string
+            if (typeof configData === 'string') {
+                try {
+                    configData = JSON.parse(configData);
+                } catch (e) {
+                    console.warn('⚠️ Failed to parse timed_access_config:', e);
+                    configData = null;
+                }
+            }
+
+            // Process array format: [{"file": "file2", "access_days": 7, "purchase_date": "2026-08-05"}]
+            if (Array.isArray(configData)) {
+                configData.forEach(item => {
+                    if (item && item.file) {
+                        timedFiles.push(item.file);
+                        timedConfig[item.file] = {
+                            purchase_date: item.purchase_date || new Date().toISOString().split('T')[0],
+                            access_days: parseInt(item.access_days) || 30
+                        };
+                    }
+                });
+            } 
+            // Process object format: {"file2": {"purchase_date": "2026-08-05", "access_days": 7}}
+            else if (typeof configData === 'object' && configData !== null) {
+                Object.keys(configData).forEach(fileId => {
+                    const item = configData[fileId];
+                    timedFiles.push(fileId);
+                    timedConfig[fileId] = {
+                        purchase_date: item.purchase_date || new Date().toISOString().split('T')[0],
+                        access_days: parseInt(item.access_days) || 30
+                    };
+                });
+            }
+        }
+
+        // 3. COMBINE: Merge permanent + timed access
+        const allAccessFiles = [...new Set([...permanentAccess, ...timedFiles])];
+
+        console.log('📁 Permanent access:', permanentAccess);
+        console.log('⏰ Timed access files:', timedFiles);
+        console.log('📋 Combined access:', allAccessFiles);
+        console.log('⚙️ Timed config:', timedConfig);
+
         return { 
-            access: data.access, 
-            config: {} 
+            access: allAccessFiles,
+            config: timedConfig
         };
     }
 
-    // Main function to refresh user access
+    // ===== MAIN REFRESH FUNCTION =====
     async function refreshUserAccess() {
         const user = window.UserSession ? window.UserSession.getCurrentUser() : null;
         
@@ -97,28 +147,33 @@
         const userId = user.id;
         console.log('🔄 Refreshing access for user:', userId);
 
-        // Fetch data from Supabase
         const data = await fetchUserAccess(userId);
         
         if (data) {
-            // Process the data (Now returns the array directly)
             const processed = processAccessData(data);
             
-            // Update UserSession with new access data
             if (window.UserSession) {
-                // Determine old access for comparison
                 const currentUser = window.UserSession.getCurrentUser();
                 const oldAccess = currentUser?.access || [];
                 
+                // Update UserSession with combined access and config
                 window.UserSession.updateAccess(processed.access, processed.config);
-                console.log('✅ User access updated. Valid files:', processed.access);
                 
-                // Show notification if access was changed
+                console.log('✅ User access updated successfully!');
+                console.log(`📊 Total accessible files: ${processed.access.length}`);
+                console.log(`⏰ Timed config for: ${Object.keys(processed.config).join(', ') || 'None'}`);
+                
+                // Show notification if access changed
                 if (oldAccess.length !== processed.access.length) {
                     if (window.NotificationManager && typeof NotificationManager.showNotification === 'function') {
+                        let message = `You have access to ${processed.access.length} file(s).`;
+                        const timedCount = Object.keys(processed.config).length;
+                        if (timedCount > 0) {
+                            message += ` ${timedCount} file(s) have time-based access.`;
+                        }
                         NotificationManager.showNotification(
                             'Access Updated',
-                            `You have unlimited access to ${processed.access.length} file(s).`,
+                            message,
                             'info',
                             4000
                         );
@@ -130,19 +185,31 @@
         }
     }
 
-    // Auto-refresh access every 5 minutes (300,000 ms)
+    // ===== START AUTO REFRESH =====
     function startAutoRefresh() {
-        setInterval(async () => {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+        }
+        
+        autoRefreshInterval = setInterval(async () => {
             console.log('⏰ Auto-refreshing user access...');
             await refreshUserAccess();
         }, 300000); // 5 minutes
     }
 
-    // Initialize the Supabase access module
+    // ===== STOP AUTO REFRESH =====
+    function stopAutoRefresh() {
+        if (autoRefreshInterval) {
+            clearInterval(autoRefreshInterval);
+            autoRefreshInterval = null;
+            console.log('⏹️ Auto-refresh stopped');
+        }
+    }
+
+    // ===== INITIALIZE =====
     async function init() {
         console.log('🚀 Initializing RX-SUPABASE-ACCESS...');
 
-        // Initialize Supabase client
         const initialized = initSupabase();
         
         if (initialized) {
@@ -161,7 +228,7 @@
         }
     }
 
-    // Listen for login events to refresh access
+    // ===== EVENT LISTENERS =====
     document.addEventListener('userLoggedIn', function() {
         console.log('🚀 User logged in, refreshing Supabase access...');
         setTimeout(refreshUserAccess, 1000);
@@ -174,20 +241,22 @@
         }
     });
 
-    // Expose functions globally
+    // ===== EXPOSE GLOBALLY =====
     window.RXSupabaseAccess = {
         init: init,
         refreshUserAccess: refreshUserAccess,
         fetchUserAccess: fetchUserAccess,
-        processAccessData: processAccessData
+        processAccessData: processAccessData,
+        stopAutoRefresh: stopAutoRefresh,
+        startAutoRefresh: startAutoRefresh
     };
 
-    // Auto-init when DOM is ready
+    // ===== AUTO-INIT =====
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
 
-    console.log('✅ RX-resource-ACCESS.js loaded');
+    console.log('✅ RX-RESOURCE-ACCESS.js loaded');
 })();
