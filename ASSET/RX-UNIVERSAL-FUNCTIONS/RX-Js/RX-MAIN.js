@@ -23,11 +23,22 @@ function rxLoadHome() {
     rxCloseMenu();
 }
 
-// Load Content with Auto Reload Feature
+// Load Content - FIXED: Don't reload for Resource Manager
 function rxLoadContent(rxTitleName) {
     localStorage.setItem('rxCurrentPage', rxTitleName);
     
-    // यदि तपाईं क्लिक गर्दा ब्राउजर पूर्ण रूपमा reload (refresh) भएको चाहनुहुन्छ भने:
+    // If it's Resource Manager or Resource, don't reload - just render directly
+    if (rxTitleName === 'Resource Manager' || rxTitleName === 'Resource') {
+        const displayArea = document.getElementById('rx-display-area');
+        if (displayArea) {
+            // Call renderContent directly without page reload
+            renderContent(rxTitleName);
+        }
+        rxCloseMenu();
+        return;
+    }
+    
+    // For all other pages, reload to load the page content
     location.reload();
 }
 
@@ -80,19 +91,27 @@ function renderContent(rxTitleName) {
         case 'Resource':
             if (typeof rxLoadResourcePage === 'function') rxLoadResourcePage(rxDisplayArea);
             break;
+        case 'Resource Manager':
+            if (typeof rxLoadresourcemanagerPage === 'function') rxLoadresourcemanagerPage(rxDisplayArea);
+            break;
+            
     }
 }
 
 // Initialize
-window.addEventListener('load', () => {
-    const savedPage = localStorage.getItem('rxCurrentPage') || 'HOME';
+window.addEventListener('load', function() {
+    // Get saved page or default to HOME
+    var savedPage = localStorage.getItem('rxCurrentPage') || 'HOME';
+    
+    // IMPORTANT: If saved page is Resource Manager, we need to render it differently
+    // But renderContent will handle it
     renderContent(savedPage);
     
-    const mobileMenuBtn = document.getElementById('rx-mobile-menu-btn');
-    const sidebar = document.getElementById('rx-sidebar');
+    var mobileMenuBtn = document.getElementById('rx-mobile-menu-btn');
+    var sidebar = document.getElementById('rx-sidebar');
 
     if (mobileMenuBtn && sidebar) {
-        mobileMenuBtn.addEventListener('click', (e) => {
+        mobileMenuBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             sidebar.classList.toggle('show');
         });
@@ -101,13 +120,15 @@ window.addEventListener('load', () => {
 
 // Date Time Update
 function updateDateTime() {
-    const now = new Date();
-    const timeEl = document.getElementById('rx-time');
-    const dateEl = document.getElementById('rx-date');
-    const dayEl = document.getElementById('rx-day');
+    var now = new Date();
+    var timeEl = document.getElementById('rx-time');
+    var dateEl = document.getElementById('rx-date');
+    var dayEl = document.getElementById('rx-day');
     if (timeEl) timeEl.innerText = now.toLocaleTimeString();
-    if (dateEl) dateEl.innerText = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+    if (dateEl) dateEl.innerText = now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0') + '.' + String(now.getDate()).padStart(2,'0');
     if (dayEl) dayEl.innerText = now.toLocaleDateString(undefined, {weekday:'long'});
 }
 setInterval(updateDateTime, 1000);
 updateDateTime();
+
+console.log('✅ RX-MAIN.js loaded successfully');
