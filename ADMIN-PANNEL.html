@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="ASSET/RX-UNIVERSAL-FUNCTIONS/RX-Js/loader.js"></script>
-    <script src="ASSET/RX-UNIVERSAL-FUNCTIONS/RX-Js/RX-DEV-TOOL-PROTECTION-ALL.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/png" href="ASSET/RX-IMAGES/RX-Logo/L-7.png" />
     <title>RX Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -31,7 +28,110 @@
         
         body { background: var(--bg); color: var(--text); min-height: 100vh; }
         
-        /* Header */
+        /* ===== LOGIN PAGE ===== */
+        .login-page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 400px;
+        }
+        .login-container .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-container .logo h1 {
+            font-size: 28px;
+            color: var(--primary);
+        }
+        .login-container .logo p {
+            color: var(--text-dim);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .login-container .logo .icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .login-form .form-group {
+            margin-bottom: 16px;
+        }
+        .login-form .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+        .login-form .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+        .login-form .form-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+        }
+        .login-form .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .login-form .login-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        .login-form .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .login-error {
+            background: #fef2f2;
+            color: var(--danger);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+            border: 1px solid #fecaca;
+        }
+        .login-error.show { display: block; }
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-footer a:hover { text-decoration: underline; }
+
+        /* ===== ADMIN PANEL ===== */
         .header { 
             background: var(--card); 
             padding: 16px 24px; 
@@ -60,7 +160,7 @@
         }
         .header-left h1 { font-size: 18px; font-weight: 700; }
         .header-left h1 span { color: var(--primary); }
-        .header-right { display: flex; align-items: center; gap: 12px; }
+        .header-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
         .admin-badge { 
             background: var(--primary); 
             color: white; 
@@ -82,7 +182,6 @@
         }
         .logout-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
         
-        /* Main Layout */
         .main { 
             display: grid; 
             grid-template-columns: 340px 1fr; 
@@ -93,7 +192,6 @@
             height: calc(100vh - 80px);
         }
         
-        /* Left Panel - User List */
         .user-panel {
             background: var(--card);
             border-radius: var(--radius);
@@ -193,7 +291,6 @@
         .user-item .status.user { background: var(--success); }
         .user-item .status.member { background: var(--warning); }
         
-        /* Right Panel - User Details */
         .detail-panel {
             background: var(--card);
             border-radius: var(--radius);
@@ -206,7 +303,6 @@
         .detail-panel::-webkit-scrollbar { width: 4px; }
         .detail-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
         
-        /* Placeholder */
         .placeholder {
             display: flex;
             flex-direction: column;
@@ -220,7 +316,6 @@
         .placeholder h3 { font-size: 18px; margin-bottom: 6px; color: var(--text); }
         .placeholder p { font-size: 14px; opacity: 0.7; }
         
-        /* User Profile View */
         .profile-view { display: none; }
         .profile-view.active { display: block; }
         
@@ -269,7 +364,6 @@
         .btn-edit:hover { background: var(--primary-dark); transform: translateY(-1px); }
         .btn-edit i { font-size: 14px; }
         
-        /* Detail Grid */
         .detail-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -280,7 +374,6 @@
         .detail-item .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; letter-spacing: 0.3px; }
         .detail-item .value { font-size: 15px; font-weight: 500; margin-top: 2px; }
         
-        /* Access Section */
         .access-section {
             background: var(--bg);
             border-radius: 8px;
@@ -308,7 +401,6 @@
         .access-tag.timed { border-color: var(--warning); color: var(--warning); }
         .no-access { font-size: 13px; color: var(--text-dim); }
         
-        /* Edit Panel (Hidden by default) */
         .edit-panel {
             display: none;
             padding: 20px 0;
@@ -376,7 +468,6 @@
         }
         .btn-cancel:hover { opacity: 0.8; }
         
-        /* Access Management in Edit */
         .access-edit {
             grid-column: 1 / -1;
             background: var(--bg);
@@ -416,7 +507,6 @@
         }
         .access-edit .add-access button:hover { opacity: 0.8; }
         
-        /* Toast */
         #toast {
             position: fixed;
             bottom: 20px;
@@ -443,34 +533,6 @@
             border-radius: var(--radius);
         }
         .loading-overlay i { font-size: 32px; color: var(--primary); }
-        
-        /* Access Denied */
-        .access-denied {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-            padding: 20px;
-            background: var(--bg);
-        }
-        .access-denied i { font-size: 64px; color: var(--danger); margin-bottom: 20px; }
-        .access-denied h1 { font-size: 28px; color: var(--danger); margin-bottom: 10px; }
-        .access-denied p { color: var(--text-dim); max-width: 500px; font-size: 16px; margin-bottom: 20px; }
-        .access-denied .btn-home {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 32px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-        .access-denied .btn-home:hover { background: var(--primary-dark); transform: translateY(-2px); }
         
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
@@ -499,6 +561,9 @@
             .access-edit .add-access { flex-direction: column; }
             .access-edit .add-access select { width: 100%; }
             .access-edit .add-access input { width: 100%; }
+            
+            .login-container { padding: 24px; }
+            .login-container .logo h1 { font-size: 24px; }
         }
         
         @media (max-width: 480px) {
@@ -535,22 +600,53 @@
                 padding: 10px 16px; 
                 font-size: 13px;
             }
-        }
-        
-        @media (max-width: 360px) {
-            .main { padding: 8px; }
-            .user-panel { height: 35vh; min-height: 200px; }
-            .detail-panel { padding: 12px; }
-            .profile-avatar { width: 44px; height: 44px; font-size: 18px; }
+            
+            .login-container { padding: 20px; }
+            .login-container .logo h1 { font-size: 20px; }
+            .login-container .logo .icon { font-size: 36px; }
+            .login-form .form-group input { padding: 8px 12px; font-size: 14px; }
+            .login-form .login-btn { padding: 10px; font-size: 14px; }
         }
     </style>
 </head>
 <body>
 
-<div id="toast"></div>
+<!-- ===== LOGIN PAGE ===== -->
+<div id="loginPage" class="login-page">
+    <div class="login-container">
+        <div class="logo">
+            <div class="icon"></div>
+            <h1>Admin Panel</h1>
+            <p>Fast & easy setup for admin</p>
+        </div>
+        
+        <div class="login-error" id="loginError">
+            <i class="fas fa-exclamation-circle"></i> <span id="loginErrorMsg">Invalid credentials</span>
+        </div>
+        
+        <form class="login-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label><i class="fas fa-envelope"></i> Email Address</label>
+                <input type="email" id="loginEmail" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter password" required>
+            </div>
+            <button type="submit" class="login-btn" id="loginBtn">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+        </form>
+        
+        <div class="login-footer">
+            <a href="index.html"><i class="fas fa-home"></i> Return to Home</a>
+        </div>
+    </div>
+</div>
 
-<!-- Header -->
-<div id="adminHeader" style="display:none;">
+<!-- ===== ADMIN PANEL ===== -->
+<div id="adminPanel" style="display:none;">
+    <!-- Header -->
     <div class="header">
         <div class="header-left">
             <div class="logo">RX</div>
@@ -562,16 +658,14 @@
             <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
     </div>
-</div>
 
-<!-- Main Content -->
-<div id="adminPanel" style="display:none;">
+    <!-- Main Content -->
     <div class="main">
         <!-- Left Panel - User List -->
         <div class="user-panel">
             <div class="panel-header">
                 <h2><i class="fas fa-users"></i> Users <span id="userCount">0</span></h2>
-                <button class="refresh-btn" onclick="loadData()" style="background:none; border:none; cursor:pointer; color:var(--text-dim);">
+                <button class="refresh-btn" onclick="loadData()" style="background:none; border:none; cursor:pointer; color:var(--text-dim); font-size:16px;">
                     <i class="fas fa-sync"></i>
                 </button>
             </div>
@@ -702,7 +796,7 @@
                                     <option value="file3">F3- QR SCANNER</option>
                                     <option value="file4">F4- TEXT TO IMAGE</option>
                                 </select>
-                                <input type="number" id="daysInput" placeholder="Days (optional)" min="1">
+                                <input type="number" id="daysInput" placeholder="Days" min="1">
                                 <button onclick="addAccess()"><i class="fas fa-plus"></i> Add</button>
                             </div>
                             <small style="color:var(--text-dim); font-size:11px; display:block; margin-top:4px;">
@@ -721,15 +815,7 @@
     </div>
 </div>
 
-<!-- Access Denied -->
-<div id="accessDenied" style="display:none;">
-    <div class="access-denied">
-        <i class="fas fa-shield-alt"></i>
-        <h1>Access Denied</h1>
-        <p>You need administrator privileges to access this panel. Please login with an admin account.</p>
-        <a href="index.html" class="btn-home"><i class="fas fa-home"></i> Return to Home</a>
-    </div>
-</div>
+<div id="toast"></div>
 
 <script>
     // ===== CONFIGURATION =====
@@ -750,33 +836,144 @@
         { id: 'file4', title: 'F4- TEXT TO IMAGE' }
     ];
 
-    // ===== INIT =====
+    // ===== INIT SUPABASE =====
     function initSupabase() {
         try {
             if (typeof supabase !== 'undefined' && supabase.createClient) {
                 supabaseClient = supabase.createClient(S_URL, S_KEY);
+                console.log('✅ Supabase client initialized');
                 return true;
             } else if (window.supabase) {
                 supabaseClient = window.supabase.createClient(S_URL, S_KEY);
+                console.log('✅ Supabase client initialized (window)');
                 return true;
             }
+            console.error('❌ Supabase library not found');
             return false;
-        } catch (e) { return false; }
+        } catch (e) {
+            console.error('❌ Supabase init error:', e);
+            return false;
+        }
     }
 
-    // ===== CHECK ADMIN =====
-    function checkAdmin() {
+    // ===== LOGIN HANDLER =====
+    async function handleLogin(event) {
+        event.preventDefault();
+        
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        const errorEl = document.getElementById('loginError');
+        const errorMsg = document.getElementById('loginErrorMsg');
+        const loginBtn = document.getElementById('loginBtn');
+        
+        // Hide previous error
+        errorEl.classList.remove('show');
+        
+        if (!email || !password) {
+            errorMsg.textContent = 'Please enter both email and password';
+            errorEl.classList.add('show');
+            return;
+        }
+        
+        // Show loading
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+        
+        try {
+            if (!supabaseClient) {
+                const initialized = initSupabase();
+                if (!initialized) throw new Error('Could not connect to database');
+            }
+            
+            // Check if user exists and is admin
+            const { data, error } = await supabaseClient
+                .from('users')
+                .select('*')
+                .eq('email', email)
+                .single();
+            
+            if (error || !data) {
+                throw new Error('User not found');
+            }
+            
+            // Check if user is admin
+            if (data.account_type !== 'Admin' && data.account_type !== 'admin') {
+                throw new Error('You are not authorized as admin');
+            }
+            
+            // Verify password via backend API
+            const response = await fetch(`${API_URL}/api/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.error || 'Invalid credentials');
+            }
+            
+            // Login successful
+            currentAdmin = data;
+            
+            // Save session
+            sessionStorage.setItem('rxSession', JSON.stringify(data));
+            localStorage.setItem('currentUser', JSON.stringify(data));
+            
+            // Show admin panel
+            showAdminPanel();
+            
+            // Load users
+            loadData();
+            
+        } catch (err) {
+            errorMsg.textContent = err.message || 'Login failed. Please try again.';
+            errorEl.classList.add('show');
+            console.error('Login error:', err);
+        }
+        
+        // Reset button
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+    }
+
+    // ===== SHOW ADMIN PANEL =====
+    function showAdminPanel() {
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        document.getElementById('adminName').textContent = currentAdmin?.full_name || currentAdmin?.user_name || 'Admin';
+    }
+
+    // ===== CHECK SESSION =====
+    function checkSession() {
         try {
             const session = sessionStorage.getItem('rxSession');
             if (session) {
                 const user = JSON.parse(session);
                 if (user && (user.account_type === 'Admin' || user.account_type === 'admin')) {
                     currentAdmin = user;
+                    showAdminPanel();
+                    initSupabase();
+                    loadData();
                     return true;
                 }
             }
             return false;
-        } catch (e) { return false; }
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // ===== LOGOUT =====
+    function logout() {
+        sessionStorage.removeItem('rxSession');
+        localStorage.removeItem('currentUser');
+        document.getElementById('loginPage').style.display = 'flex';
+        document.getElementById('adminPanel').style.display = 'none';
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginError').classList.remove('show');
     }
 
     // ===== LOAD USERS =====
@@ -785,8 +982,16 @@
         listDiv.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-dim);"><i class="fas fa-spinner fa-spin"></i><br><span style="font-size:13px; margin-top:8px; display:block;">Loading users...</span></div>';
         
         try {
-            if (!supabaseClient) initSupabase();
-            const { data, error } = await supabaseClient.from('users').select('*').order('full_name', { ascending: true, nullsLast: true });
+            if (!supabaseClient) {
+                const initialized = initSupabase();
+                if (!initialized) throw new Error('Supabase not initialized');
+            }
+            
+            const { data, error } = await supabaseClient
+                .from('users')
+                .select('*')
+                .order('full_name', { ascending: true, nullsLast: true });
+            
             if (error) throw error;
             
             allUsers = data || [];
@@ -795,11 +1000,23 @@
             
             if (activeUser) {
                 const updated = allUsers.find(u => u.id === activeUser.id);
-                if (updated) { activeUser = updated; showProfile(); }
+                if (updated) {
+                    activeUser = updated;
+                    showProfile();
+                }
             }
         } catch (err) {
-            listDiv.innerHTML = `<div style="text-align:center; padding:20px; color:var(--danger);">Error: ${err.message}</div>`;
-            notify('Error loading users', 'danger');
+            listDiv.innerHTML = `
+                <div style="text-align:center; padding:20px; color:var(--danger);">
+                    <i class="fas fa-exclamation-circle"></i><br>
+                    <span style="font-size:13px;">${err.message}</span>
+                    <br><br>
+                    <button onclick="loadData()" style="background:var(--primary); color:white; border:none; padding:6px 16px; border-radius:6px; cursor:pointer;">
+                        <i class="fas fa-sync"></i> Retry
+                    </button>
+                </div>
+            `;
+            notify('Error loading users: ' + err.message, 'danger');
         }
     }
 
@@ -813,9 +1030,10 @@
         
         listDiv.innerHTML = users.map(u => {
             const status = u.account_type === 'Admin' ? 'admin' : u.account_type === 'member' ? 'member' : 'user';
+            const initial = (u.full_name || u.user_name || 'U').charAt(0).toUpperCase();
             return `
                 <div class="user-item ${activeUser?.id === u.id ? 'active' : ''}" onclick="selectUser('${u.id}')">
-                    <div class="user-avatar">${(u.full_name || u.user_name || 'U').charAt(0).toUpperCase()}</div>
+                    <div class="user-avatar">${initial}</div>
                     <div class="info">
                         <div class="name">${u.full_name || u.user_name || 'No Name'}</div>
                         <div class="meta">${u.id}</div>
@@ -859,7 +1077,6 @@
         document.getElementById('detailDob').textContent = activeUser.dateofbirth || '-';
         document.getElementById('detailAddress').textContent = activeUser.address || '-';
         
-        // Access Tags
         const accessTags = document.getElementById('accessTags');
         const accessArr = Array.isArray(activeUser.access) ? activeUser.access : [];
         let timedConf = activeUser.timed_access_config || [];
@@ -875,7 +1092,6 @@
             accessTags.innerHTML = html;
         }
         
-        // Fill edit fields
         document.getElementById('editName').value = activeUser.full_name || '';
         document.getElementById('editUsername').value = activeUser.user_name || '';
         document.getElementById('editEmail').value = activeUser.email || '';
@@ -913,17 +1129,18 @@
         isEditMode = !isEditMode;
         const panel = document.getElementById('editPanel');
         const grid = document.getElementById('detailGrid');
+        const btn = document.querySelector('.profile-actions .btn-edit');
         
         if (isEditMode) {
             panel.classList.add('active');
             grid.style.display = 'none';
-            document.querySelector('.profile-actions .btn-edit').innerHTML = '<i class="fas fa-times"></i> Cancel Edit';
-            document.querySelector('.profile-actions .btn-edit').style.background = 'var(--danger)';
+            btn.innerHTML = '<i class="fas fa-times"></i> Cancel Edit';
+            btn.style.background = 'var(--danger)';
         } else {
             panel.classList.remove('active');
             grid.style.display = 'grid';
-            document.querySelector('.profile-actions .btn-edit').innerHTML = '<i class="fas fa-pen"></i> Edit Profile';
-            document.querySelector('.profile-actions .btn-edit').style.background = 'var(--primary)';
+            btn.innerHTML = '<i class="fas fa-pen"></i> Edit Profile';
+            btn.style.background = 'var(--primary)';
             showProfile();
         }
     }
@@ -947,7 +1164,6 @@
             const { error } = await supabaseClient.from('users').update(updates).eq('id', activeUser.id);
             if (error) throw error;
             
-            // If role changed, update ID via API
             if (updates.account_type !== activeUser.account_type) {
                 const response = await fetch(`${API_URL}/api/admin/update-role`, {
                     method: 'POST',
@@ -962,7 +1178,10 @@
             notify('✅ Profile saved successfully', 'success');
             await loadData();
             const updated = allUsers.find(u => u.id === activeUser.id);
-            if (updated) { activeUser = updated; showProfile(); }
+            if (updated) {
+                activeUser = updated;
+                showProfile();
+            }
             toggleEdit();
         } catch (err) {
             notify('❌ ' + err.message, 'danger');
@@ -981,14 +1200,12 @@
         setLoading(true);
         try {
             if (daysVal === "" || parseInt(daysVal) === 0) {
-                // Permanent
                 const oldAccess = Array.isArray(activeUser.access) ? activeUser.access : [];
                 if (oldAccess.includes(fileId)) { notify('Already has access', 'warning'); setLoading(false); return; }
                 const newAccess = [...oldAccess, fileId];
                 await supabaseClient.from('users').update({ access: newAccess }).eq('id', activeUser.id);
                 notify('✅ Permanent access added', 'success');
             } else {
-                // Timed
                 let oldTimed = activeUser.timed_access_config || [];
                 if (typeof oldTimed === 'string') { try { oldTimed = JSON.parse(oldTimed); } catch(e) { oldTimed = []; } }
                 if (!Array.isArray(oldTimed)) oldTimed = [];
@@ -1052,13 +1269,6 @@
         renderList(filtered);
     }
 
-    // ===== LOGOUT =====
-    function logout() {
-        sessionStorage.removeItem('rxSession');
-        localStorage.removeItem('currentUser');
-        window.location.href = 'index.html';
-    }
-
     // ===== HELPERS =====
     function setLoading(show) {
         document.getElementById('loading').style.display = show ? 'flex' : 'none';
@@ -1076,17 +1286,12 @@
 
     // ===== INIT =====
     document.addEventListener('DOMContentLoaded', function() {
-        if (checkAdmin()) {
-            document.getElementById('adminHeader').style.display = 'block';
-            document.getElementById('adminPanel').style.display = 'block';
-            document.getElementById('accessDenied').style.display = 'none';
-            document.getElementById('adminName').textContent = currentAdmin?.full_name || currentAdmin?.user_name || 'Admin';
-            initSupabase();
-            loadData();
-        } else {
-            document.getElementById('adminHeader').style.display = 'none';
+        initSupabase();
+        
+        // Check if already logged in
+        if (!checkSession()) {
+            document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('accessDenied').style.display = 'flex';
         }
     });
 </script>
