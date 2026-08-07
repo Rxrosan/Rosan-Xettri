@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RX Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --primary-light: #818cf8;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --border: #e2e8f0;
+            --text: #0f172a;
+            --text-dim: #64748b;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
+            --radius: 12px;
+        }
+        
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
+        
+        /* Header */
+        .header { 
+            background: var(--card); 
+            padding: 16px 24px; 
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header-left .logo { 
+            background: var(--primary); 
+            color: white; 
+            width: 38px; 
+            height: 38px; 
+            border-radius: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .header-left h1 { font-size: 18px; font-weight: 700; }
+        .header-left h1 span { color: var(--primary); }
+        .header-right { display: flex; align-items: center; gap: 12px; }
+        .admin-badge { 
+            background: var(--primary); 
+            color: white; 
+            padding: 4px 14px; 
+            border-radius: 20px; 
+            font-size: 12px; 
+            font-weight: 600;
+        }
+        .header-right .admin-name { font-size: 14px; color: var(--text-dim); }
+        .logout-btn { 
+            background: none; 
+            border: 1px solid var(--border); 
+            padding: 6px 14px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            color: var(--danger);
+            font-size: 13px;
+            transition: 0.3s;
+        }
+        .logout-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
+        
+        /* Main Layout */
+        .main { 
+            display: grid; 
+            grid-template-columns: 340px 1fr; 
+            gap: 20px; 
+            padding: 20px; 
+            max-width: 1400px; 
+            margin: 0 auto;
+            height: calc(100vh - 80px);
+        }
+        
+        /* Left Panel - User List */
+        .user-panel {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        .panel-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .panel-header h2 { 
+            font-size: 15px; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+        }
+        .panel-header h2 span { 
+            background: var(--primary-light); 
+            color: white; 
+            padding: 0 10px; 
+            border-radius: 20px; 
+            font-size: 12px;
+        }
+        .search-box {
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            background: var(--bg);
+            transition: 0.3s;
+        }
+        .search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+        
+        .user-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px 8px;
+        }
+        .user-list::-webkit-scrollbar { width: 4px; }
+        .user-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        
+        .user-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 2px;
+            border: 1px solid transparent;
+        }
+        .user-item:hover { background: var(--bg); }
+        .user-item.active { 
+            background: #4f46e510; 
+            border-color: var(--primary);
+            border-left: 3px solid var(--primary);
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .user-item .info { flex: 1; min-width: 0; }
+        .user-item .name { font-weight: 600; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-item .meta { font-size: 12px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-item .status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .user-item .status.admin { background: var(--primary); }
+        .user-item .status.user { background: var(--success); }
+        .user-item .status.member { background: var(--warning); }
+        
+        /* Right Panel - User Details */
+        .detail-panel {
+            background: var(--card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            padding: 24px;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        .detail-panel::-webkit-scrollbar { width: 4px; }
+        .detail-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        
+        /* Placeholder */
+        .placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--text-dim);
+            text-align: center;
+        }
+        .placeholder i { font-size: 56px; opacity: 0.2; margin-bottom: 16px; }
+        .placeholder h3 { font-size: 18px; margin-bottom: 6px; color: var(--text); }
+        .placeholder p { font-size: 14px; opacity: 0.7; }
+        
+        /* User Profile View */
+        .profile-view { display: none; }
+        .profile-view.active { display: block; }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .profile-info h2 { font-size: 20px; font-weight: 700; }
+        .profile-info .sub { color: var(--text-dim); font-size: 14px; }
+        .profile-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+        }
+        .btn-edit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-edit:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-edit i { font-size: 14px; }
+        
+        /* Detail Grid */
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .detail-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+        .detail-item .label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; letter-spacing: 0.3px; }
+        .detail-item .value { font-size: 15px; font-weight: 500; margin-top: 2px; }
+        
+        /* Access Section */
+        .access-section {
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 8px;
+        }
+        .access-section h4 { 
+            font-size: 13px; 
+            color: var(--text-dim); 
+            margin-bottom: 10px; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px;
+        }
+        .access-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .access-tag {
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            background: var(--card);
+            border: 1px solid var(--border);
+        }
+        .access-tag.permanent { border-color: var(--primary); color: var(--primary); }
+        .access-tag.timed { border-color: var(--warning); color: var(--warning); }
+        .no-access { font-size: 13px; color: var(--text-dim); }
+        
+        /* Edit Panel (Hidden by default) */
+        .edit-panel {
+            display: none;
+            padding: 20px 0;
+            border-top: 2px solid var(--border);
+            margin-top: 20px;
+        }
+        .edit-panel.active { display: block; }
+        .edit-panel h3 { 
+            font-size: 16px; 
+            margin-bottom: 16px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+            color: var(--primary);
+        }
+        .edit-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .edit-field { display: flex; flex-direction: column; gap: 4px; }
+        .edit-field label { font-size: 12px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.3px; }
+        .edit-field input, .edit-field select {
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+            background: var(--bg);
+        }
+        .edit-field input:focus, .edit-field select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+        }
+        .edit-field input[readonly] { background: var(--bg); cursor: not-allowed; opacity: 0.7; }
+        .edit-field select { cursor: pointer; }
+        
+        .edit-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn-save {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-save:hover { opacity: 0.8; transform: translateY(-1px); }
+        .btn-cancel {
+            background: var(--border);
+            color: var(--text);
+            border: none;
+            padding: 8px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-cancel:hover { opacity: 0.8; }
+        
+        /* Access Management in Edit */
+        .access-edit {
+            grid-column: 1 / -1;
+            background: var(--bg);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 8px;
+        }
+        .access-edit .add-access {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .access-edit .add-access select {
+            flex: 1;
+            min-width: 140px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--card);
+        }
+        .access-edit .add-access input {
+            width: 80px;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+        }
+        .access-edit .add-access button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .access-edit .add-access button:hover { opacity: 0.8; }
+        
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+            max-width: 400px;
+            font-size: 14px;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            border-radius: var(--radius);
+        }
+        .loading-overlay i { font-size: 32px; color: var(--primary); }
+        
+        /* Access Denied */
+        .access-denied {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+            background: var(--bg);
+        }
+        .access-denied i { font-size: 64px; color: var(--danger); margin-bottom: 20px; }
+        .access-denied h1 { font-size: 28px; color: var(--danger); margin-bottom: 10px; }
+        .access-denied p { color: var(--text-dim); max-width: 500px; font-size: 16px; margin-bottom: 20px; }
+        .access-denied .btn-home {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .access-denied .btn-home:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .main { grid-template-columns: 280px 1fr; gap: 16px; padding: 16px; }
+        }
+        
+        @media (max-width: 768px) {
+            .header { padding: 12px 16px; }
+            .header-left h1 { font-size: 16px; }
+            .admin-name { display: none; }
+            
+            .main { 
+                grid-template-columns: 1fr; 
+                height: auto;
+                padding: 12px;
+                gap: 12px;
+            }
+            .user-panel { height: 40vh; min-height: 280px; max-height: 45vh; }
+            .detail-panel { min-height: 50vh; }
+            
+            .profile-header { flex-direction: column; text-align: center; }
+            .profile-actions { margin-left: 0; }
+            
+            .detail-grid { grid-template-columns: 1fr; gap: 8px; }
+            .edit-grid { grid-template-columns: 1fr; gap: 12px; }
+            .access-edit .add-access { flex-direction: column; }
+            .access-edit .add-access select { width: 100%; }
+            .access-edit .add-access input { width: 100%; }
+        }
+        
+        @media (max-width: 480px) {
+            .header-left .logo { width: 32px; height: 32px; font-size: 14px; }
+            .header-left h1 { font-size: 14px; }
+            .header-right { gap: 6px; }
+            .logout-btn { padding: 4px 10px; font-size: 12px; }
+            .admin-badge { font-size: 10px; padding: 2px 10px; }
+            
+            .panel-header { padding: 12px 14px; }
+            .panel-header h2 { font-size: 13px; }
+            .search-box { padding: 8px 14px; }
+            .search-box input { padding: 6px 10px; font-size: 13px; }
+            .user-item { padding: 8px 10px; }
+            .user-avatar { width: 32px; height: 32px; font-size: 13px; }
+            .user-item .name { font-size: 13px; }
+            
+            .detail-panel { padding: 16px; }
+            .profile-avatar { width: 56px; height: 56px; font-size: 22px; }
+            .profile-info h2 { font-size: 17px; }
+            .btn-edit { padding: 6px 14px; font-size: 13px; }
+            .detail-item .value { font-size: 14px; }
+            
+            .edit-panel { padding: 12px 0; }
+            .edit-field input, .edit-field select { padding: 6px 10px; font-size: 13px; }
+            .btn-save, .btn-cancel { padding: 6px 16px; font-size: 13px; }
+            
+            .access-tag { font-size: 11px; padding: 3px 10px; }
+            
+            #toast { 
+                bottom: 10px; 
+                right: 10px; 
+                left: 10px; 
+                padding: 10px 16px; 
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .main { padding: 8px; }
+            .user-panel { height: 35vh; min-height: 200px; }
+            .detail-panel { padding: 12px; }
+            .profile-avatar { width: 44px; height: 44px; font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<!-- Header -->
+<div id="adminHeader" style="display:none;">
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">RX</div>
+            <h1>Admin <span>Panel</span></h1>
+        </div>
+        <div class="header-right">
+            <span class="admin-badge"><i class="fas fa-shield-alt"></i> Admin</span>
+            <span class="admin-name" id="adminName">Admin</span>
+            <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div id="adminPanel" style="display:none;">
+    <div class="main">
+        <!-- Left Panel - User List -->
+        <div class="user-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-users"></i> Users <span id="userCount">0</span></h2>
+                <button class="refresh-btn" onclick="loadData()" style="background:none; border:none; cursor:pointer; color:var(--text-dim);">
+                    <i class="fas fa-sync"></i>
+                </button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="userSearch" placeholder="Search users..." onkeyup="filterUsers()">
+            </div>
+            <div class="user-list" id="userList">
+                <div style="text-align:center; padding:40px; color:var(--text-dim);">
+                    <i class="fas fa-spinner fa-spin"></i><br>
+                    <span style="font-size:13px; margin-top:8px; display:block;">Loading users...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - User Details -->
+        <div class="detail-panel" id="detailPanel">
+            <div class="loading-overlay" id="loading"><i class="fas fa-spinner fa-spin"></i></div>
+            
+            <!-- Placeholder -->
+            <div class="placeholder" id="placeholder">
+                <i class="fas fa-user-circle"></i>
+                <h3>Select a User</h3>
+                <p>Choose a user from the list to view and manage their profile</p>
+            </div>
+            
+            <!-- Profile View -->
+            <div class="profile-view" id="profileView">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">U</div>
+                    <div class="profile-info">
+                        <h2 id="profileName">User Name</h2>
+                        <div class="sub" id="profileId">RX-U-001</div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn-edit" onclick="toggleEdit()">
+                            <i class="fas fa-pen"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Details Grid -->
+                <div class="detail-grid" id="detailGrid">
+                    <div class="detail-item">
+                        <div class="label">Email</div>
+                        <div class="value" id="detailEmail">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Phone</div>
+                        <div class="value" id="detailPhone">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Username</div>
+                        <div class="value" id="detailUsername">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Account Type</div>
+                        <div class="value" id="detailRole">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Date of Birth</div>
+                        <div class="value" id="detailDob">-</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="label">Address</div>
+                        <div class="value" id="detailAddress">-</div>
+                    </div>
+                </div>
+                
+                <!-- Access Section -->
+                <div class="access-section">
+                    <h4><i class="fas fa-key"></i> File Access</h4>
+                    <div class="access-tags" id="accessTags">
+                        <span class="no-access">No access granted</span>
+                    </div>
+                </div>
+                
+                <!-- Edit Panel -->
+                <div class="edit-panel" id="editPanel">
+                    <h3><i class="fas fa-edit"></i> Edit Profile</h3>
+                    <div class="edit-grid">
+                        <div class="edit-field">
+                            <label>Full Name</label>
+                            <input type="text" id="editName">
+                        </div>
+                        <div class="edit-field">
+                            <label>Username</label>
+                            <input type="text" id="editUsername">
+                        </div>
+                        <div class="edit-field">
+                            <label>Email</label>
+                            <input type="email" id="editEmail">
+                        </div>
+                        <div class="edit-field">
+                            <label>Phone</label>
+                            <input type="text" id="editPhone">
+                        </div>
+                        <div class="edit-field">
+                            <label>Address</label>
+                            <input type="text" id="editAddress">
+                        </div>
+                        <div class="edit-field">
+                            <label>Date of Birth</label>
+                            <input type="date" id="editDob">
+                        </div>
+                        <div class="edit-field">
+                            <label>Account Role</label>
+                            <select id="editRole">
+                                <option value="user">User (RX-U)</option>
+                                <option value="Admin">Admin (RX-A)</option>
+                                <option value="member">Member (RX-M)</option>
+                            </select>
+                        </div>
+                        <div class="edit-field">
+                            <label>User ID</label>
+                            <input type="text" id="editId" readonly>
+                        </div>
+                        
+                        <!-- Access Management -->
+                        <div class="access-edit">
+                            <label style="font-size:12px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.3px;">Access Management</label>
+                            <div class="access-tags" id="editAccessTags" style="margin-top:8px;"></div>
+                            <div class="add-access">
+                                <select id="fileSelect">
+                                    <option value="">Select file...</option>
+                                    <option value="file1">F1- LEKHAPADI</option>
+                                    <option value="file2">F2- KOREAN EXAM</option>
+                                    <option value="file3">F3- QR SCANNER</option>
+                                    <option value="file4">F4- TEXT TO IMAGE</option>
+                                </select>
+                                <input type="number" id="daysInput" placeholder="Days (optional)" min="1">
+                                <button onclick="addAccess()"><i class="fas fa-plus"></i> Add</button>
+                            </div>
+                            <small style="color:var(--text-dim); font-size:11px; display:block; margin-top:4px;">
+                                Leave days empty for permanent access
+                            </small>
+                        </div>
+                    </div>
+                    
+                    <div class="edit-actions">
+                        <button class="btn-save" onclick="saveProfile()"><i class="fas fa-save"></i> Save Changes</button>
+                        <button class="btn-cancel" onclick="toggleEdit()"><i class="fas fa-times"></i> Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Access Denied -->
+<div id="accessDenied" style="display:none;">
+    <div class="access-denied">
+        <i class="fas fa-shield-alt"></i>
+        <h1>Access Denied</h1>
+        <p>You need administrator privileges to access this panel. Please login with an admin account.</p>
+        <a href="index.html" class="btn-home"><i class="fas fa-home"></i> Return to Home</a>
+    </div>
+</div>
+
+<script>
+    // ===== CONFIGURATION =====
+    const S_URL = 'https://svwwbxbyutiieflxnoeb.supabase.co';
+    const S_KEY = 'sb_publishable_OBPxBVADXRdtjYEC_ZFcEw_95NR5UXA';
+    const API_URL = 'https://rx-backend-95ow.onrender.com';
+    
+    let supabaseClient = null;
+    let allUsers = [];
+    let activeUser = null;
+    let currentAdmin = null;
+    let isEditMode = false;
+    
+    const catalog = [
+        { id: 'file1', title: 'F1- LEKHAPADI' },
+        { id: 'file2', title: 'F2- KOREAN EXAM' },
+        { id: 'file3', title: 'F3- QR SCANNER' },
+        { id: 'file4', title: 'F4- TEXT TO IMAGE' }
+    ];
+
+    // ===== INIT =====
+    function initSupabase() {
+        try {
+            if (typeof supabase !== 'undefined' && supabase.createClient) {
+                supabaseClient = supabase.createClient(S_URL, S_KEY);
+                return true;
+            } else if (window.supabase) {
+                supabaseClient = window.supabase.createClient(S_URL, S_KEY);
+                return true;
+            }
+            return false;
+        } catch (e) { return false; }
+    }
+
+    // ===== CHECK ADMIN =====
+    function checkAdmin() {
+        try {
+            const session = sessionStorage.getItem('rxSession');
+            if (session) {
+                const user = JSON.parse(session);
+                if (user && (user.account_type === 'Admin' || user.account_type === 'admin')) {
+                    currentAdmin = user;
+                    return true;
+                }
+            }
+            return false;
+        } catch (e) { return false; }
+    }
+
+    // ===== LOAD USERS =====
+    async function loadData() {
+        const listDiv = document.getElementById('userList');
+        listDiv.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-dim);"><i class="fas fa-spinner fa-spin"></i><br><span style="font-size:13px; margin-top:8px; display:block;">Loading users...</span></div>';
+        
+        try {
+            if (!supabaseClient) initSupabase();
+            const { data, error } = await supabaseClient.from('users').select('*').order('full_name', { ascending: true, nullsLast: true });
+            if (error) throw error;
+            
+            allUsers = data || [];
+            document.getElementById('userCount').textContent = allUsers.length;
+            renderList(allUsers);
+            
+            if (activeUser) {
+                const updated = allUsers.find(u => u.id === activeUser.id);
+                if (updated) { activeUser = updated; showProfile(); }
+            }
+        } catch (err) {
+            listDiv.innerHTML = `<div style="text-align:center; padding:20px; color:var(--danger);">Error: ${err.message}</div>`;
+            notify('Error loading users', 'danger');
+        }
+    }
+
+    // ===== RENDER LIST =====
+    function renderList(users) {
+        const listDiv = document.getElementById('userList');
+        if (!users || users.length === 0) {
+            listDiv.innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-dim);">No users found</p>';
+            return;
+        }
+        
+        listDiv.innerHTML = users.map(u => {
+            const status = u.account_type === 'Admin' ? 'admin' : u.account_type === 'member' ? 'member' : 'user';
+            return `
+                <div class="user-item ${activeUser?.id === u.id ? 'active' : ''}" onclick="selectUser('${u.id}')">
+                    <div class="user-avatar">${(u.full_name || u.user_name || 'U').charAt(0).toUpperCase()}</div>
+                    <div class="info">
+                        <div class="name">${u.full_name || u.user_name || 'No Name'}</div>
+                        <div class="meta">${u.id}</div>
+                    </div>
+                    <div class="status ${status}"></div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ===== SELECT USER =====
+    function selectUser(id) {
+        activeUser = allUsers.find(u => u.id === id);
+        if (!activeUser) return;
+        renderList(allUsers);
+        showProfile();
+        isEditMode = false;
+        document.getElementById('editPanel').classList.remove('active');
+        document.getElementById('detailGrid').style.display = 'grid';
+        if (window.innerWidth <= 768) {
+            document.getElementById('detailPanel').scrollTop = 0;
+        }
+    }
+
+    // ===== SHOW PROFILE =====
+    function showProfile() {
+        if (!activeUser) return;
+        
+        document.getElementById('placeholder').style.display = 'none';
+        document.getElementById('profileView').classList.add('active');
+        
+        const initial = (activeUser.full_name || activeUser.user_name || 'U').charAt(0).toUpperCase();
+        document.getElementById('profileAvatar').textContent = initial;
+        document.getElementById('profileName').textContent = activeUser.full_name || activeUser.user_name || 'No Name';
+        document.getElementById('profileId').textContent = activeUser.id;
+        
+        document.getElementById('detailEmail').textContent = activeUser.email || '-';
+        document.getElementById('detailPhone').textContent = activeUser.phone || '-';
+        document.getElementById('detailUsername').textContent = activeUser.user_name || '-';
+        document.getElementById('detailRole').textContent = activeUser.account_type || 'user';
+        document.getElementById('detailDob').textContent = activeUser.dateofbirth || '-';
+        document.getElementById('detailAddress').textContent = activeUser.address || '-';
+        
+        // Access Tags
+        const accessTags = document.getElementById('accessTags');
+        const accessArr = Array.isArray(activeUser.access) ? activeUser.access : [];
+        let timedConf = activeUser.timed_access_config || [];
+        if (typeof timedConf === 'string') { try { timedConf = JSON.parse(timedConf); } catch(e) { timedConf = []; } }
+        if (!Array.isArray(timedConf)) timedConf = [];
+        
+        if (accessArr.length === 0 && timedConf.length === 0) {
+            accessTags.innerHTML = '<span class="no-access">No access granted</span>';
+        } else {
+            let html = '';
+            accessArr.forEach(f => { html += `<span class="access-tag permanent">${f}</span>`; });
+            timedConf.forEach(t => { html += `<span class="access-tag timed">${t.file} (${t.access_days}d)</span>`; });
+            accessTags.innerHTML = html;
+        }
+        
+        // Fill edit fields
+        document.getElementById('editName').value = activeUser.full_name || '';
+        document.getElementById('editUsername').value = activeUser.user_name || '';
+        document.getElementById('editEmail').value = activeUser.email || '';
+        document.getElementById('editPhone').value = activeUser.phone || '';
+        document.getElementById('editAddress').value = activeUser.address || '';
+        document.getElementById('editDob').value = activeUser.dateofbirth || '';
+        document.getElementById('editRole').value = activeUser.account_type || 'user';
+        document.getElementById('editId').value = activeUser.id;
+        
+        renderEditAccess();
+    }
+
+    // ===== RENDER EDIT ACCESS =====
+    function renderEditAccess() {
+        const container = document.getElementById('editAccessTags');
+        const accessArr = Array.isArray(activeUser.access) ? activeUser.access : [];
+        let timedConf = activeUser.timed_access_config || [];
+        if (typeof timedConf === 'string') { try { timedConf = JSON.parse(timedConf); } catch(e) { timedConf = []; } }
+        if (!Array.isArray(timedConf)) timedConf = [];
+        
+        let html = '';
+        accessArr.forEach(f => {
+            html += `<span class="access-tag permanent">${f} <i class="fas fa-times" onclick="removeAccessItem('${f}','permanent')" style="cursor:pointer;margin-left:4px;color:var(--danger);font-size:11px;"></i></span>`;
+        });
+        timedConf.forEach(t => {
+            html += `<span class="access-tag timed">${t.file} (${t.access_days}d) <i class="fas fa-times" onclick="removeAccessItem('${t.file}','timed')" style="cursor:pointer;margin-left:4px;color:var(--danger);font-size:11px;"></i></span>`;
+        });
+        if (!html) html = '<span class="no-access">No access granted</span>';
+        container.innerHTML = html;
+    }
+
+    // ===== TOGGLE EDIT =====
+    function toggleEdit() {
+        if (!activeUser) return;
+        isEditMode = !isEditMode;
+        const panel = document.getElementById('editPanel');
+        const grid = document.getElementById('detailGrid');
+        
+        if (isEditMode) {
+            panel.classList.add('active');
+            grid.style.display = 'none';
+            document.querySelector('.profile-actions .btn-edit').innerHTML = '<i class="fas fa-times"></i> Cancel Edit';
+            document.querySelector('.profile-actions .btn-edit').style.background = 'var(--danger)';
+        } else {
+            panel.classList.remove('active');
+            grid.style.display = 'grid';
+            document.querySelector('.profile-actions .btn-edit').innerHTML = '<i class="fas fa-pen"></i> Edit Profile';
+            document.querySelector('.profile-actions .btn-edit').style.background = 'var(--primary)';
+            showProfile();
+        }
+    }
+
+    // ===== SAVE PROFILE =====
+    async function saveProfile() {
+        if (!activeUser) return;
+        
+        setLoading(true);
+        try {
+            const updates = {
+                full_name: document.getElementById('editName').value,
+                user_name: document.getElementById('editUsername').value,
+                email: document.getElementById('editEmail').value,
+                phone: document.getElementById('editPhone').value,
+                address: document.getElementById('editAddress').value,
+                dateofbirth: document.getElementById('editDob').value,
+                account_type: document.getElementById('editRole').value
+            };
+            
+            const { error } = await supabaseClient.from('users').update(updates).eq('id', activeUser.id);
+            if (error) throw error;
+            
+            // If role changed, update ID via API
+            if (updates.account_type !== activeUser.account_type) {
+                const response = await fetch(`${API_URL}/api/admin/update-role`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: activeUser.email, newRole: updates.account_type })
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error);
+                notify('✅ Role updated to: ' + result.new_id, 'success');
+            }
+            
+            notify('✅ Profile saved successfully', 'success');
+            await loadData();
+            const updated = allUsers.find(u => u.id === activeUser.id);
+            if (updated) { activeUser = updated; showProfile(); }
+            toggleEdit();
+        } catch (err) {
+            notify('❌ ' + err.message, 'danger');
+        }
+        setLoading(false);
+    }
+
+    // ===== ADD ACCESS =====
+    async function addAccess() {
+        if (!activeUser) return;
+        const fileId = document.getElementById('fileSelect').value;
+        const daysVal = document.getElementById('daysInput').value;
+        
+        if (!fileId) { notify('Select a file', 'warning'); return; }
+        
+        setLoading(true);
+        try {
+            if (daysVal === "" || parseInt(daysVal) === 0) {
+                // Permanent
+                const oldAccess = Array.isArray(activeUser.access) ? activeUser.access : [];
+                if (oldAccess.includes(fileId)) { notify('Already has access', 'warning'); setLoading(false); return; }
+                const newAccess = [...oldAccess, fileId];
+                await supabaseClient.from('users').update({ access: newAccess }).eq('id', activeUser.id);
+                notify('✅ Permanent access added', 'success');
+            } else {
+                // Timed
+                let oldTimed = activeUser.timed_access_config || [];
+                if (typeof oldTimed === 'string') { try { oldTimed = JSON.parse(oldTimed); } catch(e) { oldTimed = []; } }
+                if (!Array.isArray(oldTimed)) oldTimed = [];
+                const filtered = oldTimed.filter(t => t.file !== fileId);
+                const newTimed = [...filtered, { file: fileId, access_days: parseInt(daysVal), purchase_date: new Date().toISOString().split('T')[0] }];
+                await supabaseClient.from('users').update({ timed_access_config: newTimed }).eq('id', activeUser.id);
+                notify('✅ Timed access added (' + daysVal + ' days)', 'success');
+            }
+            
+            await loadData();
+            const updated = allUsers.find(u => u.id === activeUser.id);
+            if (updated) { activeUser = updated; showProfile(); }
+            document.getElementById('fileSelect').value = '';
+            document.getElementById('daysInput').value = '';
+            renderEditAccess();
+        } catch (err) {
+            notify('❌ ' + err.message, 'danger');
+        }
+        setLoading(false);
+    }
+
+    // ===== REMOVE ACCESS =====
+    async function removeAccessItem(fileId, type) {
+        if (!activeUser) return;
+        if (!confirm(`Remove access to "${fileId}"?`)) return;
+        
+        setLoading(true);
+        try {
+            if (type === 'permanent') {
+                const newAccess = activeUser.access.filter(f => f !== fileId);
+                await supabaseClient.from('users').update({ access: newAccess }).eq('id', activeUser.id);
+            } else {
+                let oldTimed = activeUser.timed_access_config || [];
+                if (typeof oldTimed === 'string') { try { oldTimed = JSON.parse(oldTimed); } catch(e) { oldTimed = []; } }
+                if (!Array.isArray(oldTimed)) oldTimed = [];
+                const newTimed = oldTimed.filter(t => t.file !== fileId);
+                await supabaseClient.from('users').update({ timed_access_config: newTimed }).eq('id', activeUser.id);
+            }
+            
+            notify('✅ Access removed', 'success');
+            await loadData();
+            const updated = allUsers.find(u => u.id === activeUser.id);
+            if (updated) { activeUser = updated; showProfile(); }
+            renderEditAccess();
+        } catch (err) {
+            notify('❌ ' + err.message, 'danger');
+        }
+        setLoading(false);
+    }
+
+    // ===== FILTER =====
+    function filterUsers() {
+        const term = document.getElementById('userSearch').value.toLowerCase().trim();
+        if (!term) { renderList(allUsers); return; }
+        const filtered = allUsers.filter(u => 
+            (u.full_name || '').toLowerCase().includes(term) ||
+            (u.user_name || '').toLowerCase().includes(term) ||
+            (u.email || '').toLowerCase().includes(term) ||
+            (u.id || '').toLowerCase().includes(term)
+        );
+        renderList(filtered);
+    }
+
+    // ===== LOGOUT =====
+    function logout() {
+        sessionStorage.removeItem('rxSession');
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+    }
+
+    // ===== HELPERS =====
+    function setLoading(show) {
+        document.getElementById('loading').style.display = show ? 'flex' : 'none';
+    }
+
+    function notify(msg, type) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        const colors = { success: '#22c55e', danger: '#ef4444', warning: '#f59e0b' };
+        t.style.background = colors[type] || '#4f46e5';
+        t.style.display = 'block';
+        clearTimeout(t._timer);
+        t._timer = setTimeout(() => t.style.display = 'none', 3500);
+    }
+
+    // ===== INIT =====
+    document.addEventListener('DOMContentLoaded', function() {
+        if (checkAdmin()) {
+            document.getElementById('adminHeader').style.display = 'block';
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('accessDenied').style.display = 'none';
+            document.getElementById('adminName').textContent = currentAdmin?.full_name || currentAdmin?.user_name || 'Admin';
+            initSupabase();
+            loadData();
+        } else {
+            document.getElementById('adminHeader').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('accessDenied').style.display = 'flex';
+        }
+    });
+</script>
+
+</body>
+</html>
