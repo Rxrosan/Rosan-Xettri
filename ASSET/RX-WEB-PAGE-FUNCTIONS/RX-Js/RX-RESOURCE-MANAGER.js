@@ -1,6 +1,7 @@
 // ===== RX-RESOURCE-MANAGER.js =====
 // Enhanced version with User & Admin modes
 // Auto-fetches from Supabase
+// Ultra Compact Layout - PC: Vertical user list + 3-column details
 
 (function() {
     'use strict';
@@ -20,6 +21,7 @@
     let isResourceEditMode = false;
     let currentEditingUser = null;
     let isInitialized = false;
+    let filteredUserIds = null;
 
     // ===== INITIALIZE SUPABASE CLIENT =====
     function initSupabase() {
@@ -397,9 +399,6 @@
                                 <i class="fas fa-user-shield"></i> Admin
                             </button>
                         ` : ''}
-                        <button onclick="window.RXResourceManager && window.RXResourceManager.handleLogout()" class="rx-btn-logout">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </button>
                     </div>
                 </div>
 
@@ -414,7 +413,7 @@
         `;
     }
 
-    // ===== RENDER ADMIN MODE =====
+    // ===== RENDER ADMIN MODE - Compact Layout =====
     function renderAdminMode(allUsers, currentAdmin) {
         const displayArea = document.getElementById('rx-display-area');
         if (!displayArea) return;
@@ -429,46 +428,30 @@
         const adminImage = currentAdmin?.image || currentAdmin?.avatar_url;
         const isMobile = window.innerWidth <= 768;
 
-        // Build user list items
+        // Build user list items - Ultra compact
         let userListItems = '';
-        if (!allUsers || allUsers.length === 0) {
+        const usersToShow = filteredUserIds !== null ? allUsers.filter(u => filteredUserIds.includes(u.id)) : allUsers;
+        
+        if (!usersToShow || usersToShow.length === 0) {
             userListItems = `<p class="rx-no-users">No users found</p>`;
         } else {
-            allUsers.forEach(userItem => {
+            usersToShow.forEach(userItem => {
                 const userImage = userItem.image || userItem.avatar_url;
                 const initial = (userItem.full_name || userItem.user_name || 'U').charAt(0).toUpperCase();
-                const role = userItem.account_type || 'user';
-                const roleColor = role === 'Admin' ? '#e67e22' : role === 'member' ? '#2ecc71' : '#3498db';
                 const isSelected = selectedUserId === userItem.id;
-                
-                let accessCount = 0;
-                if (userItem.access && Array.isArray(userItem.access)) {
-                    accessCount = userItem.access.length;
-                }
-                if (userItem.timed_access_config) {
-                    let timed = userItem.timed_access_config;
-                    if (typeof timed === 'string') {
-                        try { timed = JSON.parse(timed); } catch(e) { timed = []; }
-                    }
-                    if (Array.isArray(timed)) {
-                        accessCount += timed.length;
-                    } else if (typeof timed === 'object') {
-                        accessCount += Object.keys(timed).length;
-                    }
-                }
 
                 if (isMobile) {
                     userListItems += `
                         <div onclick="window.RXResourceManager && window.RXResourceManager.selectUser('${userItem.id}')" 
-                             class="rx-user-horizontal-item ${isSelected ? 'rx-active' : ''}">
+                             class="rx-user-horizontal-item ${isSelected ? 'rx-active' : ''}"
+                             ontouchstart="this.style.backgroundColor='#eef2ff'" 
+                             ontouchend="this.style.backgroundColor='${isSelected ? '#eef2ff' : 'transparent'}'">
                             <div class="rx-user-avatar-sm">
                                 ${userImage && userImage !== 'ASSET/WEB-SOFTWARE/USER/IMG/USER.png' ? 
                                     `<img src="${userImage}" alt="${initial}">` : 
                                     initial}
                             </div>
-                            <div class="rx-user-name-sm">${userItem.full_name || userItem.user_name || 'No Name'}</div>
-                            <div class="rx-user-access-badge">${accessCount}</div>
-                            <div class="rx-user-role-dot" style="background:${roleColor};"></div>
+                            <span class="rx-user-name-sm">${userItem.full_name || userItem.user_name || 'No Name'}</span>
                         </div>
                     `;
                 } else {
@@ -480,30 +463,27 @@
                                     `<img src="${userImage}" alt="${initial}">` : 
                                     initial}
                             </div>
-                            <div class="rx-user-list-info">
-                                <div class="rx-user-list-name">${userItem.full_name || userItem.user_name || 'No Name'}</div>
-                                <div class="rx-user-list-meta">${userItem.id} · ${role}</div>
-                            </div>
-                            <div class="rx-user-list-badge">${accessCount}</div>
-                            <div class="rx-user-list-dot" style="background:${roleColor};"></div>
+                            <span class="rx-user-list-name">${userItem.full_name || userItem.user_name || 'No Name'}</span>
                         </div>
                     `;
                 }
             });
         }
 
-        // PC View
+        // PC View - Compact
         const pcViewHtml = `
             <div class="rx-admin-layout">
                 <div class="rx-admin-left-panel">
                     <div class="rx-admin-panel-header">
-                        <span><i class="fas fa-users"></i> Users <span class="rx-user-count">${allUsers ? allUsers.length : 0}</span></span>
-                        <button onclick="window.RXResourceManager && window.RXResourceManager.refreshAllUsers()" class="rx-refresh-btn-sm">
-                            <i class="fas fa-sync"></i>
-                        </button>
-                    </div>
-                    <div class="rx-admin-search">
-                        <input type="text" id="adminUserSearch" placeholder="Search users..." onkeyup="window.RXResourceManager && window.RXResourceManager.filterUsers(this.value)">
+                        <div class="rx-header-left-section">
+                            <span><i class="fas fa-users"></i> Users <span class="rx-user-count">${usersToShow ? usersToShow.length : 0}</span></span>
+                        </div>
+                        <div class="rx-header-right-section">
+                            <input type="text" id="adminUserSearch" placeholder="Search..." oninput="window.RXResourceManager && window.RXResourceManager.filterUsers(this.value)" onkeyup="window.RXResourceManager && window.RXResourceManager.filterUsers(this.value)">
+                            <button onclick="window.RXResourceManager && window.RXResourceManager.refreshAllUsers()" class="rx-refresh-btn-sm" title="Refresh">
+                                <i class="fas fa-sync"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="rx-admin-user-list" id="adminUserList">
                         ${userListItems}
@@ -514,7 +494,7 @@
                     <div id="adminDetailPlaceholder" class="rx-placeholder">
                         <i class="fas fa-user-circle"></i>
                         <h3>Select a User</h3>
-                        <p>Choose a user from the list to view and manage their profile</p>
+                        <p>Choose a user from the list</p>
                     </div>
                     <div id="adminDetailContent" style="display:none;"></div>
                 </div>
@@ -526,10 +506,10 @@
             <div class="rx-admin-mobile-layout">
                 <div class="rx-user-list-section">
                     <div class="rx-user-list-header">
-                        <span><i class="fas fa-users"></i> Users <span class="rx-user-count">${allUsers ? allUsers.length : 0}</span></span>
-                        <div style="display:flex; gap:6px; align-items:center;">
-                            <input type="text" id="adminUserSearchMobile" placeholder="Search..." onkeyup="window.RXResourceManager && window.RXResourceManager.filterUsersMobile(this.value)" style="padding:4px 8px; border:1px solid var(--rx-border); border-radius:4px; font-size:12px; width:120px;">
-                            <button onclick="window.RXResourceManager && window.RXResourceManager.refreshAllUsers()" class="rx-refresh-btn-sm">
+                        <span><i class="fas fa-users"></i> Users <span class="rx-user-count">${usersToShow ? usersToShow.length : 0}</span></span>
+                        <div class="rx-mobile-search">
+                            <input type="text" id="adminUserSearchMobile" placeholder="Search..." oninput="window.RXResourceManager && window.RXResourceManager.filterUsersMobile(this.value)" onkeyup="window.RXResourceManager && window.RXResourceManager.filterUsersMobile(this.value)">
+                            <button onclick="window.RXResourceManager && window.RXResourceManager.refreshAllUsers()" class="rx-refresh-btn-sm" title="Refresh">
                                 <i class="fas fa-sync"></i>
                             </button>
                         </div>
@@ -545,7 +525,7 @@
                     <div id="adminDetailPlaceholderMobile" class="rx-placeholder">
                         <i class="fas fa-user-circle"></i>
                         <h3>Select a User</h3>
-                        <p>Choose a user from the list above to view and manage their profile</p>
+                        <p>Choose a user from the list</p>
                     </div>
                     <div id="adminDetailContentMobile" style="display:none;"></div>
                 </div>
@@ -568,10 +548,7 @@
                     </div>
                     <div class="rx-header-right">
                         <button onclick="window.RXResourceManager && window.RXResourceManager.switchToUserMode()" class="rx-btn-user-mode">
-                            <i class="fas fa-user"></i> User Mode
-                        </button>
-                        <button onclick="window.RXResourceManager && window.RXResourceManager.handleLogout()" class="rx-btn-logout">
-                            <i class="fas fa-sign-out-alt"></i> Logout
+                            <i class="fas fa-user"></i> User
                         </button>
                     </div>
                 </div>
@@ -587,8 +564,12 @@
                 if (isMobileView) {
                     const items = document.querySelectorAll('.rx-user-horizontal-item');
                     items.forEach(item => item.classList.remove('rx-active'));
+                    items.forEach(item => item.style.backgroundColor = 'transparent');
                     const selected = document.querySelector(`.rx-user-horizontal-item[onclick*="selectUser('${selectedUserId}')"]`);
-                    if (selected) selected.classList.add('rx-active');
+                    if (selected) {
+                        selected.classList.add('rx-active');
+                        selected.style.backgroundColor = '#eef2ff';
+                    }
                 } else {
                     const items = document.querySelectorAll('.rx-user-list-item');
                     items.forEach(item => item.classList.remove('rx-active'));
@@ -675,10 +656,10 @@
                     </div>
                     <div class="rx-admin-profile-actions">
                         <button onclick="window.RXResourceManager && window.RXResourceManager.showEditProfile('${userId}')" class="rx-btn-edit-profile">
-                            <i class="fas fa-edit"></i> Edit Profile
+                            <i class="fas fa-edit"></i> Edit
                         </button>
                         <button onclick="window.RXResourceManager && window.RXResourceManager.showEditResources('${userId}')" class="rx-btn-edit-resources">
-                            <i class="fas fa-folder-open"></i> Edit Resources
+                            <i class="fas fa-folder-open"></i> Resources
                         </button>
                     </div>
                 </div>
@@ -816,7 +797,7 @@
                     </div>
                     <div class="rx-edit-actions">
                         <button onclick="window.RXResourceManager && window.RXResourceManager.saveUserEdit('${userId}')" class="rx-btn-save">
-                            <i class="fas fa-save"></i> Save Changes
+                            <i class="fas fa-save"></i> Save
                         </button>
                         <button onclick="window.RXResourceManager && window.RXResourceManager.cancelEdit('${userId}')" class="rx-btn-cancel">
                             <i class="fas fa-times"></i> Cancel
@@ -1090,126 +1071,28 @@
         if (!users || users.length === 0) return;
 
         const term = searchTerm.toLowerCase().trim();
-        const filtered = users.filter(u => 
-            (u.full_name || '').toLowerCase().includes(term) ||
-            (u.user_name || '').toLowerCase().includes(term) ||
-            (u.email || '').toLowerCase().includes(term) ||
-            (u.id || '').toLowerCase().includes(term)
-        );
-
-        const userList = document.getElementById('adminUserList');
-        if (!userList) return;
-
-        if (filtered.length === 0) {
-            userList.innerHTML = `<p class="rx-no-users">No users found</p>`;
-            return;
+        
+        if (!term) {
+            filteredUserIds = null;
+        } else {
+            filteredUserIds = users
+                .filter(u => 
+                    (u.full_name || '').toLowerCase().includes(term) ||
+                    (u.user_name || '').toLowerCase().includes(term) ||
+                    (u.email || '').toLowerCase().includes(term) ||
+                    (u.id || '').toLowerCase().includes(term)
+                )
+                .map(u => u.id);
         }
 
-        let html = '';
-        filtered.forEach(user => {
-            const userImage = user.image || user.avatar_url;
-            const initial = (user.full_name || user.user_name || 'U').charAt(0).toUpperCase();
-            const role = user.account_type || 'user';
-            const roleColor = role === 'Admin' ? '#e67e22' : role === 'member' ? '#2ecc71' : '#3498db';
-            const isSelected = selectedUserId === user.id;
-            
-            let accessCount = 0;
-            if (user.access && Array.isArray(user.access)) {
-                accessCount = user.access.length;
-            }
-            if (user.timed_access_config) {
-                let timed = user.timed_access_config;
-                if (typeof timed === 'string') {
-                    try { timed = JSON.parse(timed); } catch(e) { timed = []; }
-                }
-                if (Array.isArray(timed)) {
-                    accessCount += timed.length;
-                } else if (typeof timed === 'object') {
-                    accessCount += Object.keys(timed).length;
-                }
-            }
-
-            html += `
-                <div onclick="window.RXResourceManager && window.RXResourceManager.selectUser('${user.id}')" 
-                     class="rx-user-list-item ${isSelected ? 'rx-active' : ''}">
-                    <div class="rx-user-list-avatar">
-                        ${userImage && userImage !== 'ASSET/WEB-SOFTWARE/USER/IMG/USER.png' ? 
-                            `<img src="${userImage}" alt="${initial}">` : 
-                            initial}
-                    </div>
-                    <div class="rx-user-list-info">
-                        <div class="rx-user-list-name">${user.full_name || user.user_name || 'No Name'}</div>
-                        <div class="rx-user-list-meta">${user.id} · ${role}</div>
-                    </div>
-                    <div class="rx-user-list-badge">${accessCount}</div>
-                    <div class="rx-user-list-dot" style="background:${roleColor};"></div>
-                </div>
-            `;
-        });
-        userList.innerHTML = html;
+        if (isAdminModeActive) {
+            renderAdminMode(allUsersData, getCurrentUser());
+        }
     }
 
     // ===== FILTER USERS (Mobile) =====
     function filterUsersMobile(searchTerm) {
-        const users = allUsersData || [];
-        if (!users || users.length === 0) return;
-
-        const term = searchTerm.toLowerCase().trim();
-        const filtered = users.filter(u => 
-            (u.full_name || '').toLowerCase().includes(term) ||
-            (u.user_name || '').toLowerCase().includes(term) ||
-            (u.email || '').toLowerCase().includes(term) ||
-            (u.id || '').toLowerCase().includes(term)
-        );
-
-        const wrapper = document.querySelector('.rx-user-list-wrapper');
-        if (!wrapper) return;
-
-        if (filtered.length === 0) {
-            wrapper.innerHTML = `<p class="rx-no-users" style="padding:10px; text-align:center;">No users found</p>`;
-            return;
-        }
-
-        let html = `<div class="rx-user-horizontal-list">`;
-        filtered.forEach(user => {
-            const userImage = user.image || user.avatar_url;
-            const initial = (user.full_name || user.user_name || 'U').charAt(0).toUpperCase();
-            const role = user.account_type || 'user';
-            const roleColor = role === 'Admin' ? '#e67e22' : role === 'member' ? '#2ecc71' : '#3498db';
-            const isSelected = selectedUserId === user.id;
-            
-            let accessCount = 0;
-            if (user.access && Array.isArray(user.access)) {
-                accessCount = user.access.length;
-            }
-            if (user.timed_access_config) {
-                let timed = user.timed_access_config;
-                if (typeof timed === 'string') {
-                    try { timed = JSON.parse(timed); } catch(e) { timed = []; }
-                }
-                if (Array.isArray(timed)) {
-                    accessCount += timed.length;
-                } else if (typeof timed === 'object') {
-                    accessCount += Object.keys(timed).length;
-                }
-            }
-
-            html += `
-                <div onclick="window.RXResourceManager && window.RXResourceManager.selectUser('${user.id}')" 
-                     class="rx-user-horizontal-item ${isSelected ? 'rx-active' : ''}">
-                    <div class="rx-user-avatar-sm">
-                        ${userImage && userImage !== 'ASSET/WEB-SOFTWARE/USER/IMG/USER.png' ? 
-                            `<img src="${userImage}" alt="${initial}">` : 
-                            initial}
-                    </div>
-                    <div class="rx-user-name-sm">${user.full_name || user.user_name || 'No Name'}</div>
-                    <div class="rx-user-access-badge">${accessCount}</div>
-                    <div class="rx-user-role-dot" style="background:${roleColor};"></div>
-                </div>
-            `;
-        });
-        html += `</div>`;
-        wrapper.innerHTML = html;
+        filterUsers(searchTerm);
     }
 
     // ===== SELECT USER =====
@@ -1221,30 +1104,45 @@
         }
         
         selectedUserId = userId;
+        isEditMode = false;
+        isResourceEditMode = false;
         
         const isMobile = window.innerWidth <= 768;
         
         if (isMobile) {
             const items = document.querySelectorAll('.rx-user-horizontal-item');
-            items.forEach(item => item.classList.remove('rx-active'));
+            items.forEach(item => {
+                item.classList.remove('rx-active');
+                item.style.backgroundColor = 'transparent';
+            });
             const selected = document.querySelector(`.rx-user-horizontal-item[onclick*="selectUser('${userId}')"]`);
-            if (selected) selected.classList.add('rx-active');
+            if (selected) {
+                selected.classList.add('rx-active');
+                selected.style.backgroundColor = '#eef2ff';
+                selected.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
         } else {
             const items = document.querySelectorAll('.rx-user-list-item');
             items.forEach(item => item.classList.remove('rx-active'));
             const selected = document.querySelector(`.rx-user-list-item[onclick*="selectUser('${userId}')"]`);
-            if (selected) selected.classList.add('rx-active');
+            if (selected) {
+                selected.classList.add('rx-active');
+                selected.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
 
-        isEditMode = false;
-        isResourceEditMode = false;
         await renderUserDetail(userId);
     }
 
     // ===== REFRESH ALL USERS =====
     async function refreshAllUsers() {
+        filteredUserIds = null;
         const users = await fetchAllUsers();
         allUsersData = users;
+        const searchInput = document.getElementById('adminUserSearch');
+        if (searchInput) searchInput.value = '';
+        const searchInputMobile = document.getElementById('adminUserSearchMobile');
+        if (searchInputMobile) searchInputMobile.value = '';
         if (isAdminModeActive) {
             renderAdminMode(users, getCurrentUser());
         }
@@ -1307,6 +1205,7 @@
         isEditMode = false;
         isResourceEditMode = false;
         currentEditingUser = null;
+        filteredUserIds = null;
         refreshUserAccess();
     }
 
@@ -1371,6 +1270,7 @@
             adminPasswordVerified = true;
             isAdminModeActive = true;
             currentMode = 'admin';
+            filteredUserIds = null;
             
             const popup = document.getElementById('adminPasswordPopup');
             if (popup) popup.remove();
@@ -1403,6 +1303,7 @@
         isEditMode = false;
         isResourceEditMode = false;
         currentEditingUser = null;
+        filteredUserIds = null;
         
         if (window.UserSession) {
             window.UserSession.updateAccess([], {});
@@ -1496,6 +1397,7 @@
             isEditMode = false;
             isResourceEditMode = false;
             currentEditingUser = null;
+            filteredUserIds = null;
             refreshUserAccess();
         }, 1000);
     });
@@ -1508,6 +1410,7 @@
         isEditMode = false;
         isResourceEditMode = false;
         currentEditingUser = null;
+        filteredUserIds = null;
         if (window.UserSession) {
             window.UserSession.updateAccess([], {});
         }
@@ -1550,8 +1453,6 @@
         isInitialized: isInitialized,
         handleResize: handleResize
     };
-
-    window.handleLogout = handleLogout;
 
     // ===== AUTO-INIT =====
     function checkAndInit() {

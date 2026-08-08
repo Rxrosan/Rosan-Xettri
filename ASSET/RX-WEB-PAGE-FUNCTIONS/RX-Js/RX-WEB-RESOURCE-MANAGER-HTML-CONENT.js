@@ -75,11 +75,11 @@ function rxLoadresourcemanagerPage(rxDisplayArea) {
     // ============================================================
     rxDisplayArea.innerHTML = `
         <div class="rx-resource-manager" style="width:100%; max-width:1400px; margin:0 auto; padding:20px; background:#f1f5f9; min-height:100vh;">
-            <!-- Main Content -->
-            <div class="rx-main-content" style="display:grid; grid-template-columns:280px 1fr; gap:20px; padding:0;">
-                <!-- Left Panel - User List -->
-                <div class="rx-user-panel" style="background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06); height:600px; max-height:600px; min-height:400px;">
-                    <div class="rx-panel-header" style="padding:12px 16px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; background:#ffffff; position:sticky; top:0; z-index:10;">
+            <!-- Main Content - Stacked Layout (Users on top, Details below) -->
+            <div class="rx-main-content" style="display:flex; flex-direction:column; gap:20px; padding:0;">
+                <!-- Top Panel - User List (Horizontal scroll) -->
+                <div class="rx-user-panel" style="background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06); max-height:280px; min-height:180px;">
+                    <div class="rx-panel-header" style="padding:10px 16px; border-bottom:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; background:#ffffff; position:sticky; top:0; z-index:10;">
                         <h2 style="font-size:14px; font-weight:600; display:flex; align-items:center; gap:6px; color:#0f172a; margin:0;">
                             <i class="fas fa-users"></i> Users <span id="rxUserCount" style="background:#818cf8; color:white; padding:0 8px; border-radius:20px; font-size:11px;">0</span>
                         </h2>
@@ -87,19 +87,19 @@ function rxLoadresourcemanagerPage(rxDisplayArea) {
                             <i class="fas fa-sync"></i>
                         </button>
                     </div>
-                    <div class="rx-search-box" style="padding:8px 14px; border-bottom:1px solid #e2e8f0; flex-shrink:0; background:#ffffff; position:sticky; top:48px; z-index:9;">
-                        <input type="text" id="rxUserSearch" placeholder="Search users..." onkeyup="if(window.RXResourceManager) window.RXResourceManager.filterUsers(this.value)" style="width:100%; padding:6px 10px; border:1px solid #e2e8f0; border-radius:6px; font-size:13px; outline:none; background:#f1f5f9;">
+                    <div class="rx-search-box" style="padding:6px 14px; border-bottom:1px solid #e2e8f0; flex-shrink:0; background:#ffffff; position:sticky; top:48px; z-index:9;">
+                        <input type="text" id="rxUserSearch" placeholder="Search users..." oninput="if(window.RXResourceManager) window.RXResourceManager.filterUsers(this.value)" onkeyup="if(window.RXResourceManager) window.RXResourceManager.filterUsers(this.value)" style="width:100%; padding:6px 10px; border:1px solid #e2e8f0; border-radius:6px; font-size:13px; outline:none; background:#f1f5f9;">
                     </div>
-                    <div class="rx-user-list" id="rxUserList" style="flex:1; overflow-y:auto; overflow-x:hidden; padding:4px 6px; min-height:0; height:100%;">
-                        <div style="text-align:center; padding:40px; color:#64748b;">
+                    <div class="rx-user-list" id="rxUserList" style="flex:1; overflow-x:auto; overflow-y:hidden; padding:8px 12px; min-height:60px; display:flex; flex-wrap:nowrap; gap:8px; align-items:center;">
+                        <div style="text-align:center; padding:20px; color:#64748b; width:100%;">
                             <i class="fas fa-spinner fa-spin"></i><br>
                             <span style="font-size:13px; margin-top:8px; display:block;">Loading users...</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Panel - User Details -->
-                <div class="rx-detail-panel" id="rxDetailPanel" style="background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; padding:20px; overflow-y:auto; box-shadow:0 1px 3px rgba(0,0,0,0.06); height:600px; max-height:600px; min-height:400px;">
+                <!-- Bottom Panel - User Details -->
+                <div class="rx-detail-panel" id="rxDetailPanel" style="background:#ffffff; border-radius:12px; border:1px solid #e2e8f0; padding:20px; overflow-y:auto; box-shadow:0 1px 3px rgba(0,0,0,0.06); min-height:400px; flex:1;">
                     <div id="adminDetailPlaceholder" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#888; text-align:center; min-height:300px;">
                         <i class="fas fa-user-circle" style="font-size:56px; opacity:0.2; margin-bottom:16px;"></i>
                         <h3 style="font-size:16px; margin-bottom:4px; color:#1a4480;">Select a User</h3>
