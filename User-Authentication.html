@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <script src="RX_45537_F0LD3R_2061/RX_UN1V3R54L_45537_F0LD3R/RX_UN1V3R54L_J5/RX_P463_L0D3R.js"></script>
+    <script src="RX_45537_F0LD3R_2061/RX_UN1V3R54L_45537_F0LD3R/RX_UN1V3R54L_J5/RX_D3V_700L_PR073C710N.js"></script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-7.png" />
+    <title>RX | ROSAN KC - AUTHENTICATION</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="RX_45537_F0LD3R_2061/RX_W38_M41N_P463_45537_F0LD3R/RX_M41N_P463_C55/RX_W38_P463_M41N.css" />
+    <link rel="stylesheet" href="RX_45537_F0LD3R_2061/RX_U53R_4U7H3N71C4710N_45537_F0LD3R/RX_U53R_4U7H3N71C4710N_C55/RX_C0R3.css" />
+    <link rel="stylesheet" href="RX_45537_F0LD3R_2061/RX_U53R_4U7H3N71C4710N_45537_F0LD3R/RX_U53R_4U7H3N71C4710N_C55/RX_R36157R4710N.css" />
+    <link rel="stylesheet" href="RX_45537_F0LD3R_2061/RX_U53R_4U7H3N71C4710N_45537_F0LD3R/RX_U53R_4U7H3N71C4710N_C55/RX_L061N.css" />
+    <link rel="stylesheet" href="RX_45537_F0LD3R_2061/RX_U53R_4U7H3N71C4710N_45537_F0LD3R/RX_U53R_4U7H3N71C4710N_C55/RX_F0R607_P455W0RD.css" />
+</head>
+<body>
+    <noscript><div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#fff;color:red;text-align:center;padding-top:15%;font-family:Arial;font-size:24px;font-weight:bold;z-index:999999;"><p>JavaScript is disabled!</p><p style="color:#333;font-size:18px;">Please enable JavaScript.</p></div></noscript>
+
+    <header class="header">
+        <a href="index.html" class="logo-wrapper">
+            <img src="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-1.gif" alt="Rosan Xettri" class="logo-img" />
+        </a>
+        <div class="user-actions">
+            <a id="menuToggle" aria-label="Open menu" role="button">≡</a>
+        </div>
+    </header>
+
+    <div class="panel-overlay" id="panelOverlay"></div>
+    <aside class="side-panel" id="sidePanel">
+        <div class="panel-header">
+            <div class="panel-brand"><span class="panel-brand-name">Rosan <span>Xettri</span></span></div>
+            <button class="close-panel" id="closePanel" aria-label="Close menu">✕</button>
+        </div>
+        <nav class="panel-menu">
+            <div class="panel-item"><a href="User-profile.html" class="panel-link">PROFILE</a></div>
+            <div class="panel-item"><a href="Resource.html" class="panel-link">OPEN RESOURCE</a></div>
+            <div class="panel-item"><a href="P&P.html" class="panel-link">PRIVACY POLICY</a></div>
+            <div class="panel-item"><a href="T&C.html" class="panel-link">TERMS & CONDITION</a></div>
+            <div class="panel-item"><a href="News.html" class="panel-link">NEWS</a></div>
+        </nav>
+        <div class="panel-footer">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <a href="https://www.rosankc.com.np" target="_blank" rel="noopener">Rosan Xettri</a>. All rights reserved.</p>
+        </div>
+    </aside>
+
+    <main class="container">
+        <!-- ===== LOGIN PAGE ===== -->
+        <div class="login-section auth-page" id="loginSection">
+            <div class="login-container">
+                <h2 class="login-title">RX LOG-IN PORTAL</h2>
+                <div class="login-form">
+                    <div class="input-group">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="text" id="loginEmail" placeholder="Email" />
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <div class="password-wrapper">
+                            <input type="password" id="loginPassword" placeholder="Password" />
+                            <button type="button" class="password-toggle" data-target="loginPassword" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="login-btn" id="loginBtn">LOGIN</button>
+                    <div id="loginStatus" class="login-status"></div>
+                </div>
+                <div class="auth-switch">
+                    Don't have an account? <a id="gotoCreate">Create Account</a><br />
+                    Forgot your password? <a id="gotoForgot">Reset Password</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== CREATE ACCOUNT PAGE ===== -->
+        <div class="login-section auth-page page-hidden" id="createSection">
+            <div class="login-container">
+                <h2 class="login-title">CREATE ACCOUNT</h2>
+                <div class="login-form">
+                    <div class="input-group">
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="regName" placeholder="Full Name" />
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input type="email" id="regEmail" placeholder="Email" />
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-home input-icon"></i>
+                        <input type="text" id="regAddress" placeholder="Address" />
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-phone input-icon"></i>
+                        <input type="text" id="regPhone" placeholder="Phone Number" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <i class="fas fa-calendar-alt input-icon"></i>
+                        <input type="date" id="regDOB" placeholder="Date of Birth" required />
+                    </div>
+                    
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <div class="password-wrapper">
+                            <input type="password" id="regPassword" placeholder="Password" />
+                            <button type="button" class="password-toggle" data-target="regPassword" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button class="login-btn" id="createAccountBtn">CREATE ACCOUNT</button>
+                    <div id="createStatus" class="login-status"></div>
+                </div>
+                <div class="auth-switch">
+                    Already have an account? <a id="gotoLoginFromCreate">Login here</a><br />
+                    Forgot your password? <a id="gotoForgotFromCreate">Reset Password</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FORGOT PASSWORD PAGE ===== -->
+        <div class="login-section auth-page page-hidden" id="forgotSection">
+            <div class="login-container">
+                <h2 class="login-title">RESET PASSWORD</h2>
+                <div class="login-form">
+                    
+                    <div id="findAccountSection">
+                        <div class="input-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="text" id="resetIdentifier" placeholder="Email or Phone Number" />
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-user-tag input-icon"></i>
+                            <input type="text" id="resetNickname" placeholder="Enter your full name" />
+                        </div>
+                        <button class="login-btn" id="findAccountBtn">FIND MY ACCOUNT</button>
+                    </div>
+
+                    <div id="accountVerifiedSection" class="page-hidden" style="margin-top: 5px;">
+                        <div id="accountFoundNotice" style="color: #00e676; font-weight: bold; text-align: center; margin-bottom: 10px; font-size: 13px;">ACCOUNT FOUND</div>
+                        
+                        <div id="userAvatarBox" style="text-align: center; margin-bottom: 12px;">
+                            <img id="userAvatarImg" src="" alt="Profile Picture" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid #38bdf8; display: none; margin: 0 auto 8px auto;" />
+                        </div>
+
+                        <div class="input-group" style="margin-bottom: 12px;">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="foundUserName" placeholder="User Name" readonly style="background: rgba(10, 25, 47, 0.4); cursor: not-allowed;" />
+                        </div>
+
+                        <div class="input-group" style="margin-bottom: 12px;">
+                            <i class="fas fa-calendar-alt input-icon"></i>
+                            <input type="date" id="verifyDOB" placeholder="Date of Birth (English Format)" required />
+                        </div>
+                        <button class="login-btn" id="processDobBtn">PROCESSED</button>
+                    </div>
+
+                    <div class="password-section" id="passwordSection">
+                        <div class="input-group">
+                            <i class="fas fa-lock input-icon"></i>
+                            <div class="password-wrapper">
+                                <input type="password" id="resetNewPassword" placeholder="Input New Password" />
+                                <button type="button" class="password-toggle" data-target="resetNewPassword" aria-label="Toggle password visibility">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="login-btn" id="submitNewPasswordBtn">
+                            <i class="fas fa-paper-plane"></i> SUBMIT
+                        </button>
+                    </div>
+                    
+                    <div id="resetStatus" class="login-status"></div>
+                </div>
+                <div class="auth-switch">
+                    Remember your password? <a id="gotoLoginFromForgot">Login here</a><br />
+                    Don't have an account? <a id="gotoCreateFromForgot">Create Account</a>
+                </div>
+            </div>
+        </div>
+
+<!-- ===== POPUP: CONFIRM PASSWORD ===== -->
+<div class="popup-overlay" id="confirmPopup">
+    <div class="popup-box">
+        <button class="popup-close" id="popupClose">&times;</button>
+        <h3><i class="fas fa-shield-alt"></i> Confirm Password</h3>
+        <div class="input-group">
+            <i class="fas fa-lock input-icon"></i>
+            <div class="password-wrapper">
+                <!-- यहाँ 'New' शब्दलाई हटाइएको छ -->
+                <input type="password" id="popupPassword" placeholder="Re-enter Password" />
+                <button type="button" class="password-toggle" data-target="popupPassword" aria-label="Toggle password visibility">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+        </div>
+        <button class="login-btn" id="popupConfirmBtn">CONFIRM</button>
+        <div id="popupStatus" class="login-status"></div>
+    </div>
+        </div>
+
+        <div class="copyright">
+            <p>&copy; <script>document.write(new Date().getFullYear());</script> <strong><a href="https://www.rosankc.com.np" target="_blank" rel="noopener">Rosan Xettri</a></strong>. All Rights Reserved.</p>
+        </div>
+    </main>
+
+    <nav class="bottom-navbar">
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="About.html">About</a></li>
+            <li><a href="Service.html">Service</a></li>
+            <li><a href="Contact.html">Contact</a></li>
+            <li><a href="User-Authentication.html" class="active">User-Authentication</a></li>
+        </ul>
+    </nav>
+    
+    <script src="RX_45537_F0LD3R_2061/RX_W38_M41N_P463_45537_F0LD3R/RX_M41N_P463_J5/RX-W38_P463_M41N.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="RX_45537_F0LD3R_2061/RX_U53R_4U7H3N71C4710N_45537_F0LD3R/RX_U53R_4U7H3N71C4710N_J5/RX_C0R3.js"></script>
+    <script src="RX_45537_F0LD3R_2061/RX_U53R_4U7H3N71C4710N_45537_F0LD3R/RX_U53R_4U7H3N71C4710N_J5/RX_R36157R4710N.js"></script>
+    <script src="RX_45537_F0LD3R_2061/RX_U53R_4U7H3N71C4710N_45537_F0LD3R/RX_U53R_4U7H3N71C4710N_J5/RX_L061N.js"></script>
+    <script src="RX_45537_F0LD3R_2061/RX_U53R_4U7H3N71C4710N_45537_F0LD3R/RX_U53R_4U7H3N71C4710N_J5/RX_F0R607_P455W0RD.js"></script>
+
+    <script src="RX_45537_F0LD3R_2061/RX_UN1V3R54L_45537_F0LD3R/RX_UN1V3R54L_J5/RX_SM4R7_BU770N.js"></script>
+    <script src="RX_45537_F0LD3R_2061/RX_UN1V3R54L_45537_F0LD3R/RX_UN1V3R54L_J5/RX_CH47.js"></script>
+    <script src="RX_45537_F0LD3R_2061/RX_UN1V3R54L_45537_F0LD3R/RX_UN1V3R54L_J5/RX_MU51C.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+/* ======================================== */
+/* ===== CREATE ACCOUNT FIXED LAYOUT - DARK THEME ===== */
+/* ======================================== */
+#createSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: calc(100vh - 180px);
+    padding: clamp(15px, 4vw, 40px) clamp(10px, 3vw, 20px);
+    box-sizing: border-box;
+}
+
+#createSection.page-hidden,
+.page-hidden {
+    display: none !important;
+}
+
+#createSection .login-container {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    box-sizing: border-box;
+    padding: clamp(20px, 4vw, 35px) clamp(15px, 3vw, 30px);
+    background: #112240;
+    border: 1px solid #1e3a5f;
+    border-radius: clamp(12px, 2vw, 16px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+#createSection .login-title {
+    font-size: clamp(18px, 3vw, 22px);
+    color: #e6f1ff;
+    margin-bottom: clamp(18px, 3vw, 25px);
+}
+
+#createSection .login-title::after {
+    background: linear-gradient(90deg, #d10823, #ff1a3a);
+}
+
+#createSection .login-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(12px, 2vw, 16px);
+}
+
+#createSection .login-form .input-group:nth-child(1) { grid-column: 1; }
+#createSection .login-form .input-group:nth-child(2) { grid-column: 2; }
+#createSection .login-form .input-group:nth-child(3) { grid-column: 1; }
+#createSection .login-form .input-group:nth-child(4) { grid-column: 2; }
+#createSection .login-form .input-group:nth-child(5) { grid-column: 1; }
+#createSection .login-form .input-group:nth-child(6) { grid-column: 2; }
+
+#createSection .input-group input {
+    background: #0a192f;
+    border: 1px solid #1e3a5f;
+    color: #e6f1ff;
+}
+
+#createSection .input-group input:focus {
+    border-color: #d10823;
+    box-shadow: 0 0 15px rgba(209, 8, 35, 0.12);
+}
+
+#createSection .input-group input::placeholder {
+    color: #64748b;
+}
+
+#createSection input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(180deg) brightness(200%) contrast(200%);
+    cursor: pointer;
+}
+
+#createSection .login-form .login-btn {
+    grid-column: span 2;
+    margin-top: 8px;
+}
+
+#createSection .login-status {
+    grid-column: span 2;
+}
+
+#createSection .input-group {
+    margin-bottom: 0;
+    width: 100%;
+}
+
+#createSection .input-group input {
+    font-size: clamp(13px, 1.2vw, 14px);
+    padding: clamp(10px, 1.5vw, 11px) 16px clamp(10px, 1.5vw, 11px) clamp(35px, 5vw, 40px);
+}
+
+#createSection .input-group .input-icon {
+    color: #d10823;
+}
+
+/* ======================================== */
+/* ===== RESPONSIVE DESIGN (UNCHANGED) ===== */
+/* ======================================== */
+
+@media (max-width: 768px) {
+    #createSection {
+        min-height: calc(100vh - 160px);
+        padding: 20px 15px;
+    }
+    #createSection .login-container {
+        max-width: 100%;
+        padding: 25px 20px;
+    }
+    #createSection .login-form {
+        gap: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    #createSection {
+        min-height: calc(100vh - 140px);
+        padding: 15px 10px;
+    }
+    #createSection .login-container {
+        padding: 20px 15px;
+    }
+    #createSection .login-form {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    #createSection .login-form .input-group:nth-child(1),
+    #createSection .login-form .input-group:nth-child(2),
+    #createSection .login-form .input-group:nth-child(3),
+    #createSection .login-form .input-group:nth-child(4),
+    #createSection .login-form .input-group:nth-child(5),
+    #createSection .login-form .input-group:nth-child(6) {
+        grid-column: 1;
+    }
+    #createSection .login-form .login-btn {
+        grid-column: 1;
+    }
+    #createSection .login-status {
+        grid-column: 1;
+    }
+    #createSection .login-title {
+        font-size: 18px;
+        margin-bottom: 18px;
+    }
+}
+
+@media (max-width: 360px) {
+    #createSection {
+        padding: 10px 8px;
+    }
+    #createSection .login-container {
+        padding: 15px 12px;
+    }
+    #createSection .login-title {
+        font-size: 16px;
+        margin-bottom: 14px;
+    }
+    #createSection .input-group input {
+        font-size: 13px;
+        padding: 8px 12px 8px 32px;
+    }
+    #createSection .login-form .login-btn {
+        font-size: 12px;
+        padding: 10px;
+    }
+}

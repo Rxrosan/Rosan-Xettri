@@ -1,0 +1,85 @@
+/* ======================================== */
+/* ===== LOGIN PASSWORD TOGGLE & STATES - DARK THEME ===== */
+/* ======================================== */
+.password-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-wrapper input {
+    width: 100%;
+    padding-right: clamp(38px, 5vw, 44px) !important;
+    background: #0a192f;
+    border: 1px solid #1e3a5f;
+    color: #e6f1ff;
+}
+
+.password-wrapper input:focus {
+    border-color: #d10823;
+    box-shadow: 0 0 15px rgba(209, 8, 35, 0.12);
+}
+
+.password-toggle {
+    position: absolute;
+    right: clamp(8px, 1.5vw, 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #8892b0;
+    cursor: pointer;
+    font-size: clamp(13px, 1.2vw, 14px);
+    padding: clamp(4px, 0.8vw, 6px) clamp(4px, 0.8vw, 6px);
+    transition: all 0.3s ease;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.password-toggle:hover {
+    color: #d10823;
+    background: rgba(209, 8, 35, 0.12);
+}
+
+.login-btn.verified {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #fff;
+}
+
+.login-btn.verified:hover:not(:disabled) {
+    background: linear-gradient(135deg, #15803d, #16a34a);
+}
+
+.login-btn.cooldown {
+    background: #1e3a5f;
+    color: #8892b0;
+    box-shadow: none;
+}
+
+/* ======================================== */
+/* ===== MOBILE RESPONSIVE (UNCHANGED) ===== */
+/* ======================================== */
+
+@media (max-width: 576px) {
+    .password-wrapper input {
+        padding-right: 38px !important;
+    }
+    .password-toggle {
+        right: 8px;
+        font-size: 13px;
+        padding: 4px;
+    }
+}
+
+@media (max-width: 360px) {
+    .password-wrapper input {
+        padding-right: 32px !important;
+    }
+    .password-toggle {
+        right: 6px;
+        font-size: 12px;
+        padding: 3px;
+    }
+}
