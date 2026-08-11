@@ -43,7 +43,7 @@ const QuestionsManager = {
 
     loadQuestionFile: function(num) {
         return new Promise((resolve) => {
-            const fileName = `RX-ASSETS/RX-EXAM-FILE/RX-KR-EXAM-MODEL-1-FILES/RX-EXAM-QUESTION-JS/qs-no-${num}.js`;
+            const fileName = `RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_M0D3L_1_F1L35/RX_3P5_3X4M_QU35710N5/RX_3P5_3X4M_Q5_N0_${num}.js`;
             const script = document.createElement('script');
             script.src = fileName;
             script.async = true; // True allows parallel download on mobile
