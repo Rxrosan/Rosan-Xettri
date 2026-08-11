@@ -90,12 +90,14 @@
    * ===============================
    */
   const rosanDetails = {
-    name: "Rosan Khattri Chettri",
-    age: "22-year-old",
-    education: "BBS third-year student",
-    location: "Banganga-10, Kapilvastu",
+    name: "ROSAN K.C.",
+    age: "23-year-old",
+    education: "+2 Clear",
+    location: "Banganga-10, Kapilvastu pakadiachapa",
     email: "rosankc2061@gmail.com",
     facebook: "https://www.facebook.com/Rosan.2061",
+    facebookpage: "https://www.facebook.com/RosanXettri.2004",
+    youtube: "https://www.youtube.com/channel/UCzOs87ROUZSPyfdDbOl0F1w",
     website: "https://rosankc.com.np/",
     contactPage: "Contact.html",
     aboutPage: "About.html",
@@ -112,7 +114,7 @@
     { 
       command: 'about', 
       description: 'About RX Studio',
-      response: `${rosanDetails.name} is a ${rosanDetails.age} ${rosanDetails.education} from ${rosanDetails.location}. He is passionate about design and web development, creating visually appealing and user-friendly digital experiences.`,
+      response: `${rosanDetails.name} is a ${rosanDetails.age} ${rosanDetails.education} from ${rosanDetails.location}. He is a licensed professional serving the Kapilvastu district for legal documents (Kapali Tamsuk, Rajinaama, Lakhbandhak), EPS exam web services, National Identity Card assistance, PAN account creation, and essential government document solutions.`,
       category: 'info',
       isLink: true,
       url: rosanDetails.aboutPage,
@@ -130,7 +132,7 @@
     { 
       command: 'service', 
       description: 'Our services',
-      response: 'RX SERVICES:\n\n• Web Development\n• Mobile App Development\n• UI/UX Design\n• Cloud Solutions',
+      response: 'RX SERVICES:\n\n• designing \n• eps exam for web base software\n• lekhapadi services \n• lekhapadi services web based services.',
       category: 'Service',
       isLink: true,
       url: rosanDetails.servicePage,
@@ -383,10 +385,12 @@
           system_instruction: {
             parts: [{
               text: `You are the official AI assistant for ${rosanDetails.name}'s portfolio website. 
-              Bio: ${rosanDetails.age} ${rosanDetails.education} from ${rosanDetails.location}, passionate about Web Development and UI/UX.
+              Bio: ${rosanDetails.age} ${rosanDetails.education} from ${rosanDetails.location}, passionate about designer  and lekhandas.
               Contact & Links Info: 
               - Email: ${rosanDetails.email}
               - Facebook: ${rosanDetails.facebook}
+              - Facebookpage: ${rosanDetails.facebookpage}
+              - YouTube: ${rosanDetails.youtube}
               - Website: ${rosanDetails.website}
               - Contact Page: ${rosanDetails.contactPage}
               - About Page: ${rosanDetails.aboutPage}
