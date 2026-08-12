@@ -24,7 +24,7 @@
     
     // Gemini API Configuration - Just 3 models
     gemini: {
-      apiKey: '',
+      apiKey: 'AQ.Ab8RN6Is91HLeo5KvYgJkth-SWHDbFMdqjxe_ldTqc67C8bKVA',
       currentModel: 'gemini-3-flash-preview',
       availableModels: [
         { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', free: true, description: 'Fast model' },
