@@ -24,8 +24,8 @@
     
     // Gemini API Configuration - Just 3 models
     gemini: {
-      apiKey: 'AQ.Ab8RN6Is91HLeo5KvYgJkth-SWHDbFMdqjxe_ldTqc67C8bKVA',
-      currentModel: 'gemini-3-flash-preview',
+      apiKey: null, // Can be pre-filled here auto-connects in AI mode.
+      currentModel: 'gemini-3-flash-preview', // Default to fastest model
       availableModels: [
         { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', free: true, description: 'Fast model' },
         { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', free: true, description: 'More powerful' },
@@ -69,7 +69,7 @@
       position: 'rx-window-position',
       geminiKey: 'rx-gemini-key',
       geminiModel: 'rx-gemini-model',
-      chatMode: 'rx-chat-mode'
+      chatMode: 'rx-chat-mode' // New storage key for chat mode
     },
     
     // Contact Page URL
@@ -575,21 +575,19 @@
 
   /**
    * ===============================
-   * CSS Injection - UPDATED WITH NEW DESIGN
+   * CSS Injection
    * ===============================
    */
   function generateCSS() {
     const { images, colors } = config;
     return `
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    
-    /* ===== CHAT WINDOW ===== */
     .rx-chat-window {
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
       width: ${config.chatWidth}; height: ${config.chatHeight};
       background: ${colors.headerBg || 'rgba(30, 40, 60, 0.95)'};
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      ${images.background ? `background-image: url('${images.background}');` : ''}
+      background-size: cover; background-position: center; backdrop-filter: blur(10px);
       border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
       border: 1px solid rgba(255,255,255,0.2); display: none; flex-direction: column;
       overflow: hidden; z-index: 1000000; color: ${colors.textColor || 'white'};
@@ -597,231 +595,83 @@
     }
     .rx-chat-window.show { display: flex; }
     .rx-chat-window.dragging { transition: none; opacity: 0.95; }
-    
-    /* ===== HEADER - COMPACT ===== */
     .rx-chat-header {
-      padding: 8px 12px; background: ${colors.headerBg || 'rgba(0,0,0,0.4)'};
-      border-bottom: 1px solid rgba(255,255,255,0.15); display: flex;
-      align-items: center; gap: 8px; cursor: grab; min-height: 40px; flex-shrink: 0;
+      padding: 15px; background: ${colors.headerBg || 'rgba(0,0,0,0.3)'};
+      border-bottom: 1px solid rgba(255,255,255,0.2); display: flex;
+      align-items: center; gap: 10px; cursor: move; cursor: grab; height: 1cm;
     }
-    .rx-chat-header:active { cursor: grabbing; }
-    
     .rx-header-icon {
-      width: 28px; height: 28px; border-radius: 50%; background: transparent;
+      width: 0.8cm; height: 0.8cm; border-radius: 50%; background: transparent;
       display: flex; align-items: center; justify-content: center; color: white;
-      border: 2px solid rgba(255,255,255,0.3); flex-shrink: 0; overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.5);
       ${images.headerIcon ? `background-image: url('${images.headerIcon}'); background-size: cover; background-position: center;` : ''}
     }
-    .rx-header-title { 
-      flex: 1; font-weight: 700; text-align: center; font-size: 13px; 
-      color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-      letter-spacing: 0.3px;
-    }
+    .rx-header-title { flex: 1; font-weight: bold; text-align: center; font-size: 14px; }
     .rx-mode-indicator {
-      font-size: 9px; padding: 2px 8px; background: rgba(0,0,0,0.3);
-      border-radius: 12px; color: #ffaa64; margin-left: 4px; 
-      border: 1px solid rgba(255,255,255,0.15); font-weight: 600;
+      font-size: 10px; padding: 2px 6px; background: rgba(0,0,0,0.3);
+      border-radius: 12px; color: #ffaa64; margin-left: 5px; border: 1px solid rgba(255,255,255,0.2);
     }
-    
-    /* ===== CLOSE BUTTON - ONLY ICON (NO BG) ===== */
     .rx-header-close {
-      width: 28px; height: 28px;
-      background: transparent; border: none;
-      color: #ffffff; font-size: 24px; font-weight: 300;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      z-index: 10; flex-shrink: 0; transition: all 0.3s ease;
-      text-shadow: 0 0 20px rgba(255,255,255,0.2);
+      width: 0.8cm; height: 0.8cm; border-radius: 50%; background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3); color: white; font-size: 18px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;
     }
-    .rx-header-close:hover { 
-      background: transparent; border: none;
-      color: #ffffff; transform: scale(1.15);
-      text-shadow: 0 0 30px rgba(255,255,255,0.4);
-    }
-    .rx-header-close:active { transform: scale(0.9); background: transparent; border: none; }
-    
-    /* ===== MESSAGES AREA - BACKGROUND IMAGE ONLY HERE ===== */
     .rx-chat-messages {
-      flex: 1; padding: 12px 14px; overflow-y: auto; display: flex;
-      flex-direction: column; gap: 6px; -webkit-overflow-scrolling: touch;
-      position: relative; min-height: 0;
-      ${images.background ? `background-image: url('${images.background}'); background-size: cover; background-position: center; background-repeat: no-repeat;` : ''}
+      flex: 1; padding: 15px; overflow-y: auto; display: flex;
+      flex-direction: column; gap: 10px; -webkit-overflow-scrolling: touch;
     }
-    .rx-chat-messages::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(30, 40, 60, 0.25); z-index: -1; pointer-events: none;
-    }
-    .rx-chat-messages::-webkit-scrollbar { width: 3px; }
-    .rx-chat-messages::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
-    .rx-chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-    
-    /* ===== MESSAGES ===== */
-    .rx-message-wrapper { display: flex; align-items: flex-end; gap: 6px; max-width: 88%; animation: messageIn 0.3s ease; position: relative; z-index: 2; }
-    @keyframes messageIn { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    .rx-message-wrapper { display: flex; align-items: flex-end; gap: 8px; max-width: 85%; }
     .rx-message-wrapper.bot { align-self: flex-start; }
     .rx-message-wrapper.user { align-self: flex-end; flex-direction: row-reverse; }
-    
-    /* ===== AVATAR ===== */
     .rx-avatar {
-      width: 28px; height: 28px; border-radius: 50%; display: flex;
-      align-items: center; justify-content: center; color: white; font-size: 14px;
-      border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0; overflow: hidden;
-      background: rgba(0,0,0,0.3);
+      width: 32px; height: 32px; border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; color: white; font-size: 16px;
+      border: 2px solid rgba(255,255,255,0.3); flex-shrink: 0; overflow: hidden;
     }
     .rx-avatar.bot { ${images.botAvatar ? `background-image: url('${images.botAvatar}'); background-size: cover; background-position: center;` : ''} }
     .rx-avatar.user { ${images.userAvatar ? `background-image: url('${images.userAvatar}'); background-size: cover; background-position: center;` : ''} }
-    
-    /* ===== MESSAGE BUBBLE ===== */
     .rx-message {
-      padding: 8px 14px; border-radius: 16px; 
-      background: rgba(0, 0, 0, 0.4); 
-      border: 1px solid rgba(255,255,255,0.1); 
-      color: ${colors.textColor || 'white'};
-      font-size: 0.85rem; line-height: 1.5; white-space: pre-line; word-break: break-word;
-      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      padding: 10px 15px; border-radius: 18px; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2); color: ${colors.textColor || 'white'};
+      font-size: 0.9rem; line-height: 1.4; white-space: pre-line; word-break: break-word;
     }
-    .rx-message-wrapper.bot .rx-message { 
-      border-bottom-left-radius: 4px; 
-      background: rgba(0, 0, 0, 0.35);
-    }
-    .rx-message-wrapper.user .rx-message { 
-      border-bottom-right-radius: 4px; 
-      background: rgba(0, 0, 0, 0.45);
-    }
-    
-    /* ===== LINK BUTTON ===== */
     .rx-link-button {
-      display: inline-block; margin-top: 6px; padding: 6px 14px;
-      background: rgba(100, 255, 218, 0.15); border: 1px solid rgba(100, 255, 218, 0.3);
-      border-radius: 20px; color: #64ffda; text-decoration: none; font-size: 0.8rem;
-      transition: all 0.3s ease; cursor: pointer; text-align: center; font-weight: 600;
+      display: inline-block; margin-top: 8px; padding: 8px 15px;
+      background: rgba(100, 255, 218, 0.2); border: 1px solid #64ffda;
+      border-radius: 20px; color: #64ffda; text-decoration: none; font-size: 0.9rem;
     }
-    .rx-link-button:hover { background: rgba(100, 255, 218, 0.25); transform: scale(1.02); border-color: rgba(100, 255, 218, 0.5); }
-    .rx-link-button:active { transform: scale(0.95); }
-    
-    /* ===== INPUT AREA - COMPACT ===== */
+    .rx-link-button:hover { background: #64ffda; color: #000; }
     .rx-input-area {
-      display: flex; padding: 6px 10px; gap: 6px; 
-      background: rgba(0, 0, 0, 0.4); 
-      border-top: 1px solid rgba(255,255,255,0.08);
-      flex-shrink: 0; align-items: center; min-height: 44px;
+      display: flex; padding: 12px; gap: 8px; background: ${colors.headerBg || 'rgba(0,0,0,0.3)'};
+      border-top: 1px solid rgba(255,255,255,0.2);
     }
     .rx-input-area input {
-      flex: 1; padding: 8px 14px; background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; outline: none;
-      color: ${colors.textColor || 'white'}; font-size: 0.85rem;
-      min-height: 32px; height: 32px; transition: all 0.3s ease;
+      flex: 1; padding: 12px 18px; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2); border-radius: 25px; outline: none;
+      color: ${colors.textColor || 'white'}; font-size: 0.9rem;
     }
-    .rx-input-area input:focus { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); }
-    .rx-input-area input::placeholder { color: rgba(255,255,255,0.2); font-size: 0.8rem; }
-    
-    /* ===== SEND BUTTON ===== */
     .rx-input-area button {
-      width: 32px; height: 32px; min-width: 32px; min-height: 32px;
-      border-radius: 50%; border: 1px solid rgba(255,255,255,0.12);
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,0.05); transition: all 0.3s ease; padding: 0;
+      width: 45px; height: 45px; border-radius: 50%; border: none;
+      background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center;
     }
-    .rx-input-area button:hover { background: rgba(255,255,255,0.12); transform: scale(1.05); border-color: rgba(255,255,255,0.25); }
-    .rx-input-area button:active { transform: scale(0.9); }
-    .rx-send-icon { width: 18px; height: 18px; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.6; transition: all 0.3s ease; }
-    .rx-input-area button:hover .rx-send-icon { opacity: 1; transform: rotate(5deg); }
-    
-    /* ===== COPYRIGHT - COMPACT ===== */
+    .rx-send-icon { width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1); }
     .rx-copyright {
-      padding: 4px 8px; text-align: center; font-size: 0.6rem; 
-      color: rgba(255,255,255,0.3); background: rgba(0, 0, 0, 0.25);
-      border-top: 1px solid rgba(255,255,255,0.04); flex-shrink: 0;
-      letter-spacing: 0.3px;
+      padding: 6px; text-align: center; font-size: 0.7rem; color: rgba(255,255,255,0.5);
+      background: ${colors.headerBg || 'rgba(0,0,0,0.3)'}; border-top: 1px solid rgba(255,255,255,0.1);
     }
-    .rx-copyright a { color: #64ffda; text-decoration: none; }
-    .rx-copyright a:hover { color: #a8ffeb; text-decoration: underline; }
-    
-    /* ===== TYPING INDICATOR ===== */
-    .rx-typing-indicator { 
-      display: flex; gap: 4px; padding: 8px 14px; 
-      background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 16px; align-items: center;
-      backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-    }
-    .rx-typing-dot { 
-      width: 5px; height: 5px; background: rgba(255,255,255,0.3); 
-      border-radius: 50%; animation: typing 1.4s infinite; 
-    }
-    .rx-typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .rx-typing-dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typing { 0%,60%,100% { transform: translateY(0); opacity: 0.3; } 30% { transform: translateY(-5px); opacity: 0.8; } }
-
-    /* ======================================== */
-    /* ===== RESPONSIVE BREAKPOINTS ===== */
-    /* ======================================== */
-    @media screen and (max-width: 480px) {
-      .rx-chat-window { width: 95vw; max-width: 95vw; height: 90vh; max-height: 90vh; border-radius: 14px; }
-      .rx-chat-messages { padding: 8px 10px; gap: 5px; }
-      .rx-message-wrapper { max-width: 92%; }
-      .rx-message { font-size: 0.8rem; padding: 6px 12px; }
-      .rx-header-title { font-size: 12px; }
-      .rx-input-area { padding: 4px 8px; gap: 5px; min-height: 38px; }
-      .rx-input-area input { font-size: 0.8rem; padding: 6px 12px; min-height: 28px; height: 28px; }
-      .rx-input-area button { width: 28px; height: 28px; min-width: 28px; min-height: 28px; }
-      .rx-send-icon { width: 16px; height: 16px; }
-      .rx-avatar { width: 24px; height: 24px; font-size: 12px; }
-      .rx-header-close { font-size: 22px; width: 24px; height: 24px; }
-      .rx-copyright { font-size: 0.5rem; padding: 3px 6px; }
-    }
-
-    @media screen and (max-width: 360px) {
-      .rx-chat-window { width: 98vw; max-width: 98vw; height: 92vh; max-height: 92vh; border-radius: 10px; }
-      .rx-message { font-size: 0.75rem; padding: 5px 10px; }
-      .rx-avatar { width: 20px; height: 20px; font-size: 10px; }
-      .rx-header-icon { width: 22px; height: 22px; font-size: 11px; }
-      .rx-header-close { font-size: 20px; width: 22px; height: 22px; }
-      .rx-input-area { padding: 3px 6px; gap: 4px; min-height: 32px; }
-      .rx-input-area input { font-size: 0.75rem; padding: 4px 10px; min-height: 24px; height: 24px; }
-      .rx-input-area button { width: 24px; height: 24px; min-width: 24px; min-height: 24px; }
-      .rx-send-icon { width: 14px; height: 14px; }
-      .rx-copyright { font-size: 0.45rem; padding: 2px 4px; }
-    }
-
-    @media screen and (min-width: 481px) and (max-width: 768px) {
-      .rx-chat-window { width: 78vw; max-width: 400px; height: 78vh; max-height: 520px; }
-      .rx-input-area input { font-size: 0.85rem; min-height: 30px; height: 30px; }
-      .rx-input-area button { width: 30px; height: 30px; min-width: 30px; min-height: 30px; }
-    }
-
-    @media screen and (min-width: 769px) {
-      .rx-chat-window { width: 400px; max-width: 400px; height: 560px; max-height: 560px; }
-      .rx-input-area input { min-height: 34px; height: 34px; }
-      .rx-input-area button { width: 34px; height: 34px; min-width: 34px; min-height: 34px; }
-    }
-
-    @media screen and (max-height: 500px) and (orientation: landscape) {
-      .rx-chat-window { width: 65vw; max-width: 480px; height: 88vh; max-height: 380px; border-radius: 12px; }
-      .rx-chat-header { min-height: 28px; padding: 4px 10px; }
-      .rx-header-title { font-size: 11px; }
-      .rx-chat-messages { padding: 4px 8px; gap: 4px; }
-      .rx-message { font-size: 0.7rem; padding: 4px 8px; }
-      .rx-input-area { padding: 3px 6px; gap: 4px; min-height: 28px; }
-      .rx-input-area input { font-size: 0.7rem; padding: 3px 8px; min-height: 22px; height: 22px; }
-      .rx-input-area button { width: 22px; height: 22px; min-width: 22px; min-height: 22px; }
-      .rx-send-icon { width: 12px; height: 12px; }
-      .rx-avatar { width: 18px; height: 18px; font-size: 9px; }
-      .rx-copyright { font-size: 0.45rem; padding: 2px 4px; }
-      .rx-header-close { font-size: 18px; width: 20px; height: 20px; }
-    }
+    .rx-typing-indicator { display: flex; gap: 4px; padding: 12px 16px; background: rgba(255,255,255,0.1); border-radius: 18px; }
+    .rx-typing-dot { width: 6px; height: 6px; background: white; border-radius: 50%; animation: typing 1.4s infinite; }
+    @keyframes typing { 0%,60%,100% { transform: translateY(0); opacity: 0.5; } 30% { transform: translateY(-6px); opacity: 1; } }
     `;
   }
 
   function injectCSS() {
-    const existingStyle = document.getElementById('rx-chat-styles');
-    if (existingStyle) {
-      existingStyle.remove();
+    if (!document.getElementById('rx-chat-styles')) {
+      const style = document.createElement('style');
+      style.id = 'rx-chat-styles';
+      style.textContent = generateCSS();
+      document.head.appendChild(style);
     }
-    
-    const style = document.createElement('style');
-    style.id = 'rx-chat-styles';
-    style.textContent = generateCSS();
-    document.head.appendChild(style);
   }
 
   /**
@@ -880,6 +730,7 @@
     let linkUrl = null;
     let linkButtonText = null;
 
+    // AI बाट आएको [LINK:url|text] ट्यागलाई पार्स गर्ने
     if (sender === 'bot' && typeof text === 'string' && text.includes('[LINK:')) {
       const match = text.match(/\[LINK:(.*?)\|(.*?)\]/);
       if (match) {
@@ -916,6 +767,7 @@
     saveMessageHistory();
   }
 
+  // छुट्टै लिङ्क बटन देखाउनको लागि helper function
   function addMessageWithLink(text, sender, url, linkText) {
     const container = document.getElementById('rx-chat-messages');
     if (!container) return;
@@ -1163,6 +1015,7 @@
         addMessage(response, 'bot');
       }
     } else {
+      // यदि एआई मोड अन छ र कुञ्जी छ भने जेमिनी एआईले उत्तर दिनेछ, नत्र कमाण्ड मोड अनुसार काम गर्नेछ
       if (chatMode === 'ai' && config.gemini.apiKey) {
         showTypingIndicator();
         try {
@@ -1193,7 +1046,7 @@
 
   /**
    * ===============================
-   * DRAGGABLE - FIXED (No border escape, No long press)
+   * Draggable & Initialization
    * ===============================
    */
   function makeDraggable(element, handle) {
@@ -1203,121 +1056,57 @@
     let isTouchDevice = ('ontouchstart' in window);
 
     function getClientCoordinates(e) {
-      if (e.type && e.type.startsWith('touch')) {
+      if (e.type.startsWith('touch')) {
         const touch = e.touches[0] || e.changedTouches[0];
         return { clientX: touch.clientX, clientY: touch.clientY };
       }
       return { clientX: e.clientX, clientY: e.clientY };
     }
 
-    function getBoundaryLimits() {
-      const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
-      const elementWidth = element.offsetWidth;
-      const elementHeight = element.offsetHeight;
-      
-      return {
-        minX: 0,
-        maxX: viewportWidth - elementWidth,
-        minY: 0,
-        maxY: viewportHeight - elementHeight
-      };
-    }
-
     function startDrag(e) {
-      if (e.target.closest('#rx-close-btn') || 
-          e.target.closest('.rx-input-area') || 
-          e.target.closest('.rx-link-button') ||
-          e.target.closest('a')) {
-        return;
-      }
-      
+      if (e.target.closest('#rx-close-btn') || e.target.closest('.rx-input-area') || e.target.closest('.rx-link-button')) return;
       e.preventDefault();
-      
       const coords = getClientCoordinates(e);
       const rect = element.getBoundingClientRect();
-      
       startX = coords.clientX - rect.left;
       startY = coords.clientY - rect.top;
-      startLeft = rect.left;
-      startTop = rect.top;
-      
       isDragging = true;
       element.classList.add('dragging');
-      element.style.transition = 'none';
     }
 
     function onDrag(e) {
       if (!isDragging) return;
       e.preventDefault();
-      
       const coords = getClientCoordinates(e);
-      const limits = getBoundaryLimits();
-      
       let newLeft = coords.clientX - startX;
       let newTop = coords.clientY - startY;
-      
-      newLeft = Math.max(limits.minX, Math.min(limits.maxX, newLeft));
-      newTop = Math.max(limits.minY, Math.min(limits.maxY, newTop));
-      
       element.style.left = newLeft + 'px';
       element.style.top = newTop + 'px';
       element.style.right = 'auto';
       element.style.bottom = 'auto';
       element.style.transform = 'none';
-      
       currentX = newLeft;
       currentY = newTop;
     }
 
     function stopDrag(e) {
       if (!isDragging) return;
-      
       element.classList.remove('dragging');
-      element.style.transition = '';
-      
       if (currentX !== undefined && currentY !== undefined) {
         saveWindowPosition(currentX, currentY);
       }
-      
       isDragging = false;
     }
 
-    // Mouse Events
     handle.addEventListener('mousedown', startDrag);
     window.addEventListener('mousemove', onDrag);
     window.addEventListener('mouseup', stopDrag);
 
-    // Touch Events - NO LONG PRESS
     if (isTouchDevice) {
       handle.addEventListener('touchstart', startDrag, { passive: false });
       handle.addEventListener('touchmove', onDrag, { passive: false });
-      handle.addEventListener('touchend', stopDrag, { passive: false });
-      handle.addEventListener('touchcancel', stopDrag, { passive: false });
+      handle.addEventListener('touchend', stopDrag);
     }
-
-    // Window Resize - Keep in bounds
-    window.addEventListener('resize', function() {
-      const rect = element.getBoundingClientRect();
-      const limits = getBoundaryLimits();
-      
-      let newLeft = rect.left;
-      let newTop = rect.top;
-      
-      if (newLeft < limits.minX) newLeft = limits.minX;
-      if (newLeft > limits.maxX) newLeft = limits.maxX;
-      if (newTop < limits.minY) newTop = limits.minY;
-      if (newTop > limits.maxY) newTop = limits.maxY;
-      
-      if (newLeft !== rect.left || newTop !== rect.top) {
-        element.style.left = newLeft + 'px';
-        element.style.top = newTop + 'px';
-        element.style.right = 'auto';
-        element.style.bottom = 'auto';
-        element.style.transform = 'none';
-        saveWindowPosition(newLeft, newTop);
-      }
-    });
   }
 
   function setupTrigger() {
