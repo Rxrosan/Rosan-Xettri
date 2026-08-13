@@ -15,7 +15,7 @@ const config = {
   copyright: '<p>&copy; <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>',
   
   gemini: {
-    apiKey: null,
+    apiKey: '',
     currentModel: 'gemini-3-flash-preview',
     availableModels: [
       { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', free: true, description: 'Fast model' },
