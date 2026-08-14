@@ -1,5 +1,5 @@
 // ============================================================
-// 09-draggable.js - Dynamic Mouse Events (Fixed)
+// 09-draggable.js - Dynamic Mouse Events (SCROLL FIXED)
 // ============================================================
 
 function makeDraggable(element, handle) {
@@ -39,6 +39,7 @@ function makeDraggable(element, handle) {
     return { left: newRect.left, top: newRect.top, width: newRect.width, height: newRect.height };
   }
 
+  // ===== IGNORE SCROLLING =====
   function shouldIgnoreDrag(e) {
     const ignoreSelectors = [
       '#rx-close-btn',
@@ -50,7 +51,10 @@ function makeDraggable(element, handle) {
       'button',
       'a',
       '.rx-message',
-      '.rx-avatar'
+      '.rx-avatar',
+      '.rx-chat-messages',  // ← SCROLL AREA IGNORE
+      '.rx-message-wrapper',
+      '.rx-messages'
     ];
     
     for (const selector of ignoreSelectors) {
@@ -61,9 +65,28 @@ function makeDraggable(element, handle) {
     return false;
   }
 
-  // ======================================== */
-  // ===== ACTUAL DRAG HANDLER ===== */
-  // ======================================== */
+  // ===== CHECK IF SCROLLING =====
+  function isScrollingElement(target) {
+    const scrollableSelectors = [
+      '.rx-chat-messages',
+      '.rx-message-wrapper',
+      '.rx-messages'
+    ];
+    
+    for (const selector of scrollableSelectors) {
+      const el = target.closest(selector);
+      if (el) {
+        // Check if element has scrollable content
+        const hasScroll = el.scrollHeight > el.clientHeight;
+        if (hasScroll) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // ===== ACTUAL DRAG HANDLER =====
   function onDragMove(e) {
     e.preventDefault();
     
@@ -72,7 +95,6 @@ function makeDraggable(element, handle) {
     const deltaY = coords.clientY - startClientY;
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     
-    // ===== Check if user moved enough =====
     if (!dragStarted && distance > DRAG_THRESHOLD) {
       dragStarted = true;
       isDragging = true;
@@ -82,16 +104,13 @@ function makeDraggable(element, handle) {
       document.body.style.userSelect = 'none';
     }
     
-    // If not started dragging yet, ignore
     if (!dragStarted) {
       return;
     }
     
-    // ===== ACTUAL DRAG =====
     let newLeft = coords.clientX - startX;
     let newTop = coords.clientY - startY;
     
-    // Viewport bounds
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
     const elemWidth = element.offsetWidth;
@@ -111,11 +130,15 @@ function makeDraggable(element, handle) {
     currentY = newTop;
   }
 
-  // ======================================== */
-  // ===== START DRAG ===== */
-  // ======================================== */
+  // ===== START DRAG =====
   function startDrag(e) {
+    // Ignore if clicking on scrollable area
     if (shouldIgnoreDrag(e)) return;
+    
+    // Check if target is in scrollable area
+    if (isScrollingElement(e.target)) {
+      return;
+    }
     
     e.preventDefault();
     
@@ -130,13 +153,10 @@ function makeDraggable(element, handle) {
     dragStarted = false;
     isDragging = false;
     
-    // ===== MOUSE: Attach mousemove and mouseup =====
     if (!isTouchDevice) {
-      // Attach mousemove for drag
       window.addEventListener('mousemove', onDragMove);
       window.addEventListener('mouseup', stopDrag);
     } else {
-      // TOUCH: Long press detection
       if (pressTimer) {
         clearTimeout(pressTimer);
         pressTimer = null;
@@ -153,15 +173,11 @@ function makeDraggable(element, handle) {
     }
   }
 
-  // ======================================== */
-  // ===== STOP DRAG ===== */
-  // ======================================== */
+  // ===== STOP DRAG =====
   function stopDrag(e) {
-    // ===== Remove mouse listeners =====
     window.removeEventListener('mousemove', onDragMove);
     window.removeEventListener('mouseup', stopDrag);
     
-    // Reset cursor
     element.style.cursor = '';
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
@@ -171,7 +187,6 @@ function makeDraggable(element, handle) {
       pressTimer = null;
     }
     
-    // If drag never started, ignore
     if (!dragStarted) {
       element.classList.remove('dragging');
       isDragging = false;
@@ -189,10 +204,15 @@ function makeDraggable(element, handle) {
     dragStarted = false;
   }
 
-  // ======================================== */
-  // ===== TOUCH EVENTS ===== */
-  // ======================================== */
+  // ===== TOUCH EVENTS =====
   function onTouchMove(e) {
+    // Allow touch scroll on messages
+    const target = e.target.closest('.rx-chat-messages');
+    if (target) {
+      // Let browser handle scroll
+      return;
+    }
+    
     e.preventDefault();
     
     const coords = getClientCoordinates(e);
@@ -200,7 +220,6 @@ function makeDraggable(element, handle) {
     const deltaY = coords.clientY - startClientY;
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     
-    // Check if moved enough
     if (!dragStarted && distance > DRAG_THRESHOLD) {
       dragStarted = true;
       isDragging = true;
@@ -215,7 +234,6 @@ function makeDraggable(element, handle) {
       return;
     }
     
-    // Actual drag
     let newLeft = coords.clientX - startX;
     let newTop = coords.clientY - startY;
     
@@ -239,7 +257,6 @@ function makeDraggable(element, handle) {
   }
 
   function onTouchEnd(e) {
-    // Reset cursor
     element.style.cursor = '';
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
@@ -285,14 +302,9 @@ function makeDraggable(element, handle) {
     }
   }
 
-  // ======================================== */
-  // ===== ATTACH EVENT LISTENERS ===== */
-  // ======================================== */
-
-  // ===== MOUSE: Only mousedown =====
+  // ===== ATTACH EVENT LISTENERS =====
   element.addEventListener('mousedown', startDrag);
   
-  // ===== TOUCH EVENTS =====
   if (isTouchDevice) {
     element.addEventListener('touchstart', startDrag, { passive: false });
     element.addEventListener('touchmove', onTouchMove, { passive: false });
@@ -300,7 +312,6 @@ function makeDraggable(element, handle) {
     element.addEventListener('touchcancel', onTouchEnd);
   }
   
-  // ===== PREVENT TEXT SELECTION =====
   window.addEventListener('blur', cancelDrag);
   
   element.addEventListener('selectstart', function(e) {
@@ -309,7 +320,6 @@ function makeDraggable(element, handle) {
     }
   });
 
-  // ===== EXPOSE =====
   element.__dragState = {
     isDragging: () => isDragging,
     dragStarted: () => dragStarted

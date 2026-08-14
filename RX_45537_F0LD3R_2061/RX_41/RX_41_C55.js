@@ -1,6 +1,7 @@
 // ============================================================
 // 05-css.js - Liquid Theme with Background ONLY in Messages Area
 // Close Button - Only Icon (No Background, No Border, No Hover)
+// Send Button - Only Image (No Background, No Shape)
 // ============================================================
 
 function generateCSS() {
@@ -363,49 +364,66 @@ function generateCSS() {
     font-weight: 400;
   }
 
-  /* ===== SEND BUTTON - LIQUID ===== */
+  /* ======================================== */
+  /* ===== SEND BUTTON - ONLY IMAGE (NO SHAPE, NO BG, NO BORDER) ===== */
+  /* ======================================== */
   .rx-input-area button {
-    width: clamp(34px, 5vw, 42px);
-    height: clamp(34px, 5vw, 42px);
-    min-width: clamp(34px, 5vw, 42px);
-    min-height: clamp(34px, 5vw, 42px);
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    width: auto;
+    height: auto;
+    min-width: unset;
+    min-height: unset;
+    
+    /* ===== NO BACKGROUND, NO BORDER, NO SHAPE ===== */
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: all 0.3s ease;
+    transition: none;
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.05);
   }
   
+  /* ===== NO HOVER EFFECT ===== */
   .rx-input-area button:hover {
-    background: rgba(255, 255, 255, 0.12);
-    transform: scale(1.05);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: transparent;
+    border: none;
+    transform: none;
   }
   
   .rx-input-area button:active {
     transform: scale(0.9);
-    background: rgba(255, 255, 255, 0.15);
+    background: transparent;
+    border: none;
   }
 
   .rx-send-icon {
-    width: clamp(18px, 3vw, 24px);
-    height: clamp(18px, 3vw, 24px);
+    width: clamp(24px, 4vw, 32px);
+    height: clamp(24px, 4vw, 32px);
     object-fit: contain;
+    
+    /* ===== WHITE ICON ===== */
     filter: brightness(0) invert(1);
-    opacity: 0.6;
-    transition: all 0.3s ease;
+    opacity: 0.8;
+    transition: none;
+    display: block;
   }
   
+  /* ===== NO HOVER EFFECT ON ICON ===== */
   .rx-input-area button:hover .rx-send-icon {
-    opacity: 1;
-    transform: rotate(5deg);
+    opacity: 0.8;
+    transform: none;
+    filter: brightness(0) invert(1);
+  }
+  
+  .rx-input-area button:active .rx-send-icon {
+    transform: scale(0.9);
+    opacity: 0.8;
   }
 
   /* ======================================== */
@@ -478,8 +496,8 @@ function generateCSS() {
     .rx-header-title { font-size: 12px; }
     .rx-input-area { padding: 6px 8px; gap: 6px; min-height: 40px; }
     .rx-input-area input { font-size: 14px; padding: 8px 12px; min-height: 32px; height: 32px; }
-    .rx-input-area button { width: 32px; height: 32px; min-width: 32px; min-height: 32px; }
-    .rx-send-icon { width: 18px; height: 18px; }
+    .rx-input-area button { padding: 0; }
+    .rx-send-icon { width: 28px; height: 28px; }
     .rx-avatar { width: 22px; height: 22px; font-size: 11px; }
     .rx-header-close { font-size: 28px; }
   }
@@ -498,8 +516,8 @@ function generateCSS() {
     .rx-header-close { font-size: 24px; width: 24px; height: 24px; }
     .rx-input-area { padding: 4px 6px; gap: 4px; min-height: 34px; }
     .rx-input-area input { font-size: 13px; padding: 6px 10px; min-height: 28px; height: 28px; }
-    .rx-input-area button { width: 28px; height: 28px; min-width: 28px; min-height: 28px; }
-    .rx-send-icon { width: 16px; height: 16px; }
+    .rx-input-area button { padding: 0; }
+    .rx-send-icon { width: 24px; height: 24px; }
     .rx-copyright { font-size: 8px; }
   }
 
@@ -507,13 +525,15 @@ function generateCSS() {
     .rx-chat-window { width: 78vw; max-width: 400px; height: 78vh; max-height: 520px; }
     .rx-message { font-size: 15px; }
     .rx-input-area input { font-size: 15px; min-height: 36px; height: 36px; }
-    .rx-input-area button { width: 36px; height: 36px; min-width: 36px; min-height: 36px; }
+    .rx-input-area button { padding: 0; }
+    .rx-send-icon { width: 30px; height: 30px; }
   }
 
   @media screen and (min-width: 769px) {
     .rx-chat-window { width: 400px; max-width: 400px; height: 560px; max-height: 560px; }
     .rx-input-area input { min-height: 38px; height: 38px; }
-    .rx-input-area button { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
+    .rx-input-area button { padding: 0; }
+    .rx-send-icon { width: 32px; height: 32px; }
   }
 
   @media screen and (max-height: 500px) and (orientation: landscape) {
@@ -524,8 +544,8 @@ function generateCSS() {
     .rx-message { font-size: 12px; padding: 4px 8px; }
     .rx-input-area { padding: 4px 6px; gap: 4px; min-height: 30px; }
     .rx-input-area input { font-size: 12px; padding: 4px 8px; min-height: 24px; height: 24px; }
-    .rx-input-area button { width: 24px; height: 24px; min-width: 24px; min-height: 24px; }
-    .rx-send-icon { width: 14px; height: 14px; }
+    .rx-input-area button { padding: 0; }
+    .rx-send-icon { width: 20px; height: 20px; }
     .rx-avatar { width: 18px; height: 18px; font-size: 9px; }
     .rx-copyright { font-size: 7px; padding: 2px; }
     .rx-header-close { font-size: 20px; width: 22px; height: 22px; }
