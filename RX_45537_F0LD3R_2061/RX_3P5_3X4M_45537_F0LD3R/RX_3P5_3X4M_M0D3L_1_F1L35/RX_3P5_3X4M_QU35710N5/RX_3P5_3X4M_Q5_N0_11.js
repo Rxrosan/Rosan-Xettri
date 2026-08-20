@@ -30,7 +30,7 @@ const questionsForNumber11 = [
         },
         questionBody: {
             text: "다음은 경상남도 지역에 살고 있는 외국인 근로자들의 일하는 시간을 조사한 것입니다. 표에 대한 설명으로 맞는 것을 고르십시오.",
-            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-95.jpg",
+            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-40.jpg",
             audio: null
         },
         options: [

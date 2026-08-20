@@ -14,10 +14,10 @@ const questionsForNumber35 = [
             audio: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_4UD10/AUDIO-15.mp3"
         },
         options: [
-            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-37.jpg", audio: null },
-            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-38.jpg", audio: null },
-            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-39.jpg", audio: null },
-            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-36.jpg", audio: null }
+            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-15-d.jpg", audio: null },
+            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-15-c.jpg", audio: null },
+            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-15-b.jpg", audio: null },
+            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-15-a.jpg", audio: null }
         ],
         answer: 4
     },
@@ -34,10 +34,10 @@ const questionsForNumber35 = [
             audio: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_4UD10/AUDIO-103.mp3"
         },
         options: [
-            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-124.jpg", audio: null },
-            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-125.jpg", audio: null },
-            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-126.jpg", audio: null },
-            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-127.jpg", audio: null }
+            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-49-a.jpg", audio: null },
+            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-49-b.jpg", audio: null },
+            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-49-c.jpg", audio: null },
+            { text: "", image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-49-d.jpg", audio: null }
         ],
         answer: 2
     },

@@ -10,7 +10,7 @@ const questionsForNumber37 = [
         },
         questionBody: {
             text: "미용실은 어디에 있습니까 ?",
-            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-44.jpg",
+            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-17.jpg",
             audio: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_4UD10/AUDIO-17.mp3"
         },
         options: [
@@ -30,7 +30,7 @@ const questionsForNumber37 = [
         },
         questionBody: {
             text: null,
-            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-132.jpg",
+            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-51.jpg",
             audio: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_4UD10/AUDIO-105.mp3"
         },
         options: [

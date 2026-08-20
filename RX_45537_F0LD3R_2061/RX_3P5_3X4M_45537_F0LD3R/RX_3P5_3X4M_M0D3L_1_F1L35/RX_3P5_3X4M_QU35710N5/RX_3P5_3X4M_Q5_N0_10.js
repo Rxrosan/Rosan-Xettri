@@ -30,7 +30,7 @@ const questionsForNumber10 = [
         },
         questionBody: {
             text: " 한국의 수산물 수입 현황에 대한 설명으로 맞는 것은 무엇입니까?",
-            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-94.jpg",
+            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-39.jpg",
             audio: null
         },
         options: [

@@ -30,7 +30,7 @@ const questionsForNumber7 = [
         },
         questionBody: {
             text: "이 학원의 소장은 누구입니까?",
-            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-93.jpg",
+            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-32.jpg",
             audio: null
         },
         options: [

@@ -90,7 +90,7 @@ const questionsForNumber2 = [
         },
         questionBody: {
             text: null,
-            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-90.jpg",
+            image: "RX_45537_F0LD3R_2061/RX_3P5_3X4M_45537_F0LD3R/RX_3P5_3X4M_1M463/IMG-29.jpg",
             audio: null
         },
         options: [
