@@ -1,14 +1,13 @@
-// SMART-BTN-ADVANCE-DESIGN-L.js
-// RX-SMART-BUTTON — Rewritten, responsive, fully functional
-// ENHANCED: Custom center logo per theme (blue/silver) with automatic fallback
+
+//==========================================================// 
+//                       RX_SMART_BUTTON                    //
+// =========================================================//
 (function () {
   'use strict';
 
-  /**
-   * ===============================
-   * Configuration / Themes
-   * ===============================
-   */
+  // ============================================================
+  // THEMES (blue / silver) with custom center logo
+  // ============================================================
   const themes = {
     blue: {
       name: 'blue',
@@ -16,9 +15,7 @@
       glow: '0 0 15px rgba(173,216,230,0.6)',
       border: '1px solid rgba(173,216,230,0.4)',
       iconHighlight: 'rgba(173,216,230,0.7)',
-      // Custom center logo URL 
       centerLogoUrl: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-1.gif',
-      // Fallback inline SVG or default style
       fallbackLogo: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-1.gif'
     },
     silver: {
@@ -27,39 +24,40 @@
       glow: '0 0 15px rgba(220,220,220,0.6)',
       border: '1px solid rgba(220,220,220,0.4)',
       iconHighlight: 'rgba(220,220,220,0.7)',
-      // Custom center logo URL for silver theme
       centerLogoUrl: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-1.gif',
-      // Fallback inline SVG or default style
       fallbackLogo: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-1.gif'
     }
   };
 
   let themeKeys = Object.keys(themes);
   let currentThemeIndex = 0;
-
-  // Hide timer state
   let hideTimer = null;
   let hideUntil = null;
-
-  // Store current center img element reference
   let currentCenterImg = null;
 
-  /**
-   * ===============================
-   * CSS Injection (responsive & liquid glass)
-   * ===============================
-   */
+  // ============================================================
+  // CSS (includes bounce keyframes + drag-prevention)
+  // ============================================================
   const css = `
-  :root{
-    --rx-circle-size:2.2cm;
-    --rx-menu-item-size:1.6cm;
-    --rx-center-size:0.9cm;
-    --rx-menu-distance:4.2cm;
-    --rx-glass-blur:4px;
-    --rx-glass-border:1px solid rgba(255,255,255,0.15);
+  :root {
+    --rx-circle-size: 2.2cm;
+    --rx-menu-item-size: 1.6cm;
+    --rx-center-size: 0.9cm;
+    --rx-menu-distance: 4.2cm;
+    --rx-glass-blur: 4px;
+    --rx-glass-border: 1px solid rgba(255,255,255,0.15);
     --rx-glass-highlight: 0 0 15px rgba(173,216,230,0.6);
     --rx-center-gradient: ${themes.blue.centerGradient};
     --rx-icon-highlight: ${themes.blue.iconHighlight};
+  }
+
+  /* ----- prevent text selection while dragging ----- */
+  .RX-SMART-BUTTON-container,
+  .RX-SMART-BUTTON-circle,
+  .RX-SMART-BUTTON-container * {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -webkit-touch-callout: none !important;
   }
 
   .RX-SMART-BUTTON-container {
@@ -78,25 +76,25 @@
     height: var(--rx-circle-size);
     border-radius: 50%;
     position: relative;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     transition: transform 0.18s ease, box-shadow 0.18s ease;
     background: radial-gradient(circle at 65% 35%, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 30%, rgba(255,255,255,0.1) 70%);
     box-shadow: var(--rx-glass-highlight), inset 0 0 14px rgba(255,255,255,0.06);
     border: var(--rx-glass-border);
     backdrop-filter: blur(var(--rx-glass-blur));
     -webkit-backdrop-filter: blur(var(--rx-glass-blur));
+    touch-action: none;
   }
-
   .RX-SMART-BUTTON-circle:active { transform: scale(0.98); }
 
-  /* Center point now supports image logo */
+  /* ----- center point with logo image ----- */
   .RX-SMART-BUTTON-center-point {
     width: var(--rx-center-size);
     height: var(--rx-center-size);
-    border-radius:50%;
+    border-radius: 50%;
     background: var(--rx-center-gradient);
     box-shadow: inset 0 0 10px rgba(255,255,255,0.45);
     border: var(--rx-glass-border);
@@ -106,8 +104,8 @@
     justify-content: center;
     overflow: hidden;
     position: relative;
+    touch-action: none;
   }
-
   .RX-center-logo-img {
     width: 70%;
     height: 70%;
@@ -122,39 +120,47 @@
     transition: opacity 0.2s ease;
   }
 
+  /* ----- menu items with BOUNCE animation (from bounce.html) ----- */
   .RX-SMART-BUTTON-menu-item {
     position: absolute;
     width: var(--rx-menu-item-size);
     height: var(--rx-menu-item-size);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
     background: rgba(255,255,255,0.12);
     border: var(--rx-glass-border);
     backdrop-filter: blur(3px);
     -webkit-backdrop-filter: blur(3px);
-    opacity:0;
-    transform: scale(0) rotate(0deg);
-    transition: transform 0.55s cubic-bezier(0.17,0.67,0.32,1.3), opacity 0.3s ease;
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+    transition: opacity 0.25s ease, transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
     pointer-events: none;
     box-shadow: 0 0 10px rgba(255,255,255,0.12), inset 0 0 8px rgba(255,255,255,0.06);
+    touch-action: none;
   }
-
   .RX-SMART-BUTTON-menu-item img {
     width: 56%;
     height: 56%;
-    object-fit:contain;
+    object-fit: contain;
     transition: transform 0.16s ease, filter 0.16s ease;
+    pointer-events: none;
   }
+  .RX-SMART-BUTTON-menu-item:hover {
+    background: rgba(255,255,255,0.22);
+    box-shadow: 0 0 18px var(--rx-glass-highlight), inset 0 0 12px rgba(255,255,255,0.12);
+  }
+  .RX-SMART-BUTTON-menu-item:hover img { transform: scale(1.08); filter: brightness(1.05); }
 
+  /* ----- EXPANDED state: items fly in with BOUNCE (position + scale) ----- */
   .RX-SMART-BUTTON-circle.expanded .RX-SMART-BUTTON-menu-item {
-    opacity:1;
-    transform: scale(1);
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
     pointer-events: auto;
   }
 
-  /* positions for up to 24 items */
+  /* positions – up to 24 items (bounce positions) */
   .RX-SMART-BUTTON-circle.expanded .RX-item-1  { transform: rotate(15deg) translateX(var(--rx-menu-distance)) rotate(-15deg) scale(1); }
   .RX-SMART-BUTTON-circle.expanded .RX-item-2  { transform: rotate(45deg) translateX(var(--rx-menu-distance)) rotate(-45deg) scale(1); }
   .RX-SMART-BUTTON-circle.expanded .RX-item-3  { transform: rotate(75deg) translateX(var(--rx-menu-distance)) rotate(-75deg) scale(1); }
@@ -180,13 +186,7 @@
   .RX-SMART-BUTTON-circle.expanded .RX-item-23 { transform: rotate(330deg) translateX(var(--rx-menu-distance)) rotate(-330deg) scale(1); }
   .RX-SMART-BUTTON-circle.expanded .RX-item-24 { transform: rotate(360deg) translateX(var(--rx-menu-distance)) rotate(-360deg) scale(1); }
 
-  .RX-SMART-BUTTON-menu-item:hover {
-    background: rgba(255,255,255,0.22);
-    box-shadow: 0 0 18px var(--rx-glass-highlight), inset 0 0 12px rgba(255,255,255,0.12);
-  }
-  .RX-SMART-BUTTON-menu-item:hover img { transform: scale(1.08); filter: brightness(1.05); }
-
-  /* Popup overlay and popup */
+  /* ----- popup overlay (bounce on open) ----- */
   .RX-popup-overlay {
     position: fixed;
     inset: 0;
@@ -194,56 +194,68 @@
     height: 100%;
     z-index: 100001;
     background: rgba(0,0,0,0.45);
-    display:none;
-    justify-content:center;
-    align-items:center;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
   }
-
-  .RX-popup-overlay.show { display:flex; }
-
+  .RX-popup-overlay.show { display: flex; }
   .RX-hide-settings-popup {
     min-width: 280px;
     max-width: 92%;
-    padding: 18px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.12);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    padding: 22px 20px 20px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: var(--rx-glass-border);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.45);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.55);
     color: white;
     z-index: 100002;
+    animation: popupBounceIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-
+  @keyframes popupBounceIn {
+    0% { opacity: 0; transform: scale(0.7) translateY(20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
   .RX-hide-settings-popup h3 {
-    margin:0 0 12px 0;
-    font-size:18px;
-    text-align:center;
+    margin: 0 0 14px 0;
+    font-size: 18px;
+    text-align: center;
+    font-weight: 500;
+    letter-spacing: 0.3px;
   }
-  .RX-time-inputs { display:flex; gap:10px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
-  .RX-time-input { display:flex; flex-direction:column; align-items:center; min-width:60px; }
-  .RX-time-input label { font-size:12px; margin-bottom:6px; color:#fff; opacity:0.95; }
+  .RX-time-inputs { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+  .RX-time-input { display: flex; flex-direction: column; align-items: center; min-width: 60px; }
+  .RX-time-input label { font-size: 12px; margin-bottom: 6px; color: #fff; opacity: 0.9; }
   .RX-time-input input {
-    width:68px; padding:8px; border-radius:8px; border:var(--rx-glass-border);
-    background: rgba(255,255,255,0.07); color:white; text-align:center;
+    width: 68px; padding: 8px; border-radius: 8px; border: var(--rx-glass-border);
+    background: rgba(255,255,255,0.08); color: white; text-align: center;
+    outline: none;
   }
-  .RX-popup-buttons { display:flex; gap:10px; justify-content:center; margin-top:6px; }
+  .RX-time-input input:focus { border-color: rgba(173,216,230,0.6); }
+  .RX-popup-buttons { display: flex; gap: 12px; justify-content: center; margin-top: 6px; }
   .RX-popup-btn {
-    padding:8px 12px; border-radius:8px; border:var(--rx-glass-border);
-    background: rgba(255,255,255,0.12); color:white; cursor:pointer;
+    padding: 8px 16px; border-radius: 8px; border: var(--rx-glass-border);
+    background: rgba(255,255,255,0.10); color: white; cursor: pointer;
+    transition: 0.15s ease;
+    font-size: 14px;
   }
-  .RX-popup-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0,0,0,0.35); }
+  .RX-popup-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.35); background: rgba(255,255,255,0.18); }
 
-  /* Small screens */
+  /* responsive */
   @media (max-width: 768px) {
     :root { --rx-circle-size:2cm; --rx-menu-item-size:1.4cm; --rx-center-size:0.8cm; --rx-menu-distance:3.8cm; --rx-glass-blur:3px; }
-    .RX-popup-btn { padding:7px 10px; }
+    .RX-popup-btn { padding:6px 12px; }
   }
   @media (max-width: 480px) {
     :root { --rx-circle-size:1.8cm; --rx-menu-item-size:1.2cm; --rx-center-size:0.7cm; --rx-menu-distance:3.2cm; }
   }
   `;
 
+  // ============================================================
+  // INJECT CSS
+  // ============================================================
   function injectCSS() {
     const style = document.createElement('style');
     style.id = 'rx-smart-button-styles';
@@ -251,11 +263,9 @@
     document.head.appendChild(style);
   }
 
-  /**
-   * ===============================
-   * HTML Injection with all menu items
-   * ===============================
-   */
+  // ============================================================
+  // HTML (with 24 menu items – 12 blue + 12 silver)
+  // ============================================================
   const injectedHTML = `
   <div class="RX-SMART-BUTTON-container" aria-hidden="false">
     <div class="RX-SMART-BUTTON-circle" role="button" aria-label="Smart button">
@@ -263,7 +273,7 @@
         <img class="RX-center-logo-img" id="RX-center-logo-img" alt="center logo" src="">
       </div>
 
-      <!-- Menu items Blue Theme (1-12) -->
+      <!-- Blue items (1-12) -->
       <div class="RX-SMART-BUTTON-menu-item RX-item-1 blue-item" data-link="Contact.html"><img src="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_FUNC710N_1C0N/contact.png" alt="contact"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-2 blue-item" data-link="User-profile.html"><img src="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_FUNC710N_1C0N/user.png" alt="user"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-3 blue-item" data-link="#"><img src="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-6.gif" alt="logo"></div>
@@ -277,7 +287,7 @@
       <div class="RX-SMART-BUTTON-menu-item RX-item-11 blue-item" data-link="About.html"><img src="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_FUNC710N_1C0N/about.png" alt="about"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-12 blue-item" data-link="Service.html"><img src="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_FUNC710N_1C0N/service.png" alt="service"></div>
 
-      <!-- Menu items Silver Theme (13-24) - Initially hidden -->
+      <!-- Silver items (13-24) hidden by default -->
       <div class="RX-SMART-BUTTON-menu-item RX-item-13 silver-item" data-link="https://rosankc.com.np" style="display: none;"><img src="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_FUNC710N_1C0N/BOT-PROFILE.png" alt="item13"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-14 silver-item" data-link="#" style="display: none;"><img src="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_FUNC710N_1C0N/user.png" alt="item14"></div>
       <div class="RX-SMART-BUTTON-menu-item RX-item-15 silver-item" data-link="#" style="display: none;"><img src="RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_FUNC710N_1C0N/user.png" alt="item15"></div>
@@ -326,55 +336,34 @@
     }
   }
 
-  /**
-   * ===============================
-   * CUSTOM CENTER LOGO HANDLER (BLUE / SILVER) with auto fallback
-   * ===============================
-   */
+  // ============================================================
+  // CENTER LOGO
+  // ============================================================
   function setCenterLogo(themeName) {
     const theme = themes[themeName];
     if (!theme) return;
-    
     const centerImg = document.getElementById('RX-center-logo-img');
     if (!centerImg) return;
-    
     const logoUrl = theme.centerLogoUrl;
-    
-    // Function to apply fallback (SVG or text-based)
     const applyFallback = () => {
       centerImg.src = theme.fallbackLogo;
       centerImg.style.opacity = '1';
-      // Optional: add a small inline style to ensure visibility
-      centerImg.style.background = 'transparent';
     };
-    
     if (logoUrl && logoUrl.trim() !== '') {
-      // Set src and handle error event for fallback
       centerImg.src = logoUrl;
-      centerImg.onload = () => {
-        centerImg.style.opacity = '1';
-        // remove error handler to avoid double fallback
-        centerImg.onerror = null;
-      };
-      centerImg.onerror = () => {
-        console.warn(`[RX Smart Button] Center logo not found: ${logoUrl}, using fallback for ${themeName} theme.`);
-        applyFallback();
-      };
-      // If image loads successfully, great; if already cached, onload triggers.
+      centerImg.onload = () => { centerImg.style.opacity = '1'; centerImg.onerror = null; };
+      centerImg.onerror = () => { console.warn('[RX] logo fallback'); applyFallback(); };
     } else {
       applyFallback();
     }
   }
 
-  /**
-   * ===============================
-   * Toggle menu items based on theme
-   * ===============================
-   */
+  // ============================================================
+  // TOGGLE MENU ITEMS (blue / silver)
+  // ============================================================
   function toggleMenuItems(themeName) {
     const blueItems = document.querySelectorAll('.blue-item');
     const silverItems = document.querySelectorAll('.silver-item');
-    
     if (themeName === 'blue') {
       blueItems.forEach(item => item.style.display = 'flex');
       silverItems.forEach(item => item.style.display = 'none');
@@ -384,13 +373,9 @@
     }
   }
 
-  /**
-   * ===============================
-   * Theme functions
-   * - applyTheme(themeName) - applies and saves, updates center logo
-   * - cycleTheme() - cycles to next theme
-   * ===============================
-   */
+  // ============================================================
+  // THEME
+  // ============================================================
   function applyTheme(themeName) {
     const theme = themes[themeName];
     if (!theme) return;
@@ -398,13 +383,8 @@
     document.documentElement.style.setProperty('--rx-glass-border', theme.border);
     document.documentElement.style.setProperty('--rx-center-gradient', theme.centerGradient);
     document.documentElement.style.setProperty('--rx-icon-highlight', theme.iconHighlight);
-
-    // Toggle menu items based on theme
     toggleMenuItems(themeName);
-    
-    // Update center logo with custom image or fallback
     setCenterLogo(themeName);
-
     localStorage.setItem('RX-SMART-BUTTON-theme', themeName);
     currentThemeIndex = themeKeys.indexOf(themeName);
     if (currentThemeIndex === -1) currentThemeIndex = 0;
@@ -412,15 +392,12 @@
 
   function cycleTheme() {
     currentThemeIndex = (currentThemeIndex + 1) % themeKeys.length;
-    const newTheme = themeKeys[currentThemeIndex];
-    applyTheme(newTheme);
+    applyTheme(themeKeys[currentThemeIndex]);
   }
 
-  /**
-   * ===============================
-   * State persistence (position, expanded, theme, hide-until)
-   * ===============================
-   */
+  // ============================================================
+  // STATE PERSISTENCE
+  // ============================================================
   function saveState() {
     const container = document.querySelector('.RX-SMART-BUTTON-container');
     const circle = document.querySelector('.RX-SMART-BUTTON-circle');
@@ -435,15 +412,12 @@
   }
 
   function loadStateAndApply() {
-    // Theme
     const savedTheme = localStorage.getItem('RX-SMART-BUTTON-theme');
     if (savedTheme && themes[savedTheme]) {
       applyTheme(savedTheme);
     } else {
       applyTheme(themeKeys[currentThemeIndex]);
     }
-
-    // Hide timer
     const hideItem = localStorage.getItem('RX-SMART-BUTTON-hide-until');
     if (hideItem) {
       const timeVal = parseInt(hideItem, 10);
@@ -454,8 +428,6 @@
         localStorage.removeItem('RX-SMART-BUTTON-hide-until');
       }
     }
-
-    // Position & expanded
     const savedState = localStorage.getItem('RX-SMART-BUTTON-state');
     if (savedState) {
       try {
@@ -472,17 +444,13 @@
         if (circle && parsed.expanded) {
           setTimeout(() => circle.classList.add('expanded'), 80);
         }
-      } catch (err) {
-        console.error('Failed to parse RX saved state:', err);
-      }
+      } catch (err) { console.error('RX state parse error:', err); }
     }
   }
 
-  /**
-   * ===============================
-   * Show/Hide Smart Button and Timer
-   * ===============================
-   */
+  // ============================================================
+  // HIDE / SHOW + TIMER
+  // ============================================================
   function hideSmartButton() {
     const container = document.querySelector('.RX-SMART-BUTTON-container');
     const circle = document.querySelector('.RX-SMART-BUTTON-circle');
@@ -497,15 +465,10 @@
   }
 
   function startHideTimer() {
-    if (hideTimer) {
-      clearTimeout(hideTimer);
-      hideTimer = null;
-    }
-
+    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
     if (!hideUntil) return;
     const now = Date.now();
     const left = hideUntil - now;
-
     if (left > 0) {
       hideSmartButton();
       hideTimer = setTimeout(() => {
@@ -521,11 +484,9 @@
     }
   }
 
-  /**
-   * ===============================
-   * Popup controls (show/hide)
-   * ===============================
-   */
+  // ============================================================
+  // POPUP
+  // ============================================================
   function showHidePopup() {
     const overlay = document.getElementById('RX-popup-overlay');
     if (!overlay) return;
@@ -542,46 +503,34 @@
     document.body.style.overflow = '';
   }
 
-  /**
-   * ===============================
-   * Interaction setup (click, long-press, drag, menu items)
-   * ===============================
-   */
+  // ============================================================
+  // INTERACTIONS (drag, click, long-press, menu clicks)
+  // ============================================================
   function setupInteractions() {
     const circle = document.querySelector('.RX-SMART-BUTTON-circle');
     const container = document.querySelector('.RX-SMART-BUTTON-container');
-
     if (!circle || !container) return;
 
     let isDragging = false;
     let wasDragging = false;
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let offsetX = 0;
-    let offsetY = 0;
-
+    let dragStartX = 0, dragStartY = 0;
+    let offsetX = 0, offsetY = 0;
     let longPressTimer = null;
     const LONG_PRESS_MS = 3000;
 
     function clearLongPressTimer() {
-      if (longPressTimer) {
-        clearTimeout(longPressTimer);
-        longPressTimer = null;
-      }
+      if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
     }
 
+    // ---- CLICK: toggle menu (with bounce) ----
     circle.addEventListener('click', function (e) {
-      if (wasDragging) {
-        wasDragging = false;
-        return;
-      }
-      if (e.target.classList.contains('RX-SMART-BUTTON-menu-item') || e.target.closest('.RX-SMART-BUTTON-menu-item')) {
-        return;
-      }
+      if (wasDragging) { wasDragging = false; return; }
+      if (e.target.closest('.RX-SMART-BUTTON-menu-item')) return;
       this.classList.toggle('expanded');
       saveState();
     });
 
+    // ---- DOUBLE-CLICK center: cycle theme ----
     const centerPoint = circle.querySelector('.RX-SMART-BUTTON-center-point');
     if (centerPoint) {
       centerPoint.addEventListener('dblclick', (e) => {
@@ -590,6 +539,7 @@
       });
     }
 
+    // ---- LONG PRESS: show hide popup ----
     function startLongPress() {
       clearLongPressTimer();
       longPressTimer = setTimeout(() => {
@@ -598,6 +548,7 @@
       }, LONG_PRESS_MS);
     }
 
+    // ---- MOUSE DRAG ----
     circle.addEventListener('mousedown', function (e) {
       dragStartX = e.clientX;
       dragStartY = e.clientY;
@@ -632,9 +583,7 @@
         clearLongPressTimer();
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
-        if (wasDragging) {
-          setTimeout(() => { wasDragging = false; }, 120);
-        }
+        if (wasDragging) { setTimeout(() => { wasDragging = false; }, 120); }
         saveState();
       }
 
@@ -642,6 +591,7 @@
       window.addEventListener('mouseup', onMouseUp);
     });
 
+    // ---- TOUCH DRAG ----
     circle.addEventListener('touchstart', function (e) {
       if (!e.touches || e.touches.length === 0) return;
       const touch = e.touches[0];
@@ -680,9 +630,7 @@
         clearLongPressTimer();
         window.removeEventListener('touchmove', onTouchMove);
         window.removeEventListener('touchend', onTouchEnd);
-        if (wasDragging) {
-          setTimeout(() => { wasDragging = false; }, 120);
-        }
+        if (wasDragging) { setTimeout(() => { wasDragging = false; }, 120); }
         saveState();
       }
 
@@ -690,6 +638,7 @@
       window.addEventListener('touchend', onTouchEnd);
     }, { passive: false });
 
+    // ---- MENU ITEM CLICK ----
     document.querySelectorAll('.RX-SMART-BUTTON-menu-item').forEach((item) => {
       item.addEventListener('click', function (e) {
         e.stopPropagation();
@@ -703,6 +652,7 @@
       });
     });
 
+    // ---- KEYBOARD ----
     circle.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -712,28 +662,22 @@
     });
   }
 
-  /**
-   * ===============================
-   * Popup button wiring
-   * ===============================
-   */
+  // ============================================================
+  // POPUP CONTROLS
+  // ============================================================
   function setupPopupControls() {
     const saveBtn = document.getElementById('RX-save-hide');
     const cancelBtn = document.getElementById('RX-cancel-hide');
     const overlay = document.getElementById('RX-popup-overlay');
-
     if (!saveBtn || !cancelBtn || !overlay) return;
 
-    overlay.addEventListener('click', (e) => {
-      e.stopPropagation();
-    });
+    overlay.addEventListener('click', (e) => { e.stopPropagation(); });
 
     saveBtn.addEventListener('click', () => {
       const hours = parseInt(document.getElementById('RX-hide-hours').value || '0', 10) || 0;
       const minutes = parseInt(document.getElementById('RX-hide-minutes').value || '0', 10) || 0;
       const seconds = parseInt(document.getElementById('RX-hide-seconds').value || '0', 10) || 0;
       const ms = (hours * 3600 + minutes * 60 + seconds) * 1000;
-
       if (ms > 0) {
         hideUntil = Date.now() + ms;
         localStorage.setItem('RX-SMART-BUTTON-hide-until', hideUntil.toString());
@@ -742,26 +686,22 @@
       closeHidePopup();
     });
 
-    cancelBtn.addEventListener('click', () => {
-      closeHidePopup();
-    });
+    cancelBtn.addEventListener('click', closeHidePopup);
 
     window.addEventListener('keydown', (e) => {
-      const overlayVisible = overlay.classList.contains('show');
-      if (overlayVisible && e.key === 'Escape') {
+      if (overlay.classList.contains('show') && e.key === 'Escape') {
         e.preventDefault();
+        closeHidePopup();
       }
     });
   }
 
-  /**
-   * ===============================
-   * Initialization
-   * ===============================
-   */
+  // ============================================================
+  // INIT
+  // ============================================================
   function init() {
-    if (window.__RX_SMART_BUTTON_INITIALIZED__) return;
-    window.__RX_SMART_BUTTON_INITIALIZED__ = true;
+    if (window.__RX_SMART_BUTTON_BOUNCE_INIT__) return;
+    window.__RX_SMART_BUTTON_BOUNCE_INIT__ = true;
 
     injectCSS();
     injectHTML();
