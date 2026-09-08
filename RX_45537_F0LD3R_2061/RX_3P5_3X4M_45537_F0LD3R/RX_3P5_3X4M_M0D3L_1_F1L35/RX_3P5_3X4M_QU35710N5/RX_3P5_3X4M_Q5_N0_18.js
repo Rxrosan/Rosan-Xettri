@@ -41,6 +41,26 @@ const questionsForNumber18 = [
         ],
         answer: 1
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>18. 다음 글을 읽고 무엇에 대한 글인지 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "한국에서는 설날이 되면 가족들이 함께 모입니다. 그리고 떠국을 먹고 서로 새해 인사를 합니다. 아이들은 어른들에게 세배를 하고 세뱃돈을 받기도 합니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 한국의 명절 문화 ", image: null, audio: null },
+            { text: " 한국의 음식 종류 ", image: null, audio: null },
+            { text: " 한국의 계절 활동 ", image: null, audio: null },
+            { text: " 한국의 명절 종류 ", image: null, audio: null }
+        ],
+        answer: 1
+    },
 ];
 
 // Register these questions with the manager

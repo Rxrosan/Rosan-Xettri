@@ -41,6 +41,26 @@ const questionsForNumber13 = [
         ],
         answer: 1
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>13. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "우리 공장은 2 교대 근무제를 시행하고 있으며, 5 일마다 주간 근무와 _____________ 근무를 교대합니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "교대", image: null, audio: null },
+            { text: "야간", image: null, audio: null },
+            { text: "야근", image: null, audio: null },
+            { text: "잔업", image: null, audio: null }
+        ],
+        answer: 2
+    },
     
 ];
 

@@ -41,6 +41,26 @@ const questionsForNumber16 = [
         ],
         answer: 2
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>16. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "저는 우사에서 일합니다. 분뇨가 밀려서 축사가 더럽습니다. 그래서 분뇨를 매일 _____________ .",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "만들어야 합니다", image: null, audio: null },
+            { text: "만들 수 있습니다", image: null, audio: null },
+            { text: "치워야 합니다", image: null, audio: null },
+            { text: "치울 수 있습니다", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 

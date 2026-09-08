@@ -41,6 +41,26 @@ const questionsForNumber15 = [
         ],
         answer: 1
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>15. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "저는 오늘 공장에서 부품을 _____________ 그래서 어제 필요한 나사와 공구를 준비했어요.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "청소할 거에요", image: null, audio: null },
+            { text: "용접할 거에요", image: null, audio: null },
+            { text: "조립할 거에요", image: null, audio: null },
+            { text: "주문할 거에요", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 

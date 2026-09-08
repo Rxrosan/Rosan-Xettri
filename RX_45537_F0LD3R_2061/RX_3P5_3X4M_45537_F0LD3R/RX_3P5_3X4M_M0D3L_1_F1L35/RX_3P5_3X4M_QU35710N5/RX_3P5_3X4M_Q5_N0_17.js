@@ -41,6 +41,26 @@ const questionsForNumber17 = [
         ],
         answer: 4
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>17. 다음 설명에 알맞은 어휘를 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "식사할 때 사용하는 두 개의 기구로, 음식을 먹는 데 씁니다. 일반적으로 나무, 대나무, 또는 플라스틱을 만들어집니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "반찬", image: null, audio: null },
+            { text: "숟가락", image: null, audio: null },
+            { text: "젓가락", image: null, audio: null },
+            { text: "메뉴 ", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 

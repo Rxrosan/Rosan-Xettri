@@ -41,6 +41,26 @@ const questionsForNumber20 = [
         ],
         answer: 3
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>20. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "봄이는 몸에 힘이 없고 자주 피곰해집니다. 이는 낫과 밤의 기온 차이가 크기 때문에 생기는 현상입니다. 봄에는 낮 기온이 높지만 아침과 밤 기온은 낮습니다. 사람의 몸은 이러한 온도 치이를 잘 따라가지 못해 자주 피곤해집니다. 이럴 때는 선선한 과일을 자주 먹거나 시원한 물을 많이 마시는 것이 중요합니다. 그래야 건가하게 지낼 수 있습니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "봄에는 시원한 물을 마시면 안 됩니다.", image: null, audio: null },
+            { text: "봄에는 아침과 낮의 기온이 비슷합니다. ", image: null, audio: null },
+            { text: "봄에는 과일은 많이 먹으면 건강에 나쁩니다.  ", image: null, audio: null },
+            { text: "봄에는 온도 차이 때문에 몸이 피곤합니다. ", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

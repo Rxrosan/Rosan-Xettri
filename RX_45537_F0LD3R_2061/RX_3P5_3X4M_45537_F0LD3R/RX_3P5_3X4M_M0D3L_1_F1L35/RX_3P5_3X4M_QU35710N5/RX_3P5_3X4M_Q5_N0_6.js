@@ -36,10 +36,30 @@ const questionsForNumber6 = [
         options: [
             { text: "집에서 </u>쉬었습니다.", image: null, audio: null },
             { text: "<u>가족와 </u>외식했어요.", image: null, audio: null },
-            { text: "<u>공원아서 </u>산책했어요..", image: null, audio: null },
+            { text: "<u>공원아서 </u>산책했어요.", image: null, audio: null },
             { text: "<u>친구과 </u>영화를 봤어요.", image: null, audio: null }
         ],
         answer: 1
+    },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>6. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: null, 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: "이번 겨을에 스키를 </u>배우랴고 해요.", image: null, audio: null },
+            { text: "오늘 라면을 <u>끓여려고 해요</u>.", image: null, audio: null },
+            { text: "시간이 <u>있을 때</u>친구에게 전화해요.", image: null, audio: null },
+            { text: "시간이 <u>있어면</u>친구와 영화를 봐요.", image: null, audio: null }
+        ],
+        answer: 3
     },
     
 ];

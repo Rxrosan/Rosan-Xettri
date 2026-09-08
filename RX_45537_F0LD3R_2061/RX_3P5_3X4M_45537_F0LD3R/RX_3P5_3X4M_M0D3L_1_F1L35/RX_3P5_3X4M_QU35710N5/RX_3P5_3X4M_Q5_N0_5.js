@@ -122,6 +122,26 @@ const questionsForNumber5 = [
         ],
         answer: 4
     },
+    {
+        id: 7,
+        instruction: {
+            text: "[Q-ID : 7]<br><br>5. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: null,
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "요리를 <u>배워는</u>것이 어려워요.", image: null, audio: null },
+            { text: "저는 전통 춤을 보는 것이<u>즐겁어요</u>.", image: null, audio: null },
+            { text: "저는 가족하고 사진 <u>찍은 게</u>좋아요.", image: null, audio: null },
+            { text: "김치찌게를 처음에 <u>만들어 봤어요</u>.", image: null, audio: null }
+        ],
+        answer: 4
+    },
 
 ];
 

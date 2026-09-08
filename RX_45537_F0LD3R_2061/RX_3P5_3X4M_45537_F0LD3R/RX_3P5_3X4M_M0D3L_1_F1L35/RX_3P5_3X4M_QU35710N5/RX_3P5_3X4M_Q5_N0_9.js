@@ -41,6 +41,26 @@ const questionsForNumber9 = [
         ],
         answer: 1
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>9. 다음 단어의 비슷한 말은 무엇입니까 ? ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "거실 ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 근로자가 거주하는 곳이에요. ", image: null, audio: null },
+            { text: " 음식을 조리하는 곳이에요. ", image: null, audio: null },
+            { text: " 자동차를 보관하는 곳이에요. ", image: null, audio: null },
+            { text: " 가족이 함께 모여 생활하는 곳이에요.", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

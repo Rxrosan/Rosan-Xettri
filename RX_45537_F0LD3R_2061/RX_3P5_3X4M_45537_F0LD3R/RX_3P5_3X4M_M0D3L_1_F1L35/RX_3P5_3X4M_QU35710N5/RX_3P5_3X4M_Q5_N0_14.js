@@ -22,7 +22,7 @@ const questionsForNumber14 = [
         answer: 2
     },
     {
-        id: 12,
+        id: 2,
         instruction: {
             text: "[Q-ID : 2]<br><br>14. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
             image: null,
@@ -41,7 +41,26 @@ const questionsForNumber14 = [
         ],
         answer: 4
     },
-    
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>14. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "오늘은 창고에 들어온 물건을 종류별로 나누어 정리해야 합니다. 그래서 물건을 _____________ 을/를 합니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "운반", image: null, audio: null },
+            { text: "분류", image: null, audio: null },
+            { text: "수리", image: null, audio: null },
+            { text: "세척", image: null, audio: null }
+        ],
+        answer: 2
+    },
 ];
 
 // Register these questions with the manager

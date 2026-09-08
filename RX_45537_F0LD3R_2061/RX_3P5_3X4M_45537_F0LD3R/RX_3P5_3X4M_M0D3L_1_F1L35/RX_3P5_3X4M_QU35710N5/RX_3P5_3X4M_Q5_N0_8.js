@@ -41,6 +41,26 @@ const questionsForNumber8 = [
         ],
         answer: 2
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br> 8. 다음 단어와 관계있는 것은 무엇입니까?",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "밥솥",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "빨래", image: null, audio: null },
+            { text: "청소", image: null, audio: null },
+            { text: "요리", image: null, audio: null },
+            { text: "교통", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 
