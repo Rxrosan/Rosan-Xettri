@@ -325,8 +325,12 @@ audio { display: none !important; }
 .audio-play-button.completed { background: #95a5a6 !important; cursor: not-allowed !important; }
 .audio-play-button:disabled  { opacity: 0.7; cursor: not-allowed !important; }
 
+/* अडियो चल्दा पनि इमेज र मोडाल क्लिक गर्न मिल्ने बनाइएको छ */
 body.audio-playing *                          { pointer-events: none !important; cursor: not-allowed !important; }
-body.audio-playing .option-card               { pointer-events: auto !important; cursor: pointer !important; }
+body.audio-playing .option-card, 
+body.audio-playing .content-image, 
+body.audio-playing .image-modal-overlay,
+body.audio-playing .image-modal-overlay *     { pointer-events: auto !important; cursor: pointer !important; }
 body.audio-playing .audio-play-button.playing { pointer-events: none !important; }
 body.modal-open                               { overflow: hidden; }
 
