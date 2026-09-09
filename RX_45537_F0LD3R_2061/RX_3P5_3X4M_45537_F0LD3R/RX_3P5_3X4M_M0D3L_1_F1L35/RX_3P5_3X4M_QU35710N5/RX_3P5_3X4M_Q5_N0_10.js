@@ -41,6 +41,26 @@ const questionsForNumber10 = [
         ],
         answer: 4
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>10. 빔칸에 들어칼 가장 알맞은 것을 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 저는 일하는 화사가 좀 멉니다. 기숙사에서 회사까지 __________ 가는 버스가 없슺니다. 그래서 저는 버스를 타고 오거리에서 내려 자하철로 갈아탑니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 특히 ", image: null, audio: null },
+            { text: " 바로 ", image: null, audio: null },
+            { text: " 빨리 ", image: null, audio: null },
+            { text: " 오래 ", image: null, audio: null }
+        ],
+        answer: 2
+    },
 ];
 
 // Register these questions with the manager

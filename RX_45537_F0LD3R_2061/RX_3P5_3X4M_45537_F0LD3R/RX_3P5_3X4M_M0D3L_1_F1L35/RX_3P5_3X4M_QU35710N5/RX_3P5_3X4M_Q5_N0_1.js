@@ -141,6 +141,26 @@ const questionsForNumber1 = [
     ],
     answer: 3
     },
+    {
+        id: 8,
+        instruction: {
+            text: "[Q-ID : 8]<br><br> 1. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: "", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: "머리를 <u>잘라면</u> 돼요.", image: null, audio: null },
+            { text: "길이 생각보다 <u>길아요</u>.", image: null, audio: null },
+            { text: "아이가 아주 <u>귀엽어요</u>.", image: null, audio: null },
+            { text: "방 안에 새 문을 <u>닫았어요</u>.", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

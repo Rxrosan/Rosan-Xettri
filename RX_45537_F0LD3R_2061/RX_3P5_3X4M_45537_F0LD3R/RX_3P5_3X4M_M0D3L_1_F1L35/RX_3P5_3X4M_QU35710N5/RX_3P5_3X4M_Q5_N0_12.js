@@ -61,6 +61,26 @@ const questionsForNumber12 = [
         ],
         answer: 1
     },
+        {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>12. 빔칸에 들어칼 가장 알맞은 것을 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 직장 동료가 멉무를 도와달라고 부탁해습니다. 예의 바르게 부탁을 들어주기 위해 저는 __________ . ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 거절했어요 ", image: null, audio: null },
+            { text: " 요구했어요 ", image: null, audio: null },
+            { text: " 도와주었어요 ", image: null, audio: null },
+            { text: " 신고했어요 ", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 

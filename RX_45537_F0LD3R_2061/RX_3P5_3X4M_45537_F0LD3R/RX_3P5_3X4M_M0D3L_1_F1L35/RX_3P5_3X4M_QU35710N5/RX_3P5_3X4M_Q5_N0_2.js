@@ -101,6 +101,26 @@ const questionsForNumber2 = [
         ],
         answer: 1
     },
+        {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br> 2. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: "", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: "옷장<u>가</u> 있어요.", image: null, audio: null },
+            { text: "저는 농부<u>이</u> 아닙니다.", image: null, audio: null },
+            { text: "저는 텔레비전<u>를</u> 봐요.", image: null, audio: null },
+            { text: "선생님<u>은</u> 한국 사람입니다.", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 
 ];

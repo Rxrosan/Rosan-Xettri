@@ -61,6 +61,26 @@ const questionsForNumber18 = [
         ],
         answer: 1
     },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>18. 다음 글을 읽고 무엇에 대한 글인지 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 원사는 습기와 직사광선에 민감하여 보관 방법이 중요합니다. 사용하지 않을 때는 밀폐 용기에 넣어 건조하고 서늘한 곳에 보관해야 하며, 색상이 변하거나 상하지 않도록 먼지와 햇핓을 피하는 것이 좋슺니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 원사 보관 방법 ", image: null, audio: null },
+            { text: " 옷 만들기 순서 ", image: null, audio: null },
+            { text: " 염색 가공 순서 ", image: null, audio: null },
+            { text: " 원사 구매 요령 ", image: null, audio: null }
+        ],
+        answer: 1
+    },
 ];
 
 // Register these questions with the manager

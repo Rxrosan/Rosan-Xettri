@@ -41,6 +41,26 @@ const questionsForNumber11 = [
         ],
         answer: 4
     },
+        {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>11. 빔칸에 들어칼 가장 알맞은 것을 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 계단에서 넘어져 발목을 다쳐습니다. 병원에 갔더니 발목을 __________ 많이 걷지 말라고 했습니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 데었다가 ", image: null, audio: null },
+            { text: " 삐었다가 ", image: null, audio: null },
+            { text: " 데었으니까 ", image: null, audio: null },
+            { text: " 삐었으니까 ", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

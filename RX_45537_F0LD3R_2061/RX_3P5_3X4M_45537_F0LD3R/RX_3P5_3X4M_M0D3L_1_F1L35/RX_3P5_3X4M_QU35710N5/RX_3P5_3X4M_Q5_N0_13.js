@@ -61,6 +61,26 @@ const questionsForNumber13 = [
         ],
         answer: 2
     },
+        {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>13. 빔칸에 들어칼 가장 알맞은 것을 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 오늘 아침부터 배가 아파는데 병원에서 진료를 몇 시까지 하는지 __________ 전화를 해 물어봤습니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 안전해서 ", image: null, audio: null },
+            { text: " 가득해서 ", image: null, audio: null },
+            { text: " 충분해서 ", image: null, audio: null },
+            { text: " 궁금해서 ", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

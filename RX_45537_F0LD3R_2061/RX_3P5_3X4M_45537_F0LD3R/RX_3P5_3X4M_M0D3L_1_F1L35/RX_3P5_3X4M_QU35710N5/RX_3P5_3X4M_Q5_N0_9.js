@@ -61,6 +61,26 @@ const questionsForNumber9 = [
         ],
         answer: 4
     },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>9. 빔칸에 들어칼 가장 알맞은 것을 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 20 분 후에 친구와 커피숍에서 __________ 해서 지금 영화 보러 가기 어렵습니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 만들기로 ", image: null, audio: null },
+            { text: " 만나기로 ", image: null, audio: null },
+            { text: " 만들려고 ", image: null, audio: null },
+            { text: " 모시려고 ", image: null, audio: null }
+        ],
+        answer: 2
+    },
     
 ];
 

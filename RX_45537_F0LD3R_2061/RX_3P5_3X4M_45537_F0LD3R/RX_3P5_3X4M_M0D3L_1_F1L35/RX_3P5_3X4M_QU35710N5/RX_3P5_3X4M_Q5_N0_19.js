@@ -41,6 +41,26 @@ const questionsForNumber19 = [
         ],
         answer: 2
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br>19. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 직장 생활을 때는 단정한 놋차림을 해야 합니다. 사무직은 양복이나 정장을 입고, 넥타이를 착용합니다. 생산직은 근무복이나 작업복을 착용하며, 점퍼의 지퍼는 반드시 오려야 합니다. 단정하고 깔끔한 옷차림은 직장에서 지켜야 할 기본 예절입니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 생산 작업을 하는  사람들이 양복을 입어야 합니다.", image: null, audio: null },
+            { text: " 생산직에서도 근무복을 입고 넥타이를 매야 합니다. ", image: null, audio: null },
+            { text: " 직장에서 작업복을 입고 점퍼의 지퍼는 꼭 내려야 합니다. ", image: null, audio: null },
+            { text: " 옷을 단정하게 입는 것이 가장 기본적인 직장 예절입니다. ", image: null, audio: null }
+        ],
+        answer: 4
+    },
 ];
 
 // Register these questions with the manager

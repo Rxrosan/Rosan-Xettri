@@ -61,6 +61,26 @@ const questionsForNumber16 = [
         ],
         answer: 3
     },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>16. 다음 글을 읽고 무엇에 대한 글인지 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "한국의 큰 도시는 각각 다른 매력이 있습니다. 서을은 엣날과 현대가 함께 있는 곳으로 쇼핑하기 좋습니다. 부산은 바다와 맛이있는 음식이 많습니다. 대구는 오래된 골목을 걸으며 역사와 문화를 볼 수 잇습니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 한국의 교통 제도 ", image: null, audio: null },
+            { text: " 하국의 산업 발전 ", image: null, audio: null },
+            { text: " 한국의 기후와 날씨 ", image: null, audio: null },
+            { text: " 한국의 대도시 관광 명소 ", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

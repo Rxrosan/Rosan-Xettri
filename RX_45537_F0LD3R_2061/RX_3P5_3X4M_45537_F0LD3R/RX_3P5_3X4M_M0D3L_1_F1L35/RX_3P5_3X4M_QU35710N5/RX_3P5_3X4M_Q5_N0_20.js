@@ -61,6 +61,26 @@ const questionsForNumber20 = [
         ],
         answer: 4
     },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>20. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 한국은 땅이 좁아서 밀, 옥수수 같은 곡식을 많이 생산하지 못합니다. 그래서 이런 시략은 다른 나라에서 수입합니다. 하지만 자동차, 배, 철강 제품은 않이 만들어서 외국에 수출합니다. 또 요즘에는 딸기, 배 같은 과일도 외국으로 보내고 있습니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 한국은 모든 곡식을 스스로 생산합니다. ", image: null, audio: null },
+            { text: " 한국은 자동차와 배를 외국에 수출합니다. ", image: null, audio: null },
+            { text: " 한국은 과일을 전혀 수출하지 않습니다. ", image: null, audio: null },
+            { text: " 한국은 식량을 충분히 생산합니다.", image: null, audio: null }
+        ],
+        answer: 2
+    },
     
 ];
 
