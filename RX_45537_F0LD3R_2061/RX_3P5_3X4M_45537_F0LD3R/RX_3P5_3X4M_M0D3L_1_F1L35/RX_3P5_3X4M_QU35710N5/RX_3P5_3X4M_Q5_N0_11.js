@@ -61,6 +61,26 @@ const questionsForNumber11 = [
         ],
         answer: 4
     },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>11. 다음 글을 읽고 무엇에 대한 글인지 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 한국에 입국한 후 90 일 안에 일하는 곳 근처의 출입국 외국인관서를 방문해야 합니다. 여권, 사진 2 장, 30 만 원, 그리고 회사의 사업자등록증 사본을 가지고 가야 합니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 입국 심사 ", image: null, audio: null },
+            { text: " 취업 교육 ", image: null, audio: null },
+            { text: " 근로 재계약 ", image: null, audio: null },
+            { text: " 외국인등록증 ", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

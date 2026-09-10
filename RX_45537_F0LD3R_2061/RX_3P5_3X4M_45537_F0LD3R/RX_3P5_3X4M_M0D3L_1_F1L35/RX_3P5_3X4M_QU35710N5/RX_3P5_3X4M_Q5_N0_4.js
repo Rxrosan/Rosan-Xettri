@@ -101,6 +101,26 @@ const questionsForNumber4 = [
         ],
         answer: 3
     },
+        {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br> 4. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 주말에 마두 씨는 도서관에 가서 새로운 책을 __________ 읽고 싶은 책이 많습니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 빌릴 예정입니다 ", image: null, audio: null },
+            { text: " 만들 예정입니다 ", image: null, audio: null },
+            { text: " 구입할 예정입니다 ", image: null, audio: null },
+            { text: " 판매할 예정입니다 ", image: null, audio: null }
+        ],
+        answer: 1
+    },
     
 ];
 

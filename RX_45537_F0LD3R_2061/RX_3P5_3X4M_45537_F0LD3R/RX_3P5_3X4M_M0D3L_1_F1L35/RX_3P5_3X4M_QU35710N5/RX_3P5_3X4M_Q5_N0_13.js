@@ -101,6 +101,26 @@ const questionsForNumber13 = [
         ],
         answer: 1
     },
+    {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br>13. 다음 글을 읽고 무엇에 대한 글인지 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 불이 나면 이것을 가져와 손잡이 부분에 있는  안전핀을 뽑습니다. 바람을 등지고 호스를 불 쪽으로 향한 뒤, 손잡이를 힘껏 잡아 뽑어냅니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 소독 방법 ", image: null, audio: null },
+            { text: " 비상구 이용법 ", image: null, audio: null },
+            { text: " 소하기 사용법 ", image: null, audio: null },
+            { text: " 가스 밸브 사용법 ", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 

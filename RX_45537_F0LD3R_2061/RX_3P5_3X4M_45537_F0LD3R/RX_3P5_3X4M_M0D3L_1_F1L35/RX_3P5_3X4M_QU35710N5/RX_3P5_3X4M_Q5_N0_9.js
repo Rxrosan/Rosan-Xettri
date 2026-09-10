@@ -101,6 +101,26 @@ const questionsForNumber9 = [
         ],
         answer: 2
     },
+    {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br> 9. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: "", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: " 이 책이 아주 홍미로워요. 한번 <u>읽아</u> 보세요.", image: null, audio: null },
+            { text: " 도서관<u>에서</u> 와서 공부했어요.", image: null, audio: null },
+            { text: " 커피가 <u>맛있었어서</u> 두 잔이나 마셨어요.", image: null, audio: null },
+            { text: " 케이크를 만들어 <u>친구한테 </u> 줄 거예요.", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

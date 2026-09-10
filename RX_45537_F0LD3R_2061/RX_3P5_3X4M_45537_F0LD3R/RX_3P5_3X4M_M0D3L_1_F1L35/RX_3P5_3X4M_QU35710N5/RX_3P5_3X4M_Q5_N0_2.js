@@ -141,6 +141,26 @@ const questionsForNumber2 = [
         ],
         answer: 2
     },
+    {
+        id: 8,
+        instruction: {
+            text: "[Q-ID : 8]<br><br> 2. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 시간이 없으니까 이야기할 때는 요점만 __________ 말해 주세요.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 길게 ", image: null, audio: null },
+            { text: " 자세히 ", image: null, audio: null },
+            { text: " 짧게 ", image: null, audio: null },
+            { text: " 빠르게 ", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 
 ];

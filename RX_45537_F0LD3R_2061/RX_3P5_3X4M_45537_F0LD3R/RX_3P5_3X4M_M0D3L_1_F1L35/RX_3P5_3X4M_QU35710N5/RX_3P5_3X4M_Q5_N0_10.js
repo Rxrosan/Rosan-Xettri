@@ -62,9 +62,9 @@ const questionsForNumber10 = [
         answer: 2
     },
     {
-        id: 6,
+        id: 4,
         instruction: {
-            text: "[Q-ID : 6]<br><br>10. 다음 글을 읽고 내용과 같은 것을 고르십시오. ",
+            text: "[Q-ID : 4]<br><br>10. 다음 글을 읽고 내용과 같은 것을 고르십시오. ",
             image: null,
             audio: null
         },
@@ -80,6 +80,26 @@ const questionsForNumber10 = [
             { text: " 항공 소포는 외국으로 물건을 보낼 때 비교적 저렴합니다. ", image: null, audio: null }
         ],
         answer: 4
+    },
+    {
+        id: 5,
+        instruction: {
+            text: "[Q-ID : 5]<br><br>10. 다음 설명에 알맞은 어휘를 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "  재료나 성분을 골고루 섰을 때 사용하는 기계를 말합니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 혼합기 ", image: null, audio: null },
+            { text: " 첨가제 ", image: null, audio: null },
+            { text: " 원재로 ", image: null, audio: null },
+            { text: " 송풍기 ", image: null, audio: null }
+        ],
+        answer: 1
     },
 ];
 

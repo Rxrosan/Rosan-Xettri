@@ -102,6 +102,26 @@ const questionsForNumber3 = [
         ],
         answer: 1
     },
+        {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br> 3. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 오늘 저녁에 리한 씨 집에서 회사 사람들과 __________ 저는 고향 음식을 준비해 갈 겁니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 떠드는 편입니다 ", image: null, audio: null },
+            { text: " 모이는 편입니다 ", image: null, audio: null },
+            { text: " 떠들기로  했습니다 ", image: null, audio: null },
+            { text: " 모이기로 했습니다 ", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

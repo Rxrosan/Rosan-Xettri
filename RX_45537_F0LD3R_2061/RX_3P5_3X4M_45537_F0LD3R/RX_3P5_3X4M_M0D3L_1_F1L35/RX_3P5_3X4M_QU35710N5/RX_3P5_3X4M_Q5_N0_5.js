@@ -162,6 +162,26 @@ const questionsForNumber5 = [
         ],
         answer: 4
     },
+        {
+        id: 9,
+        instruction: {
+            text: "[Q-ID : 9]<br><br> 5. 빈칸에 든어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 못에 찔렸을 상처가 가벼워도 바로 소독을 해야 합니다. 그리고 병원에 가서 진료를 받고 주사를 __________ .",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 맞는 것이 좋습니다 ", image: null, audio: null },
+            { text: " 놓는 것이 좋습니다 ", image: null, audio: null },
+            { text: " 맞지 않도록 합니다 ", image: null, audio: null },
+            { text: " 놓지 않도록 합니다 ", image: null, audio: null }
+        ],
+        answer: 1
+    },
 
 ];
 

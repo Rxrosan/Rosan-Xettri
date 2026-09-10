@@ -81,6 +81,26 @@ const questionsForNumber15 = [
         ],
         answer: 3
     },
+    {
+        id: 5,
+        instruction: {
+            text: "[Q-ID : 5]<br><br>15. 다음 글을 읽고 내용과 같은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 저는 제주도에 가 본 적이 없습니다. 그래서 이번 여름에 친구들과 같이 제주도 여행을 하기로 했습니다. 여행을 가려고 돈도 모았습니다. 제주도에 가면 차를 빌려서 여행할 예정입니다. 차를 타고 가다가 아름다운 곳이 있으면 내려서 사진도 찍고 수영도 하려고 합니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 나는 여행을 위해 돈을 모았습니다. ", image: null, audio: null },
+            { text: " 나는 혼자서 제주도 여행을 할 계획입니다. ", image: null, audio: null },
+            { text: " 나는 잔에 제주도에 여러 번 가 본 적이 있습니다. ", image: null, audio: null },
+            { text: " 나는 제주도에서 대중교통만 이용할 예정입니다. ", image: null, audio: null }
+        ],
+        answer: 1
+    },
     
 ];
 

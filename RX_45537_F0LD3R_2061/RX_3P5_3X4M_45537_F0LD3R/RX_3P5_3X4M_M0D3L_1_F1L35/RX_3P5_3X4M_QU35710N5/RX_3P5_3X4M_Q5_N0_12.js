@@ -101,6 +101,26 @@ const questionsForNumber12 = [
         ],
         answer: 4
     },
+    {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br>12. 다음 글을 읽고 무엇에 대한 글인지 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 근로의 의무는 있으나 근로기준법 등에 따라 근로가 면제되는 날로, 유급으로 쉬는 날을 말합니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 유급 휴일 ", image: null, audio: null },
+            { text: " 무급 휴일 ", image: null, audio: null },
+            { text: " 하계 휴가 ", image: null, audio: null },
+            { text: " 겨조 휴가 ", image: null, audio: null }
+        ],
+        answer: 1
+    },
     
 ];
 

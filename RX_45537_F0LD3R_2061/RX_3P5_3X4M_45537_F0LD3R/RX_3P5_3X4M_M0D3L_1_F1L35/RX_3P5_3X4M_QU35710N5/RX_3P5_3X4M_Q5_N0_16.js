@@ -9,7 +9,7 @@ const questionsForNumber16 = [
             audio: null
         },
         questionBody: {
-            text: "어두운 곳에서 작업할 때는 가시성이 높은 - - - - - . 이것을 입으면 멀리서도 잘 보여 사고를 막을 수 있습니다.",
+            text: "어두운 곳에서 작업할 때는 가시성이 높은 __________ . 이것을 입으면 멀리서도 잘 보여 사고를 막을 수 있습니다.",
             image: null,
             audio: null
         },
@@ -100,6 +100,26 @@ const questionsForNumber16 = [
             { text: " 유출되자마자 ", image: null, audio: null }
         ],
         answer: 4
+    },
+    {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br>16. 다음 단어의 비슷한 말은 무엇입니까 ? ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 외투를 씻다",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 싣다 ", image: null, audio: null },
+            { text: " 세차하다 ", image: null, audio: null },
+            { text: " 빨다 ", image: null, audio: null },
+            { text: " 목욕하다 ", image: null, audio: null }
+        ],
+        answer: 3
     },
     
     
