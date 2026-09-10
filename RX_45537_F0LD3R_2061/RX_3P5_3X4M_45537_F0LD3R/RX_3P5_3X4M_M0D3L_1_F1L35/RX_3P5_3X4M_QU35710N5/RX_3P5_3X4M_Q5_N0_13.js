@@ -81,6 +81,26 @@ const questionsForNumber13 = [
         ],
         answer: 4
     },
+    {
+        id: 5,
+        instruction: {
+            text: "[Q-ID : 5]<br><br>13. 빔칸에 들어칼 가장 알맞은 것을 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 겨울철에 날씨가 매우 추워서 손발이 시려요. 집 안을 따뜻하게 만들려면 __________ 을/를 켜야 합니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 난방 ", image: null, audio: null },
+            { text: " 냉방 ", image: null, audio: null },
+            { text: " 청소 ", image: null, audio: null },
+            { text: " 점검 ", image: null, audio: null }
+        ],
+        answer: 1
+    },
     
 ];
 

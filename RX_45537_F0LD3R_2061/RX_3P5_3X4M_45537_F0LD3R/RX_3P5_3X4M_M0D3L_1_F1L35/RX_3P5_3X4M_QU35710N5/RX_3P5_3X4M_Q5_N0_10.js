@@ -61,6 +61,26 @@ const questionsForNumber10 = [
         ],
         answer: 2
     },
+    {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br>10. 다음 글을 읽고 내용과 같은 것을 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 국제 항공 소포를 이용하면 외국으로 물건을 비교적 저럼하게 보낼 수 있으며, 베송 진행 상황을 인터넷으로 확인할 수 있습니다. 항공 소포로 의류, 서류, 장난감 등을 보낼 수 있지만, 신선 식품, 위험 물질, 현금은 보낼 수 없습니다. 국내에서는 귀중품이나 조용한 물건을 보낼 때 안전하게 받는 사람에게 절달되는 택배 서비스를 이용하면 좋습니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 국내에서는 귀중품을 보낼 때 일반 소포가 더 안잔합니다. ", image: null, audio: null },
+            { text: " 항공 소포는 외국으로 물건을 보낼 때 빠르자만 비쌉니다. ", image: null, audio: null },
+            { text: " 항공 소포는 인터넷으로 배송 사항을 확인할 수 있습니다. ", image: null, audio: null },
+            { text: " 항공 소포는 외국으로 물건을 보낼 때 비교적 저렴합니다. ", image: null, audio: null }
+        ],
+        answer: 4
+    },
 ];
 
 // Register these questions with the manager

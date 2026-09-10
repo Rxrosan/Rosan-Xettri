@@ -81,6 +81,26 @@ const questionsForNumber9 = [
         ],
         answer: 2
     },
+    {
+        id: 5,
+        instruction: {
+            text: "[Q-ID : 5]<br><br>9. 다음 글을 읽고 내용과 같은 것을 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 사다리를 사용할 때에는 항상 안전에 유의해야 합니다. 사다리를 설치할 때는 단단한 바닥에두고, 기울기가 지나치게 크지 핞도록 해야 합니다. 올라갈 때에는 두 손을 사용해 균형을 잡아야 하며, 한쪽에만 몸을 기대지 않도록 주의해야 합니다. 또안 높은 곳에서 작업할 경우에는 반드시 안전모와 안전벨트를 착용해 사고를 예방해야 합니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 사다리는 단단하지 않은 바닥에도 세울 수 있습니다. ", image: null, audio: null },
+            { text: " 사다리를 오를 때는 반드시 두 손을 사용해야 합니다. ", image: null, audio: null },
+            { text: " 안전모와 안전벨트를 착용해야 사고를 당할 수 있습니다. ", image: null, audio: null },
+            { text: " 사다리를 사용할 대는 한쪽으로 몸을 기대는 것이 안전합니다. ", image: null, audio: null }
+        ],
+        answer: 2
+    },
     
 ];
 

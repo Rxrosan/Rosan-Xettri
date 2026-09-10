@@ -61,6 +61,26 @@ const questionsForNumber14 = [
         ],
         answer: 2
     },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>14. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 배관 공사를 할 때 배관 크기보다 구덩이를 _____________ 작업하기 쉬워요.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 맑게 파야 ", image: null, audio: null },
+            { text: " 넓게 파야 ", image: null, audio: null },
+            { text: " 메워 보면 ", image: null, audio: null },
+            { text: " 다져 보면 ", image: null, audio: null }
+        ],
+        answer: 2
+    },
 ];
 
 // Register these questions with the manager

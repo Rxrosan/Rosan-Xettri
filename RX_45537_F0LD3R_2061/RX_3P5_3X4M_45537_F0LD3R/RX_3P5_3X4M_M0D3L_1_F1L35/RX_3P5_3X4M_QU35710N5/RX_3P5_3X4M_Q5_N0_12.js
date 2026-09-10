@@ -61,7 +61,7 @@ const questionsForNumber12 = [
         ],
         answer: 1
     },
-        {
+    {
         id: 4,
         instruction: {
             text: "[Q-ID : 4]<br><br>12. 빔칸에 들어칼 가장 알맞은 것을 고르십시오. ",
@@ -80,6 +80,26 @@ const questionsForNumber12 = [
             { text: " 신고했어요 ", image: null, audio: null }
         ],
         answer: 3
+    },
+    {
+        id: 5,
+        instruction: {
+            text: "[Q-ID : 5]<br><br>12. 빔칸에 들어칼 가장 알맞은 것을 고르십시오. ",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 저는 __________ 에만 운동을 합니다. 일요일과 토요일에는 헬스를 합니다. ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 아침 ", image: null, audio: null },
+            { text: " 평일 ", image: null, audio: null },
+            { text: " 오후 ", image: null, audio: null },
+            { text: " 주말 ", image: null, audio: null }
+        ],
+        answer: 4
     },
     
 ];

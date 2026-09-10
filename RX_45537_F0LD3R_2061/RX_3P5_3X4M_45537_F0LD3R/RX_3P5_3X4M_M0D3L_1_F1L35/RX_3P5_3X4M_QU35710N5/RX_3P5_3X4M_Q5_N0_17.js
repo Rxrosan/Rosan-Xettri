@@ -61,6 +61,26 @@ const questionsForNumber17 = [
         ],
         answer: 3
     },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>17. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까 ?", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: null, 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: " 아침에 기게가 고장이 <u>났다고 했어요</u>. ", image: null, audio: null },
+            { text: " 사장님은 오늘 회의가 <u>없는다고 하셨어요</u>.", image: null, audio: null },
+            { text: " 민수 씨는 일이 너무 많아 <u>바쁜다고 했어요</u>.", image: null, audio: null },
+            { text: " 친구는 그 회사가 월급을 잘 <u>주는다고 했어요</u>.", image: null, audio: null }
+        ],
+        answer: 1
+    },
     
 ];
 

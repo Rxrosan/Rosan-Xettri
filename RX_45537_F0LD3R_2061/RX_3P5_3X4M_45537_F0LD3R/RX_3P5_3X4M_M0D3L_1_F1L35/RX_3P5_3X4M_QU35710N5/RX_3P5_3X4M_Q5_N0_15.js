@@ -61,6 +61,26 @@ const questionsForNumber15 = [
         ],
         answer: 3
     },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>15. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 작업을 하다가 손이 다쳤습니다. 그래도 보험에 _____________ 병원비를 지원받았습니다.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 가입되어 있지만 ", image: null, audio: null },
+            { text: " 제출되어 있지만 ", image: null, audio: null },
+            { text: " 가입되어 있어서 ", image: null, audio: null },
+            { text: " 제출되어 있어서 ", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 

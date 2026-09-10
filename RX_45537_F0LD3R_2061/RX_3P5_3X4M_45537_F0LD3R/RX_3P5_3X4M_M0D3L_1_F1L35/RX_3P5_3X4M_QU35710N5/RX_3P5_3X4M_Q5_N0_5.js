@@ -125,7 +125,7 @@ const questionsForNumber5 = [
     {
         id: 7,
         instruction: {
-            text: "[Q-ID : 7]<br><br>5. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까?",
+            text: "[Q-ID : 7]<br><br>5. 다음 중 밑줄 친 부분이 맞는 것은 무엇입니까 ?",
             image: null,
             audio: null
         },
@@ -139,6 +139,26 @@ const questionsForNumber5 = [
             { text: "저는 전통 춤을 보는 것이<u>즐겁어요</u>.", image: null, audio: null },
             { text: "저는 가족하고 사진 <u>찍은 게</u>좋아요.", image: null, audio: null },
             { text: "김치찌게를 처음에 <u>만들어 봤어요</u>.", image: null, audio: null }
+        ],
+        answer: 4
+    },
+    {
+        id: 8,
+        instruction: {
+            text: "[Q-ID : 6]<br><br>5. 다음 단어와 관게있는 것은 무엇입니까 ?",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 혼합기 ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 음식을 데우는 기계예요. ", image: null, audio: null },
+            { text: " 물을 정화하는 기계에요. ", image: null, audio: null },
+            { text: " 쓰레기를 분리하는 기계예요. ", image: null, audio: null },
+            { text: " 여러 가지 재료를 섞는 기계예요. ", image: null, audio: null }
         ],
         answer: 4
     },

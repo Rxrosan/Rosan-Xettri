@@ -161,6 +161,26 @@ const questionsForNumber1 = [
         ],
         answer: 4
     },
+    {
+        id: 9,
+        instruction: {
+        text: "[Q-ID : 9]<br><br> 1. 다음 설명에 알맞은 어휘를 고르십시오.", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: " 일반적으로 산업 현장이나 건설 현장에서 많이 착용합니다. 특히 자겁을 안전하고 편리하게 할 수 있도록 디자인된 옷입니다.", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: " 양복 ", image: null, audio: null },
+            { text: " 작업복 ", image: null, audio: null },
+            { text: " 교복 ", image: null, audio: null },
+            { text: " 정장 ", image: null, audio: null }
+        ],
+        answer: 2
+    },
     
 ];
 

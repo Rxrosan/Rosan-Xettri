@@ -81,6 +81,27 @@ const questionsForNumber16 = [
         ],
         answer: 4
     },
+    {
+        id: 5,
+        instruction: {
+            text: "[Q-ID : 5]<br><br>16. 빈칸에 들어갈 가장 알맞은 것을 고르십시오.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 근무 시간에 유해 무질이 _____________ 밖으로 대피했어요.",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 도착하지만 ", image: null, audio: null },
+            { text: " 도착하자마자 ", image: null, audio: null },
+            { text: " 유출되지만 ", image: null, audio: null },
+            { text: " 유출되자마자 ", image: null, audio: null }
+        ],
+        answer: 4
+    },
+    
     
 ];
 

@@ -54,12 +54,32 @@ const questionsForNumber6 = [
             audio: null
         },
         options: [
-            { text: "이번 겨을에 스키를 </u>배우랴고 해요.", image: null, audio: null },
+            { text: "이번 겨을에 스키를 <u>배우랴고</u> 해요.", image: null, audio: null },
             { text: "오늘 라면을 <u>끓여려고 해요</u>.", image: null, audio: null },
             { text: "시간이 <u>있을 때</u>친구에게 전화해요.", image: null, audio: null },
             { text: "시간이 <u>있어면</u>친구와 영화를 봐요.", image: null, audio: null }
         ],
         answer: 3
+    },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br>6. 다음 단어와 관게있는 것은 무엇입니까 ?",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: " 밴드, 우표, 라벨 ",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: " 받치다 ", image: null, audio: null },
+            { text: " 부치다 ", image: null, audio: null },
+            { text: " 보내다 ", image: null, audio: null },
+            { text: " 붙이다 ", image: null, audio: null }
+        ],
+        answer: 4
     },
     
 ];

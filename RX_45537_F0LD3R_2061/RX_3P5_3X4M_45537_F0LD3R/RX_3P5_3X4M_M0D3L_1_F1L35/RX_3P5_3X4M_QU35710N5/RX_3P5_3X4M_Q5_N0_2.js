@@ -121,6 +121,26 @@ const questionsForNumber2 = [
         ],
         answer: 4
     },
+        {
+        id: 7,
+        instruction: {
+        text: "[Q-ID : 7]<br><br> 2. 다음 설명에 알맞은 어휘를 고르십시오.", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: " 금속이나 나무에 뜷린 구멍을 더 넓히거나 매끄럽게 다듬는 데 사용하는 공구입니다.", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: " 풀러 ", image: null, audio: null },
+            { text: " 리머 ", image: null, audio: null },
+            { text: " 베어링 ", image: null, audio: null },
+            { text: " 드릴링머신 ", image: null, audio: null }
+        ],
+        answer: 2
+    },
     
 
 ];

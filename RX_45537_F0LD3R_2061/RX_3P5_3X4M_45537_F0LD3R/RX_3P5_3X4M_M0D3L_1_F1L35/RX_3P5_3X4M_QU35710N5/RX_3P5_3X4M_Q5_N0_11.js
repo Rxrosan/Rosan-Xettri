@@ -41,7 +41,7 @@ const questionsForNumber11 = [
         ],
         answer: 4
     },
-        {
+    {
         id: 3,
         instruction: {
             text: "[Q-ID : 3]<br><br>11. 빔칸에 들어칼 가장 알맞은 것을 고르십시오. ",
