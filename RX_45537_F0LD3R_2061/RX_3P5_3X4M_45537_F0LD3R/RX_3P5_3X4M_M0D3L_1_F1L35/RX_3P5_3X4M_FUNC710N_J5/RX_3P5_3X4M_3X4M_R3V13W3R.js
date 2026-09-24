@@ -4,6 +4,7 @@ const ExamReview = {
     reviewData: null,
     isReviewMode: false,
     menuPopup: null,
+    contentPopup: null,
     
     // Initialize review after exam submission
     initReview: function(results, userAnswers, questionsData) {
@@ -419,19 +420,22 @@ const ExamReview = {
                 display: none;
                 justify-content: center;
                 align-items: center;
+                padding: 12px;
+                box-sizing: border-box;
                 z-index: 20000;
+                overflow: hidden;
             `;
             modal.innerHTML = `
-                <div style="position:relative; max-width:90vw; max-height:90vh;">
+                <div style="position:relative; max-width:100%; max-height:100%; display:flex; align-items:center; justify-content:center;">
                     <button style="position:absolute; top:-40px; right:0; background:#e74c3c; color:white; border:none; width:35px; height:35px; border-radius:50%; font-size:20px; cursor:pointer;">×</button>
-                    <img id="reviewModalImage" style="width:100%; height:auto; max-height:85vh; object-fit:contain; border-radius:8px;">
+                    <img id="reviewModalImage" style="max-width:100%; max-height:80vh; width:auto; height:auto; object-fit:contain; border-radius:8px;">
                 </div>
             `;
             document.body.appendChild(modal);
             
             const closeBtn = modal.querySelector('button');
             closeBtn.onclick = () => { modal.style.display = 'none'; };
-            modal.onclick = (e) => { if (e.target === modal) modal.style.display = 'none'; };
+            // Outside click does NOT close image modal
         }
         
         const img = modal.querySelector('#reviewModalImage');
@@ -462,7 +466,7 @@ const ExamReview = {
         };
     },
     
-    // Show menu popup
+    // Show menu popup (with scrollable body)
     showMenuPopup: function() {
         this.removeMenuPopup();
         
@@ -479,20 +483,31 @@ const ExamReview = {
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 8px;
+            box-sizing: border-box;
+            overflow: hidden;
         `;
         
         this.menuPopup.innerHTML = `
-            <div style="background: white; border-radius: 20px; width: 90%; max-width: 350px; overflow: hidden; animation: popupSlideIn 0.3s ease;">
-                <div style="background: #2c3e50; padding: 15px 20px; color: white; text-align: center;">
-                    <h3 style="margin: 0; font-size: 18px;">MENU OPTIONS</h3>
+            <div class="review-popup-card" style="background: white; border-radius: 16px; width: 100%; max-width: 380px; max-height: 100%; overflow: hidden; display: flex; flex-direction: column; animation: popupSlideIn 0.3s ease; box-sizing: border-box;">
+                <div style="background: #2c3e50; padding: 12px 44px 12px 18px; color: white; text-align: center; position: relative; flex-shrink: 0;">
+                    <h3 style="margin: 0; font-size: 16px; line-height: 1.3;">MENU OPTIONS</h3>
+                    <button id="menuPopupCloseBtn" style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%); background: transparent; color: white; border: none; font-size: 24px; line-height: 1; cursor: pointer; padding: 0 8px; font-weight: 300;">×</button>
                 </div>
-                <div style="padding: 20px; display: flex; flex-direction: column; gap: 12px;">
-                    <button id="reviewNewExamBtn" style="padding: 14px; background: #3498db; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                         New Exam
-                    </button>
-                    <button id="reviewExitBtn" style="padding: 14px; background: #95a5a6; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                         Exit
-                    </button>
+                <div class="review-scroll-body" style="padding: 14px 14px; overflow-y: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; overscroll-behavior: contain; flex: 1; min-height: 0;">
+                    <div style="display: flex; flex-direction: row; gap: 8px; justify-content: center;">
+                        <button id="reviewNewExamBtn" style="flex: 1; min-width: 0; padding: 12px 6px; background: #3498db; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; box-sizing: border-box;">
+                             New Exam
+                        </button>
+                        <button id="reviewExitBtn" style="flex: 1; min-width: 0; padding: 12px 6px; background: #95a5a6; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; box-sizing: border-box;">
+                             Exit
+                        </button>
+                    </div>
+                    <div style="margin-top: 12px; text-align: center; font-size: 11px; color: #7f8c8d; line-height: 1.6;">
+                        <span style="cursor: pointer; text-decoration: underline;" onclick="ExamReview.openTerms()">Terms & Condition</span>
+                        <span style="margin: 0 6px;"> </span>
+                        <span style="cursor: pointer; text-decoration: underline;" onclick="ExamReview.openPrivacy()">Privacy & Policy</span>
+                    </div>
                 </div>
             </div>
         `;
@@ -505,11 +520,51 @@ const ExamReview = {
                     from { opacity: 0; transform: scale(0.9); }
                     to { opacity: 1; transform: scale(1); }
                 }
+                @media (max-width: 360px) {
+                    #reviewMenuPopup button {
+                        font-size: 11px !important;
+                        padding: 10px 4px !important;
+                    }
+                    #reviewMenuPopup h3 {
+                        font-size: 14px !important;
+                    }
+                }
+                @media (max-height: 450px) {
+                    #reviewMenuPopup h3 {
+                        font-size: 14px !important;
+                    }
+                    #reviewMenuPopup button {
+                        font-size: 12px !important;
+                        padding: 10px 6px !important;
+                    }
+                }
+                /* Slim custom scrollbar */
+                .review-scroll-body::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .review-scroll-body::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .review-scroll-body::-webkit-scrollbar-thumb {
+                    background: #c0c6cc;
+                    border-radius: 3px;
+                }
+                .review-scroll-body::-webkit-scrollbar-thumb:hover {
+                    background: #95a5a6;
+                }
+                .review-scroll-body {
+                    scrollbar-width: thin;
+                    scrollbar-color: #c0c6cc transparent;
+                }
             `;
             document.head.appendChild(style);
         }
         
         document.body.appendChild(this.menuPopup);
+        
+        document.getElementById('menuPopupCloseBtn').onclick = () => {
+            this.removeMenuPopup();
+        };
         
         document.getElementById('reviewNewExamBtn').onclick = () => {
             this.removeMenuPopup();
@@ -520,12 +575,110 @@ const ExamReview = {
             this.removeMenuPopup();
             this.exitToResource();
         };
+    },
+    
+    // Open Terms & Condition (hides menu, shows content popup)
+    openTerms: function() {
+        this.hideMenuPopup();
+        this.showContentPopup(
+            'Terms & Condition',
+            `
+                <p style="margin: 0 0 12px 0;">Welcome to our exam application. By accessing or using this service, you agree to be bound by the following terms and conditions.</p>
+                <p style="margin: 0 0 12px 0;"><strong>1. Use of Service</strong><br>This application is provided for educational and assessment purposes only. You agree to use it in compliance with all applicable laws and regulations.</p>
+                <p style="margin: 0 0 12px 0;"><strong>2. User Responsibilities</strong><br>You are responsible for maintaining the confidentiality of your account and for all activities that occur under your account.</p>
+                <p style="margin: 0 0 12px 0;"><strong>3. Intellectual Property</strong><br>All content, including questions, images, and audio, is the property of the application owner and is protected by copyright laws.</p>
+                <p style="margin: 0 0 12px 0;"><strong>4. Limitation of Liability</strong><br>We are not liable for any direct, indirect, incidental, or consequential damages arising from your use of this application.</p>
+                <p style="margin: 0 0 12px 0;"><strong>5. Changes to Terms</strong><br>We reserve the right to modify these terms at any time. Continued use of the application constitutes acceptance of the updated terms.</p>
+                <p style="margin: 0 0 12px 0;"><strong>6. Contact</strong><br>If you have any questions about these terms, please contact our support team.</p>
+                <p style="margin: 0;"><strong>7. Governing Law</strong><br>These terms shall be governed by and construed in accordance with applicable local laws.</p>
+            `
+        );
+    },
+    
+    // Open Privacy & Policy (hides menu, shows content popup)
+    openPrivacy: function() {
+        this.hideMenuPopup();
+        this.showContentPopup(
+            'Privacy & Policy',
+            `
+                <p style="margin: 0 0 12px 0;">Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
+                <p style="margin: 0 0 12px 0;"><strong>1. Information We Collect</strong><br>We may collect basic usage data such as exam progress, answers, and performance statistics to improve the application.</p>
+                <p style="margin: 0 0 12px 0;"><strong>2. How We Use Information</strong><br>Collected data is used solely for educational purposes, performance tracking, and improving the user experience.</p>
+                <p style="margin: 0 0 12px 0;"><strong>3. Data Storage</strong><br>Your data is stored locally on your device and is not shared with third parties without your consent.</p>
+                <p style="margin: 0 0 12px 0;"><strong>4. Cookies</strong><br>This application may use local storage to remember your progress. You can clear this data at any time through your browser settings.</p>
+                <p style="margin: 0 0 12px 0;"><strong>5. Your Rights</strong><br>You have the right to access, modify, or delete your personal data at any time.</p>
+                <p style="margin: 0 0 12px 0;"><strong>6. Security</strong><br>We take reasonable measures to protect your information from unauthorized access or disclosure.</p>
+                <p style="margin: 0;"><strong>7. Updates to This Policy</strong><br>We may update this privacy policy from time to time. Continued use of the application constitutes acceptance of the updated policy.</p>
+            `
+        );
+    },
+    
+    // Show content popup (Terms/Privacy) - with smooth scrollable body
+    showContentPopup: function(title, bodyHTML) {
+        this.removeContentPopup();
         
-        this.menuPopup.onclick = (e) => {
-            if (e.target === this.menuPopup) {
-                this.removeMenuPopup();
-            }
+        this.contentPopup = document.createElement('div');
+        this.contentPopup.id = 'reviewContentPopup';
+        this.contentPopup.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 31000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            box-sizing: border-box;
+            overflow: hidden;
+        `;
+        
+        this.contentPopup.innerHTML = `
+            <div class="review-popup-card" style="background: white; border-radius: 16px; width: 100%; max-width: 420px; max-height: 100%; overflow: hidden; display: flex; flex-direction: column; animation: popupSlideIn 0.3s ease; box-sizing: border-box;">
+                <div style="background: #2c3e50; padding: 12px 44px 12px 18px; color: white; text-align: center; position: relative; flex-shrink: 0;">
+                    <h3 style="margin: 0; font-size: 15px; line-height: 1.3;">${title}</h3>
+                    <button id="contentPopupCloseBtn" style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%); background: transparent; color: white; border: none; font-size: 24px; line-height: 1; cursor: pointer; padding: 0 8px; font-weight: 300;">×</button>
+                </div>
+                <div class="review-scroll-body" style="padding: 14px 16px; overflow-y: auto; font-size: 13px; line-height: 1.6; color: #34495e; -webkit-overflow-scrolling: touch; touch-action: pan-y; overscroll-behavior: contain; word-wrap: break-word; overflow-wrap: break-word; flex: 1; min-height: 0;">
+                    ${bodyHTML}
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(this.contentPopup);
+        
+        document.getElementById('contentPopupCloseBtn').onclick = () => {
+            this.closeContentPopup();
         };
+    },
+    
+    // Close content popup and re-show menu popup
+    closeContentPopup: function() {
+        this.removeContentPopup();
+        this.showMenuPopup();
+    },
+    
+    removeContentPopup: function() {
+        if (this.contentPopup) {
+            this.contentPopup.remove();
+            this.contentPopup = null;
+        }
+    },
+    
+    // Hide menu popup without removing from DOM (so we can restore it)
+    hideMenuPopup: function() {
+        if (this.menuPopup) {
+            this.menuPopup.style.display = 'none';
+        }
+    },
+    
+    // Restore menu popup display
+    restoreMenuPopup: function() {
+        if (this.menuPopup) {
+            this.menuPopup.style.display = 'flex';
+        }
     },
     
     removeMenuPopup: function() {
