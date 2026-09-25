@@ -10,6 +10,24 @@ const ExamReview = {
     initReview: function(results, userAnswers, questionsData) {
         console.log(' Initializing review mode with audio');
         
+        // STOP THE TIMER FIRST - before anything else
+        if (typeof ExamTimer !== 'undefined') {
+            ExamTimer.stop();
+            if (ExamTimer.intervalId) {
+                clearInterval(ExamTimer.intervalId);
+                ExamTimer.intervalId = null;
+            }
+            console.log(' Timer stopped for review mode');
+        }
+        
+        // Also hide/disable timer UI if it exists
+        const timerElement = document.getElementById('timerDisplay') || 
+                             document.getElementById('examTimer') || 
+                             document.querySelector('.timer');
+        if (timerElement) {
+            timerElement.style.display = 'none';
+        }
+        
         this.reviewData = {
             results: results,
             userAnswers: userAnswers,
@@ -57,6 +75,23 @@ const ExamReview = {
     // Enter review mode - modify existing UI
     enterReviewMode: function() {
         console.log(' Entering review mode with audio enabled');
+        
+        // Ensure timer is stopped (belt and suspenders)
+        if (typeof ExamTimer !== 'undefined') {
+            ExamTimer.stop();
+            if (ExamTimer.intervalId) {
+                clearInterval(ExamTimer.intervalId);
+                ExamTimer.intervalId = null;
+            }
+        }
+        
+        // Hide timer UI
+        const timerElement = document.getElementById('timerDisplay') || 
+                             document.getElementById('examTimer') || 
+                             document.querySelector('.timer');
+        if (timerElement) {
+            timerElement.style.display = 'none';
+        }
         
         // Show menu screen (grid view)
         const menuScreen = document.getElementById('menuScreen');
@@ -466,7 +501,9 @@ const ExamReview = {
         };
     },
     
-    // Show menu popup (with scrollable body)
+    // ─────────────────────────────────────────────────────────────
+    // Show menu popup (auto-sized, no forced scroll)
+    // ─────────────────────────────────────────────────────────────
     showMenuPopup: function() {
         this.removeMenuPopup();
         
@@ -483,27 +520,27 @@ const ExamReview = {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 8px;
+            padding: 6px;
             box-sizing: border-box;
             overflow: hidden;
         `;
         
         this.menuPopup.innerHTML = `
-            <div class="review-popup-card" style="background: white; border-radius: 16px; width: 100%; max-width: 380px; max-height: 100%; overflow: hidden; display: flex; flex-direction: column; animation: popupSlideIn 0.3s ease; box-sizing: border-box;">
-                <div style="background: #2c3e50; padding: 12px 44px 12px 18px; color: white; text-align: center; position: relative; flex-shrink: 0;">
-                    <h3 style="margin: 0; font-size: 16px; line-height: 1.3;">MENU OPTIONS</h3>
-                    <button id="menuPopupCloseBtn" style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%); background: transparent; color: white; border: none; font-size: 24px; line-height: 1; cursor: pointer; padding: 0 8px; font-weight: 300;">×</button>
+            <div class="review-popup-card" style="background: white; border-radius: 14px; width: auto; min-width: 240px; max-width: min(380px, 94vw); height: auto; max-height: 92vh; overflow: hidden; display: flex; flex-direction: column; animation: popupSlideIn 0.3s ease; box-sizing: border-box; margin: auto;">
+                <div style="background: #2c3e50; padding: 8px 40px 8px 14px; color: white; text-align: center; position: relative; flex-shrink: 0;">
+                    <h3 style="margin: 0; font-size: 15px; line-height: 1.25;">MENU OPTIONS</h3>
+                    <button id="menuPopupCloseBtn" style="position: absolute; top: 50%; right: 6px; transform: translateY(-50%); background: transparent; color: white; border: none; font-size: 22px; line-height: 1; cursor: pointer; padding: 0 6px; font-weight: 300;">×</button>
                 </div>
-                <div class="review-scroll-body" style="padding: 14px 14px; overflow-y: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; overscroll-behavior: contain; flex: 1; min-height: 0;">
+                <div class="review-scroll-body" style="padding: 10px 12px; overflow-y: auto; -webkit-overflow-scrolling: touch; touch-action: pan-y; overscroll-behavior: contain; flex: 0 1 auto; min-height: 0;">
                     <div style="display: flex; flex-direction: row; gap: 8px; justify-content: center;">
-                        <button id="reviewNewExamBtn" style="flex: 1; min-width: 0; padding: 12px 6px; background: #3498db; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; box-sizing: border-box;">
+                        <button id="reviewNewExamBtn" style="flex: 1; min-width: 0; padding: 10px 6px; background: #3498db; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; box-sizing: border-box;">
                              New Exam
                         </button>
-                        <button id="reviewExitBtn" style="flex: 1; min-width: 0; padding: 12px 6px; background: #95a5a6; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; box-sizing: border-box;">
+                        <button id="reviewExitBtn" style="flex: 1; min-width: 0; padding: 10px 6px; background: #95a5a6; color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; white-space: nowrap; box-sizing: border-box;">
                              Exit
                         </button>
                     </div>
-                    <div style="margin-top: 12px; text-align: center; font-size: 11px; color: #7f8c8d; line-height: 1.6;">
+                    <div style="margin-top: 10px; text-align: center; font-size: 11px; color: #7f8c8d; line-height: 1.5;">
                         <span style="cursor: pointer; text-decoration: underline;" onclick="ExamReview.openTerms()">Terms & Condition</span>
                         <span style="margin: 0 6px;"> </span>
                         <span style="cursor: pointer; text-decoration: underline;" onclick="ExamReview.openPrivacy()">Privacy & Policy</span>
@@ -523,24 +560,24 @@ const ExamReview = {
                 @media (max-width: 360px) {
                     #reviewMenuPopup button {
                         font-size: 11px !important;
-                        padding: 10px 4px !important;
+                        padding: 9px 4px !important;
                     }
                     #reviewMenuPopup h3 {
-                        font-size: 14px !important;
+                        font-size: 13px !important;
                     }
                 }
                 @media (max-height: 450px) {
                     #reviewMenuPopup h3 {
-                        font-size: 14px !important;
+                        font-size: 13px !important;
                     }
                     #reviewMenuPopup button {
-                        font-size: 12px !important;
-                        padding: 10px 6px !important;
+                        font-size: 11px !important;
+                        padding: 8px 6px !important;
                     }
                 }
                 /* Slim custom scrollbar */
                 .review-scroll-body::-webkit-scrollbar {
-                    width: 6px;
+                    width: 5px;
                 }
                 .review-scroll-body::-webkit-scrollbar-track {
                     background: transparent;
@@ -583,13 +620,13 @@ const ExamReview = {
         this.showContentPopup(
             'Terms & Condition',
             `
-                <p style="margin: 0 0 12px 0;">Welcome to our exam application. By accessing or using this service, you agree to be bound by the following terms and conditions.</p>
-                <p style="margin: 0 0 12px 0;"><strong>1. Use of Service</strong><br>This application is provided for educational and assessment purposes only. You agree to use it in compliance with all applicable laws and regulations.</p>
-                <p style="margin: 0 0 12px 0;"><strong>2. User Responsibilities</strong><br>You are responsible for maintaining the confidentiality of your account and for all activities that occur under your account.</p>
-                <p style="margin: 0 0 12px 0;"><strong>3. Intellectual Property</strong><br>All content, including questions, images, and audio, is the property of the application owner and is protected by copyright laws.</p>
-                <p style="margin: 0 0 12px 0;"><strong>4. Limitation of Liability</strong><br>We are not liable for any direct, indirect, incidental, or consequential damages arising from your use of this application.</p>
-                <p style="margin: 0 0 12px 0;"><strong>5. Changes to Terms</strong><br>We reserve the right to modify these terms at any time. Continued use of the application constitutes acceptance of the updated terms.</p>
-                <p style="margin: 0 0 12px 0;"><strong>6. Contact</strong><br>If you have any questions about these terms, please contact our support team.</p>
+                <p style="margin: 0 0 8px 0;">Welcome to our exam application. By accessing or using this service, you agree to be bound by the following terms and conditions.</p>
+                <p style="margin: 0 0 8px 0;"><strong>1. Use of Service</strong><br>This application is provided for educational and assessment purposes only. You agree to use it in compliance with all applicable laws and regulations.</p>
+                <p style="margin: 0 0 8px 0;"><strong>2. User Responsibilities</strong><br>You are responsible for maintaining the confidentiality of your account and for all activities that occur under your account.</p>
+                <p style="margin: 0 0 8px 0;"><strong>3. Intellectual Property</strong><br>All content, including questions, images, and audio, is the property of the application owner and is protected by copyright laws.</p>
+                <p style="margin: 0 0 8px 0;"><strong>4. Limitation of Liability</strong><br>We are not liable for any direct, indirect, incidental, or consequential damages arising from your use of this application.</p>
+                <p style="margin: 0 0 8px 0;"><strong>5. Changes to Terms</strong><br>We reserve the right to modify these terms at any time. Continued use of the application constitutes acceptance of the updated terms.</p>
+                <p style="margin: 0 0 8px 0;"><strong>6. Contact</strong><br>If you have any questions about these terms, please contact our support team.</p>
                 <p style="margin: 0;"><strong>7. Governing Law</strong><br>These terms shall be governed by and construed in accordance with applicable local laws.</p>
             `
         );
@@ -601,19 +638,21 @@ const ExamReview = {
         this.showContentPopup(
             'Privacy & Policy',
             `
-                <p style="margin: 0 0 12px 0;">Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
-                <p style="margin: 0 0 12px 0;"><strong>1. Information We Collect</strong><br>We may collect basic usage data such as exam progress, answers, and performance statistics to improve the application.</p>
-                <p style="margin: 0 0 12px 0;"><strong>2. How We Use Information</strong><br>Collected data is used solely for educational purposes, performance tracking, and improving the user experience.</p>
-                <p style="margin: 0 0 12px 0;"><strong>3. Data Storage</strong><br>Your data is stored locally on your device and is not shared with third parties without your consent.</p>
-                <p style="margin: 0 0 12px 0;"><strong>4. Cookies</strong><br>This application may use local storage to remember your progress. You can clear this data at any time through your browser settings.</p>
-                <p style="margin: 0 0 12px 0;"><strong>5. Your Rights</strong><br>You have the right to access, modify, or delete your personal data at any time.</p>
-                <p style="margin: 0 0 12px 0;"><strong>6. Security</strong><br>We take reasonable measures to protect your information from unauthorized access or disclosure.</p>
+                <p style="margin: 0 0 8px 0;">Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
+                <p style="margin: 0 0 8px 0;"><strong>1. Information We Collect</strong><br>We may collect basic usage data such as exam progress, answers, and performance statistics to improve the application.</p>
+                <p style="margin: 0 0 8px 0;"><strong>2. How We Use Information</strong><br>Collected data is used solely for educational purposes, performance tracking, and improving the user experience.</p>
+                <p style="margin: 0 0 8px 0;"><strong>3. Data Storage</strong><br>Your data is stored locally on your device and is not shared with third parties without your consent.</p>
+                <p style="margin: 0 0 8px 0;"><strong>4. Cookies</strong><br>This application may use local storage to remember your progress. You can clear this data at any time through your browser settings.</p>
+                <p style="margin: 0 0 8px 0;"><strong>5. Your Rights</strong><br>You have the right to access, modify, or delete your personal data at any time.</p>
+                <p style="margin: 0 0 8px 0;"><strong>6. Security</strong><br>We take reasonable measures to protect your information from unauthorized access or disclosure.</p>
                 <p style="margin: 0;"><strong>7. Updates to This Policy</strong><br>We may update this privacy policy from time to time. Continued use of the application constitutes acceptance of the updated policy.</p>
             `
         );
     },
     
-    // Show content popup (Terms/Privacy) - with smooth scrollable body
+    // ─────────────────────────────────────────────────────────────
+    // Show content popup (Terms/Privacy) - auto-sized, auto-fit font
+    // ─────────────────────────────────────────────────────────────
     showContentPopup: function(title, bodyHTML) {
         this.removeContentPopup();
         
@@ -625,23 +664,23 @@ const ExamReview = {
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.75);
             z-index: 31000;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 8px;
+            padding: 4px;
             box-sizing: border-box;
             overflow: hidden;
         `;
         
         this.contentPopup.innerHTML = `
-            <div class="review-popup-card" style="background: white; border-radius: 16px; width: 100%; max-width: 420px; max-height: 100%; overflow: hidden; display: flex; flex-direction: column; animation: popupSlideIn 0.3s ease; box-sizing: border-box;">
-                <div style="background: #2c3e50; padding: 12px 44px 12px 18px; color: white; text-align: center; position: relative; flex-shrink: 0;">
-                    <h3 style="margin: 0; font-size: 15px; line-height: 1.3;">${title}</h3>
-                    <button id="contentPopupCloseBtn" style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%); background: transparent; color: white; border: none; font-size: 24px; line-height: 1; cursor: pointer; padding: 0 8px; font-weight: 300;">×</button>
+            <div class="review-popup-card" style="background: white; border-radius: 12px; width: min(480px, 96vw); max-width: 96vw; height: auto; max-height: 92vh; margin: auto; overflow: hidden; display: flex; flex-direction: column; animation: popupSlideIn 0.3s ease; box-sizing: border-box;">
+                <div style="background: #2c3e50; padding: 7px 38px 7px 14px; color: white; text-align: center; position: relative; flex-shrink: 0;">
+                    <h3 style="margin: 0; font-size: 14px; line-height: 1.2;">${title}</h3>
+                    <button id="contentPopupCloseBtn" style="position: absolute; top: 50%; right: 6px; transform: translateY(-50%); background: transparent; color: white; border: none; font-size: 22px; line-height: 1; cursor: pointer; padding: 0 6px; font-weight: 300;">×</button>
                 </div>
-                <div class="review-scroll-body" style="padding: 14px 16px; overflow-y: auto; font-size: 13px; line-height: 1.6; color: #34495e; -webkit-overflow-scrolling: touch; touch-action: pan-y; overscroll-behavior: contain; word-wrap: break-word; overflow-wrap: break-word; flex: 1; min-height: 0;">
+                <div class="review-scroll-body" style="padding: 8px 12px; overflow: hidden; font-size: 11px; line-height: 1.25; color: #34495e; word-wrap: break-word; overflow-wrap: break-word; flex: 0 1 auto; min-height: 0;">
                     ${bodyHTML}
                 </div>
             </div>
@@ -652,6 +691,70 @@ const ExamReview = {
         document.getElementById('contentPopupCloseBtn').onclick = () => {
             this.closeContentPopup();
         };
+        
+        // Auto-fit multiple times to catch all layout shifts (animation, fonts, etc.)
+        const self = this;
+        setTimeout(() => self.autoFitContentPopup(), 30);
+        setTimeout(() => self.autoFitContentPopup(), 150);
+        setTimeout(() => self.autoFitContentPopup(), 400);
+        setTimeout(() => self.autoFitContentPopup(), 800);
+    },
+    
+    // Auto-fit: shrink font + margins + line-height until content fits (min 7px)
+    autoFitContentPopup: function() {
+        if (!this.contentPopup) return;
+        const body = this.contentPopup.querySelector('.review-scroll-body');
+        const card = this.contentPopup.querySelector('.review-popup-card');
+        if (!body || !card) return;
+        
+        // Reset starting values
+        let fontSize = 11;
+        let lineHeight = 1.25;
+        let paraMargin = 5;
+        body.style.fontSize = fontSize + 'px';
+        body.style.lineHeight = lineHeight;
+        body.style.overflow = 'hidden';
+        
+        // Apply tighter paragraph margins and headings
+        const applyMargins = () => {
+            const ps = body.querySelectorAll('p');
+            ps.forEach(p => {
+                p.style.marginBottom = paraMargin + 'px';
+                p.style.marginTop = '0';
+            });
+            const strongs = body.querySelectorAll('strong');
+            strongs.forEach(s => { s.style.fontSize = 'inherit'; });
+        };
+        applyMargins();
+        
+        // Check if content fits
+        const fits = () => body.scrollHeight <= body.clientHeight + 1;
+        
+        // Progressive shrink loop
+        let guard = 0;
+        while (!fits() && fontSize > 7 && guard < 40) {
+            fontSize -= 0.5;
+            body.style.fontSize = fontSize + 'px';
+            
+            // Every 4 steps tighten paragraph margins
+            if (guard % 4 === 0 && paraMargin > 1) {
+                paraMargin -= 1;
+                applyMargins();
+            }
+            // Every 5 steps tighten line-height
+            if (guard % 5 === 0 && lineHeight > 1.05) {
+                lineHeight -= 0.05;
+                body.style.lineHeight = lineHeight;
+            }
+            guard++;
+        }
+        
+        // Final safety: allow scroll only if truly impossible to fit
+        if (!fits()) {
+            body.style.overflowY = 'auto';
+            body.style.overflowX = 'hidden';
+            body.style.webkitOverflowScrolling = 'touch';
+        }
     },
     
     // Close content popup and re-show menu popup
@@ -725,7 +828,14 @@ const ExamReview = {
 if (typeof ExamSubmit !== 'undefined') {
     const originalProcessSubmission = ExamSubmit.processSubmission;
     ExamSubmit.processSubmission = function() {
-        if (typeof ExamTimer !== 'undefined') ExamTimer.stop();
+        // Stop timer FIRST
+        if (typeof ExamTimer !== 'undefined') {
+            ExamTimer.stop();
+            if (ExamTimer.intervalId) {
+                clearInterval(ExamTimer.intervalId);
+                ExamTimer.intervalId = null;
+            }
+        }
         
         const score = this.calculateScore();
         this.saveResults(score);
@@ -800,6 +910,28 @@ reviewCSS.textContent = `
     .btn-finish:hover {
         transform: scale(1.02);
         opacity: 0.95;
+    }
+
+    /* ── POPUP OVERRIDE FIX (JS-injected) ── */
+    #reviewMenuPopup,
+    #reviewMenuPopup *,
+    #reviewContentPopup,
+    #reviewContentPopup * {
+        max-width: none;
+    }
+    #reviewMenuPopup .review-scroll-body,
+    #reviewContentPopup .review-scroll-body {
+        flex: 0 1 auto;
+        min-height: 0;
+        overflow-x: hidden;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+    }
+    #reviewContentPopup p,
+    #reviewMenuPopup p {
+        max-width: none;
+        word-break: break-word;
     }
 `;
 document.head.appendChild(reviewCSS);
