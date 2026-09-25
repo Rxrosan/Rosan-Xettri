@@ -16,7 +16,7 @@
       border: '1px solid rgba(173,216,230,0.4)',
       iconHighlight: 'rgba(173,216,230,0.7)',
       centerLogoUrl: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-8.png',
-      fallbackLogo: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-9.gif'
+      fallbackLogo: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-8.png'
     },
     silver: {
       name: 'silver',
@@ -25,7 +25,7 @@
       border: '1px solid rgba(220,220,220,0.4)',
       iconHighlight: 'rgba(220,220,220,0.7)',
       centerLogoUrl: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-8.png',
-      fallbackLogo: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-9.gif'
+      fallbackLogo: 'RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-8.png'
     }
   };
 

@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    const LOGO_URL = "RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-9.gif";
+    const LOGO_URL = "RX_45537_F0LD3R_2061/RX_1M463_45537_F0LD3R/RX_1M463_L0605/L-10.gif";
     const BG_COLOR = "#0a192f";
     const PRIMARY_TEXT = "ROSAN KC";
     const SECONDARY_TEXT = "RKC";
