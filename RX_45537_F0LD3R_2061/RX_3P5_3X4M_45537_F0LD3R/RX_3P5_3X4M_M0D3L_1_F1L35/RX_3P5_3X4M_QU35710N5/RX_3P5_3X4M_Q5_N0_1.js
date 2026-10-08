@@ -181,6 +181,26 @@ const questionsForNumber1 = [
         ],
         answer: 2
     },
+    {
+        id: 10,
+        instruction: {
+        text: "[Q-ID : 10]<br><br> 1. 다음 글을 읽고 내용과 같은 것을 고르십시오.", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: " 한국에서는 전화나 앱을 통해 음식을 배달시키는 사람이 많습니다. 특히 '배달 앱'을 이용하면 식당의 메뉴와 사용자들의 평점을 볼 수 있고 음식이 언제 배달되는지 학인할 수도 있습니다. 그리고 현금 외에도 카드, 휴대폰 등의 다양한 결제 수단이 있어 편리할 뿐만 아니라 할인을 해 주거나 쿠폰을 주기 때문에 인기가 많습니다.", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: " 배달 앱은 현금 결제가 안 됩니다. ", image: null, audio: null },
+            { text: " 앱으로 주문하면 할인을 받지 못합니다. ", image: null, audio: null },
+            { text: " 음식을 주문할 때 전화가 앱보다 편합니다. ", image: null, audio: null },
+            { text: " 앱을 사용하면 배달 시간을 알 수 있습니다. ", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

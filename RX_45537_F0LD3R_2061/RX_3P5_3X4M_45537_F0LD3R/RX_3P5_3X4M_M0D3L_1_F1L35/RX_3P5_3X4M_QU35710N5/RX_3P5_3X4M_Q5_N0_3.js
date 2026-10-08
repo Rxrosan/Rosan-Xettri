@@ -122,6 +122,26 @@ const questionsForNumber3 = [
         ],
         answer: 4
     },
+        {
+        id: 7,
+        instruction: {
+        text: "[Q-ID : 7]<br><br> 3. 다음 글을 읽고 내용과 같은 것을 고르십시오.", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: " 내일은 제 친구 미미 씨의 생일입니다. 내일이 토요일이라 회사에 가지 않아도 됩니다. 그래서 친구들과 함께 놀이공원에 가기로 했습니다. 놀이공웜에 가기 전에 미미 씨의 선물을 사려고 합니다. 선물로 휴대전화를 줄 계획입니다. 전자상가에서 선물을 산 후 친구들과 점심을 먹고 놀이공원으로 출발할 계획입니다.", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: " 논이 공원에 간 후에 선물을 사려고 합니다. ", image: null, audio: null },
+            { text: " 친구에게서 선물로 휴대전화를 받으려고 합니다. ", image: null, audio: null },
+            { text: " 놀이공원으로 가기 전에 점심을 먹을 것입니다. ", image: null, audio: null },
+            { text: " 제 생일에 친구와 같이 놀이공원으로 가기로 합니다. ", image: null, audio: null }
+        ],
+        answer: 3
+    },
     
 ];
 

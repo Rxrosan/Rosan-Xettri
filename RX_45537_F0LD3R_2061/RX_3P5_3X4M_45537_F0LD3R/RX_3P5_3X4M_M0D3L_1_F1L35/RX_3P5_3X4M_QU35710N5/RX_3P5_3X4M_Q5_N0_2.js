@@ -161,6 +161,26 @@ const questionsForNumber2 = [
         ],
         answer: 3
     },
+        {
+        id: 9,
+        instruction: {
+        text: "[Q-ID : 9]<br><br> 2. 다음 글을 읽고 내용과 같은 것을 고르십시오.", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: " 세계 각국은  화석 연료의 사용으로 인한 한경 파괴와 기후 변화에 대응하기 위하여 친환경 에너지 개발에 힘쓰고 있습니다. 친환경 에너지는 초기 설치 비용이 높아 경제적으로 부담이 될 수 있지만, 운영 비용이 낮고 무제한으로 사용할 수 있다는 장점이 잇습니다. 또한 화석 연료의 고갈을 막고 옴실가스를 줄여 급격한 기후 변화에 따른 재난에 대비할 수 잇게 해 줍니다. ", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: " 친환경 에너지는 설치비가 낮아서 경제적입니다. ", image: null, audio: null },
+            { text: " 세계 여러 나라는 화석 연료를 더 많이 사용합니다. ", image: null, audio: null },
+            { text: " 친환경 에너지는 운영비가 많이 들어서 부담됩니다. ", image: null, audio: null },
+            { text: " 친환경 에너지는 환경 오염을 줄이는 데 도음이 됩니다. ", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 
 ];
