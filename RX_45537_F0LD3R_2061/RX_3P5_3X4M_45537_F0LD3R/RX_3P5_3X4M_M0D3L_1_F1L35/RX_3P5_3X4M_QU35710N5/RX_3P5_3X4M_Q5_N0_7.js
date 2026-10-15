@@ -41,6 +41,26 @@ const questionsForNumber7 = [
         ],
         answer: 1
     },
+    {
+        id: 3,
+        instruction: {
+            text: "[Q-ID : 3]<br><br> 7. 다음 단어와 관계있는 것은 무엇입니까?.",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "수출하다, 수입하다, 무역",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "경제", image: null, audio: null },
+            { text: "한류", image: null, audio: null },
+            { text: "혼례", image: null, audio: null },
+            { text: "갈등", image: null, audio: null }
+        ],
+        answer: 1
+    },
 
 ];
 

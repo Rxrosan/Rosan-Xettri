@@ -61,6 +61,26 @@ const questionsForNumber8 = [
         ],
         answer: 3
     },
+    {
+        id: 4,
+        instruction: {
+            text: "[Q-ID : 4]<br><br> 8. 다음 단어의 반대한 말은 무엇입니까?",
+            image: null,
+            audio: null
+        },
+        questionBody: {
+            text: "날씬하다",
+            image: null,
+            audio: null
+        },
+        options: [
+            { text: "친절하다", image: null, audio: null },
+            { text: "똑똑하다", image: null, audio: null },
+            { text: "딱딱하다", image: null, audio: null },
+            { text: "뚱뚱하다", image: null, audio: null }
+        ],
+        answer: 4
+    },
     
 ];
 

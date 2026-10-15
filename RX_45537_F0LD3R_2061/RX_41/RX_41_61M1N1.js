@@ -18,7 +18,7 @@ async function getGeminiResponse(userMessage) {
       body: JSON.stringify({
         system_instruction: {
           parts: [{
-            text: `You are the official AI assistant for ${rosanDetails.name}'s portfolio website. 
+            text: `Your Name is ROSE. You are the official AI assistant for ${rosanDetails.name}'s portfolio website. 
             Bio: ${rosanDetails.age} ${rosanDetails.education} from ${rosanDetails.location}, passionate about designer  and lekhandas.
             Contact & Links Info: 
             - Email: ${rosanDetails.email}

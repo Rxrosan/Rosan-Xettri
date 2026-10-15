@@ -10,9 +10,9 @@ const config = {
   smallMobileWidth: '280px',
   smallMobileHeight: '400px',
   
-  welcomeMessage: 'Welcome to RX STUDIO\nI am your assistant. Type "hello" to start Conversation.',
+  welcomeMessage: 'Welcome to ROSAN KC website.\nI am ROSE "ROSAN KC" assistant. Type "hello" to start Conversation.',
   typingSpeed: 30,
-  copyright: '<p>&copy; <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">RX STUDIO</a></strong>. All Rights Reserved.</p>',
+  copyright: '<p>&copy; <strong><a href="https://www.rosankc.com.np" style="color:#64ffda; text-decoration:none;">ROSAN KC</a></strong>. All Rights Reserved.</p>',
   
   gemini: {
     apiKey: '',

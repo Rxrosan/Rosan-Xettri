@@ -109,7 +109,7 @@ const questionsForNumber9 = [
             audio: null
         },
         questionBody: {
-            text: "", 
+            text:  null, 
             image: null, 
             audio: null
         },
@@ -118,6 +118,26 @@ const questionsForNumber9 = [
             { text: " 도서관<u>에서</u> 와서 공부했어요.", image: null, audio: null },
             { text: " 커피가 <u>맛있었어서</u> 두 잔이나 마셨어요.", image: null, audio: null },
             { text: " 케이크를 만들어 <u>친구한테 </u> 줄 거예요.", image: null, audio: null }
+        ],
+        answer: 4
+    },
+    {
+        id: 7,
+        instruction: {
+            text: "[Q-ID : 7]<br><br> 9. 다음 글을 읽고 무엇에 대한 글인지 고르십시오.", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: "한국에서 6 개월 이상 거주한 외국인은 은행에서 통장을 만들 수 있습니다. 통장을  만들 때에는 여권과 외국인등록증이 필요합니다. 그리고 본인 확인이 반드시 필요하기 때문에 직접 은행을 방문해야 합니다.", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: " 은행 위치", image: null, audio: null },
+            { text: " 등록증 가입", image: null, audio: null },
+            { text: " 여권 발급", image: null, audio: null },
+            { text: " 계좌 개설.", image: null, audio: null }
         ],
         answer: 4
     },

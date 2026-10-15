@@ -10,7 +10,7 @@ function injectHTML() {
       <div class="rx-chat-header" id="rx-chat-header">
         <div class="rx-header-icon" id="rx-header-icon">${!config.images.headerIcon ? avatars.headerEmoji : ''}</div>
         <div class="rx-header-title">
-          ROSAN XETTRI STUDIO
+          ROSAN KC
           <span class="rx-mode-indicator" id="rx-mode-indicator">CMD</span>
         </div>
         <div class="rx-header-close" id="rx-close-btn">×</div>

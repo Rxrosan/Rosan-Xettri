@@ -21,12 +21,12 @@ const commands = [
   { 
     command: 'hello', 
     description: 'Start conversation',
-    response: 'Hello! I am RX STUDIO ASSISTANT. type "help" to see all comands.',
+    response: 'Hello! I am ROSE "ROSAN KC ASSISTANT". type "help" to see all comands. & Tell me how can i help you ?',
     category: 'basic'
   },
   { 
     command: 'about', 
-    description: 'About RX Studio',
+    description: 'About ROSAN KC',
     response: `${rosanDetails.name} is a ${rosanDetails.age} ${rosanDetails.education} from ${rosanDetails.location}. He is a licensed professional serving the Kapilvastu district for legal documents (Kapali Tamsuk, Rajinaama, Lakhbandhak), EPS exam web services, National Identity Card assistance, PAN account creation, and essential government document solutions.`,
     category: 'info',
     isLink: true,

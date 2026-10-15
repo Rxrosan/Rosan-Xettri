@@ -101,6 +101,26 @@ const questionsForNumber10 = [
         ],
         answer: 1
     },
+        {
+        id: 6,
+        instruction: {
+            text: "[Q-ID : 6]<br><br> 10. 다음 글을 읽고 무엇에 대한 글인지 고르십시오.", 
+            image: null, 
+            audio: null
+        },
+        questionBody: {
+            text: "한국에서는 결혼식이 끝난 후 폐벡을 합니다. 폐벡은 신랑과 신부가 신랑 측 어른들께 부부로서 처음 인사를 드리는 의례입니다.폐벡을 할 때 신랑의 부모님과 친척 어른들은 부부의 행복을 기원합니다. 요즘은 신랑 쪽뿐만 아니라 신부 쪽 부오님과 친척들도 참석하여 양쪽 친척들이 함께 인사를 나누기도 합니다.", 
+            image: null, 
+            audio: null
+        },
+        options: [
+            { text: " 전통 폐벡의 종류", image: null, audio: null },
+            { text: " 폐벡 문화 풍습", image: null, audio: null },
+            { text: " 전통 놀이 풍습", image: null, audio: null },
+            { text: " 전통 혼례 잘차", image: null, audio: null }
+        ],
+        answer: 2
+    },
 ];
 
 // Register these questions with the manager
