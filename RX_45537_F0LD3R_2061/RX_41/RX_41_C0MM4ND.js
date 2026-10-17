@@ -1,5 +1,5 @@
 // ============================================================
-// 08-command.js - Command Processing
+// 08-command.js - Command Processing (WITH AI KEY GATE + FIX)
 // ============================================================
 
 let chatMode = 'command';
@@ -80,23 +80,71 @@ function extractParameter(input, command) {
 }
 
 async function processCommand(input) {
+  const lowerInput = input.toLowerCase().trim();
+  
+  // ============================================================
+  //  API KEY AWAITING STATE (FIXED)
+  // ============================================================
   if (awaitingApiKey) {
-    if (input.toLowerCase().startsWith('set key ')) {
-      const key = input.substring(8).trim();
-      if (saveApiKey(key)) {
-        addMessage('API key saved! Testing models...', 'bot');
-        await connectToFreeTier();
-      } else {
-        addMessage('Invalid API key.', 'bot');
-      }
-      awaitingApiKey = false;
-      return;
-    } else {
-      addMessage('Please use: set key YOUR_API_KEY', 'bot');
+    //  पहिले command जाँच — user ले अरू command type गरे पनि काम गर्ने
+    const cmd = findCommand(input);
+    
+    //  "get api key" link command → awaiting state भए पनि link देखाउने
+    if (cmd && cmd.isLink && cmd.action === undefined) {
+      awaitingApiKey = false;  // state reset — फेरि ai mode बाट सुरु गर्न
+      const response = typeof cmd.response === 'function' ? cmd.response() : cmd.response;
+      addMessageWithLink(response, 'bot', cmd.url, cmd.linkText);
       return;
     }
+    
+    //  "command mode" → awaiting state बन्द गर्ने
+    if (cmd && cmd.action === 'commandMode') {
+      awaitingApiKey = false;
+      chatMode = 'command';
+      saveChatMode('command');
+      updateModeIndicator();
+      addMessage(cmd.response, 'bot');
+      return;
+    }
+    
+    //  "help" → सहयोग देखाउने
+    if (cmd && cmd.action === 'showHelp') {
+      awaitingApiKey = false;
+      showHelp();
+      return;
+    }
+    
+    //  set key प्रक्रिया
+    if (lowerInput.startsWith('set key ')) {
+      const key = input.substring(8).trim();
+      if (saveApiKey(key)) {
+        addMessage(' API key saved! Testing models...', 'bot');
+        const ok = await connectToFreeTier();
+        awaitingApiKey = false;
+        if (!ok) {
+          // Key save भयो तर model fail → AI mode ON नगर्ने
+          chatMode = 'command';
+          saveChatMode('command');
+          updateModeIndicator();
+        }
+      } else {
+        addMessage(' Invalid API key. Please enter a valid key.\n\nType: `set key YOUR_API_KEY`', 'bot');
+      }
+      return;
+    }
+    
+    //  अन्य केही → सरल warning (get api key link सहित)
+    addMessage(
+      ' API key format यसरी हाल्नुहोस्:\n\n`set key YOUR_API_KEY`\n\n' +
+      ' Key कहाँबाट लिने? Type: `get api key`',
+      'bot'
+    );
+    return;
   }
 
+  // ============================================================
+  // 🎯 सामान्य COMMAND PROCESSING
+  // ============================================================
   const cmd = findCommand(input);
   
   if (cmd) {
@@ -110,18 +158,26 @@ async function processCommand(input) {
     }
     else if (cmd.action === 'clear') {
       clearMessageHistory();
-      addMessage(cmd.response, 'bot');
+      addMessage(cmd.response + '\nStart new massage...', 'bot');
     }
     else if (cmd.action === 'showHelp') {
       showHelp();
     }
     else if (cmd.action === 'aiMode') {
+      //  API key छ भने मात्र AI mode attempt
       if (config.gemini.apiKey) {
         addMessage('API key found! Connecting to Gemini...', 'bot');
         await connectToFreeTier();
       } else {
+        //  API key छैन → AI mode ON नगर्ने, पहिले key माग्ने
         awaitingApiKey = true;
-        addMessage('Enter your Gemini API key:\n\nFormat: set key YOUR_API_KEY\n\nGet a key: type "get api key"', 'bot');
+        addMessage(
+          ' AI Mode for activating  **first API Key** needed.\n\n' +
+          ' Step 1: typing `get api key` and get you gemini api key\n' +
+          ' Step 2: type `set key YOUR_API_KEY` and upload your api key\n\n' +
+          'After uploaded your Key AI mode auto-connect ',
+          'bot'
+        );
       }
     }
     else if (cmd.action === 'commandMode') {
@@ -132,7 +188,12 @@ async function processCommand(input) {
       addMessage(cmd.response, 'bot');
     }
     else if (cmd.action === 'setApiKey') {
-      addMessage('Use: set key YOUR_API_KEY', 'bot');
+      awaitingApiKey = true;
+      addMessage(
+        ' कृपया API key हाल्नुहोस्:\n\n`set key YOUR_API_KEY`\n\n' +
+        ' Key कहाँबाट लिने? Type: `get api key`',
+        'bot'
+      );
     }
     else if (cmd.action === 'clearApiKey') {
       clearApiKey();
@@ -140,9 +201,9 @@ async function processCommand(input) {
     else if (cmd.action === 'checkApiKey') {
       if (config.gemini.apiKey) {
         const modelInfo = getCurrentModelInfo();
-        addMessage(`API key saved\nModel: ${modelInfo.name}\nMode: ${chatMode.toUpperCase()}`, 'bot');
+        addMessage(` API key saved\nModel: ${modelInfo.name}\nMode: ${chatMode.toUpperCase()}`, 'bot');
       } else {
-        addMessage('No API key saved. Type "ai mode" to set up.', 'bot');
+        addMessage(' No API key saved. Type "ai mode" to set up.', 'bot');
       }
     }
     else if (cmd.action === 'listModels') { listModels(); }
@@ -150,6 +211,7 @@ async function processCommand(input) {
     else if (cmd.action === 'showCurrentModel') { showCurrentModel(); }
     else if (cmd.action === 'testAllModels') { await testAllAvailableModels(); }
     else if (cmd.isLink) {
+      //  get api key, about, contact, service, website — सबै link commands
       const response = typeof cmd.response === 'function' ? cmd.response() : cmd.response;
       addMessageWithLink(response, 'bot', cmd.url, cmd.linkText);
     }
@@ -158,6 +220,7 @@ async function processCommand(input) {
       addMessage(response, 'bot');
     }
   } else {
+    // AI mode मा key नभए reply नगर्ने, key माग्ने
     if (chatMode === 'ai' && config.gemini.apiKey) {
       showTypingIndicator();
       try {
@@ -169,7 +232,12 @@ async function processCommand(input) {
         addMessage('Error. Please try again.', 'bot');
       }
     } else if (chatMode === 'ai' && !config.gemini.apiKey) {
-      addMessage('Set API key first: set key YOUR_API_KEY', 'bot');
+      awaitingApiKey = true;
+      addMessage(
+        ' Set API key first:\n\n`set key YOUR_API_KEY`\n\n' +
+        ' Key कहाँबाट लिने? Type: `get api key`',
+        'bot'
+      );
     } else {
       addMessage(`Unknown: "${input}"\n\nType "help" for commands.`, 'bot');
     }

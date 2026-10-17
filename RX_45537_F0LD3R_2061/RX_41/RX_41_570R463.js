@@ -1,5 +1,5 @@
 // ============================================================
-// 03-storage.js - LocalStorage Helpers (FULLY REWRITTEN)
+// 03-storage.js - LocalStorage Helpers (WITH AI MEMORY CLEAR)
 // ============================================================
 
 // ===== API KEY MANAGEMENT =====
@@ -31,21 +31,17 @@ function removeApiKey() {
 }
 
 function clearApiKey() {
-  // 1. Remove API key from storage and config
   localStorage.removeItem(config.storageKeys.geminiKey);
   localStorage.removeItem(config.storageKeys.chatMode);
   config.gemini.apiKey = null;
   
-  // 2. FORCE SWITCH TO COMMAND MODE
   chatMode = 'command';
   localStorage.setItem(config.storageKeys.chatMode, 'command');
   
-  // 3. Update UI indicator
   if (typeof updateModeIndicator === 'function') {
     updateModeIndicator();
   }
   
-  // 4. Show confirmation message
   if (typeof addMessage === 'function') {
     addMessage(' API key cleared. Switched to CMD mode. Type "ai mode" to set up new key.', 'bot');
   }
@@ -161,7 +157,6 @@ function saveMessageHistory() {
       const avatarDiv = wrapper.querySelector('.rx-avatar');
       const link = wrapper.querySelector('.rx-link-button');
       
-      // Get full message text including link if present
       let fullText = '';
       const textDivs = messageDiv ? messageDiv.querySelectorAll('div') : [];
       textDivs.forEach(div => {
@@ -196,6 +191,11 @@ function clearMessageHistory() {
   localStorage.removeItem(config.storageKeys.messages);
   const container = document.getElementById('rx-chat-messages');
   if (container) container.innerHTML = '';
+  
+  //  AI conversation memory पनि clear गर्नुहोस्
+  if (typeof clearAIConversationHistory === 'function') {
+    clearAIConversationHistory();
+  }
 }
 
 // ===== COMPLETE RESET =====
@@ -210,6 +210,11 @@ function resetAllStorage() {
   config.gemini.apiKey = null;
   config.gemini.currentModel = config.gemini.availableModels[0].id;
   chatMode = 'command';
+  
+  //  AI memory पनि clear
+  if (typeof clearAIConversationHistory === 'function') {
+    clearAIConversationHistory();
+  }
   
   if (typeof updateModeIndicator === 'function') {
     updateModeIndicator();
@@ -226,7 +231,7 @@ function getStorageStats() {
   let keys = [];
   for (let key in localStorage) {
     if (localStorage.hasOwnProperty(key)) {
-      const size = localStorage[key].length * 2; // UTF-16
+      const size = localStorage[key].length * 2;
       total += size;
       keys.push({ key, size: size / 1024 });
     }

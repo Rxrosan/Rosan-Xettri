@@ -1,5 +1,5 @@
 // ============================================================
-// 11-main.js - Main Initialization
+// 11-main.js - Main Initialization (WITH AI MEMORY REBUILD)
 // ============================================================
 
 function setupInteractions() {
@@ -25,7 +25,7 @@ function setupInteractions() {
   closeBtn.addEventListener('click', () => {
     chatWindow.classList.remove('show');
     saveWindowState(false);
-    clearMessageHistory();
+    clearMessageHistory();  // ✅ AI memory पनि clear हुन्छ
   });
 
   sendBtn.addEventListener('click', handleUserInput);
@@ -39,9 +39,42 @@ function setupInteractions() {
   if (loadWindowState()) {
     chatWindow.classList.add('show');
     loadMessagesFromHistory();
+    // ✅ पुरानो chat बाट AI memory rebuild गर्ने
+    rebuildAIContextFromHistory();
   }
 
   setupTrigger();
+}
+
+// ✅ localStorage को message history बाट AI conversation memory फेरि बनाउने
+function rebuildAIContextFromHistory() {
+  if (typeof clearAIConversationHistory === 'function') {
+    clearAIConversationHistory();
+  }
+  
+  const messages = loadMessageHistory();
+  if (!messages || messages.length === 0) return;
+  
+  // welcome message छोडेर बाँकी सबै conversation memory मा हाल्ने
+  const conversationMessages = messages.filter(msg => 
+    msg.text && 
+    !msg.text.includes('Welcome to ROSAN KC website') &&
+    msg.text.trim().length > 0
+  );
+  
+  conversationMessages.forEach(msg => {
+    if (typeof conversationHistory !== 'undefined') {
+      conversationHistory.push({
+        role: msg.sender === 'user' ? 'user' : 'model',
+        text: msg.text
+      });
+    }
+  });
+  
+  // max limit भन्दा बढी भए trim
+  while (conversationHistory.length > MAX_CONTEXT_MESSAGES) {
+    conversationHistory.shift();
+  }
 }
 
 async function handleUserInput() {

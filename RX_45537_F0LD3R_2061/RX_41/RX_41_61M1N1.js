@@ -1,6 +1,9 @@
 // ============================================================
-// 04-gemini.js - Gemini API Functions
+// 04-gemini.js - Gemini API Functions (WITH CONVERSATION MEMORY)
 // ============================================================
+
+let conversationHistory = [];
+const MAX_CONTEXT_MESSAGES = 20;
 
 async function getGeminiResponse(userMessage) {
   if (!config.gemini.apiKey) {
@@ -10,11 +13,15 @@ async function getGeminiResponse(userMessage) {
   try {
     const modelInfo = getCurrentModelInfo();
     
+    const contents = [];
+    conversationHistory.forEach(turn => {
+      contents.push({ role: turn.role, parts: [{ text: turn.text }] });
+    });
+    contents.push({ role: 'user', parts: [{ text: userMessage }] });
+    
     const response = await fetch(`${config.gemini.apiUrl}${modelInfo.id}:generateContent?key=${config.gemini.apiKey}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         system_instruction: {
           parts: [{
@@ -30,29 +37,37 @@ async function getGeminiResponse(userMessage) {
             - About Page: ${rosanDetails.aboutPage}
             - Services Page: ${rosanDetails.servicePage}
             
+            IMPORTANT: Remember the entire conversation history and answer based on the user's topic and previous messages. If the user changes topic, follow their new topic naturally.
+
             IMPORTANT INSTRUCTION FOR LINKS: When a user asks for any link, website, facebook, social media, contact, about, or service page, you MUST include a special link formatting tag at the end of your text like this: 
             [LINK:URL_HERE|BUTTON_TEXT_HERE]
             `
           }]
         },
-        contents: [{
-          parts: [{
-            text: userMessage
-          }]
-        }]
+        contents: contents
       })
     });
 
     const data = await response.json();
     
     if (response.ok && data.candidates && data.candidates[0]) {
-      return data.candidates[0].content.parts[0].text;
+      const aiText = data.candidates[0].content.parts[0].text;
+      conversationHistory.push({ role: 'user', text: userMessage });
+      conversationHistory.push({ role: 'model', text: aiText });
+      while (conversationHistory.length > MAX_CONTEXT_MESSAGES) {
+        conversationHistory.shift();
+      }
+      return aiText;
     } else {
       return `Error: ${data.error?.message || 'Unknown error'}`;
     }
   } catch (error) {
     return 'Network error. Please check your connection.';
   }
+}
+
+function clearAIConversationHistory() {
+  conversationHistory = [];
 }
 
 async function testModelConnection(modelId) {
@@ -70,75 +85,65 @@ async function testModelConnection(modelId) {
   }
 }
 
+//  FIX: सफल भएमा मात्र chatMode='ai' set गर्ने, false return मा कहिल्यै नगर्ने
 async function connectToFreeTier() {
   if (!config.gemini.apiKey) {
     if (typeof addMessage === 'function') {
-      addMessage('No API key found. Please set your API key first using: set key YOUR_API_KEY', 'bot');
+      addMessage(' No API key found. Please set your API key first using: `set key YOUR_API_KEY`', 'bot');
     }
     return false;
   }
 
-  if (typeof addMessage === 'function') {
-    addMessage('Testing models...', 'bot');
-  }
+  if (typeof addMessage === 'function') addMessage(' Testing models...', 'bot');
   
   for (const model of config.gemini.availableModels) {
-    if (typeof addMessage === 'function') {
-      addMessage(`Testing ${model.name}...`, 'bot');
-    }
-    if (typeof showTypingIndicator === 'function') {
-      showTypingIndicator();
-    }
+    if (typeof addMessage === 'function') addMessage(`Testing ${model.name}...`, 'bot');
+    if (typeof showTypingIndicator === 'function') showTypingIndicator();
     const isWorking = await testModelConnection(model.id);
-    if (typeof removeTypingIndicator === 'function') {
-      removeTypingIndicator();
-    }
+    if (typeof removeTypingIndicator === 'function') removeTypingIndicator();
     
     if (isWorking) {
       saveModel(model.id);
       chatMode = 'ai';
       saveChatMode('ai');
-      if (typeof updateModeIndicator === 'function') {
-        updateModeIndicator();
-      }
+      if (typeof updateModeIndicator === 'function') updateModeIndicator();
       if (typeof addMessage === 'function') {
-        addMessage(`Connected with ${model.name}! How can I help you?`, 'bot');
+        addMessage(`Connected with ${model.name}!\n\nAI Mode activated How can I help you?`, 'bot');
       }
       return true;
     }
   }
   
+  //  कुनै पनि model चलेन → AI mode OFF नै रहन्छ
   if (typeof addMessage === 'function') {
-    addMessage('Your API key works but needs to be enabled for Gemini API. Go to https://aistudio.google.com/ and create a new key.', 'bot');
+    addMessage(
+      ' API key ले काम गरेन।\n\n' +
+      ' सम्भावित कारण:\n' +
+      '• Key गलत छ\n' +
+      '• Key enable छैन\n\n' +
+      ' नयाँ key बनाउनुहोस्: https://aistudio.google.com/app/apikey\n\n' +
+      'फेरि प्रयास: `set key YOUR_API_KEY`',
+      'bot'
+    );
   }
   return false;
 }
 
 async function testAllAvailableModels() {
   if (!config.gemini.apiKey) {
-    if (typeof addMessage === 'function') {
-      addMessage('No API key found. Please set your API key first using "set key YOUR_API_KEY"', 'bot');
-    }
+    if (typeof addMessage === 'function') addMessage('No API key found. Please set your API key first using "set key YOUR_API_KEY"', 'bot');
     return;
   }
   
-  if (typeof addMessage === 'function') {
-    addMessage('Testing all models...\n', 'bot');
-  }
+  if (typeof addMessage === 'function') addMessage('Testing all models...\n', 'bot');
   const results = [];
   let workingModel = null;
   
   for (const model of config.gemini.availableModels) {
-    if (typeof addMessage === 'function') {
-      addMessage(`Testing ${model.name}...`, 'bot');
-    }
-    if (typeof showTypingIndicator === 'function') {
-      showTypingIndicator();
-    }
+    if (typeof addMessage === 'function') addMessage(`Testing ${model.name}...`, 'bot');
+    if (typeof showTypingIndicator === 'function') showTypingIndicator();
     const isWorking = await testModelConnection(model.id);
-    if (typeof removeTypingIndicator === 'function') {
-      removeTypingIndicator();
-    }
+    if (typeof removeTypingIndicator === 'function') removeTypingIndicator();
     
     if (isWorking) {
       results.push(`${model.name} - Connected`);
@@ -155,17 +160,13 @@ async function testAllAvailableModels() {
     saveModel(workingModel.id);
     chatMode = 'ai';
     saveChatMode('ai');
-    if (typeof updateModeIndicator === 'function') {
-      updateModeIndicator();
-    }
+    if (typeof updateModeIndicator === 'function') updateModeIndicator();
     resultMessage += `\nAuto-connected to: ${workingModel.name}`;
   } else {
     resultMessage += `\nNo working models found. Go to https://aistudio.google.com/ and create a new key.`;
   }
   
-  if (typeof addMessage === 'function') {
-    addMessage(resultMessage, 'bot');
-  }
+  if (typeof addMessage === 'function') addMessage(resultMessage, 'bot');
 }
 
 function getCurrentModelInfo() {
