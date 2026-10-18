@@ -14,7 +14,9 @@ const rosanDetails = {
   website: "https://rosankc.com.np/",
   contactPage: "Contact.html",
   aboutPage: "About.html",
-  servicePage: "Service.html"
+  servicePage: "Service.html",
+  termsconditionsPage: "T&C.html",
+  privacypolicyPage: "P&P.html"
 };
 
 const commands = [
@@ -45,7 +47,7 @@ const commands = [
   { 
     command: 'service', 
     description: 'Our services',
-    response: 'RX SERVICES:\n\n• designing \n• eps exam for web base software\n• lekhapadi services \n• lekhapadi services web based services.',
+    response: 'ROSAN KC SERVICES:\n\n• designing \n• eps exam for web base software\n• lekhapadi services \n• lekhapadi services web based services.',
     category: 'Service',
     isLink: true,
     url: rosanDetails.servicePage,
@@ -172,4 +174,22 @@ const commands = [
     url: 'https://aistudio.google.com/app/apikey',
     linkText: 'Click to open API Key Page'
   },
+  { 
+  command: 'terms', 
+  description: 'Terms & Conditions page',
+  response: 'Terms & Conditions:\n\nClick the link below to open:',
+  category: 'info',
+  isLink: true,
+  url: rosanDetails.termsconditionsPage,
+  linkText: 'Click to open Terms & Conditions'
+  },
+  { 
+  command: 'privacy', 
+  description: 'Privacy Policy page',
+  response: 'Privacy Policy:\n\nClick the link below to open:',
+  category: 'info',
+  isLink: true,
+  url: rosanDetails.privacypolicyPage,
+  linkText: 'Click to open Privacy Policy'
+  }, 
 ];

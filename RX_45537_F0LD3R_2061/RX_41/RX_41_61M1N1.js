@@ -36,6 +36,8 @@ async function getGeminiResponse(userMessage) {
             - Contact Page: ${rosanDetails.contactPage}
             - About Page: ${rosanDetails.aboutPage}
             - Services Page: ${rosanDetails.servicePage}
+            - Terms Condition Page: ${rosanDetails.termsconditionsPage}
+            - Privacey Policy Page: ${rosanDetails.privacypolicyPage}
             
             IMPORTANT: Remember the entire conversation history and answer based on the user's topic and previous messages. If the user changes topic, follow their new topic naturally.
 
@@ -121,7 +123,7 @@ async function connectToFreeTier() {
       ' सम्भावित कारण:\n' +
       '• Key गलत छ\n' +
       '• Key enable छैन\n\n' +
-      ' नयाँ key बनाउनुहोस्: https://aistudio.google.com/app/apikey\n\n' +
+      ' नयाँ key बनाउनुहोस्: https://aistudio.google.com/app/api-keys\n\n' +
       'फेरि प्रयास: `set key YOUR_API_KEY`',
       'bot'
     );
