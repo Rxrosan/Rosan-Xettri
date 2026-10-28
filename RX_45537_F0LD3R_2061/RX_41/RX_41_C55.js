@@ -263,7 +263,7 @@ function generateCSS() {
   /* ======================================== */
   /* ===== MESSAGE BUBBLE - LIQUID GLASS ===== */
   /* ======================================== */
-  .rx-message {
+   .rx-message {
     padding: clamp(8px, 1.5vh, 12px) clamp(12px, 2vw, 16px);
     border-radius: clamp(12px, 2vw, 16px);
     background: rgba(0, 0, 0, 0.4);
@@ -271,7 +271,7 @@ function generateCSS() {
     color: #ffffff;
     font-size: clamp(14px, 1.8vw, 15px);
     font-weight: 500;
-    line-height: 1.7;
+    line-height: 1.4;          /* ← 1.7 बाट 1.4 */
     white-space: pre-line;
     word-break: break-word;
     max-width: 100%;

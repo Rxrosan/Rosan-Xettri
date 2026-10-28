@@ -1,5 +1,5 @@
 // ============================================================
-// 02-constants.js - Rosan Details & Commands
+// 02-constants.js - Rosan Details & Commands (AUTO LINKS)
 // ============================================================
 
 const rosanDetails = {
@@ -19,6 +19,69 @@ const rosanDetails = {
   privacypolicyPage: "P&P.html"
 };
 
+// ============================================================
+// AUTO LINK SYSTEM
+// rosanDetails मा link थप्नुहोस् — prompt auto-update हुन्छ
+// ============================================================
+
+// यी key हरू link होइनन् — skip गर्ने
+const NON_LINK_KEYS = ['name', 'age', 'education', 'location'];
+
+// key बाट human-readable label
+function keyToLabel(key) {
+  return key
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, c => c.toUpperCase())
+    .trim();
+}
+
+// key बाट keywords (auto + custom aliases)
+function keyToKeywords(key) {
+  const label = keyToLabel(key).toLowerCase();
+  const base = [label];
+  
+  const aliases = {
+    email: ['mail', 'gmail'],
+    facebook: ['fb'],
+    facebookpage: ['fb page', 'page'],
+    youtube: ['video', 'channel'],
+    website: ['home', 'site'],
+    contactpage: ['contact', 'reach', 'message', 'call'],
+    aboutpage: ['about', 'who is rosan', 'bio', 'profile'],
+    servicepage: ['service', 'work', 'offer'],
+    termsconditionspage: ['terms', 'conditions', 't&c'],
+    privacypolicypage: ['privacy', 'policy', 'p&p']
+  };
+  
+  const keyLower = key.toLowerCase();
+  const extra = aliases[keyLower] || [];
+  return [...new Set([...base, ...extra])];
+}
+
+// सबै link keys निकाल्ने
+function getLinkKeys() {
+  return Object.keys(rosanDetails)
+    .filter(key => !NON_LINK_KEYS.includes(key))
+    .filter(key => rosanDetails[key]);
+}
+
+// Prompt को लागि EXACT LINKS text
+function buildExactLinksText() {
+  return getLinkKeys()
+    .map(key => `- ${keyToLabel(key)}: ${rosanDetails[key]}`)
+    .join('\n');
+}
+
+// Prompt को लागि LINK RULES text
+function buildLinkRulesText() {
+  return getLinkKeys()
+    .map(key => `   - ${keyToKeywords(key).join(' / ')} → ${rosanDetails[key]}`)
+    .join('\n');
+}
+
+// ============================================================
+// COMMANDS (जस्ताको तस्तै)
+// ============================================================
 const commands = [
   { 
     command: 'hello', 

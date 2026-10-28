@@ -1,5 +1,5 @@
 // ============================================================
-// 07-message.js - Message Functions
+// 07-message.js - Message Functions (MULTIPLE LINKS SUPPORT)
 // ============================================================
 
 function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '') {
@@ -16,16 +16,17 @@ function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '')
   }
 
   let processedText = text;
-  let linkUrl = null;
-  let linkButtonText = null;
+  const links = [];  // ← multiple links array
 
+  // ===== Multiple [LINK:...] parse गर्ने =====
   if (sender === 'bot' && typeof text === 'string' && text.includes('[LINK:')) {
-    const match = text.match(/\[LINK:(.*?)\|(.*?)\]/);
-    if (match) {
-      linkUrl = match[1];
-      linkButtonText = match[2];
-      processedText = text.replace(match[0], '').trim();
+    const linkRegex = /\[LINK:(.*?)\|(.*?)\]/g;
+    let match;
+    while ((match = linkRegex.exec(text)) !== null) {
+      links.push({ url: match[1], buttonText: match[2] });
     }
+    // सबै [LINK:...] हटाउने
+    processedText = text.replace(linkRegex, '').trim();
   }
 
   wrapper.appendChild(avatar);
@@ -38,15 +39,27 @@ function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '')
   textDiv.textContent = typeof processedText === 'function' ? processedText() : processedText;
   messageContainer.appendChild(textDiv);
 
-  if (linkUrl) {
-    const link = document.createElement('a');
-    link.href = linkUrl;
-    link.className = 'rx-link-button';
-    link.textContent = linkButtonText || 'Open Link';
-    link.target = '_blank';
-    link.rel = 'noopener noreferrer';
-    link.addEventListener('click', (e) => { e.stopPropagation(); });
-    messageContainer.appendChild(link);
+  // ===== सबै links add गर्ने (multiple) =====
+  if (links.length > 0) {
+    const linkContainer = document.createElement('div');
+    linkContainer.className = 'rx-link-container';
+    linkContainer.style.display = 'flex';
+    linkContainer.style.flexWrap = 'wrap';
+    linkContainer.style.gap = '6px';
+    linkContainer.style.marginTop = '8px';
+
+    links.forEach(linkData => {
+      const link = document.createElement('a');
+      link.href = linkData.url;
+      link.className = 'rx-link-button';
+      link.textContent = linkData.buttonText || 'Open Link';
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.addEventListener('click', (e) => { e.stopPropagation(); });
+      linkContainer.appendChild(link);
+    });
+
+    messageContainer.appendChild(linkContainer);
   }
 
   wrapper.appendChild(messageContainer);
@@ -72,8 +85,15 @@ function addMessageWithLink(text, sender, url, linkText) {
   messageContainer.className = 'rx-message';
   messageContainer.style.whiteSpace = 'pre-line';
 
-  const textDiv = document.createElement('div');
-  textDiv.textContent = text;
+   const textDiv = document.createElement('div');
+  let finalText = text;
+  if (typeof finalText === 'string') {
+    finalText = finalText
+      .replace(/\n{3,}/g, '\n\n')
+      .replace(/[ \t]+\n/g, '\n')
+      .trim();
+  }
+  textDiv.textContent = finalText;
   messageContainer.appendChild(textDiv);
 
   if (url) {
