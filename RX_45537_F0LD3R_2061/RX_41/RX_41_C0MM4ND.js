@@ -1,8 +1,9 @@
 // ============================================================
 // 08-command.js - Command Processing (REWRITTEN)
+// BUGFIX: chatMode declaration 01-config.js मा सारियो
 // ============================================================
 
-let chatMode = 'command';
+// ✅ chatMode अब 01-config.js मा declare छ — यहाँ declare नगर्ने
 let awaitingApiKey = false;
 
 // ============================================================
@@ -101,11 +102,10 @@ async function processCommand(input) {
 
   // ============================================================
   // STEP 1: ALWAYS CHECK COMMANDS FIRST
-  // (यसले AI mode, CMD mode, awaitingApiKey — सबैमा काम गर्छ)
   // ============================================================
   const cmd = findCommand(input);
 
-  // ----- LINK COMMANDS (get api key, about, contact, service, website, terms, privacy) -----
+  // ----- LINK COMMANDS -----
   if (cmd && cmd.isLink && cmd.action === undefined) {
     awaitingApiKey = false;
     const response = typeof cmd.response === 'function' ? cmd.response() : cmd.response;
@@ -149,7 +149,6 @@ async function processCommand(input) {
       const ok = await connectToFreeTier();
       awaitingApiKey = false;
       if (!ok) {
-        // Key save भयो तर model fail → AI mode OFF राख्ने
         chatMode = 'command';
         saveChatMode('command');
         updateModeIndicator();
@@ -220,7 +219,7 @@ async function processCommand(input) {
     return;
   }
 
-  // ----- ANY OTHER KNOWN COMMAND (hello, date, time, आदि) -----
+  // ----- ANY OTHER KNOWN COMMAND -----
   if (cmd) {
     const response = typeof cmd.response === 'function' ? cmd.response() : cmd.response;
     addMessage(response, 'bot');
@@ -228,7 +227,7 @@ async function processCommand(input) {
   }
 
   // ============================================================
-  // STEP 2: AWAITING API KEY STATE (केवल unknown input मा)
+  // STEP 2: AWAITING API KEY STATE
   // ============================================================
   if (awaitingApiKey) {
     addMessage(

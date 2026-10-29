@@ -23,7 +23,7 @@ function setupTrigger() {
       trigger.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); openChatWindow(); });
       return true;
     }
-    const images = document.querySelectorAll('img[src*="BOT-PROFILE-1.png"]');
+    const images = document.querySelectorAll('img[src*="BOT-PROFILE.png"]');
     for (const img of images) {
       const parent = img.closest('.RX-SMART-BUTTON-menu-item');
       if (parent) {

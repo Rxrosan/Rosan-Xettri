@@ -1,51 +1,49 @@
 // ============================================================
-// 03-storage.js - LocalStorage Helpers (WITH AI MEMORY CLEAR)
+// 03-storage.js - LocalStorage Helpers
+// FIXED: Debounced save + message state store + quota handling
 // ============================================================
 
-// ===== API KEY MANAGEMENT =====
+// ===== API KEY (obfuscated) =====
 function saveApiKey(key) {
-  if (key && key.trim()) {
-    localStorage.setItem(config.storageKeys.geminiKey, key.trim());
-    config.gemini.apiKey = key.trim();
+  if (!key || !key.trim()) return false;
+  const trimmed = key.trim();
+  if (trimmed.length < 20) return false;
+  try {
+    localStorage.setItem(config.storageKeys.geminiKey, btoa(trimmed));
+    config.gemini.apiKey = trimmed;
     return true;
+  } catch (e) {
+    console.error('Save key failed:', e);
+    return false;
   }
-  return false;
 }
 
 function loadApiKey() {
-  if (config.gemini.apiKey) {
-    return config.gemini.apiKey;
-  }
-  const savedKey = localStorage.getItem(config.storageKeys.geminiKey);
-  if (savedKey) {
-    config.gemini.apiKey = savedKey;
-    return savedKey;
+  if (config.gemini.apiKey) return config.gemini.apiKey;
+  const saved = localStorage.getItem(config.storageKeys.geminiKey);
+  if (saved) {
+    try {
+      const decoded = atob(saved);
+      config.gemini.apiKey = decoded;
+      return decoded;
+    } catch (e) {
+      console.error('Load key failed:', e);
+      return null;
+    }
   }
   return null;
-}
-
-function removeApiKey() {
-  localStorage.removeItem(config.storageKeys.geminiKey);
-  localStorage.removeItem(config.storageKeys.chatMode);
-  config.gemini.apiKey = null;
 }
 
 function clearApiKey() {
   localStorage.removeItem(config.storageKeys.geminiKey);
   localStorage.removeItem(config.storageKeys.chatMode);
   config.gemini.apiKey = null;
-  
   chatMode = 'command';
   localStorage.setItem(config.storageKeys.chatMode, 'command');
-  
-  if (typeof updateModeIndicator === 'function') {
-    updateModeIndicator();
-  }
-  
+  if (typeof updateModeIndicator === 'function') updateModeIndicator();
   if (typeof addMessage === 'function') {
-    addMessage(' API key cleared. Switched to CMD mode. Type "ai mode" to set up new key.', 'bot');
+    addMessage('🔑 API key cleared. Switched to CMD mode.\n\nType "ai mode" to set new key.', 'bot');
   }
-  
   return true;
 }
 
@@ -53,7 +51,7 @@ function hasApiKey() {
   return !!(config.gemini.apiKey || localStorage.getItem(config.storageKeys.geminiKey));
 }
 
-// ===== MODEL MANAGEMENT =====
+// ===== MODEL =====
 function saveModel(modelId) {
   if (modelId) {
     localStorage.setItem(config.storageKeys.geminiModel, modelId);
@@ -66,8 +64,8 @@ function saveModel(modelId) {
 function loadModel() {
   const savedModel = localStorage.getItem(config.storageKeys.geminiModel);
   if (savedModel) {
-    const modelExists = config.gemini.availableModels.some(m => m.id === savedModel);
-    if (modelExists) {
+    const exists = config.gemini.availableModels.some(m => m.id === savedModel);
+    if (exists) {
       config.gemini.currentModel = savedModel;
       return savedModel;
     }
@@ -80,7 +78,7 @@ function getCurrentModelInfo() {
   return config.gemini.availableModels.find(m => m.id === config.gemini.currentModel) || config.gemini.availableModels[0];
 }
 
-// ===== CHAT MODE MANAGEMENT =====
+// ===== CHAT MODE =====
 function saveChatMode(mode) {
   if (mode && (mode === 'ai' || mode === 'command')) {
     localStorage.setItem(config.storageKeys.chatMode, mode);
@@ -101,31 +99,7 @@ function loadChatMode() {
   return 'command';
 }
 
-function switchToCommandMode() {
-  chatMode = 'command';
-  localStorage.setItem(config.storageKeys.chatMode, 'command');
-  if (typeof updateModeIndicator === 'function') {
-    updateModeIndicator();
-  }
-  return true;
-}
-
-function switchToAIMode() {
-  if (!hasApiKey()) {
-    if (typeof addMessage === 'function') {
-      addMessage(' No API key found. Please set your API key first using: set key YOUR_API_KEY', 'bot');
-    }
-    return false;
-  }
-  chatMode = 'ai';
-  localStorage.setItem(config.storageKeys.chatMode, 'ai');
-  if (typeof updateModeIndicator === 'function') {
-    updateModeIndicator();
-  }
-  return true;
-}
-
-// ===== WINDOW STATE MANAGEMENT =====
+// ===== WINDOW STATE =====
 function saveWindowState(isOpen) {
   localStorage.setItem(config.storageKeys.windowState, isOpen ? 'open' : 'closed');
 }
@@ -146,34 +120,44 @@ function loadWindowPosition() {
   return null;
 }
 
-// ===== MESSAGE HISTORY MANAGEMENT =====
+// ===== MESSAGE HISTORY (State-based + Debounced) =====
+let messageStore = [];
+let saveMsgTimer = null;
+
+function pushMessageToStore(msg) {
+  messageStore.push(msg);
+  saveMessageHistoryDebounced();
+}
+
+function saveMessageHistoryDebounced() {
+  if (saveMsgTimer) clearTimeout(saveMsgTimer);
+  saveMsgTimer = setTimeout(() => {
+    saveMessageHistory();
+    saveMsgTimer = null;
+  }, 500);
+}
+
 function saveMessageHistory() {
-  const container = document.getElementById('rx-chat-messages');
-  if (container) {
-    const messages = [];
-    container.querySelectorAll('.rx-message-wrapper').forEach(wrapper => {
-      const sender = wrapper.classList.contains('bot') ? 'bot' : 'user';
-      const messageDiv = wrapper.querySelector('.rx-message');
-      const avatarDiv = wrapper.querySelector('.rx-avatar');
-      const link = wrapper.querySelector('.rx-link-button');
-      
-      let fullText = '';
-      const textDivs = messageDiv ? messageDiv.querySelectorAll('div') : [];
-      textDivs.forEach(div => {
-        fullText += div.textContent + '\n';
-      });
-      fullText = fullText.trim();
-      
-      messages.push({
-        sender: sender,
-        text: fullText || (messageDiv ? messageDiv.textContent : ''),
-        avatarEmoji: avatarDiv ? avatarDiv.textContent : '',
-        hasLink: !!link,
-        linkUrl: link ? link.href : null,
-        linkText: link ? link.textContent : null
-      });
-    });
-    localStorage.setItem(config.storageKeys.messages, JSON.stringify(messages));
+  try {
+    localStorage.setItem(
+      config.storageKeys.messages,
+      JSON.stringify(messageStore)
+    );
+  } catch (e) {
+    if (e.name === 'QuotaExceededError') {
+      console.warn('Storage full — trimming old messages');
+      messageStore.splice(0, Math.max(1, Math.floor(messageStore.length / 2)));
+      try {
+        localStorage.setItem(
+          config.storageKeys.messages,
+          JSON.stringify(messageStore)
+        );
+      } catch (e2) {
+        console.error('Storage still full:', e2);
+      }
+    } else {
+      console.error('Save failed:', e);
+    }
   }
 }
 
@@ -181,24 +165,27 @@ function loadMessageHistory() {
   const saved = localStorage.getItem(config.storageKeys.messages);
   if (saved) {
     try {
-      return JSON.parse(saved);
-    } catch (e) {}
+      const parsed = JSON.parse(saved);
+      messageStore = parsed || [];
+      return parsed;
+    } catch (e) {
+      return null;
+    }
   }
   return null;
 }
 
 function clearMessageHistory() {
   localStorage.removeItem(config.storageKeys.messages);
+  messageStore = [];
   const container = document.getElementById('rx-chat-messages');
   if (container) container.innerHTML = '';
-  
-  //  AI conversation memory पनि clear गर्नुहोस्
   if (typeof clearAIConversationHistory === 'function') {
     clearAIConversationHistory();
   }
 }
 
-// ===== COMPLETE RESET =====
+// ===== RESET =====
 function resetAllStorage() {
   localStorage.removeItem(config.storageKeys.geminiKey);
   localStorage.removeItem(config.storageKeys.geminiModel);
@@ -210,44 +197,32 @@ function resetAllStorage() {
   config.gemini.apiKey = null;
   config.gemini.currentModel = config.gemini.availableModels[0].id;
   chatMode = 'command';
+  messageStore = [];
   
-  //  AI memory पनि clear
-  if (typeof clearAIConversationHistory === 'function') {
-    clearAIConversationHistory();
-  }
-  
-  if (typeof updateModeIndicator === 'function') {
-    updateModeIndicator();
-  }
-  
-  if (typeof addMessage === 'function') {
-    addMessage(' All data cleared. Switched to CMD mode.', 'bot');
-  }
+  if (typeof clearAIConversationHistory === 'function') clearAIConversationHistory();
+  if (typeof updateModeIndicator === 'function') updateModeIndicator();
+  if (typeof addMessage === 'function') addMessage('🗑️ All data cleared. Switched to CMD mode.', 'bot');
 }
 
-// ===== UTILITY FUNCTIONS =====
+// ===== UTILS =====
 function getStorageStats() {
   let total = 0;
-  let keys = [];
-  for (let key in localStorage) {
+  const keys = [];
+  for (const key in localStorage) {
     if (localStorage.hasOwnProperty(key)) {
       const size = localStorage[key].length * 2;
       total += size;
       keys.push({ key, size: size / 1024 });
     }
   }
-  return {
-    totalKB: (total / 1024).toFixed(2),
-    keys: keys
-  };
+  return { totalKB: (total / 1024).toFixed(2), keys };
 }
 
-// ===== EXPOSE FOR DEBUGGING =====
 if (typeof window !== 'undefined') {
   window.__storageDebug = {
     getStats: getStorageStats,
     resetAll: resetAllStorage,
-    hasApiKey: hasApiKey,
+    hasApiKey,
     getCurrentMode: () => chatMode
   };
 }

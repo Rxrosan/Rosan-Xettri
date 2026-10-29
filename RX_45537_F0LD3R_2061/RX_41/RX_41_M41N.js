@@ -1,6 +1,34 @@
 // ============================================================
-// 11-main.js - Main Initialization (WITH AI MEMORY REBUILD)
+// 11-main.js - Main Initialization
+// FIXED: Global error handler + input validation + safe async
 // ============================================================
+
+// ✅ Global error handlers (सबैभन्दा पहिले)
+window.addEventListener('error', (event) => {
+  console.error('Global error:', event.error);
+  if (typeof addMessage === 'function') {
+    addMessage('⚠️ Unexpected error. Please refresh if issue continues.', 'bot');
+  }
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
+  event.preventDefault();
+});
+
+// ✅ Safe async wrapper
+async function safeAsync(fn, ...args) {
+  try {
+    return await fn(...args);
+  } catch (error) {
+    console.error(`Error in ${fn.name}:`, error);
+    if (typeof removeTypingIndicator === 'function') removeTypingIndicator();
+    if (typeof addMessage === 'function') {
+      addMessage('❌ Something went wrong. Please try again.', 'bot');
+    }
+    return null;
+  }
+}
 
 function setupInteractions() {
   const chatWindow = document.getElementById('rx-chat-window');
@@ -9,7 +37,10 @@ function setupInteractions() {
   const input = document.getElementById('rx-user-input');
   const header = document.getElementById('rx-chat-header');
 
-  if (!chatWindow || !closeBtn || !sendBtn || !input || !header) return;
+  if (!chatWindow || !closeBtn || !sendBtn || !input || !header) {
+    console.error('Required DOM elements missing');
+    return;
+  }
 
   makeDraggable(chatWindow, header);
 
@@ -25,11 +56,13 @@ function setupInteractions() {
   closeBtn.addEventListener('click', () => {
     chatWindow.classList.remove('show');
     saveWindowState(false);
-    clearMessageHistory();  // ✅ AI memory पनि clear हुन्छ
+    clearMessageHistory();
   });
 
-  sendBtn.addEventListener('click', handleUserInput);
-  input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleUserInput(); });
+  sendBtn.addEventListener('click', () => safeAsync(handleUserInput));
+  input.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') safeAsync(handleUserInput);
+  });
 
   loadApiKey();
   loadModel();
@@ -39,23 +72,18 @@ function setupInteractions() {
   if (loadWindowState()) {
     chatWindow.classList.add('show');
     loadMessagesFromHistory();
-    // ✅ पुरानो chat बाट AI memory rebuild गर्ने
     rebuildAIContextFromHistory();
   }
 
   setupTrigger();
 }
 
-// ✅ localStorage को message history बाट AI conversation memory फेरि बनाउने
 function rebuildAIContextFromHistory() {
-  if (typeof clearAIConversationHistory === 'function') {
-    clearAIConversationHistory();
-  }
+  if (typeof clearAIConversationHistory === 'function') clearAIConversationHistory();
   
   const messages = loadMessageHistory();
   if (!messages || messages.length === 0) return;
   
-  // welcome message छोडेर बाँकी सबै conversation memory मा हाल्ने
   const conversationMessages = messages.filter(msg => 
     msg.text && 
     !msg.text.includes('Welcome to ROSAN KC website') &&
@@ -71,7 +99,6 @@ function rebuildAIContextFromHistory() {
     }
   });
   
-  // max limit भन्दा बढी भए trim
   while (conversationHistory.length > MAX_CONTEXT_MESSAGES) {
     conversationHistory.shift();
   }
@@ -79,8 +106,16 @@ function rebuildAIContextFromHistory() {
 
 async function handleUserInput() {
   const input = document.getElementById('rx-user-input');
+  if (!input) return;
+  
   const text = input.value.trim();
+  
+  // ✅ Input validation
   if (!text) return;
+  if (text.length > 2000) {
+    addMessage('⚠️ Message too long (max 2000 characters).', 'bot');
+    return;
+  }
 
   addMessage(text, 'user');
   input.value = '';
@@ -91,12 +126,15 @@ function init() {
   if (window.__RX_INIT__) return;
   window.__RX_INIT__ = true;
 
-  injectCSS();
-  injectHTML();
-  setTimeout(setupInteractions, 100);
+  try {
+    injectCSS();
+    injectHTML();
+    setTimeout(setupInteractions, 100);
+  } catch (error) {
+    console.error('Init failed:', error);
+  }
 }
 
-// Auto-initialize
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {

@@ -19,8 +19,8 @@ const rosanDetails = {
     contactPage:         { label: "Contact Page",       url: "Contact.html",                                              button: "Open Contact Page",       keywords: ["contact", "reach", "message", "call"] },
     aboutPage:           { label: "About Page",         url: "About.html",                                                button: "Open About Page",         keywords: ["about", "who is rosan", "bio", "profile"] },
     servicePage:         { label: "Service Page",       url: "Service.html",                                              button: "Open Service Page",       keywords: ["service", "work", "offer"] },
-    termsconditionsPage: { label: "Terms & Conditions", url: "T&C.html",                                                  button: "Open Terms & Conditions", keywords: ["terms", "conditions", "t&c"] },
-    privacypolicyPage:   { label: "Privacy Policy",     url: "P&P.html",                                                  button: "Open Privacy Policy",     keywords: ["privacy", "policy", "p&p"] }
+    termsconditionsPage: { label: "Terms & Conditions", url: "T%26C.html",                                                  button: "Open Terms & Conditions", keywords: ["terms", "conditions", "t&c"] },
+    privacypolicyPage:   { label: "Privacy Policy",     url: "P%26P.html",                                                  button: "Open Privacy Policy",     keywords: ["privacy", "policy", "p&p"] }
   }
 };
 
