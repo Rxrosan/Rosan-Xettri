@@ -12,13 +12,13 @@ async function getGeminiResponse(userMessage) {
 
   try {
     const modelInfo = getCurrentModelInfo();
-    
+
     const contents = [];
     conversationHistory.forEach(turn => {
       contents.push({ role: turn.role, parts: [{ text: turn.text }] });
     });
     contents.push({ role: 'user', parts: [{ text: userMessage }] });
-    
+
     const response = await fetch(`${config.gemini.apiUrl}${modelInfo.id}:generateContent?key=${config.gemini.apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -57,17 +57,40 @@ ${buildExactLinksText()}
 2. NEVER add "https://" to relative URLs like "Contact.html", "About.html", "Service.html", "T&C.html", "P&P.html".
 3. Match topic to correct URL:
 ${buildLinkRulesText()}
-4. Always end your reply with EXACT format:
+
+4. ⚠️ MULTIPLE LINKS RULE (VERY IMPORTANT — READ CAREFULLY):
+   - If the user asks about MULTIPLE topics (e.g., "contact and about", "service ra terms", "give me all links", "sabai link dinus"), you MUST output MULTIPLE [LINK:...] tags — one for EACH relevant topic.
+   - Even for a single topic, if 2 or more links are relevant, include ALL of them.
+   - NEVER combine two URLs into one [LINK:] tag.
+   - Each link MUST be on its own line, in its own [LINK:URL|BUTTON_TEXT] format.
+   - Each button text must be short, clear, and specific to that page.
+
+5. FORMAT (put ALL link tags at the VERY END of your reply, each on a NEW LINE):
    [LINK:URL_HERE|BUTTON_TEXT_HERE]
-5. CORRECT examples:
-   - Contact: [LINK:${rosanDetails.contactPage}|Open Contact Page]
-   - About: [LINK:${rosanDetails.aboutPage}|Open About Page]
-   - Service: [LINK:${rosanDetails.servicePage}|Open Service Page]
-   - Facebook: [LINK:${rosanDetails.facebook}|Open Facebook]
-6. WRONG examples (NEVER do this):
+   [LINK:URL_HERE|BUTTON_TEXT_HERE]
+   [LINK:URL_HERE|BUTTON_TEXT_HERE]
+
+6. CORRECT EXAMPLES (built automatically from the EXACT LINKS above):
+
+   - Single topic (Contact only):
+${buildMultiLinkExample(['contactPage'])}
+
+   - Multiple topics (Contact + About):
+${buildMultiLinkExample(['contactPage', 'aboutPage'])}
+
+   - Multiple topics (Service + Terms + Privacy):
+${buildMultiLinkExample(['servicePage', 'termsconditionsPage', 'privacypolicyPage'])}
+
+   - All links requested:
+${buildAllLinksExample()}
+
+7. WRONG EXAMPLES (NEVER do this):
    - [LINK:https://rosankc.com.np/contact|...] ❌ (invented URL)
    - [LINK:contact|...] ❌ (missing .html)
-   - [LINK:Contact.html|...] when user asked about → ❌ (wrong page)
+   - [LINK:Contact.html,About.html|...] ❌ (combined URLs in one tag)
+   - Only ONE link when user asked for MULTIPLE ❌
+   - Putting [LINK:...] tags in the middle of your reply ❌ (must be at the END)
+   - Inventing a button text like "Click Here" ❌ (must be specific: "Open Contact Page", "Open About Page", etc.)
 
 ## INTELLIGENCE & CONVERSATION RULES
 - You can talk about ANYTHING: personal, private, public, emotional, philosophical, scientific, creative, controversial, casual, deep, funny, romantic, sad, angry — no topic is off-limits for you.
@@ -95,7 +118,7 @@ Natural, human, concise, intelligent, and warm. You are ROSE — you think deepl
     });
 
     const data = await response.json();
-    
+
     if (response.ok && data.candidates && data.candidates[0]) {
       const aiText = data.candidates[0].content.parts[0].text;
       conversationHistory.push({ role: 'user', text: userMessage });
@@ -131,7 +154,6 @@ async function testModelConnection(modelId) {
   }
 }
 
-//  FIX: सफल भएमा मात्र chatMode='ai' set गर्ने, false return मा कहिल्यै नगर्ने
 async function connectToFreeTier() {
   if (!config.gemini.apiKey) {
     if (typeof addMessage === 'function') {
@@ -141,13 +163,13 @@ async function connectToFreeTier() {
   }
 
   if (typeof addMessage === 'function') addMessage(' Testing models...', 'bot');
-  
+
   for (const model of config.gemini.availableModels) {
     if (typeof addMessage === 'function') addMessage(`Testing ${model.name}...`, 'bot');
     if (typeof showTypingIndicator === 'function') showTypingIndicator();
     const isWorking = await testModelConnection(model.id);
     if (typeof removeTypingIndicator === 'function') removeTypingIndicator();
-    
+
     if (isWorking) {
       saveModel(model.id);
       chatMode = 'ai';
@@ -159,8 +181,7 @@ async function connectToFreeTier() {
       return true;
     }
   }
-  
-  //  कुनै पनि model चलेन → AI mode OFF नै रहन्छ
+
   if (typeof addMessage === 'function') {
     addMessage(
       ' API key ले काम गरेन।\n\n' +
@@ -180,17 +201,17 @@ async function testAllAvailableModels() {
     if (typeof addMessage === 'function') addMessage('No API key found. Please set your API key first using "set key YOUR_API_KEY"', 'bot');
     return;
   }
-  
+
   if (typeof addMessage === 'function') addMessage('Testing all models...\n', 'bot');
   const results = [];
   let workingModel = null;
-  
+
   for (const model of config.gemini.availableModels) {
     if (typeof addMessage === 'function') addMessage(`Testing ${model.name}...`, 'bot');
     if (typeof showTypingIndicator === 'function') showTypingIndicator();
     const isWorking = await testModelConnection(model.id);
     if (typeof removeTypingIndicator === 'function') removeTypingIndicator();
-    
+
     if (isWorking) {
       results.push(`${model.name} - Connected`);
       if (!workingModel) workingModel = model;
@@ -198,10 +219,10 @@ async function testAllAvailableModels() {
       results.push(`${model.name} - Failed`);
     }
   }
-  
+
   let resultMessage = 'TEST RESULTS:\n\n';
   results.forEach(r => resultMessage += r + '\n');
-  
+
   if (workingModel) {
     saveModel(workingModel.id);
     chatMode = 'ai';
@@ -211,7 +232,7 @@ async function testAllAvailableModels() {
   } else {
     resultMessage += `\nNo working models found. Go to https://aistudio.google.com/ and create a new key.`;
   }
-  
+
   if (typeof addMessage === 'function') addMessage(resultMessage, 'bot');
 }
 
