@@ -19,8 +19,10 @@ const rosanDetails = {
     contactPage:         { label: "Contact Page",       url: "Contact.html",                                              button: "Open Contact Page",       keywords: ["contact", "reach", "message", "call"] },
     aboutPage:           { label: "About Page",         url: "About.html",                                                button: "Open About Page",         keywords: ["about", "who is rosan", "bio", "profile"] },
     servicePage:         { label: "Service Page",       url: "Service.html",                                              button: "Open Service Page",       keywords: ["service", "work", "offer"] },
-    termsconditionsPage: { label: "Terms & Conditions", url: "T%26C.html",                                                  button: "Open Terms & Conditions", keywords: ["terms", "conditions", "t&c"] },
-    privacypolicyPage:   { label: "Privacy Policy",     url: "P%26P.html",                                                  button: "Open Privacy Policy",     keywords: ["privacy", "policy", "p&p"] }
+    epsexamPage:         { label: "EPS exam Page",      url: "RX-KR-EXAM.html",                                           button: "Open EPS exam software",  keywords: ["EPS", "exam", "korean"] },
+    resourcePage:        { label: "Resource Page",      url: "Resource.html",                                             button: "Open Resource Page",      keywords: ["collection", "resource", "web-software"] },
+    termsconditionsPage: { label: "Terms & Conditions", url: "T%26C.html",                                                button: "Open Terms & Conditions", keywords: ["terms", "conditions", "t&c"] },
+    privacypolicyPage:   { label: "Privacy Policy",     url: "P%26P.html",                                                button: "Open Privacy Policy",     keywords: ["privacy", "policy", "p&p"] }
   }
 };
 
@@ -219,6 +221,24 @@ const commands = [
     response: '',
     category: 'ai-functions',
     action: 'testAllModels'
+  },
+  {
+    command: 'EPS test',
+    description: 'To open EPS korean language exam practice web software.',
+    response: 'Lets practice EPS korean language for great future:',
+    category: 'website-link',
+    isLink: true,
+    url: 'https://rosankc.com.np/RX-KR-EXAM.html',
+    linkText: 'Click to open EPS exam.'
+  },
+  {
+    command: 'Resource',
+    description: 'To open all web software resource page.',
+    response: 'here it is allweb-software collection page:',
+    category: 'website-link',
+    isLink: true,
+    url: 'https://rosankc.com.np/Resource.html',
+    linkText: 'Click to open Resource page.'
   },
   {
     command: 'get api key',

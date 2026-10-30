@@ -1,19 +1,17 @@
 // ============================================================
 // 07-message.js - Message Functions
-// FIXED: State-based store + debounced save + typing timeout
-// BUGFIX: loadMessagesFromHistory() र showWelcomeSequence() duplicate रोकियो
 // ============================================================
 
 let typingTimeout = null;
 
-// ✅ Duplicate रोक्ने flag
+//  Duplicate रोक्ने flag
 let isRestoringFromHistory = false;
 
-function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '') {
+function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '', savedLinks = null) {
   const container = document.getElementById('rx-chat-messages');
   if (!container) return;
 
-  // ✅ Validate
+  //  Validate
   if (text === null || text === undefined) return;
   const safeText = String(text);
   if (safeText.trim().length === 0) return;
@@ -28,9 +26,15 @@ function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '')
   }
 
   let processedText = safeText;
-  const links = [];
+  let links = [];
 
-  if (sender === 'bot' && safeText.includes('[LINK:')) {
+  //  History बाट restore गर्दा savedLinks प्रयोग गर्ने
+  if (isRestoringFromHistory && Array.isArray(savedLinks)) {
+    links = savedLinks;
+    // text बाट [LINK:...] हटाउने (यदि छ भने)
+    processedText = safeText.replace(/\[LINK:(.*?)\|(.*?)\]/g, '').trim();
+  } else if (sender === 'bot' && safeText.includes('[LINK:')) {
+    //  नयाँ message — text बाट links निकाल्ने
     const linkRegex = /\[LINK:(.*?)\|(.*?)\]/g;
     let match;
     while ((match = linkRegex.exec(safeText)) !== null) {
@@ -49,6 +53,7 @@ function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '')
   textDiv.textContent = processedText;
   messageContainer.appendChild(textDiv);
 
+  //  सबै links render गर्ने (multiple links support)
   if (links.length > 0) {
     const linkContainer = document.createElement('div');
     linkContainer.className = 'rx-link-container';
@@ -75,18 +80,20 @@ function addMessage(text, sender = 'bot', isLink = false, savedAvatarEmoji = '')
   container.appendChild(wrapper);
   container.scrollTop = container.scrollHeight;
 
-  // ✅ History restore गर्दा store मा फेरि नथप्ने
+  //  History restore गर्दा store मा फेरि नथप्ने
   if (isRestoringFromHistory) {
     return;
   }
 
-  // ✅ State मा थप + debounced save
+  //  State मा थप + debounced save (सबै links store गर्ने)
   if (typeof pushMessageToStore === 'function') {
     pushMessageToStore({
       sender,
       text: safeText,
       avatarEmoji: savedAvatarEmoji || '',
       hasLink: links.length > 0,
+      links: links.length > 0 ? links : null,  //  सबै links array store
+      //  Backward compatibility — पहिलो link पनि राख्ने
       linkUrl: links[0]?.url || null,
       linkText: links[0]?.buttonText || null
     });
@@ -123,7 +130,9 @@ function addMessageWithLink(text, sender, url, linkText) {
   textDiv.textContent = finalText;
   messageContainer.appendChild(textDiv);
 
+  const links = [];
   if (url) {
+    links.push({ url, buttonText: linkText || 'Open Link' });
     const link = document.createElement('a');
     link.href = url;
     link.className = 'rx-link-button';
@@ -139,7 +148,7 @@ function addMessageWithLink(text, sender, url, linkText) {
   container.appendChild(wrapper);
   container.scrollTop = container.scrollHeight;
 
-  // ✅ History restore गर्दा store मा फेरि नथप्ने
+  //  History restore गर्दा store मा फेरि नथप्ने
   if (isRestoringFromHistory) {
     return;
   }
@@ -150,6 +159,7 @@ function addMessageWithLink(text, sender, url, linkText) {
       text: finalText,
       avatarEmoji: '',
       hasLink: !!url,
+      links: links.length > 0 ? links : null,  //  links array
       linkUrl: url || null,
       linkText: linkText || null
     });
@@ -162,7 +172,7 @@ function showTypingIndicator() {
   const container = document.getElementById('rx-chat-messages');
   if (!container) return;
 
-  removeTypingIndicator();  // ✅ duplicate रोक्ने
+  removeTypingIndicator();  //  duplicate रोक्ने
 
   const indicator = document.createElement('div');
   indicator.className = 'rx-message-wrapper bot';
@@ -181,7 +191,7 @@ function showTypingIndicator() {
   container.appendChild(indicator);
   container.scrollTop = container.scrollHeight;
 
-  // ✅ Safety timeout
+  //  Safety timeout
   if (typingTimeout) clearTimeout(typingTimeout);
   typingTimeout = setTimeout(() => removeTypingIndicator(), 45000);
 }
@@ -199,19 +209,19 @@ function showWelcomeSequence() {
   const container = document.getElementById('rx-chat-messages');
   if (!container) return;
 
-  // ✅ पहिलो पटक हो कि पुरानो history बाट हो check गर्ने
+  //  पहिलो पटक हो कि पुरानो history बाट हो check गर्ने
   const welcomeAlreadyInStore = messageStore.some(
     m => m.sender === 'bot' && m.text === config.welcomeMessage
   );
 
-  // ✅ DOM मा पहिले नै छ कि check
+  //  DOM मा पहिले नै छ कि check
   const existingWelcome = Array.from(container.querySelectorAll('.rx-message-wrapper.bot'))
     .some(w => {
       const msgDiv = w.querySelector('.rx-message');
       return msgDiv && msgDiv.textContent.trim() === config.welcomeMessage.trim();
     });
 
-  if (existingWelcome) return;  // ✅ duplicate रोक्ने
+  if (existingWelcome) return;  //  duplicate रोक्ने
 
   let i = 0;
   const welcome = config.welcomeMessage;
@@ -238,13 +248,14 @@ function showWelcomeSequence() {
   }
   typeWriter();
 
-  // ✅ Store मा पहिले नै छ भने फेरि नथप्ने
+  //  Store मा पहिले नै छ भने फेरि नथप्ने
   if (!welcomeAlreadyInStore && typeof pushMessageToStore === 'function') {
     pushMessageToStore({
       sender: 'bot',
       text: welcome,
       avatarEmoji: '',
       hasLink: false,
+      links: null,
       linkUrl: null,
       linkText: null
     });
@@ -255,19 +266,26 @@ function loadMessagesFromHistory() {
   const messages = loadMessageHistory();
   if (!messages || messages.length === 0) return;
 
-  // ✅ History restore mode ON — store मा फेरि नथप्ने
+  //  History restore mode ON — store मा फेरि नथप्ने
   isRestoringFromHistory = true;
 
   try {
     messages.forEach(msg => {
-      if (msg.hasLink) {
+      //  नयाँ format: links array
+      if (Array.isArray(msg.links) && msg.links.length > 0) {
+        addMessage(msg.text, msg.sender, false, msg.avatarEmoji, msg.links);
+      }
+      //  पुरानो format: hasLink + linkUrl (single link)
+      else if (msg.hasLink && msg.linkUrl) {
         addMessageWithLink(msg.text, msg.sender, msg.linkUrl, msg.linkText);
-      } else {
+      }
+      //  सामान्य message
+      else {
         addMessage(msg.text, msg.sender, false, msg.avatarEmoji);
       }
     });
   } finally {
-    // ✅ Restore mode OFF — अब normal message store हुन्छ
+    //  Restore mode OFF — अब normal message store हुन्छ
     isRestoringFromHistory = false;
   }
 }

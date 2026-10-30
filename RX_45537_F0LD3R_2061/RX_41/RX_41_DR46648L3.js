@@ -1,7 +1,5 @@
 // ============================================================
-// 09-draggable.js - Dynamic Mouse Events (SCROLL FIXED)
-// BUGFIX: isScrollingElement() अब messages area भित्र जहाँ पनि
-//         click भयो भने drag block गर्छ (scroll छ/छैन भनेर हेर्दैन)
+// 09-draggable.js - Dynamic Mouse Events 
 // ============================================================
 
 function makeDraggable(element, handle) {
@@ -68,8 +66,6 @@ function makeDraggable(element, handle) {
   }
 
   // ===== CHECK IF SCROLLING =====
-  // ✅ FIXED: Messages area भित्र जहाँ पनि click भयो भने drag block
-  // (scroll छ/छैन भनेर हेर्दैन — खाली area मा पनि drag हुँदैन)
   function isScrollingElement(target) {
     if (target.closest('.rx-chat-messages')) return true;
     if (target.closest('.rx-message-wrapper')) return true;
@@ -126,7 +122,7 @@ function makeDraggable(element, handle) {
     // Ignore if clicking on scrollable area
     if (shouldIgnoreDrag(e)) return;
     
-    // ✅ Messages area भित्र जहाँ पनि click भयो भने drag block
+    // Messages area भित्र जहाँ पनि click भयो भने drag block
     if (isScrollingElement(e.target)) {
       return;
     }

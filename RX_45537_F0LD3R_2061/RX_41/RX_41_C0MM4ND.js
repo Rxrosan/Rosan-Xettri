@@ -1,9 +1,8 @@
 // ============================================================
-// 08-command.js - Command Processing (REWRITTEN)
-// BUGFIX: chatMode declaration 01-config.js मा सारियो
+// 08-command.js - Command Processing 
 // ============================================================
 
-// ✅ chatMode अब 01-config.js मा declare छ — यहाँ declare नगर्ने
+//  chatMode अब 01-config.js मा declare छ — यहाँ declare नगर्ने
 let awaitingApiKey = false;
 
 // ============================================================
@@ -80,10 +79,11 @@ function showCurrentModel() {
 // COMMAND LOOKUP
 // ============================================================
 function findCommand(input) {
-  let cmd = commands.find(c => input.toLowerCase() === c.command.toLowerCase());
+  const cleanInput = input.toLowerCase().trim();   
+  let cmd = commands.find(c => cleanInput === c.command.toLowerCase().trim());
   if (!cmd) {
     cmd = commands.find(
-      c => c.requiresParameter && input.toLowerCase().startsWith(c.command.toLowerCase() + ' ')
+      c => c.requiresParameter && cleanInput.startsWith(c.command.toLowerCase().trim() + ' ')
     );
   }
   return cmd;

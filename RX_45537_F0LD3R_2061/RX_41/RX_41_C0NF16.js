@@ -1,9 +1,8 @@
 // ============================================================
 // 01-config.js - Configuration
-// BUGFIX: chatMode global declaration यहाँ सारियो
 // ============================================================
 
-// ✅ Global state (सबैभन्दा पहिले declare)
+//  Global state (सबैभन्दा पहिले declare)
 let chatMode = 'command';
 
 const config = {

@@ -1,6 +1,5 @@
 // ============================================================
 // 03-storage.js - LocalStorage Helpers
-// FIXED: Debounced save + message state store + quota handling
 // ============================================================
 
 // ===== API KEY (obfuscated) =====
@@ -42,7 +41,7 @@ function clearApiKey() {
   localStorage.setItem(config.storageKeys.chatMode, 'command');
   if (typeof updateModeIndicator === 'function') updateModeIndicator();
   if (typeof addMessage === 'function') {
-    addMessage('🔑 API key cleared. Switched to CMD mode.\n\nType "ai mode" to set new key.', 'bot');
+    addMessage(' API key cleared. Switched to CMD mode.\n\nType "ai mode" to set new key.', 'bot');
   }
   return true;
 }
@@ -72,10 +71,6 @@ function loadModel() {
   }
   config.gemini.currentModel = config.gemini.availableModels[0].id;
   return config.gemini.currentModel;
-}
-
-function getCurrentModelInfo() {
-  return config.gemini.availableModels.find(m => m.id === config.gemini.currentModel) || config.gemini.availableModels[0];
 }
 
 // ===== CHAT MODE =====
@@ -138,6 +133,11 @@ function saveMessageHistoryDebounced() {
 }
 
 function saveMessageHistory() {
+  //  Debounce timer clear गर्ने (force save गर्दा)
+  if (saveMsgTimer) {
+    clearTimeout(saveMsgTimer);
+    saveMsgTimer = null;
+  }
   try {
     localStorage.setItem(
       config.storageKeys.messages,
@@ -201,7 +201,7 @@ function resetAllStorage() {
   
   if (typeof clearAIConversationHistory === 'function') clearAIConversationHistory();
   if (typeof updateModeIndicator === 'function') updateModeIndicator();
-  if (typeof addMessage === 'function') addMessage('🗑️ All data cleared. Switched to CMD mode.', 'bot');
+  if (typeof addMessage === 'function') addMessage(' All data cleared. Switched to CMD mode.', 'bot');
 }
 
 // ===== UTILS =====

@@ -1,7 +1,5 @@
 // ============================================================
 // 04-gemini.js - Gemini API Functions
-// FIXED: API key in HEADER (not URL) + Smart error handling + Retry
-// BUGFIX: testModelConnection() मा पनि retry logic थपियो
 // ============================================================
 
 let conversationHistory = [];
@@ -15,12 +13,10 @@ function sleep(ms) {
 async function fetchWithRetry(url, options, maxRetries = 3) {
   let lastError;
   for (let i = 0; i < maxRetries; i++) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 45000);
     try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 45000);
-      
       const response = await fetch(url, { ...options, signal: controller.signal });
-      clearTimeout(timeoutId);
       
       if (response.status >= 500 && i < maxRetries - 1) {
         await sleep(1000 * (i + 1));
@@ -30,6 +26,8 @@ async function fetchWithRetry(url, options, maxRetries = 3) {
     } catch (error) {
       lastError = error;
       if (i < maxRetries - 1) await sleep(1000 * (i + 1));
+    } finally {
+      clearTimeout(timeoutId);  // सधैं clear — leak छैन
     }
   }
   throw lastError;
@@ -37,7 +35,7 @@ async function fetchWithRetry(url, options, maxRetries = 3) {
 
 async function getGeminiResponse(userMessage) {
   if (!config.gemini.apiKey) {
-    return '❌ No API key set.\n\nType: `set key YOUR_API_KEY`';
+    return 'No API key set.\n\nType: `set key YOUR_API_KEY`';
   }
 
   try {
@@ -49,7 +47,7 @@ async function getGeminiResponse(userMessage) {
     });
     contents.push({ role: 'user', parts: [{ text: userMessage }] });
 
-    // ✅ SECURE: API key header मा (URL मा होइन)
+    // SECURE: API key header मा (URL मा होइन)
     const response = await fetchWithRetry(
       `${config.gemini.apiUrl}${modelInfo.id}:generateContent`,
       {
@@ -59,7 +57,7 @@ async function getGeminiResponse(userMessage) {
           'x-goog-api-key': config.gemini.apiKey
         },
         body: JSON.stringify({
-          system_instruction: {
+         system_instruction: {
             parts: [{
               text: `You are ROSE — the official AI assistant of ${rosanDetails.name}'s portfolio website.
 
@@ -93,7 +91,7 @@ ${buildExactLinksText()}
 3. Match topic to correct URL:
 ${buildLinkRulesText()}
 
-4. ⚠️ LINK OUTPUT RULE (SMART — 3 CASES):
+4. LINK OUTPUT RULE (SMART — 3 CASES):
 
    **CASE A — User explicitly asks for a page/link/navigation:**
    → Output [LINK:...] tag(s). Example: "contact page link dinus", "about khol", "sabai link dinus".
@@ -133,15 +131,15 @@ ${buildMultiLinkExample(['servicePage'])}
    - CASE C — "hello" / "thanks" / "who is Einstein" → NO LINKS, only text.
 
 8. WRONG EXAMPLES (NEVER do this):
-   - [LINK:https://rosankc.com.np/contact|...] ❌ (invented URL)
-   - [LINK:contact|...] ❌ (missing .html)
-   - [LINK:Contact.html,About.html|...] ❌ (combined URLs)
-   - Adding ALL links when user asked a simple question ❌
-   - Adding links for casual chat/greetings/thanks ❌
-   - Putting [LINK:...] in the middle of reply ❌ (must be at END)
-   - More than 2 suggestion links in CASE B ❌
+   - [LINK:https://rosankc.com.np/contact|...] (invented URL)
+   - [LINK:contact|...]  (missing .html)
+   - [LINK:Contact.html,About.html|...]  (combined URLs)
+   - Adding ALL links when user asked a simple question 
+   - Adding links for casual chat/greetings/thanks 
+   - Putting [LINK:...] in the middle of reply  (must be at END)
+   - More than 2 suggestion links in CASE B 
 
-## ⚠️ REPLY STYLE RULE (VERY IMPORTANT)
+## REPLY STYLE RULE (VERY IMPORTANT)
 
 Your replies must be SHORT but DETAIL-RICH:
 
@@ -176,26 +174,26 @@ Short, structured, scannable, warm, intelligent. Use bullets. Avoid long paragra
       }
     );
 
-    // ✅ Specific error handling
+    //  Specific error handling
     if (!response.ok) {
       const data = await response.json().catch(() => ({}));
       switch (response.status) {
-        case 400: return '❌ Invalid request. Please try again.';
-        case 401: return '❌ API key invalid.\n\nType: `clear key` then `set key YOUR_KEY`';
-        case 403: return '❌ API key disabled or quota exceeded.';
-        case 429: return '⏳ Too many requests. Wait a minute and try again.';
+        case 400: return ' Invalid request. Please try again.';
+        case 401: return ' API key invalid.\n\nType: `clear key` then `set key YOUR_KEY`';
+        case 403: return ' API key disabled or quota exceeded.';
+        case 429: return ' Too many requests. Wait a minute and try again.';
         case 500:
         case 502:
-        case 503: return '🔧 Google server error. Please try again.';
-        default: return `❌ Error: ${data.error?.message || 'Unknown error'}`;
+        case 503: return ' Google server error. Please try again.';
+        default: return ` Error: ${data.error?.message || 'Unknown error'}`;
       }
     }
 
     const data = await response.json();
 
-    // ✅ Validate response structure
+    //  Validate response structure
     if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
-      return '❌ Empty response from AI. Please try again.';
+      return ' Empty response from AI. Please try again.';
     }
 
     let aiText = data.candidates[0].content.parts[0].text;
@@ -230,12 +228,12 @@ Short, structured, scannable, warm, intelligent. Use bullets. Avoid long paragra
   } catch (error) {
     console.error('Gemini error:', error);
     if (error.name === 'AbortError') {
-      return '⏱️ Request timeout. Please try again.';
+      return ' Request timeout. Please try again.';
     }
     if (error.message && error.message.includes('fetch')) {
-      return '📡 Network error.\n\nCheck your internet connection.';
+      return ' Network error.\n\nCheck your internet connection.';
     }
-    return '❌ Something went wrong. Please try again.';
+    return ' Something went wrong. Please try again.';
   }
 }
 
@@ -243,7 +241,7 @@ function clearAIConversationHistory() {
   conversationHistory = [];
 }
 
-// ✅ FIXED: testModelConnection() मा पनि retry logic
+//  testModelConnection() मा पनि retry logic
 async function testModelConnection(modelId) {
   if (!config.gemini.apiKey) return false;
   try {
@@ -253,11 +251,11 @@ async function testModelConnection(modelId) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-goog-api-key': config.gemini.apiKey  // ✅ header
+          'x-goog-api-key': config.gemini.apiKey
         },
         body: JSON.stringify({ contents: [{ parts: [{ text: 'Hello' }] }] })
       },
-      2  // ✅ Test गर्दा 2 retry मात्र (छिटो हुनको लागि)
+      2  //  Test गर्दा 2 retry मात्र
     );
     const data = await response.json();
     return response.ok && !data.error && data.candidates;
@@ -270,12 +268,12 @@ async function testModelConnection(modelId) {
 async function connectToFreeTier() {
   if (!config.gemini.apiKey) {
     if (typeof addMessage === 'function') {
-      addMessage('❌ No API key found.\n\nType: `set key YOUR_API_KEY`', 'bot');
+      addMessage(' No API key found.\n\nType: `set key YOUR_API_KEY`', 'bot');
     }
     return false;
   }
 
-  if (typeof addMessage === 'function') addMessage('🔄 Testing models...', 'bot');
+  if (typeof addMessage === 'function') addMessage(' Testing models...', 'bot');
 
   for (const model of config.gemini.availableModels) {
     if (typeof addMessage === 'function') addMessage(`Testing ${model.name}...`, 'bot');
@@ -289,7 +287,7 @@ async function connectToFreeTier() {
       saveChatMode('ai');
       if (typeof updateModeIndicator === 'function') updateModeIndicator();
       if (typeof addMessage === 'function') {
-        addMessage(`✅ Connected with ${model.name}!\n\nAI Mode activated. How can I help you?`, 'bot');
+        addMessage(` Connected with ${model.name}!\n\nAI Mode activated. How can I help you?`, 'bot');
       }
       return true;
     }
@@ -297,7 +295,7 @@ async function connectToFreeTier() {
 
   if (typeof addMessage === 'function') {
     addMessage(
-      '❌ API key ले काम गरेन।\n\n' +
+      ' API key ले काम गरेन।\n\n' +
       'सम्भावित कारण:\n' +
       '• Key गलत छ\n' +
       '• Key enable छैन\n\n' +
@@ -311,11 +309,11 @@ async function connectToFreeTier() {
 
 async function testAllAvailableModels() {
   if (!config.gemini.apiKey) {
-    if (typeof addMessage === 'function') addMessage('❌ No API key found.\n\nType: `set key YOUR_API_KEY`', 'bot');
+    if (typeof addMessage === 'function') addMessage(' No API key found.\n\nType: `set key YOUR_API_KEY`', 'bot');
     return;
   }
 
-  if (typeof addMessage === 'function') addMessage('🔄 Testing all models...\n', 'bot');
+  if (typeof addMessage === 'function') addMessage(' Testing all models...\n', 'bot');
   const results = [];
   let workingModel = null;
 
@@ -326,10 +324,10 @@ async function testAllAvailableModels() {
     if (typeof removeTypingIndicator === 'function') removeTypingIndicator();
 
     if (isWorking) {
-      results.push(`✅ ${model.name} - Connected`);
+      results.push(` ${model.name} - Connected`);
       if (!workingModel) workingModel = model;
     } else {
-      results.push(`❌ ${model.name} - Failed`);
+      results.push(` ${model.name} - Failed`);
     }
   }
 
@@ -349,6 +347,7 @@ async function testAllAvailableModels() {
   if (typeof addMessage === 'function') addMessage(resultMessage, 'bot');
 }
 
+//  getCurrentModelInfo() — यही file मा रहन्छ (single source of truth)
 function getCurrentModelInfo() {
   return config.gemini.availableModels.find(m => m.id === config.gemini.currentModel) || config.gemini.availableModels[0];
 }

@@ -1,7 +1,5 @@
 // ============================================================
-// 05-css.js - Liquid Theme with Background ONLY in Messages Area
-// Close Button - Only Icon (No Background, No Border, No Hover)
-// Send Button - Only Image (No Background, No Shape)
+// 05-css.js - Liquid Theme with Background 
 // ============================================================
 
 function generateCSS() {

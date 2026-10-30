@@ -1,9 +1,8 @@
 // ============================================================
 // 11-main.js - Main Initialization
-// FIXED: Global error handler + input validation + safe async
 // ============================================================
 
-// ✅ Global error handlers (सबैभन्दा पहिले)
+//  Global error handlers (सबैभन्दा पहिले)
 window.addEventListener('error', (event) => {
   console.error('Global error:', event.error);
   if (typeof addMessage === 'function') {
@@ -16,7 +15,7 @@ window.addEventListener('unhandledrejection', (event) => {
   event.preventDefault();
 });
 
-// ✅ Safe async wrapper
+//  Safe async wrapper
 async function safeAsync(fn, ...args) {
   try {
     return await fn(...args);
@@ -53,10 +52,11 @@ function setupInteractions() {
     chatWindow.style.transform = 'none';
   }
 
+  //  X button — window बन्द + history मेट्ने
   closeBtn.addEventListener('click', () => {
     chatWindow.classList.remove('show');
     saveWindowState(false);
-    clearMessageHistory();
+    clearMessageHistory();   //  history मेटिन्छ
   });
 
   sendBtn.addEventListener('click', () => safeAsync(handleUserInput));
@@ -110,10 +110,10 @@ async function handleUserInput() {
   
   const text = input.value.trim();
   
-  // ✅ Input validation
+  //  Input validation
   if (!text) return;
   if (text.length > 2000) {
-    addMessage('⚠️ Message too long (max 2000 characters).', 'bot');
+    addMessage(' Message too long (max 2000 characters).', 'bot');
     return;
   }
 
