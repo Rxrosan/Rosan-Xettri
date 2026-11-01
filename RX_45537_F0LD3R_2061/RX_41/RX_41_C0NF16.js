@@ -19,7 +19,7 @@ const config = {
 
   gemini: {
     apiKey: '',
-    currentModel: 'gemini-3-flash-preview',
+    currentModel: 'gemini-2.5-flash',
     availableModels: [
       { id: 'gemini-2.5-flash', name: 'Gemini 2.5 Flash', free: true, description: 'Fast model' },
       { id: 'gemini-2.5-pro', name: 'Gemini 2.5 Pro', free: true, description: 'More powerful' },

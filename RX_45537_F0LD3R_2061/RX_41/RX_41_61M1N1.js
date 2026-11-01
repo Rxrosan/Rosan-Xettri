@@ -1,5 +1,5 @@
 // ============================================================
-// 04-gemini.js - Gemini API Functions
+// 04-gemini.js - Gemini API Functions (with Search Grounding)
 // ============================================================
 
 let conversationHistory = [];
@@ -17,22 +17,93 @@ async function fetchWithRetry(url, options, maxRetries = 3) {
     const timeoutId = setTimeout(() => controller.abort(), 45000);
     try {
       const response = await fetch(url, { ...options, signal: controller.signal });
-      
+
+      // 5xx → retry
       if (response.status >= 500 && i < maxRetries - 1) {
         await sleep(1000 * (i + 1));
         continue;
       }
+
+      // 429 (rate limit) → retry
+      if (response.status === 429 && i < maxRetries - 1) {
+        await sleep(2000 * (i + 1));
+        continue;
+      }
+
       return response;
     } catch (error) {
       lastError = error;
       if (i < maxRetries - 1) await sleep(1000 * (i + 1));
     } finally {
-      clearTimeout(timeoutId);  // सधैं clear — leak छैन
+      clearTimeout(timeoutId);
     }
   }
   throw lastError;
 }
 
+// ===== Grounding sources निकाल्ने helper (title सहित) =====
+function extractGroundingSources(groundingMetadata) {
+  if (!groundingMetadata?.groundingChunks) return [];
+
+  const seen = new Set();
+  const sources = [];
+
+  groundingMetadata.groundingChunks.forEach(chunk => {
+    const uri = chunk?.web?.uri;
+    const title = chunk?.web?.title;
+
+    if (!uri || seen.has(uri)) return;
+    seen.add(uri);
+
+    sources.push({
+      uri: uri,
+      title: (title && title.trim()) ? title.trim() : null
+    });
+  });
+
+  return sources;
+}
+
+// ===== Grounding sources लाई [LINK:...] tag मा convert गर्ने =====
+function appendSourcesToText(aiText, sources) {
+  if (!sources || sources.length === 0) return aiText;
+
+  const sourceTags = sources
+    .slice(0, 3)
+    .map((src, i) => {
+      let label;
+
+      // 1st priority: actual page title
+      if (src.title && src.title.length > 0) {
+        label = src.title.length > 40
+          ? src.title.slice(0, 37) + '...'
+          : src.title;
+      } else {
+        // Fallback: domain name (or generic if redirect)
+        try {
+          const domain = new URL(src.uri).hostname.replace(/^www\./, '');
+          if (domain.includes('vertexaisearch') || domain === 'google.com') {
+            label = 'Source ' + (i + 1);
+          } else {
+            label = domain.length > 30 ? domain.slice(0, 27) + '...' : domain;
+          }
+        } catch (e) {
+          label = 'Source ' + (i + 1);
+        }
+      }
+
+      // label भित्र | वा ] भए sanitize गर्ने
+      label = label.replace(/[\[\]|]/g, '').trim();
+      if (!label) label = 'Source ' + (i + 1);
+
+      return `[LINK:${src.uri}|${label}]`;
+    })
+    .join('\n');
+
+  return aiText + '\n\n' + sourceTags;
+}
+
+// ===== Main AI response function =====
 async function getGeminiResponse(userMessage) {
   if (!config.gemini.apiKey) {
     return 'No API key set.\n\nType: `set key YOUR_API_KEY`';
@@ -47,7 +118,6 @@ async function getGeminiResponse(userMessage) {
     });
     contents.push({ role: 'user', parts: [{ text: userMessage }] });
 
-    // SECURE: API key header मा (URL मा होइन)
     const response = await fetchWithRetry(
       `${config.gemini.apiUrl}${modelInfo.id}:generateContent`,
       {
@@ -57,7 +127,7 @@ async function getGeminiResponse(userMessage) {
           'x-goog-api-key': config.gemini.apiKey
         },
         body: JSON.stringify({
-         system_instruction: {
+          system_instruction: {
             parts: [{
               text: `You are ROSE — the official AI assistant of ${rosanDetails.name}'s portfolio website.
 
@@ -139,6 +209,22 @@ ${buildMultiLinkExample(['servicePage'])}
    - Putting [LINK:...] in the middle of reply  (must be at END)
    - More than 2 suggestion links in CASE B 
 
+## INTERNET SEARCH RULE (GOOGLE SEARCH GROUNDING AVAILABLE)
+
+You have access to Google Search. Use it ONLY when:
+- User asks about current events, news, weather, prices, sports scores
+- User asks about something that happened after your training cutoff
+- User explicitly says "search", "google it", "internet ma herna", "search gara"
+- User asks for real-time data (though today's date/time is already provided above)
+
+DO NOT search for:
+- Questions about ${rosanDetails.name} or this website (use provided EXACT LINKS)
+- General knowledge you already know confidently
+- Casual chat, greetings, emotions, philosophy
+- Math, coding, or logic questions
+
+When you use search results, weave the information naturally into your reply. Do NOT say "According to my search" — just state the facts confidently. The system will automatically attach sources at the end.
+
 ## REPLY STYLE RULE (VERY IMPORTANT)
 
 Your replies must be SHORT but DETAIL-RICH:
@@ -169,12 +255,17 @@ Your replies must be SHORT but DETAIL-RICH:
 Short, structured, scannable, warm, intelligent. Use bullets. Avoid long paragraphs. Add relevant links as suggestions ONLY when the user's question naturally leads to a page (CASE B). You are ROSE. ROSAN KC comes first.`
             }]
           },
-          contents: contents
+          contents: contents,
+
+          // ✅ SEARCH GROUNDING ENABLE
+          tools: [{
+            google_search: {}
+          }]
         })
       }
     );
 
-    //  Specific error handling
+    // ===== Specific error handling =====
     if (!response.ok) {
       const data = await response.json().catch(() => ({}));
       switch (response.status) {
@@ -191,14 +282,25 @@ Short, structured, scannable, warm, intelligent. Use bullets. Avoid long paragra
 
     const data = await response.json();
 
-    //  Validate response structure
+    // ===== Validate response structure =====
     if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
       return ' Empty response from AI. Please try again.';
     }
 
     let aiText = data.candidates[0].content.parts[0].text;
 
-    // ===== SAFETY FILTER: Duplicate links हटाउने + END मा राख्ने =====
+    // ===== GROUNDING SOURCES निकाल्ने =====
+    const groundingMetadata = data.candidates[0].groundingMetadata;
+    const sources = extractGroundingSources(groundingMetadata);
+
+    // ===== DEBUG (temporary — पछि हटाउन सकिन्छ) =====
+    console.log('=== GROUNDING DEBUG ===');
+    console.log('Model:', modelInfo.id);
+    console.log('groundingMetadata:', groundingMetadata);
+    console.log('Extracted sources:', sources);
+    console.log('=== END DEBUG ===');
+
+    // ===== SAFETY FILTER: Duplicate links हटाउने =====
     const linkRegex = /\[LINK:(.*?)\|(.*?)\]/g;
     const seenUrls = new Set();
     const uniqueLinks = [];
@@ -214,6 +316,11 @@ Short, structured, scannable, warm, intelligent. Use bullets. Avoid long paragra
     aiText = aiText.replace(linkRegex, '').trim();
     aiText = aiText.replace(/\n{3,}/g, '\n\n').trim();
 
+    // ===== Grounding sources append गर्ने (यदि छन् भने) =====
+    // यसले [LINK:...] tag बनाउँछ जुन addMessage() ले button render गर्छ
+    aiText = appendSourcesToText(aiText, sources);
+
+    // ===== Internal [LINK:...] tags append गर्ने =====
     if (uniqueLinks.length > 0) {
       aiText += '\n\n' + uniqueLinks.join('\n');
     }
@@ -241,7 +348,7 @@ function clearAIConversationHistory() {
   conversationHistory = [];
 }
 
-//  testModelConnection() मा पनि retry logic
+// ===== testModelConnection() =====
 async function testModelConnection(modelId) {
   if (!config.gemini.apiKey) return false;
   try {
@@ -253,9 +360,12 @@ async function testModelConnection(modelId) {
           'Content-Type': 'application/json',
           'x-goog-api-key': config.gemini.apiKey
         },
-        body: JSON.stringify({ contents: [{ parts: [{ text: 'Hello' }] }] })
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: 'Hello' }] }],
+          tools: [{ google_search: {} }]
+        })
       },
-      2  //  Test गर्दा 2 retry मात्र
+      2
     );
     const data = await response.json();
     return response.ok && !data.error && data.candidates;
@@ -347,7 +457,7 @@ async function testAllAvailableModels() {
   if (typeof addMessage === 'function') addMessage(resultMessage, 'bot');
 }
 
-//  getCurrentModelInfo() — यही file मा रहन्छ (single source of truth)
+// ===== getCurrentModelInfo() =====
 function getCurrentModelInfo() {
   return config.gemini.availableModels.find(m => m.id === config.gemini.currentModel) || config.gemini.availableModels[0];
 }
