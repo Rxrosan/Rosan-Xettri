@@ -57,7 +57,7 @@ const questionsForNumber5 = [
             { text: "한국에서 가장 큰 도시인 서울은 대한민국의 관문입니다.", image: null, audio: null },
             { text: "인천은 한국의 도시 중에서 두 번째로 큰 곳입니다.", image: null, audio: null },
             { text: "한국에는 특별시와 광역시가 모두 여섯 개 있습니다.", image: null, audio: null },
-            { text: "관광객들은 아름다운 해변을 보려고 뷰산을 찾습니다.", image: null, audio: null }
+{ text: "관광객들은 아름다운 해변을 보려고 부산을 찾습니다.", image: null, audio: null }
         ],
         answer: 4
     },

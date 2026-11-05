@@ -34,7 +34,7 @@ const questionsForNumber6 = [
             audio: null
         },
         options: [
-            { text: "집에서 </u>쉬었습니다.", image: null, audio: null },
+            { text: "<u>집에서 </u>쉬었습니다.", image: null, audio: null },
             { text: "<u>가족와 </u>외식했어요.", image: null, audio: null },
             { text: "<u>공원아서 </u>산책했어요.", image: null, audio: null },
             { text: "<u>친구과 </u>영화를 봤어요.", image: null, audio: null }
