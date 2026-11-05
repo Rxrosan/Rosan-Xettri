@@ -2,6 +2,8 @@
     --primary: #3498db;
     --secondary: #380c9e;
     --border: #e20e0e;
+    --vh: 1vh;
+    --vw: 1vw;
 }
 
 * {
@@ -20,6 +22,8 @@ html, body {
 
 body {
     height: 100vh;
+    height: 100dvh;
+    height: calc(var(--vh, 1vh) * 100);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -71,6 +75,8 @@ body {
     overflow: hidden;
     padding: 10px;
     background: #f4f7f6;
+    display: flex;
+    flex-direction: column;
 }
 
 .view-container {
@@ -198,6 +204,7 @@ body {
     visibility: hidden;
 }
 
+/* 🚨 यहाँ margin-top: auto ले बटनलाई स्वतः तल धकेल्छ */
 #navFooter[style*="display: flex"] {
     display: flex !important;
     visibility: visible !important;
@@ -211,6 +218,7 @@ body {
     gap: 6px;
     flex-direction: row;
     flex-wrap: nowrap;
+    margin-top: auto;
 }
 
 .nav-btn {
@@ -325,7 +333,6 @@ audio { display: none !important; }
 .audio-play-button.completed { background: #95a5a6 !important; cursor: not-allowed !important; }
 .audio-play-button:disabled  { opacity: 0.7; cursor: not-allowed !important; }
 
-/* अडियो चल्दा पनि इमेज र मोडाल क्लिक गर्न मिल्ने बनाइएको छ */
 body.audio-playing *                          { pointer-events: none !important; cursor: not-allowed !important; }
 body.audio-playing .option-card, 
 body.audio-playing .content-image, 
@@ -339,18 +346,12 @@ body.modal-open                               { overflow: hidden; }
     50%       { opacity: 0.7; }
 }
 
-/* ── MISC ── */
 .fullscreen-active { background: #f4f7f6 !important; }
 
 /* ════════════════════════════════════════════════════
-   RESPONSIVE — single clean cascade, no conflicts
-   Desktop ≥ 769px  →  base styles above apply
-   Tablet / small laptop 600–768px
-   Mobile landscape  (orientation:landscape, ≤ 900px)
-   Mobile portrait   (orientation:portrait,  ≤ 768px)
+   RESPONSIVE CASCADE
 ════════════════════════════════════════════════════ */
 
-/* ── Tablet / small screens ── */
 @media (max-width: 768px) {
     .main-header  { font-size: 12px; height: 34px; padding: 0 10px; }
     .stats-bar    { font-size: 10px; height: 28px; }
@@ -362,13 +363,15 @@ body.modal-open                               { overflow: hidden; }
     .opt-circle   { width: 22px; height: 22px; font-size: 11px; }
     .btn-finish   { font-size: 12px; height: 32px; }
 
-    textarea, input { font-size: 16px; } /* prevent iOS zoom */
+    textarea, input { font-size: 16px; }
 }
 
-/* ── LANDSCAPE MODE (phone/tablet on its side) ── */
+/* ── ACTUAL LANDSCAPE MODE ── */
 @media (orientation: landscape) and (max-width: 900px) {
     html, body {
         height: 100vh;
+        height: 100dvh;
+        height: calc(var(--vh, 1vh) * 100);
         overflow: hidden;
         position: fixed;
         width: 100%;
@@ -385,7 +388,7 @@ body.modal-open                               { overflow: hidden; }
     .main-wrapper {
         flex: 1;
         overflow: hidden;
-        padding: 5px 8px 48px; /* bottom pad for fixed footer */
+        padding: 5px 8px;
     }
 
     .view-container {
@@ -395,7 +398,6 @@ body.modal-open                               { overflow: hidden; }
         overflow: hidden;
     }
 
-    /* Grid: side-by-side columns */
     .grid-dual-pane {
         flex-direction: row;
         flex: 1;
@@ -414,7 +416,6 @@ body.modal-open                               { overflow: hidden; }
     .qnum   { min-height: 26px; font-size: 11px; padding: 3px 0; }
     .btn-finish { height: 30px; font-size: 11px; margin-top: 5px; }
 
-    /* Question screen: side by side */
     .split-pane-container {
         flex-direction: row;
         flex: 1;
@@ -436,14 +437,9 @@ body.modal-open                               { overflow: hidden; }
     .content-image { max-height: 100px; }
     .audio-play-button { min-height: 32px; padding: 6px 12px; font-size: 12px; margin: 4px 0; }
 
-    /* Footer fixed at bottom */
     #navFooter[style*="display: flex"] {
-        position: fixed;
-        bottom: 0; left: 0; right: 0;
         height: 42px;
         padding: 5px 8px;
-        z-index: 1000;
-        box-shadow: 0 -2px 8px rgba(0,0,0,0.12);
     }
 
     #navFooter[style*="display: flex"] .nav-btn {
@@ -452,7 +448,9 @@ body.modal-open                               { overflow: hidden; }
     }
 }
 
-/* ── PORTRAIT MODE: FULL-SCREEN FORCED LANDSCAPE (5 COLUMN GRID) ── */
+/* ════════════════════════════════════════════════════
+   PORTRAIT MODE: FORCED LANDSCAPE (ROTATED)
+════════════════════════════════════════════════════ */
 @media (orientation: portrait) and (max-width: 768px) {
 
     html {
@@ -463,39 +461,38 @@ body.modal-open                               { overflow: hidden; }
     }
 
     body {
-        /* SWAP dimensions for full screen length */
         width: 100vh !important;
+        width: 100dvh !important;
+        width: calc(var(--vh, 1vh) * 100) !important;
+
         height: 100vw !important;
-        max-width: none !important; 
-        
+        height: 100dvw !important;
+        height: calc(var(--vw, 1vw) * 100) !important;
+
+        max-width: none !important;
+
         position: absolute;
         top: 0;
-        left: 100vw; 
+        left: 100vw;
+        left: 100dvw;
+        left: calc(var(--vw, 1vw) * 100);
 
         transform: rotate(90deg);
         transform-origin: top left;
-        
+
         display: flex;
         flex-direction: column;
         overflow: hidden;
     }
 
-    .main-header { 
-        height: 40px; 
-        flex-shrink: 0; 
-        padding: 0 20px;
-    }
-
-    .stats-bar { 
-        height: 32px; 
-        flex-shrink: 0;
-    }
+    .main-header { height: 32px; font-size: 12px; padding: 0 12px; flex-shrink: 0; }
+    .stats-bar   { height: 26px; font-size: 10px; padding: 0 8px; flex-shrink: 0; }
 
     .main-wrapper {
         flex: 1; 
         display: flex;
         flex-direction: column;
-        padding: 6px;
+        padding: 5px 8px;
         overflow: hidden;
         background: #f4f7f6;
     }
@@ -505,6 +502,39 @@ body.modal-open                               { overflow: hidden; }
         display: flex;
         flex-direction: column;
         height: 100%;
+        overflow: hidden;
+    }
+
+    .grid-dual-pane {
+        flex-direction: row !important;
+        flex: 1;
+        gap: 10px;
+        padding: 8px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .grid-column {
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .q-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 4px;
+    }
+
+    .qnum {
+        min-height: 26px;
+        font-size: 11px;
+        padding: 3px 0;
+    }
+
+    .btn-finish {
+        height: 30px;
+        font-size: 11px;
+        margin-top: 5px;
     }
 
     .split-pane-container {
@@ -520,7 +550,7 @@ body.modal-open                               { overflow: hidden; }
         flex: 1;
         height: 100%;
         overflow-y: auto;
-        padding: 15px;
+        padding: 10px;
         -webkit-overflow-scrolling: touch;
     }
 
@@ -528,42 +558,18 @@ body.modal-open                               { overflow: hidden; }
         border-right: 1px solid var(--border);
     }
 
-    /* ── GRID MENU UPDATED TO 5 COLUMNS ── */
-    .grid-dual-pane {
-        flex-direction: row !important;
-        flex: 1;
-        gap: 15px;
-    }
+    .option-item { min-height: 36px; padding: 6px 8px; font-size: 11px; }
+    .opt-circle  { width: 20px; height: 20px; font-size: 10px; }
+    .content-image { max-height: 100px; width: auto; margin: 5px auto; }
+    .audio-play-button { min-height: 32px; padding: 6px 12px; font-size: 12px; margin: 4px 0; }
 
-    .q-grid {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr); /* CHANGED FROM 6 TO 5 */
-        gap: 6px;
-    }
-
-    .qnum {
-        min-height: 34px; /* Slightly taller for better touch */
-        font-size: 12px;
-    }
-
-    /* ── Footer Navigation ── */
     #navFooter[style*="display: flex"] {
-        height: 50px;
-        flex-shrink: 0;
-        display: flex !important;
-        padding: 0 20px;
-        background: white;
-        border-top: 2px solid var(--border);
+        height: 42px;
+        padding: 5px 8px;
     }
 
-    .nav-btn {
-        height: 38px;
-        font-size: 13px;
-    }
-
-    .content-image {
-        max-height: 130px;
-        width: auto;
-        margin: 5px auto;
+    #navFooter[style*="display: flex"] .nav-btn {
+        height: 30px;
+        font-size: 11px;
     }
 }
