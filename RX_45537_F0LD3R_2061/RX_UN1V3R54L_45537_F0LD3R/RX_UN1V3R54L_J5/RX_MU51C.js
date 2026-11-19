@@ -623,7 +623,7 @@
   // ============================================================
   // 6b. TOOLTIP — 2 SECOND HOLD पछि देखिने, MOUSE हटाएपछि हट्ने
   // ============================================================
-  const HOLD_DELAY = 2000;   // ms — hold गरेको 2 सेकेन्ड पछि देखिने
+  const HOLD_DELAY = 1000;   // ms — hold for 1 sec
   let tooltipEl = null;
   let tooltipTimer = null;
   let tooltipTarget = null;
