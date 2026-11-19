@@ -73,15 +73,21 @@
       font-weight: bold;
     }
 
-    @keyframes scrollLoop {
-      0%   { transform: translate3d(0, 0, 0); }
-      8%   { transform: translate3d(0, 0, 0); }
-      92%  { transform: translate3d(var(--rx-scroll, -120px), 0, 0); }
-      100% { transform: translate3d(0, 0, 0); }
+    /* ============================================================
+       AUTO-SPEED ANIMATION
+       ============================================================ */
+    @keyframes scrollLoopSmart {
+      0%   { transform: translate3d(0, 0, 0); opacity: 1; }
+      12%  { transform: translate3d(0, 0, 0); opacity: 1; }              /* सुरुमा पज — पढ्न पाइने */
+      78%  { transform: translate3d(var(--rx-scroll, -120px), 0, 0); opacity: 1; } /* बिस्तारै scroll */
+      86%  { transform: translate3d(var(--rx-scroll, -120px), 0, 0); opacity: 0; } /* अन्त्यमा fade out */
+      92%  { transform: translate3d(0, 0, 0); opacity: 0; }              /* reset (invisible) */
+      96%  { transform: translate3d(0, 0, 0); opacity: 1; }              /* fade in suru मा */
+      100% { transform: translate3d(0, 0, 0); opacity: 1; }
     }
 
     .rx-track-name.slide-anim {
-      animation: scrollLoop var(--rx-dur, 8s) linear infinite;
+      animation: scrollLoopSmart var(--rx-dur, 14s) linear infinite;
       animation-fill-mode: both;
     }
 
@@ -284,7 +290,7 @@
     }
 
     /* ============================================================
-       TOOLTIP — 2s hold पछि देखिने, mouse हटाएपछि हट्ने
+       TOOLTIP 
        ============================================================ */
     .rx-tooltip {
       position: fixed;
@@ -381,9 +387,30 @@
       color: #cc9900 !important;
     }
 
-    .rx-track-item-left { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
-    .rx-track-item-title { font-size: 13px; font-weight: inherit; }
+    .rx-track-item-left { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; overflow: hidden; }
+    .rx-track-item-title { font-size: 13px; font-weight: inherit; white-space: nowrap; overflow: hidden; }
     .rx-track-item-singer { font-size: 10px; color: #ff3333; font-weight: 600; }
+
+    /* Playlist long name scroll — same auto-speed smart animation */
+    .rx-track-item-title-wrap { overflow: hidden; white-space: nowrap; position: relative; width: 100%; }
+    .rx-track-item-title.rx-pl-scroll {
+      display: inline-block;
+      white-space: nowrap;
+      padding-right: 16px;
+    }
+    @keyframes scrollLoopSmartPl {
+      0%   { transform: translate3d(0, 0, 0); opacity: 1; }
+      12%  { transform: translate3d(0, 0, 0); opacity: 1; }
+      78%  { transform: translate3d(var(--rx-pl-scroll, -120px), 0, 0); opacity: 1; }
+      86%  { transform: translate3d(var(--rx-pl-scroll, -120px), 0, 0); opacity: 0; }
+      92%  { transform: translate3d(0, 0, 0); opacity: 0; }
+      96%  { transform: translate3d(0, 0, 0); opacity: 1; }
+      100% { transform: translate3d(0, 0, 0); opacity: 1; }
+    }
+    .rx-track-item-title.rx-pl-scroll.rx-pl-anim {
+      animation: scrollLoopSmartPl var(--rx-pl-dur, 14s) linear infinite;
+      animation-fill-mode: both;
+    }
 
     .rx-track-item span:last-child {
       font-size: 12px; color: #555; font-weight: 600; font-family: monospace;
@@ -621,7 +648,43 @@
   }
 
   // ============================================================
-  // 6b. TOOLTIP — 2 SECOND HOLD पछि देखिने, MOUSE हटाएपछि हट्ने
+  // 6a. SMART AUTO-SPEED CALCULATOR
+  // ============================================================
+  function calcScrollDuration(scrollDist, containerWidth) {
+    // Reading speed: मानिसले ~10-12 अक्षर/सेकेन्ड पढ्छ
+    // Title को approximate अक्षर संख्या (pixels बाट estimate)
+    const approxChars = Math.abs(scrollDist) / 7.5;
+
+    // 1. Reading pause — सुरुमा title देखाउने समय (प्रति 3 अक्षरमा 1s, min 2s)
+    const readPause = Math.max(2, Math.min(6, approxChars / 3));
+
+    // 2. Scrolling time — आरामसँग scroll गर्ने समय
+    //    प्रति 8px मा 1s (यो मानव आँखाले ट्र्याक गर्न सक्ने आरामदायी गति हो)
+    const scrollTime = Math.abs(scrollDist) / 8;
+
+    // 3. End pause — अन्त्यमा पनि अलिकति रोक्ने (min 1.5s)
+    const endPause = Math.max(1.5, approxChars / 8);
+
+    // 4. Fade in/out time
+    const fadeTime = 1.2;
+
+    // Total duration — सबै जोड्ने
+    let total = readPause + scrollTime + endPause + fadeTime;
+
+    // Safety limits — धेरै छिटो वा धेरै ढिलो नहोस्
+    total = Math.max(10, Math.min(90, total));
+
+    return {
+      duration: total,
+      readPause,
+      scrollTime,
+      endPause,
+      fadeTime
+    };
+  }
+
+  // ============================================================
+  // 6b. TOOLTIP 
   // ============================================================
   const HOLD_DELAY = 1000;   // ms — hold for 1 sec
   let tooltipEl = null;
@@ -784,7 +847,7 @@
   volSlider.addEventListener('change', resetVolumeAutoTimer);
 
   // ============================================================
-  // 8. PLAY TRACK
+  // 8. PLAY TRACK — smart auto-speed scroll
   // ============================================================
   function playTrack(index, startPos = 0, autoPlay = true) {
     currentTrackIndex = index;
@@ -808,11 +871,21 @@
 
         if (textWidth > containerWidth + 4) {
           const scrollDist = -(textWidth - containerWidth + 10);
-          let dur = Math.abs(scrollDist) / 35;
-          dur = Math.max(6, Math.min(16, dur));
+
+          // ⬇️ SMART AUTO-SPEED — title को length अनुसार duration आफै calculate
+          const timing = calcScrollDuration(scrollDist, containerWidth);
           trackTitleText.style.setProperty('--rx-scroll', scrollDist + 'px');
-          trackTitleText.style.setProperty('--rx-dur', dur + 's');
+          trackTitleText.style.setProperty('--rx-dur', timing.duration.toFixed(2) + 's');
           trackTitleText.classList.add('slide-anim');
+
+          console.log(
+            `[RX Player] "${track.title}" → ` +
+            `scrollDist=${Math.round(Math.abs(scrollDist))}px, ` +
+            `total=${timing.duration.toFixed(1)}s ` +
+            `(pause=${timing.readPause.toFixed(1)}s, ` +
+            `scroll=${timing.scrollTime.toFixed(1)}s, ` +
+            `endPause=${timing.endPause.toFixed(1)}s)`
+          );
         }
       });
     });
@@ -937,7 +1010,7 @@
   });
 
   // ============================================================
-  // 11. PLAYLIST
+  // 11. PLAYLIST — smart auto-speed scroll
   // ============================================================
   function renderPlaylist() {
     playlistList.innerHTML = '';
@@ -953,7 +1026,9 @@
       div.className = itemClass;
       div.innerHTML = `
         <div class="rx-track-item-left">
-          <span class="rx-track-item-title">${track.title}</span>
+          <div class="rx-track-item-title-wrap">
+            <span class="rx-track-item-title">${track.title}</span>
+          </div>
           <span class="rx-track-item-singer">${track.singer || '—'}</span>
         </div>
         <span>${track.duration || '--:--'}</span>
@@ -967,6 +1042,31 @@
         closePlaylist();
       });
       playlistList.appendChild(div);
+    });
+
+    // Smart auto-speed scroll for long playlist titles
+    requestAnimationFrame(() => {
+      playlistList.querySelectorAll('.rx-track-item-title').forEach(el => {
+        const wrap = el.parentElement;
+        el.classList.remove('rx-pl-scroll', 'rx-pl-anim');
+        el.style.removeProperty('--rx-pl-dur');
+        el.style.removeProperty('--rx-pl-scroll');
+        el.style.display = 'inline-block';
+        el.style.whiteSpace = 'nowrap';
+
+        if (el.scrollWidth > wrap.clientWidth + 4) {
+          const scrollDist = -(el.scrollWidth - wrap.clientWidth + 10);
+
+          // ⬇️ SMART AUTO-SPEED — playlist title को length अनुसार duration आफै
+          const timing = calcScrollDuration(scrollDist, wrap.clientWidth);
+          el.style.setProperty('--rx-pl-scroll', scrollDist + 'px');
+          el.style.setProperty('--rx-pl-dur', timing.duration.toFixed(2) + 's');
+          el.classList.add('rx-pl-scroll', 'rx-pl-anim');
+        } else {
+          el.style.display = '';
+          el.style.whiteSpace = '';
+        }
+      });
     });
   }
 
