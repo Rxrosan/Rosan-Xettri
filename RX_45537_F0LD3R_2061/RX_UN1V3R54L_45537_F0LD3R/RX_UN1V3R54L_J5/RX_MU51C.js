@@ -403,7 +403,7 @@
           <div class="rx-singer-name" id="rx-singer-text">—</div>
         </div>
 
-        <button class="rx-btn rx-close-btn" id="rx-close">×</button>
+         <button class="rx-btn rx-close-btn" id="rx-close"><span style="display:block;line-height:1;transform:translateY(-1px);">×</span></button>
       </div>
 
       <div class="rx-bottom" id="rx-bottom-row">
