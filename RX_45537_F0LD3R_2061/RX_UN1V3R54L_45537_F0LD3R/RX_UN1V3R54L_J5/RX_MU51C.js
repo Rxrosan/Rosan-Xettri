@@ -1,4 +1,4 @@
-// RX-MUSIC-PLAYER.js (v6 — Full Persistence + Auto-Resume)
+// RX-MUSIC-PLAYER
 (function () {
   'use strict';
 
@@ -129,6 +129,8 @@
       letter-spacing: 0.3px;
       text-shadow: 0 1px 1px rgba(255,255,255,0.6);
       transition: color 0.4s ease;
+      position: relative;
+      cursor: default;
     }
 
     .rx-time.countdown {
@@ -144,6 +146,9 @@
       text-shadow: 0 0 6px rgba(255,51,51,0.3);
     }
 
+    /* ============================================================
+       SLIDER WRAP — timeline र volume दुवै exact same position मा
+       ============================================================ */
     .rx-slider-wrap {
       position: relative;
       flex-grow: 1;
@@ -158,22 +163,19 @@
       position: absolute;
       left: 0; right: 0; top: 0; bottom: 0;
       display: flex; align-items: center;
-      transition: opacity 0.25s ease, transform 0.25s ease;
+      transition: opacity 0.25s ease;
     }
     .rx-volume-mode {
       opacity: 0;
       pointer-events: none;
-      transform: translateY(6px);
     }
     .rx-slider-wrap.volume-active .rx-timeline-mode {
       opacity: 0;
       pointer-events: none;
-      transform: translateY(-6px);
     }
     .rx-slider-wrap.volume-active .rx-volume-mode {
       opacity: 1;
       pointer-events: auto;
-      transform: translateY(0);
     }
 
     .rx-slider-buffer {
@@ -279,6 +281,51 @@
     }
     .rx-bottom .rx-btn.active svg {
       stroke: #00cc66; filter: drop-shadow(0 0 5px rgba(0, 204, 102, 0.5));
+    }
+
+    /* ============================================================
+       TOOLTIP — 2s hold पछि देखिने, mouse हटाएपछि हट्ने
+       ============================================================ */
+    .rx-tooltip {
+      position: fixed;
+      z-index: 2000000;
+      padding: 6px 10px;
+      background: rgba(20, 20, 20, 0.88);
+      backdrop-filter: blur(8px) saturate(140%);
+      -webkit-backdrop-filter: blur(8px) saturate(140%);
+      color: #ffffff;
+      font-size: 11px;
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.35), inset 0 0 8px rgba(255,255,255,0.08);
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(4px) scale(0.95);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      user-select: none;
+    }
+    .rx-tooltip.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    .rx-tooltip::after {
+      content: '';
+      position: absolute;
+      left: 50%; bottom: -5px;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid rgba(20, 20, 20, 0.88);
+    }
+    .rx-tooltip.below::after {
+      bottom: auto; top: -5px;
+      border-top: none;
+      border-bottom: 5px solid rgba(20, 20, 20, 0.88);
     }
 
     .rx-playlist-ui {
@@ -389,42 +436,42 @@
   const html = `
     <div class="rx-player-ui" id="rx-player-ui">
       <div class="rx-top" id="rx-header">
-        <button class="rx-btn rx-nav-btn" id="rx-prev"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
-        <button class="rx-btn rx-play-btn" id="rx-play">
+        <button class="rx-btn rx-nav-btn" id="rx-prev" data-tip="Previous Track"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+        <button class="rx-btn rx-play-btn" id="rx-play" data-tip="Play / Pause">
           <svg id="rx-icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           <svg id="rx-icon-pause" class="pause-icon" style="display:none;" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         </button>
-        <button class="rx-btn rx-nav-btn" id="rx-next"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+        <button class="rx-btn rx-nav-btn" id="rx-next" data-tip="Next Track"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
 
-        <div class="rx-track-name-container" id="rx-track-name-btn">
+        <div class="rx-track-name-container" id="rx-track-name-btn" data-tip="Open Playlist">
           <div class="rx-track-title-wrap">
-            <div class="rx-track-name" id="rx-track-title-text">Select Track</div>
+            <div class="rx-track-name" id="rx-track-title-text">Select Music</div>
           </div>
           <div class="rx-singer-name" id="rx-singer-text">—</div>
         </div>
 
-         <button class="rx-btn rx-close-btn" id="rx-close"><span style="display:block;line-height:1;transform:translateY(-1px);">×</span></button>
+         <button class="rx-btn rx-close-btn" id="rx-close" data-tip="Close Player"><span style="display:block;line-height:1;transform:translateY(-1px);">×</span></button>
       </div>
 
       <div class="rx-bottom" id="rx-bottom-row">
-        <span class="rx-time countdown" id="rx-curr">0:00</span>
+        <span class="rx-time countdown" id="rx-curr" data-tip="Time Remaining">0:00</span>
 
         <div class="rx-slider-wrap" id="rx-slider-wrap">
           <div class="rx-timeline-mode" id="rx-timeline-mode">
             <div class="rx-slider-buffer" id="rx-buffer"></div>
-            <input type="range" min="0" max="100" value="0" step="0.1" class="rx-slider" id="rx-slider">
+            <input type="range" min="0" max="100" value="0" step="0.1" class="rx-slider" id="rx-slider" data-tip="Seek Timeline">
           </div>
           <div class="rx-volume-mode" id="rx-volume-mode">
             <span class="rx-vol-label">VOL</span>
-            <input type="range" min="0" max="100" value="70" step="1" class="rx-vol-slider" id="rx-vol-slider">
+            <input type="range" min="0" max="100" value="70" step="1" class="rx-vol-slider" id="rx-vol-slider" data-tip="Adjust Volume">
           </div>
         </div>
 
-        <span class="rx-time total" id="rx-dur">0:00</span>
+        <span class="rx-time total" id="rx-dur" data-tip="Total Duration">0:00</span>
 
-        <button class="rx-btn" id="rx-repeat-btn"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
+        <button class="rx-btn" id="rx-repeat-btn" data-tip="Repeat Mode"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></button>
 
-        <button class="rx-btn" id="rx-volume-btn" title="Volume">
+        <button class="rx-btn" id="rx-volume-btn" data-tip="Volume">
           <svg viewBox="0 0 24 24" id="rx-volume-icon">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="none"/>
             <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
@@ -436,13 +483,13 @@
 
     <div class="rx-playlist-ui" id="rx-playlist-ui">
       <div class="rx-playlist-header" id="rx-playlist-header">
-        <span>Select Track</span>
+        <span>Select Music</span>
         <button class="rx-playlist-close" id="rx-playlist-close">×</button>
       </div>
       <div class="rx-playlist-list" id="rx-playlist-list"></div>
     </div>
 
-    <div class="rx-fallback-btn" id="rx-fallback-btn">
+    <div class="rx-fallback-btn" id="rx-fallback-btn" data-tip="Open Music Player">
       <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
     </div>
   `;
@@ -509,7 +556,6 @@
   function savePlaying() { localStorage.setItem(K.PLAYING, isPlaying ? '1' : '0'); }
   function saveRepeat() { localStorage.setItem(K.REPEAT, isRepeatMode ? '1' : '0'); }
 
-  // Throttle pos saves to avoid spam
   let lastPosSave = 0;
   function savePosThrottled() {
     const now = Date.now();
@@ -572,6 +618,123 @@
       }, { once: true });
       probe.addEventListener('error', () => { probe.src = ''; }, { once: true });
     });
+  }
+
+  // ============================================================
+  // 6b. TOOLTIP — 2 SECOND HOLD पछि देखिने, MOUSE हटाएपछि हट्ने
+  // ============================================================
+  const HOLD_DELAY = 2000;   // ms — hold गरेको 2 सेकेन्ड पछि देखिने
+  let tooltipEl = null;
+  let tooltipTimer = null;
+  let tooltipTarget = null;
+  let tooltipVisible = false;
+
+  function ensureTooltipEl() {
+    if (tooltipEl) return tooltipEl;
+    tooltipEl = document.createElement('div');
+    tooltipEl.className = 'rx-tooltip';
+    document.body.appendChild(tooltipEl);
+    return tooltipEl;
+  }
+
+  function showTooltip(target, text) {
+    if (!text) return;
+    const el = ensureTooltipEl();
+    el.textContent = text;
+    el.classList.remove('below');
+
+    el.style.visibility = 'hidden';
+    el.classList.add('show');
+
+    const rect = target.getBoundingClientRect();
+    const tipRect = el.getBoundingClientRect();
+
+    let left = rect.left + rect.width / 2 - tipRect.width / 2;
+    let top = rect.top - tipRect.height - 8;
+    let below = false;
+
+    if (top < 6) {
+      top = rect.bottom + 8;
+      below = true;
+    }
+    left = Math.max(6, Math.min(window.innerWidth - tipRect.width - 6, left));
+
+    el.style.left = left + 'px';
+    el.style.top = top + 'px';
+    if (below) el.classList.add('below');
+
+    el.style.visibility = '';
+    tooltipVisible = true;
+  }
+
+  function hideTooltip() {
+    if (!tooltipEl) return;
+    tooltipEl.classList.remove('show');
+    tooltipVisible = false;
+  }
+
+  function bindLongPressTooltip(el) {
+    if (!el) return;
+    const text = el.getAttribute('data-tip');
+    if (!text) return;
+
+    let startX = 0, startY = 0, moved = false;
+
+    const clearTimer = () => {
+      if (tooltipTimer) { clearTimeout(tooltipTimer); tooltipTimer = null; }
+    };
+
+    // ---- MOUSE: 2 सेकेन्ड hold पछि देखाउने, हटाएपछि हटाउने ----
+    const onMouseEnter = () => {
+      clearTimer();
+      tooltipTarget = el;
+      tooltipTimer = setTimeout(() => {
+        showTooltip(el, text);
+      }, HOLD_DELAY);
+    };
+    const onMouseLeave = () => {
+      clearTimer();
+      hideTooltip();
+      tooltipTarget = null;
+    };
+
+    // ---- TOUCH: 2 सेकेन्ड hold पछि देखाउने, छोड्दा हटाउने ----
+    const onTouchStart = (e) => {
+      if (e.touches && e.touches.length > 1) return;
+      const pt = e.touches[0];
+      startX = pt.clientX; startY = pt.clientY; moved = false;
+      tooltipTarget = el;
+      clearTimer();
+      tooltipTimer = setTimeout(() => {
+        if (!moved) showTooltip(el, text);
+      }, HOLD_DELAY);
+    };
+    const onTouchMove = (e) => {
+      const pt = e.touches[0];
+      if (Math.abs(pt.clientX - startX) > 10 || Math.abs(pt.clientY - startY) > 10) {
+        moved = true;
+        clearTimer();
+        if (tooltipVisible) hideTooltip();
+      }
+    };
+    const onTouchEnd = () => {
+      clearTimer();
+      hideTooltip();
+      tooltipTarget = null;
+    };
+
+    el.addEventListener('mouseenter', onMouseEnter);
+    el.addEventListener('mouseleave', onMouseLeave);
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchmove', onTouchMove, { passive: true });
+    el.addEventListener('touchend', onTouchEnd);
+    el.addEventListener('touchcancel', onTouchEnd);
+    el.addEventListener('contextmenu', (e) => e.preventDefault());
+  }
+
+  function attachTooltips() {
+    const nodes = document.querySelectorAll('[data-tip]');
+    nodes.forEach(bindLongPressTooltip);
   }
 
   // ============================================================
@@ -659,7 +822,6 @@
     if (track.url) {
       audio.src = track.url;
 
-      // set start position after metadata loads
       const onMeta = () => {
         if (startPos > 0 && isFinite(audio.duration)) {
           audio.currentTime = Math.min(startPos, audio.duration - 0.5);
@@ -675,7 +837,6 @@
           iconPause.style.display = 'block';
           savePlaying();
         }).catch(() => {
-          // Autoplay blocked — show play icon, wait for interaction
           isPlaying = false;
           iconPlay.style.display = 'block';
           iconPause.style.display = 'none';
@@ -871,7 +1032,7 @@
   });
 
   // ============================================================
-  // 14. POSITION & STATE (already via keys above)
+  // 14. POSITION & STATE
   // ============================================================
   const savePosition = (id, x, y) => localStorage.setItem(`rx-pos-${id}`, JSON.stringify({ x, y }));
   const loadPosition = (id, el) => {
@@ -976,9 +1137,9 @@
     fallbackBtn.style.display = 'none';
     saveOpen(true);
     loadPosition('rx-player-ui', player);
+    attachTooltips();
   };
 
-  // CLOSE = stop music + hide player (only way to stop)
   const closePlayer = () => {
     audio.pause();
     isPlaying = false;
@@ -995,6 +1156,7 @@
       fallbackBtn.style.display = 'flex';
       loadPosition('rx-fallback-btn', fallbackBtn);
     }
+    hideTooltip();
   };
 
   makeDraggable(fallbackBtn, fallbackBtn, openPlayer);
@@ -1006,7 +1168,6 @@
     closePlayer();
   });
 
-  // Save state before page unload
   window.addEventListener('beforeunload', () => {
     savePos();
     savePlaying();
@@ -1057,6 +1218,7 @@
     if (player.classList.contains('show')) loadPosition('rx-player-ui', player);
     if (playlistUI.classList.contains('show')) loadPosition('rx-playlist-ui', playlistUI);
     if (fallbackBtn.style.display === 'flex') loadPosition('rx-fallback-btn', fallbackBtn);
+    hideTooltip();
   });
 
   // ============================================================
@@ -1065,7 +1227,6 @@
   setTimeout(() => {
     loadDurations();
 
-    // --- Restore VOLUME ---
     const savedVol = parseFloat(localStorage.getItem(K.VOLUME));
     if (!isNaN(savedVol) && savedVol >= 0 && savedVol <= 1) {
       audio.volume = savedVol;
@@ -1077,11 +1238,9 @@
     updateVolumeColor(audio.volume * 100);
     updateTimelineColor(0);
 
-    // --- Restore REPEAT ---
     isRepeatMode = localStorage.getItem(K.REPEAT) === '1';
     repeatBtn.classList.toggle('active', isRepeatMode);
 
-    // --- Restore TRACK + POS + PLAYING ---
     const savedTrack = parseInt(localStorage.getItem(K.TRACK), 10);
     const savedPos = parseFloat(localStorage.getItem(K.POS));
     const savedPlaying = localStorage.getItem(K.PLAYING) === '1';
@@ -1089,12 +1248,10 @@
     const trackIdx = (!isNaN(savedTrack) && savedTrack >= 0 && savedTrack < trackList.length) ? savedTrack : 0;
     const startPos = (!isNaN(savedPos) && savedPos > 0) ? savedPos : 0;
 
-    // Always load the track (autoPlay only if savedPlaying was true AND we can try)
     if (localStorage.getItem(K.TRACK) !== null) {
       playTrack(trackIdx, startPos, savedPlaying);
     }
 
-    // --- Restore PLAYER open state ---
     const triggerFound = attachToTrigger();
     if (loadOpen()) {
       player.classList.add('show');
@@ -1117,12 +1274,13 @@
       observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    // --- Autoplay unlock: on first user interaction, resume if savedPlaying ---
+    // Tooltip सबै data-tip element मा जोड्ने
+    attachTooltips();
+
     if (savedPlaying) {
       const resumeOnInteraction = () => {
         if (hasUserInteracted) return;
         hasUserInteracted = true;
-        // Only resume if still not playing and we have a saved playing state
         if (!isPlaying && audio.src && audio.paused) {
           audio.play().then(() => {
             isPlaying = true;
