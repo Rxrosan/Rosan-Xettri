@@ -386,12 +386,6 @@
       color: #00cc66 !important;
     }
 
-    .rx-track-item.next-track {
-      background: rgba(255,255,255,0.6); border-color: rgba(255, 204, 0, 0.5);
-      box-shadow: 0 2px 10px rgba(255, 204, 0, 0.2);
-      color: #cc9900 !important;
-    }
-
     .rx-track-item-left { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; overflow: hidden; }
     .rx-track-item-title { font-size: 13px; font-weight: inherit; white-space: nowrap; overflow: hidden; }
     .rx-track-item-singer { font-size: 10px; color: #ff3333; font-weight: 600; }
@@ -422,7 +416,6 @@
       flex-shrink: 0; margin-left: 8px;
     }
     .rx-track-item.selected span:last-child { color: #00cc66; }
-    .rx-track-item.next-track span:last-child { color: #cc9900; }
 
     .rx-fallback-btn {
       position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
@@ -968,10 +961,6 @@
       let itemClass = 'rx-track-item';
       if (index === currentTrackIndex) itemClass += ' selected';
 
-      let nextIndex = currentTrackIndex + 1;
-      if (nextIndex >= trackList.length) nextIndex = 0;
-      if (!isRepeatMode && index === nextIndex) itemClass += ' next-track';
-
       div.className = itemClass;
       div.innerHTML = `
         <div class="rx-track-item-left">
@@ -1107,8 +1096,8 @@
     const DRAG_THRESHOLD = 15;
 
     const startDrag = (e) => {
+      // Sliders र buttons लाई drag बाट रोक्ने (तिनीहरूको आफ्नै काम छ)
       if (e.target.closest('input[type="range"]') || e.target.closest('button')) return;
-      if (el.id === 'rx-player-ui' && !e.target.closest('.rx-top')) return;
 
       document.body.classList.add('rx-dragging');
 
@@ -1205,9 +1194,10 @@
     hideTooltip();
   };
 
+  // ⬇️⬇️⬇️ यहाँ परिवर्तन: player लाई पूरै element (player) मा drag गर्न मिल्ने बनाइयो
   makeDraggable(fallbackBtn, fallbackBtn, openPlayer);
-  makeDraggable(player, header);
-  makeDraggable(playlistUI, playlistHeader);
+  makeDraggable(player, player);           // अब जहाँ hand cursor देखिन्छ त्यहाँबाट drag हुन्छ
+  makeDraggable(playlistUI, playlistUI);   // playlist मा पनि जहाँ hand cursor देखिन्छ त्यहाँबाट drag
 
   document.getElementById('rx-close').addEventListener('click', (e) => {
     if (wasDragged) return;
