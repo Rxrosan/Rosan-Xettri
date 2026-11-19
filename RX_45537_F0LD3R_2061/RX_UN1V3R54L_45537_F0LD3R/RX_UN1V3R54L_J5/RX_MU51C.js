@@ -446,19 +446,19 @@
       title: 'DILRUBA.DILNASHEEN',
       singer: 'Reto Riba',
       duration: '--:--',
-      url: 'RX_45537_F0LD3R_2061/MU51C_F0LD3R/DILRUBA.DILNASHEEN._BY-RETO RIBA.mp3'
+      url: 'https://github.com/Rxrosan/RKC_RESOURCE.2004/raw/refs/heads/main/MU51C_F0LD3R/DILRUBA.DILNASHEEN._BY-RETO%20RIBA.mp3'
     },
     {
       title: 'Maan_Panu',
       singer: 'Unknown Artist',
       duration: '--:--',
-      url: 'RX_45537_F0LD3R_2061/MU51C_F0LD3R/Maan_Panu_I_Met_Her_Again.mp3'
+      url: 'https://github.com/Rxrosan/RKC_RESOURCE.2004/raw/refs/heads/main/MU51C_F0LD3R/Maan_Panu_I_Met_Her_Again.mp3'
     },
     {
       title: 'VAARU',
       singer: 'Romy, Anand',
       duration: '--:--',
-      url: 'RX_45537_F0LD3R_2061/MU51C_F0LD3R/VAARU- Romy, Anand.mp3'
+      url: 'https://github.com/Rxrosan/RKC_RESOURCE.2004/raw/refs/heads/main/MU51C_F0LD3R/VAARU-%20Romy,%20Anand.mp3'
     },
   ];
 
