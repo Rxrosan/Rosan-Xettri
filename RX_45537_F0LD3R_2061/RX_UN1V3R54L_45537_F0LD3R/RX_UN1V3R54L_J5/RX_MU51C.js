@@ -78,11 +78,11 @@
        ============================================================ */
     @keyframes scrollLoopSmart {
       0%   { transform: translate3d(0, 0, 0); opacity: 1; }
-      12%  { transform: translate3d(0, 0, 0); opacity: 1; }              /* सुरुमा पज — पढ्न पाइने */
-      78%  { transform: translate3d(var(--rx-scroll, -120px), 0, 0); opacity: 1; } /* बिस्तारै scroll */
-      86%  { transform: translate3d(var(--rx-scroll, -120px), 0, 0); opacity: 0; } /* अन्त्यमा fade out */
-      92%  { transform: translate3d(0, 0, 0); opacity: 0; }              /* reset (invisible) */
-      96%  { transform: translate3d(0, 0, 0); opacity: 1; }              /* fade in suru मा */
+      12%  { transform: translate3d(0, 0, 0); opacity: 1; }
+      78%  { transform: translate3d(var(--rx-scroll, -120px), 0, 0); opacity: 1; }
+      86%  { transform: translate3d(var(--rx-scroll, -120px), 0, 0); opacity: 0; }
+      92%  { transform: translate3d(0, 0, 0); opacity: 0; }
+      96%  { transform: translate3d(0, 0, 0); opacity: 1; }
       100% { transform: translate3d(0, 0, 0); opacity: 1; }
     }
 
@@ -153,7 +153,7 @@
     }
 
     /* ============================================================
-       SLIDER WRAP — timeline र volume दुवै exact same position मा
+       SLIDER WRAP
        ============================================================ */
     .rx-slider-wrap {
       position: relative;
@@ -290,7 +290,7 @@
     }
 
     /* ============================================================
-       TOOLTIP 
+       TOOLTIP — PC/mouse only (mobile मा देखिँदैन)
        ============================================================ */
     .rx-tooltip {
       position: fixed;
@@ -332,6 +332,11 @@
       bottom: auto; top: -5px;
       border-top: none;
       border-bottom: 5px solid rgba(20, 20, 20, 0.88);
+    }
+
+    /* Touch/mobile devices मा tooltip लुकाउने */
+    @media (hover: none) and (pointer: coarse) {
+      .rx-tooltip { display: none !important; }
     }
 
     .rx-playlist-ui {
@@ -651,46 +656,29 @@
   // 6a. SMART AUTO-SPEED CALCULATOR
   // ============================================================
   function calcScrollDuration(scrollDist, containerWidth) {
-    // Reading speed: मानिसले ~10-12 अक्षर/सेकेन्ड पढ्छ
-    // Title को approximate अक्षर संख्या (pixels बाट estimate)
     const approxChars = Math.abs(scrollDist) / 7.5;
-
-    // 1. Reading pause — सुरुमा title देखाउने समय (प्रति 3 अक्षरमा 1s, min 2s)
     const readPause = Math.max(2, Math.min(6, approxChars / 3));
-
-    // 2. Scrolling time — आरामसँग scroll गर्ने समय
-    //    प्रति 8px मा 1s (यो मानव आँखाले ट्र्याक गर्न सक्ने आरामदायी गति हो)
     const scrollTime = Math.abs(scrollDist) / 8;
-
-    // 3. End pause — अन्त्यमा पनि अलिकति रोक्ने (min 1.5s)
     const endPause = Math.max(1.5, approxChars / 8);
-
-    // 4. Fade in/out time
     const fadeTime = 1.2;
-
-    // Total duration — सबै जोड्ने
     let total = readPause + scrollTime + endPause + fadeTime;
-
-    // Safety limits — धेरै छिटो वा धेरै ढिलो नहोस्
     total = Math.max(10, Math.min(90, total));
-
-    return {
-      duration: total,
-      readPause,
-      scrollTime,
-      endPause,
-      fadeTime
-    };
+    return { duration: total, readPause, scrollTime, endPause, fadeTime };
   }
 
   // ============================================================
-  // 6b. TOOLTIP 
+  // 6b. TOOLTIP — PC/mouse only (mobile मा disable)
   // ============================================================
-  const HOLD_DELAY = 1000;   // ms — hold for 1 sec
+  const HOLD_DELAY = 1000;
   let tooltipEl = null;
   let tooltipTimer = null;
   let tooltipTarget = null;
   let tooltipVisible = false;
+
+  // Detect if device supports hover (PC/mouse) — mobile मा false
+  function isHoverDevice() {
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  }
 
   function ensureTooltipEl() {
     if (tooltipEl) return tooltipEl;
@@ -702,6 +690,7 @@
 
   function showTooltip(target, text) {
     if (!text) return;
+    if (!isHoverDevice()) return;   // mobile/touch मा कहिल्यै नदेखाउने
     const el = ensureTooltipEl();
     el.textContent = text;
     el.classList.remove('below');
@@ -741,61 +730,32 @@
     const text = el.getAttribute('data-tip');
     if (!text) return;
 
-    let startX = 0, startY = 0, moved = false;
+    // Mobile/touch device भए tooltip bind नै नगर्ने
+    if (!isHoverDevice()) return;
 
-    const clearTimer = () => {
-      if (tooltipTimer) { clearTimeout(tooltipTimer); tooltipTimer = null; }
-    };
-
-    // ---- MOUSE: 2 सेकेन्ड hold पछि देखाउने, हटाएपछि हटाउने ----
+    // ---- MOUSE ONLY: hold गरेपछि देखाउने, हटाएपछि हटाउने ----
     const onMouseEnter = () => {
-      clearTimer();
+      if (tooltipTimer) { clearTimeout(tooltipTimer); tooltipTimer = null; }
       tooltipTarget = el;
       tooltipTimer = setTimeout(() => {
         showTooltip(el, text);
       }, HOLD_DELAY);
     };
     const onMouseLeave = () => {
-      clearTimer();
-      hideTooltip();
-      tooltipTarget = null;
-    };
-
-    // ---- TOUCH: 2 सेकेन्ड hold पछि देखाउने, छोड्दा हटाउने ----
-    const onTouchStart = (e) => {
-      if (e.touches && e.touches.length > 1) return;
-      const pt = e.touches[0];
-      startX = pt.clientX; startY = pt.clientY; moved = false;
-      tooltipTarget = el;
-      clearTimer();
-      tooltipTimer = setTimeout(() => {
-        if (!moved) showTooltip(el, text);
-      }, HOLD_DELAY);
-    };
-    const onTouchMove = (e) => {
-      const pt = e.touches[0];
-      if (Math.abs(pt.clientX - startX) > 10 || Math.abs(pt.clientY - startY) > 10) {
-        moved = true;
-        clearTimer();
-        if (tooltipVisible) hideTooltip();
-      }
-    };
-    const onTouchEnd = () => {
-      clearTimer();
+      if (tooltipTimer) { clearTimeout(tooltipTimer); tooltipTimer = null; }
       hideTooltip();
       tooltipTarget = null;
     };
 
     el.addEventListener('mouseenter', onMouseEnter);
     el.addEventListener('mouseleave', onMouseLeave);
-    el.addEventListener('touchstart', onTouchStart, { passive: true });
-    el.addEventListener('touchmove', onTouchMove, { passive: true });
-    el.addEventListener('touchend', onTouchEnd);
-    el.addEventListener('touchcancel', onTouchEnd);
+
+    // Right-click मेनु disable गर्ने (सबै device मा)
     el.addEventListener('contextmenu', (e) => e.preventDefault());
   }
 
   function attachTooltips() {
+    // Mobile/mouse दुवैमा safe — bindLongPressTooltip भित्र check छ
     const nodes = document.querySelectorAll('[data-tip]');
     nodes.forEach(bindLongPressTooltip);
   }
@@ -847,7 +807,7 @@
   volSlider.addEventListener('change', resetVolumeAutoTimer);
 
   // ============================================================
-  // 8. PLAY TRACK — smart auto-speed scroll
+  // 8. PLAY TRACK
   // ============================================================
   function playTrack(index, startPos = 0, autoPlay = true) {
     currentTrackIndex = index;
@@ -871,21 +831,10 @@
 
         if (textWidth > containerWidth + 4) {
           const scrollDist = -(textWidth - containerWidth + 10);
-
-          // ⬇️ SMART AUTO-SPEED — title को length अनुसार duration आफै calculate
           const timing = calcScrollDuration(scrollDist, containerWidth);
           trackTitleText.style.setProperty('--rx-scroll', scrollDist + 'px');
           trackTitleText.style.setProperty('--rx-dur', timing.duration.toFixed(2) + 's');
           trackTitleText.classList.add('slide-anim');
-
-          console.log(
-            `[RX Player] "${track.title}" → ` +
-            `scrollDist=${Math.round(Math.abs(scrollDist))}px, ` +
-            `total=${timing.duration.toFixed(1)}s ` +
-            `(pause=${timing.readPause.toFixed(1)}s, ` +
-            `scroll=${timing.scrollTime.toFixed(1)}s, ` +
-            `endPause=${timing.endPause.toFixed(1)}s)`
-          );
         }
       });
     });
@@ -1010,7 +959,7 @@
   });
 
   // ============================================================
-  // 11. PLAYLIST — smart auto-speed scroll
+  // 11. PLAYLIST
   // ============================================================
   function renderPlaylist() {
     playlistList.innerHTML = '';
@@ -1044,7 +993,6 @@
       playlistList.appendChild(div);
     });
 
-    // Smart auto-speed scroll for long playlist titles
     requestAnimationFrame(() => {
       playlistList.querySelectorAll('.rx-track-item-title').forEach(el => {
         const wrap = el.parentElement;
@@ -1056,8 +1004,6 @@
 
         if (el.scrollWidth > wrap.clientWidth + 4) {
           const scrollDist = -(el.scrollWidth - wrap.clientWidth + 10);
-
-          // ⬇️ SMART AUTO-SPEED — playlist title को length अनुसार duration आफै
           const timing = calcScrollDuration(scrollDist, wrap.clientWidth);
           el.style.setProperty('--rx-pl-scroll', scrollDist + 'px');
           el.style.setProperty('--rx-pl-dur', timing.duration.toFixed(2) + 's');
@@ -1374,7 +1320,6 @@
       observer.observe(document.body, { childList: true, subtree: true });
     }
 
-    // Tooltip सबै data-tip element मा जोड्ने
     attachTooltips();
 
     if (savedPlaying) {
