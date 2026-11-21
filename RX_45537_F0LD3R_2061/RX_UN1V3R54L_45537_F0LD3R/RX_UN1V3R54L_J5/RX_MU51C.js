@@ -653,7 +653,6 @@
   let tooltipTarget = null;
   let tooltipVisible = false;
 
-  // Detect if device supports hover (PC/mouse) — mobile मा false
   function isHoverDevice() {
     return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   }
@@ -668,7 +667,7 @@
 
   function showTooltip(target, text) {
     if (!text) return;
-    if (!isHoverDevice()) return;   // mobile/touch मा कहिल्यै नदेखाउने
+    if (!isHoverDevice()) return;
     const el = ensureTooltipEl();
     el.textContent = text;
     el.classList.remove('below');
@@ -707,11 +706,8 @@
     if (!el) return;
     const text = el.getAttribute('data-tip');
     if (!text) return;
-
-    // Mobile/touch device भए tooltip bind नै नगर्ने
     if (!isHoverDevice()) return;
 
-    // ---- MOUSE ONLY: hold गरेपछि देखाउने, हटाएपछि हटाउने ----
     const onMouseEnter = () => {
       if (tooltipTimer) { clearTimeout(tooltipTimer); tooltipTimer = null; }
       tooltipTarget = el;
@@ -727,13 +723,10 @@
 
     el.addEventListener('mouseenter', onMouseEnter);
     el.addEventListener('mouseleave', onMouseLeave);
-
-    // Right-click मेनु disable गर्ने (सबै device मा)
     el.addEventListener('contextmenu', (e) => e.preventDefault());
   }
 
   function attachTooltips() {
-    // Mobile/mouse दुवैमा safe — bindLongPressTooltip भित्र check छ
     const nodes = document.querySelectorAll('[data-tip]');
     nodes.forEach(bindLongPressTooltip);
   }
@@ -990,12 +983,48 @@
     });
   }
 
+  // ============================================================
+  // 11a. PLAYLIST SCROLL LOGIC (NEW)
+  // ============================================================
+  // जब music playing छ → selected track मा auto-scroll
+  // जब music playing छैन → top मा scroll
+  function scrollPlaylistToSelected() {
+    // पहिले rendering सकियोस् भनेर एक frame पर्खने
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const selectedItem = playlistList.querySelector('.rx-track-item.selected');
+
+        if (isPlaying && selectedItem) {
+          // Music playing छ → selected track मा smooth scroll
+          const listRect = playlistList.getBoundingClientRect();
+          const itemRect = selectedItem.getBoundingClientRect();
+          const offset = itemRect.top - listRect.top + playlistList.scrollTop;
+
+          // item लाई list को बीचमा ल्याउने (वा top बाट अलिकति तल)
+          const targetScroll = offset - (playlistList.clientHeight / 2) + (selectedItem.offsetHeight / 2);
+
+          playlistList.scrollTo({
+            top: Math.max(0, targetScroll),
+            behavior: 'smooth'
+          });
+        } else {
+          // Music playing छैन → top मा scroll
+          playlistList.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  }
+
   const openPlaylist = () => {
     if (wasDragged) return;
     player.classList.remove('show');
     playlistUI.classList.add('show');
     renderPlaylist();
     loadPosition('rx-playlist-ui', playlistUI);
+    scrollPlaylistToSelected();  // ⬅️ NEW: playlist open हुँदा auto-scroll logic
   };
 
   const closePlaylist = () => {
