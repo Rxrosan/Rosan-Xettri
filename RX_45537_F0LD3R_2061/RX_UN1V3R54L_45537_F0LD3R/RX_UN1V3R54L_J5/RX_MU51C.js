@@ -1,6 +1,15 @@
 // RX-MUSIC-PLAYER
+// ⚠️ यो file ले tracks.js पहिले load भएको अपेक्षा गर्छ (trackList global variable चाहिन्छ)
 (function () {
   'use strict';
+
+  // ============================================================
+  // 0. TRACK LIST CHECK
+  // ============================================================
+  if (typeof trackList === 'undefined' || !Array.isArray(trackList)) {
+    console.error('[RX-MUSIC-PLAYER] trackList फेला परेन! tracks.js पहिले load गर्नुहोस्।');
+    return;
+  }
 
   // ============================================================
   // 1. CSS INJECTION
@@ -430,30 +439,6 @@
     .rx-fallback-btn svg { width: 24px; height: 24px; fill: #222; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(255,255,255,0.8)); }
   `;
   document.head.appendChild(style);
-
-  // ============================================================
-  // 2. TRACK LIST
-  // ============================================================
-  const trackList = [
-    {
-      title: 'DILRUBA.DILNASHEEN',
-      singer: 'Reto Riba',
-      duration: '--:--',
-      url: 'https://github.com/Rxrosan/RKC_RESOURCE.2004/raw/refs/heads/main/MU51C_F0LD3R/DILRUBA.DILNASHEEN._BY-RETO%20RIBA.mp3'
-    },
-    {
-      title: 'Maan_Panu',
-      singer: 'Unknown Artist',
-      duration: '--:--',
-      url: 'https://github.com/Rxrosan/RKC_RESOURCE.2004/raw/refs/heads/main/MU51C_F0LD3R/Maan_Panu_I_Met_Her_Again.mp3'
-    },
-    {
-      title: 'VAARU',
-      singer: 'Romy, Anand',
-      duration: '--:--',
-      url: 'https://github.com/Rxrosan/RKC_RESOURCE.2004/raw/refs/heads/main/MU51C_F0LD3R/VAARU-%20Romy,%20Anand.mp3'
-    },
-  ];
 
   // ============================================================
   // 3. HTML INJECTION
@@ -1096,7 +1081,6 @@
     const DRAG_THRESHOLD = 15;
 
     const startDrag = (e) => {
-      // Sliders र buttons लाई drag बाट रोक्ने (तिनीहरूको आफ्नै काम छ)
       if (e.target.closest('input[type="range"]') || e.target.closest('button')) return;
 
       document.body.classList.add('rx-dragging');
@@ -1194,10 +1178,9 @@
     hideTooltip();
   };
 
-  // ⬇️⬇️⬇️ यहाँ परिवर्तन: player लाई पूरै element (player) मा drag गर्न मिल्ने बनाइयो
   makeDraggable(fallbackBtn, fallbackBtn, openPlayer);
-  makeDraggable(player, player);           // अब जहाँ hand cursor देखिन्छ त्यहाँबाट drag हुन्छ
-  makeDraggable(playlistUI, playlistUI);   // playlist मा पनि जहाँ hand cursor देखिन्छ त्यहाँबाट drag
+  makeDraggable(player, player);
+  makeDraggable(playlistUI, playlistUI);
 
   document.getElementById('rx-close').addEventListener('click', (e) => {
     if (wasDragged) return;
