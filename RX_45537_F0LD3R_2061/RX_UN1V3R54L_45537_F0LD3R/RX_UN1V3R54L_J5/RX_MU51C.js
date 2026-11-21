@@ -1647,14 +1647,16 @@
     saveHasPlayed();
   });
 
-  // ============================================================
+    // ============================================================
   // 17. KEYBOARD SHORTCUTS
   // ============================================================
   document.addEventListener('keydown', (e) => {
     const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
     const isSearchInput = (e.target === searchInput);
 
-    // GUARD 1: Search input focus → Esc मात्र
+    // ----------------------------------------------------------
+    // GUARD 1: Search input focus → Esc मात्र काम गर्छ
+    // ----------------------------------------------------------
     if (isSearchInput) {
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -1664,7 +1666,9 @@
       return;
     }
 
-    // GUARD 2: अन्य input/textarea
+    // ----------------------------------------------------------
+    // GUARD 2: अन्य input / textarea / select / contentEditable
+    // ----------------------------------------------------------
     if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
     if (e.target && e.target.isContentEditable) return;
 
@@ -1672,34 +1676,44 @@
     const playlistVisible = playlistUI.classList.contains('show');
     const fallbackVisible = (fallbackBtn.style.display === 'flex');
 
-    // 1. TAB
+    // ----------------------------------------------------------
+    // 1. TAB — player → playlist
+    //    (playlist खुला छ भने काम गर्दैन)
+    // ----------------------------------------------------------
     if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
-      if (playerVisible || playlistVisible) {
+      if (playerVisible) {
         e.preventDefault();
         e.stopPropagation();
-        if (playerVisible) openPlaylist();
+        openPlaylist();
+        return;
+      }
+      if (playlistVisible) {
+        e.preventDefault();
+        e.stopPropagation();
         return;
       }
       return;
     }
 
+    // ----------------------------------------------------------
     // 2. ESC — priority chain
+    //    a) Search खुला → search बन्द (playlist खुलै)
+    //    b) Playlist खुला → playlist बन्द (player फर्क)
+    //    c) Player खुला → double Esc ले player बन्द
+    // ----------------------------------------------------------
     if (e.key === 'Escape') {
-      // a) Search खुला → search बन्द (playlist खुलै)
       if (searchActive) {
         e.preventDefault();
         e.stopPropagation();
         closeSearch();
         return;
       }
-      // b) Playlist खुला → playlist बन्द (player फर्क)
       if (playlistVisible) {
         e.preventDefault();
         e.stopPropagation();
         closePlaylist();
         return;
       }
-      // c) Player खुला → double Esc
       if (playerVisible) {
         e.preventDefault();
         e.stopPropagation();
@@ -1715,48 +1729,59 @@
       return;
     }
 
-    if (fallbackVisible && !playerVisible && !playlistVisible) return;
+    // ----------------------------------------------------------
+    // यदि player वा playlist कुनै पनि खुला छैन → बाँकी सबै बन्द
+    // ----------------------------------------------------------
     if (!playerVisible && !playlistVisible) return;
 
-     // 3. S — Search open only (close is via Esc only)
+    // ----------------------------------------------------------
+    // 3. S — Search open ONLY
+    //    • playlist खुला छ भने → search खोल्छ (बन्द होइन)
+    //    • playlist बन्द छ भने → केही गर्दैन
+    //    • search खुला छ भने → केही गर्दैन (focus मात्र)
+    // ----------------------------------------------------------
     if ((e.key === 's' || e.key === 'S') && !e.ctrlKey && !e.altKey && !e.metaKey) {
       e.preventDefault();
       e.stopPropagation();
 
-      // ⚠️ Playlist खुला छैन भने S ले केही पनि गर्दैन
       if (!playlistVisible) {
+        // player मात्र खुला छ → S ले केही गर्दैन
         return;
       }
 
-      // Playlist खुला छ भने search खोल्ने मात्र (बन्द गर्ने होइन)
       if (!searchActive) {
         openSearch();
       }
       return;
     }
 
-    // 4. R — Repeat toggle (ONLY when player is open, NOT playlist)
+    // ----------------------------------------------------------
+    // ⚠️ यहाँबाट तलका सबै shortcut — player खुला छ भने मात्र
+    //    (playlist खुला छ भने R, Space, Ctrl+arrows सबै बन्द)
+    // ----------------------------------------------------------
+    if (playlistVisible) return;
+
+    // ----------------------------------------------------------
+    // 4. R — Repeat toggle (player खुला भए मात्र)
+    // ----------------------------------------------------------
     if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.altKey && !e.metaKey) {
       e.preventDefault();
       e.stopPropagation();
-
-      // ⚠️ Playlist खुला छ भने R ले काम गर्दैन
-      if (playlistVisible) {
-        return;
-      }
-
-      // Player खुला छ भने मात्र repeat toggle
       isRepeatMode = !isRepeatMode;
       repeatBtn.classList.toggle('active', isRepeatMode);
       saveRepeat();
       return;
     }
 
-    // 5. SPACE
+    // ----------------------------------------------------------
+    // 5. SPACE — Play / Pause (player खुला भए मात्र)
+    // ----------------------------------------------------------
     if ((e.code === 'Space' || e.key === ' ') && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
       e.preventDefault();
       e.stopPropagation();
+
       if (!audio.src) { playTrack(0); return; }
+
       if (isPlaying) {
         audio.pause();
         isPlaying = false;
@@ -1782,34 +1807,38 @@
       return;
     }
 
-    // 6. CTRL + ←
+    // ----------------------------------------------------------
+    // 6. CTRL + ← — Previous Track (player खुला भए मात्र)
+    // ----------------------------------------------------------
     if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowLeft') {
       e.preventDefault();
       e.stopPropagation();
       let prevIdx = currentTrackIndex - 1;
       if (prevIdx < 0) prevIdx = trackList.length - 1;
       playTrack(prevIdx);
-      if (playlistVisible) { renderPlaylist(); scrollPlaylistToSelected(); }
       return;
     }
 
-    // 7. CTRL + →
+    // ----------------------------------------------------------
+    // 7. CTRL + → — Next Track (player खुला भए मात्र)
+    // ----------------------------------------------------------
     if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowRight') {
       e.preventDefault();
       e.stopPropagation();
       let nextIdx = currentTrackIndex + 1;
       if (nextIdx >= trackList.length) nextIdx = 0;
       playTrack(nextIdx);
-      if (playlistVisible) { renderPlaylist(); scrollPlaylistToSelected(); }
       return;
     }
 
-    // 8. CTRL + ↑
+    // ----------------------------------------------------------
+    // 8. CTRL + ↑ — Volume Up (player खुला भए मात्र)
+    // ----------------------------------------------------------
     if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowUp') {
       e.preventDefault();
       e.stopPropagation();
       if (!volumeModeActive) enterVolumeMode();
-      let newVol = Math.min(1, audio.volume + 0.10);
+      const newVol = Math.min(1, audio.volume + 0.10);
       audio.volume = newVol;
       volSlider.value = newVol * 100;
       volSlider.style.backgroundSize = (newVol * 100) + '% 100%';
@@ -1819,12 +1848,14 @@
       return;
     }
 
-    // 9. CTRL + ↓
+    // ----------------------------------------------------------
+    // 9. CTRL + ↓ — Volume Down (player खुला भए मात्र)
+    // ----------------------------------------------------------
     if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowDown') {
       e.preventDefault();
       e.stopPropagation();
       if (!volumeModeActive) enterVolumeMode();
-      let newVol = Math.max(0, audio.volume - 0.10);
+      const newVol = Math.max(0, audio.volume - 0.10);
       audio.volume = newVol;
       volSlider.value = newVol * 100;
       volSlider.style.backgroundSize = (newVol * 100) + '% 100%';
