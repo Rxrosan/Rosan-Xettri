@@ -538,7 +538,14 @@
     .rx-fallback-btn:active { cursor: grabbing; transform: scale(0.9); }
     .rx-fallback-btn svg { width: 24px; height: 24px; fill: #222; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(255,255,255,0.8)); }
 
-    /* Mobile media queries हटाइयो — सबै डिभाइसमा एउटै साइज */
+    /* Mobile मा animation को लागि GPU acceleration */
+    .rx-track-name.slide-anim,
+    .rx-track-item-title.rx-pl-anim {
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      -webkit-transform-style: preserve-3d;
+      transform-style: preserve-3d;
+    }
   `;
   document.head.appendChild(style);
 
@@ -772,6 +779,46 @@
   }
 
   // ============================================================
+  // 6-NEW. TRACK TITLE SCROLL (MOBILE SAFE)
+  // ============================================================
+  function updateTrackScroll() {
+    // element visible छैन भने measure नगर्ने
+    if (!trackTitleText || !trackNameBtn) return;
+
+    const containerWidth = trackNameBtn.clientWidth;
+    // hidden वा width 0 भए skip गर्ने
+    if (!containerWidth || containerWidth <= 0) return;
+
+    // reset
+    trackTitleText.classList.remove('slide-anim');
+    trackTitleText.style.removeProperty('--rx-dur');
+    trackTitleText.style.removeProperty('--rx-scroll');
+
+    // reflow force
+    void trackTitleText.offsetWidth;
+
+    requestAnimationFrame(() => {
+      const textWidth = trackTitleText.scrollWidth;
+      if (textWidth > containerWidth + 4) {
+        const scrollDist = -(textWidth - containerWidth + 10);
+        const timing = calcScrollDuration(scrollDist, containerWidth);
+        trackTitleText.style.setProperty('--rx-scroll', scrollDist + 'px');
+        trackTitleText.style.setProperty('--rx-dur', timing.duration.toFixed(2) + 's');
+        trackTitleText.classList.add('slide-anim');
+      }
+    });
+  }
+
+  // font load पछि re-measure (mobile को लागि महत्त्वपूर्ण)
+  function setupFontReadyScroll() {
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        if (player.classList.contains('show')) updateTrackScroll();
+      }).catch(() => {});
+    }
+  }
+
+  // ============================================================
   // 6a. TOOLTIP
   // ============================================================
   const HOLD_DELAY = 1000;
@@ -917,25 +964,15 @@
     singerText.textContent = track.singer || '—';
     singerText.classList.add('active-singer');
 
-    trackTitleText.classList.remove('slide-anim');
-    trackTitleText.style.removeProperty('--rx-dur');
-    trackTitleText.style.removeProperty('--rx-scroll');
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const container = trackNameBtn;
-        const textWidth = trackTitleText.scrollWidth;
-        const containerWidth = container.clientWidth;
-
-        if (textWidth > containerWidth + 4) {
-          const scrollDist = -(textWidth - containerWidth + 10);
-          const timing = calcScrollDuration(scrollDist, containerWidth);
-          trackTitleText.style.setProperty('--rx-scroll', scrollDist + 'px');
-          trackTitleText.style.setProperty('--rx-dur', timing.duration.toFixed(2) + 's');
-          trackTitleText.classList.add('slide-anim');
-        }
-      });
-    });
+    // player visible छ भने मात्र scroll animation गणना
+    if (player.classList.contains('show')) {
+      updateTrackScroll();
+    } else {
+      // hidden छ भने पुरानो animation हटाउने मात्र
+      trackTitleText.classList.remove('slide-anim');
+      trackTitleText.style.removeProperty('--rx-dur');
+      trackTitleText.style.removeProperty('--rx-scroll');
+    }
 
     saveTrack();
 
@@ -1325,7 +1362,12 @@
         const pos = clampAndApplyPosition(player, plRect.left, plRect.top);
         savePosition('rx-player-ui', pos.x, pos.y);
         savePosition('rx-playlist-ui', pos.x, pos.y);
+        // player visible भएपछि animation re-measure
+        requestAnimationFrame(() => updateTrackScroll());
       });
+    } else {
+      // fallback: player visible भएपछि animation re-measure
+      requestAnimationFrame(() => updateTrackScroll());
     }
   };
 
@@ -1549,6 +1591,10 @@
     saveOpen(true);
     loadPosition('rx-player-ui', player);
     attachTooltips();
+    // player visible भएपछि animation re-measure
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => updateTrackScroll());
+    });
   };
 
   const closePlayer = () => {
@@ -1603,7 +1649,7 @@
     saveHasPlayed();
   });
 
-    // ============================================================
+  // ============================================================
   // 17. KEYBOARD SHORTCUTS
   // ============================================================
   document.addEventListener('keydown', (e) => {
@@ -1634,7 +1680,6 @@
 
     // ----------------------------------------------------------
     // 1. TAB — player → playlist
-    //    (playlist खुला छ भने काम गर्दैन)
     // ----------------------------------------------------------
     if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
       if (playerVisible) {
@@ -1653,9 +1698,6 @@
 
     // ----------------------------------------------------------
     // 2. ESC — priority chain
-    //    a) Search खुला → search बन्द (playlist खुलै)
-    //    b) Playlist खुला → playlist बन्द (player फर्क)
-    //    c) Player खुला → double Esc ले player बन्द
     // ----------------------------------------------------------
     if (e.key === 'Escape') {
       if (searchActive) {
@@ -1692,16 +1734,12 @@
 
     // ----------------------------------------------------------
     // 3. S — Search open ONLY
-    //    • playlist खुला छ भने → search खोल्छ (बन्द होइन)
-    //    • playlist बन्द छ भने → केही गर्दैन
-    //    • search खुला छ भने → केही गर्दैन (focus मात्र)
     // ----------------------------------------------------------
     if ((e.key === 's' || e.key === 'S') && !e.ctrlKey && !e.altKey && !e.metaKey) {
       e.preventDefault();
       e.stopPropagation();
 
       if (!playlistVisible) {
-        // player मात्र खुला छ → S ले केही गर्दैन
         return;
       }
 
@@ -1713,7 +1751,6 @@
 
     // ----------------------------------------------------------
     // ⚠️ यहाँबाट तलका सबै shortcut — player खुला छ भने मात्र
-    //    (playlist खुला छ भने R, Space, Ctrl+arrows सबै बन्द)
     // ----------------------------------------------------------
     if (playlistVisible) return;
 
@@ -1853,7 +1890,10 @@
   }
 
   window.addEventListener('resize', () => {
-    if (player.classList.contains('show')) loadPosition('rx-player-ui', player);
+    if (player.classList.contains('show')) {
+      loadPosition('rx-player-ui', player);
+      updateTrackScroll();
+    }
     if (playlistUI.classList.contains('show')) loadPosition('rx-playlist-ui', playlistUI);
     if (fallbackBtn.style.display === 'flex') loadPosition('rx-fallback-btn', fallbackBtn);
     hideTooltip();
@@ -1908,6 +1948,10 @@
       player.classList.add('show');
       fallbackBtn.style.display = 'none';
       loadPosition('rx-player-ui', player);
+      // init मा player visible भएपछि animation गणना
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => updateTrackScroll());
+      });
     } else {
       if (!triggerFound) {
         fallbackBtn.dataset.isFallback = 'true';
@@ -1926,6 +1970,9 @@
     }
 
     attachTooltips();
+
+    // font load पछि animation re-measure (mobile fix)
+    setupFontReadyScroll();
 
     if (savedPlaying) {
       const resumeOnInteraction = () => {
