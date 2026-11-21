@@ -21,7 +21,7 @@
     /* PLAYER UI */
     .rx-player-ui {
       position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
-      width: min(300px, 88vw);
+      width: 300px; /* Fixed width for all devices */
       background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.12));
       backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%);
       border: 2px solid rgba(255, 255, 255, 0.5);
@@ -355,7 +355,7 @@
     /* PLAYLIST UI */
     .rx-playlist-ui {
       position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
-      width: min(280px, 85vw);
+      width: 280px; /* Fixed width for all devices */
       height: auto;
       background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
       backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%);
@@ -538,60 +538,7 @@
     .rx-fallback-btn:active { cursor: grabbing; transform: scale(0.9); }
     .rx-fallback-btn svg { width: 24px; height: 24px; fill: #222; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(255,255,255,0.8)); }
 
-    @media (max-width: 400px) {
-      .rx-player-ui { width: 86vw; padding: 9px 10px 7px 10px; gap: 8px; border-radius: 14px; }
-      .rx-play-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
-      .rx-play-btn svg { width: 16px; height: 16px; }
-      .rx-nav-btn svg { width: 16px; height: 16px; }
-      .rx-track-name { font-size: 11px; }
-      .rx-singer-name { font-size: 8px; }
-      .rx-close-btn { width: 24px; height: 24px; min-width: 24px; min-height: 24px; font-size: 17px; }
-      .rx-time { font-size: 10px; width: 34px; }
-      .rx-bottom { gap: 4px; padding: 2px 1px; }
-      .rx-bottom .rx-btn svg { width: 14px; height: 14px; }
-      .rx-slider-wrap { margin: 0 1px; height: 18px; }
-      .rx-vol-label { font-size: 7px; top: -11px; }
-      .rx-playlist-ui { width: 82vw; padding: 9px 10px 7px 10px; gap: 7px; border-radius: 14px; }
-      .rx-playlist-header { font-size: 13px; padding-bottom: 5px; height: 24px; }
-      .rx-playlist-close { width: 24px; height: 24px; min-width: 24px; min-height: 24px; font-size: 16px; padding-bottom: 2px; }
-      .rx-playlist-search.open { width: 85px; }
-      .rx-playlist-search-wrap { gap: 3px; }
-      .rx-playlist-list { height: 85px; max-height: 170px; gap: 5px; }
-      .rx-track-item { padding: 6px 8px; height: 38px; font-size: 11px; }
-      .rx-track-item-title { font-size: 11px; }
-      .rx-track-item-singer { font-size: 8px; }
-      .rx-track-item span:last-child { font-size: 10px; margin-left: 5px; }
-      .rx-fallback-btn { width: 46px; height: 46px; }
-      .rx-fallback-btn svg { width: 22px; height: 22px; }
-    }
-
-    @media (max-width: 340px) {
-      .rx-player-ui { width: 84vw; padding: 8px 8px 5px 8px; gap: 7px; }
-      .rx-playlist-ui { width: 80vw; padding: 8px 8px 6px 8px; gap: 6px; }
-      .rx-play-btn { width: 34px; height: 34px; min-width: 34px; min-height: 34px; }
-      .rx-play-btn svg { width: 15px; height: 15px; }
-      .rx-nav-btn svg { width: 14px; height: 14px; }
-      .rx-track-name { font-size: 10px; }
-      .rx-singer-name { font-size: 8px; }
-      .rx-close-btn { width: 22px; height: 22px; min-width: 22px; min-height: 22px; font-size: 16px; }
-      .rx-time { font-size: 9px; width: 32px; }
-      .rx-bottom { gap: 3px; }
-      .rx-bottom .rx-btn svg { width: 13px; height: 13px; }
-      .rx-slider-wrap { height: 16px; margin: 0 1px; }
-      .rx-playlist-search.open { width: 70px; }
-      .rx-playlist-list { height: 80px; max-height: 150px; gap: 4px; }
-      .rx-track-item { padding: 5px 7px; height: 36px; font-size: 10px; }
-      .rx-track-item-title { font-size: 10px; }
-      .rx-track-item-singer { font-size: 7px; }
-    }
-
-    @media (max-height: 500px) and (orientation: landscape) {
-      .rx-playlist-list { height: 80px; max-height: 160px; }
-      .rx-player-ui { width: 72vw; padding: 7px 10px 5px 10px; gap: 6px; }
-      .rx-playlist-ui { width: 68vw; padding: 7px 10px 5px 10px; gap: 6px; }
-      .rx-play-btn { width: 36px; height: 36px; min-width: 36px; min-height: 36px; }
-      .rx-play-btn svg { width: 16px; height: 16px; }
-    }
+    /* Mobile media queries हटाइयो — सबै डिभाइसमा एउटै साइज */
   `;
   document.head.appendChild(style);
 
