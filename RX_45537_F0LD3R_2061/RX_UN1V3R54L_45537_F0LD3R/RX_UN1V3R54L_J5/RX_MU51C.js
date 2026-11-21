@@ -21,15 +21,15 @@
     /* PLAYER UI */
     .rx-player-ui {
       position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
-      width: min(360px, 92vw);
+      width: min(300px, 88vw);
       background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.12));
       backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%);
       border: 2px solid rgba(255, 255, 255, 0.5);
       border-top: 2px solid rgba(255, 255, 255, 0.8);
       border-left: 2px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255,255,255,0.2);
-      border-radius: 18px; padding: 14px 18px 10px 18px;
-      display: none; flex-direction: column; gap: 12px;
+      border-radius: 16px; padding: 10px 12px 8px 12px;
+      display: none; flex-direction: column; gap: 9px;
       z-index: 1000000; cursor: grab; user-select: none; font-family: sans-serif;
       touch-action: none; will-change: transform;
       box-sizing: border-box;
@@ -37,7 +37,7 @@
     .rx-player-ui:active { cursor: grabbing; }
     .rx-player-ui.show { display: flex; }
 
-    .rx-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+    .rx-top { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
 
     .rx-btn {
       background: none; border: none; cursor: pointer;
@@ -47,7 +47,7 @@
     .rx-btn:active { transform: scale(0.85); }
 
     .rx-play-btn {
-      width: 48px; height: 48px; min-width: 48px; min-height: 48px;
+      width: 42px; height: 42px; min-width: 42px; min-height: 42px;
       background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(5px);
       border-radius: 50%;
@@ -62,13 +62,13 @@
     .rx-play-btn.ring-green { --rx-ring-color: #00cc66; }
     .rx-play-btn.ring-red   { --rx-ring-color: #ff3333; }
 
-    .rx-play-btn svg { width: 20px; height: 20px; fill: white; margin-left: 2px; }
+    .rx-play-btn svg { width: 18px; height: 18px; fill: white; margin-left: 2px; }
     .rx-play-btn .pause-icon { margin-left: 0; }
-    .rx-nav-btn svg { width: 20px; height: 20px; fill: #222; filter: drop-shadow(0 2px 2px rgba(255,255,255,0.5)); }
+    .rx-nav-btn svg { width: 17px; height: 17px; fill: #222; filter: drop-shadow(0 2px 2px rgba(255,255,255,0.5)); }
 
     .rx-track-name-container {
       flex-grow: 1; overflow: hidden; position: relative;
-      padding: 4px 0; cursor: pointer; display: flex; flex-direction: column;
+      padding: 3px 0; cursor: pointer; display: flex; flex-direction: column;
       justify-content: center; gap: 1px;
       -webkit-tap-highlight-color: transparent; touch-action: manipulation;
       min-width: 0;
@@ -80,7 +80,7 @@
 
     .rx-track-name {
       display: inline-block;
-      font-family: Georgia, serif; font-style: italic; font-size: 13px;
+      font-family: Georgia, serif; font-style: italic; font-size: 12px;
       color: #ff3333;
       text-shadow: 0 1px 2px rgba(255,255,255,0.8);
       transition: color 0.35s ease;
@@ -111,7 +111,7 @@
 
     .rx-singer-name {
       font-family: 'Segoe UI', sans-serif;
-      font-size: 10px;
+      font-size: 9px;
       font-style: normal;
       font-weight: 600;
       color: #ff3333;
@@ -130,10 +130,10 @@
     }
 
     .rx-close-btn {
-      width: 30px; height: 30px; min-width: 30px; min-height: 30px;
+      width: 26px; height: 26px; min-width: 26px; min-height: 26px;
       background: rgba(230, 213, 213, 0.6); backdrop-filter: blur(5px);
       box-shadow: 0 2px 5px rgba(0,0,0,0.1), inset 0 0 5px rgba(255,255,255,0.5);
-      border-radius: 50%; font-size: 22px; color: #222; font-weight: 300;
+      border-radius: 50%; font-size: 19px; color: #222; font-weight: 300;
       flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
       padding: 0; margin: 0; line-height: 1;
@@ -144,15 +144,15 @@
     .rx-close-btn span { display: block; line-height: 1; transform: translateY(-1px); }
 
     .rx-bottom {
-      display: flex; align-items: center; gap: 8px;
-      padding: 2px 4px; position: relative;
+      display: flex; align-items: center; gap: 6px;
+      padding: 2px 2px; position: relative;
     }
 
     .rx-time {
-      font-size: 12px;
+      font-size: 11px;
       color: #222;
       font-family: 'Segoe UI', monospace;
-      width: 42px;
+      width: 38px;
       text-align: center;
       font-weight: 700;
       flex-shrink: 0;
@@ -181,8 +181,8 @@
       flex-grow: 1;
       display: flex;
       align-items: center;
-      margin: 0 4px;
-      height: 22px;
+      margin: 0 2px;
+      height: 20px;
       min-width: 0;
     }
 
@@ -247,7 +247,7 @@
 
     .rx-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 15px; height: 15px;
+      width: 14px; height: 14px;
       background: #ffffff;
       border: 3px solid var(--rx-prog-color, #4285f4);
       border-radius: 50%;
@@ -259,7 +259,7 @@
     .rx-slider:active::-webkit-slider-thumb { transform: scale(1.3); }
 
     .rx-slider::-moz-range-thumb {
-      width: 15px; height: 15px;
+      width: 14px; height: 14px;
       background: #ffffff;
       border: 3px solid var(--rx-prog-color, #4285f4);
       border-radius: 50%; cursor: pointer;
@@ -269,7 +269,7 @@
 
     .rx-vol-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 15px; height: 15px;
+      width: 14px; height: 14px;
       background: #ffffff;
       border: 3px solid var(--rx-prog-color, #4285f4);
       border-radius: 50%;
@@ -281,7 +281,7 @@
     .rx-vol-slider:active::-webkit-slider-thumb { transform: scale(1.3); }
 
     .rx-vol-slider::-moz-range-thumb {
-      width: 15px; height: 15px;
+      width: 14px; height: 14px;
       background: #ffffff;
       border: 3px solid var(--rx-prog-color, #4285f4);
       border-radius: 50%; cursor: pointer;
@@ -291,8 +291,8 @@
 
     .rx-vol-label {
       position: absolute;
-      right: 0; top: -14px;
-      font-size: 9px;
+      right: 0; top: -13px;
+      font-size: 8px;
       font-weight: 700;
       color: #444;
       letter-spacing: 0.4px;
@@ -302,7 +302,7 @@
     }
 
     .rx-bottom .rx-btn svg {
-      width: 16px; height: 16px; fill: none; stroke: #222; stroke-width: 2.5;
+      width: 15px; height: 15px; fill: none; stroke: #222; stroke-width: 2.5;
       stroke-linecap: round; stroke-linejoin: round;
       filter: drop-shadow(0 1px 1px rgba(255,255,255,0.8)); transition: 0.2s;
     }
@@ -352,16 +352,17 @@
       .rx-tooltip { display: none !important; }
     }
 
+    /* PLAYLIST UI */
     .rx-playlist-ui {
       position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
-      width: min(360px, 92vw);
+      width: min(280px, 85vw);
       height: auto;
       background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
       backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%);
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25), inset 0 0 15px rgba(255,255,255,0.3);
-      border-radius: 18px; padding: 14px 18px 10px 18px;
-      display: none; flex-direction: column; gap: 12px;
+      border-radius: 16px; padding: 10px 12px 8px 12px;
+      display: none; flex-direction: column; gap: 8px;
       z-index: 1000001; font-family: sans-serif;
       touch-action: none; cursor: grab;
       will-change: transform;
@@ -372,11 +373,11 @@
 
     .rx-playlist-header {
       display: flex; justify-content: space-between; align-items: center;
-      font-weight: bold; color: #222; font-size: 15px;
-      border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 8px;
+      font-weight: bold; color: #222; font-size: 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 6px;
       flex-shrink: 0; cursor: grab; user-select: none;
-      height: 30px;
-      gap: 8px;
+      height: 26px;
+      gap: 5px;
     }
     .rx-playlist-header:active { cursor: grabbing; }
 
@@ -385,18 +386,18 @@
       align-items: center;
       justify-content: flex-end;
       flex-grow: 1;
-      gap: 6px;
+      gap: 4px;
       min-width: 0;
     }
     .rx-playlist-search {
       width: 0;
       min-width: 0;
-      height: 26px;
+      height: 24px;
       padding: 0;
       border: none;
       background: rgba(255,255,255,0.55);
-      border-radius: 13px;
-      font-size: 12px;
+      border-radius: 12px;
+      font-size: 11px;
       color: #222;
       outline: none;
       opacity: 0;
@@ -407,18 +408,18 @@
       box-sizing: border-box;
     }
     .rx-playlist-search.open {
-      width: 150px;
-      padding: 0 10px;
+      width: 100px;
+      padding: 0 8px;
       opacity: 1;
       pointer-events: auto;
       cursor: text;
     }
     .rx-playlist-search::placeholder {
       color: #888;
-      font-size: 11px;
+      font-size: 10px;
     }
     .rx-search-icon-btn {
-      width: 26px; height: 26px; min-width: 26px; min-height: 26px;
+      width: 24px; height: 24px; min-width: 24px; min-height: 24px;
       background: rgba(255,255,255,0.55);
       border: none;
       border-radius: 50%;
@@ -430,17 +431,17 @@
     .rx-search-icon-btn:active { transform: scale(0.9); }
     .rx-search-icon-btn.active { background: rgba(0, 204, 102, 0.35); }
     .rx-search-icon-btn svg {
-      width: 14px; height: 14px;
+      width: 13px; height: 13px;
       stroke: #222; stroke-width: 2.5; fill: none;
       stroke-linecap: round; stroke-linejoin: round;
       pointer-events: none;
     }
 
     .rx-playlist-close {
-      width: 30px; height: 30px; min-width: 30px; min-height: 30px;
+      width: 26px; height: 26px; min-width: 26px; min-height: 26px;
       background: rgba(230, 213, 213, 0.6); backdrop-filter: blur(5px);
       box-shadow: 0 2px 5px rgba(0,0,0,0.1), inset 0 0 5px rgba(255,255,255,0.5);
-      border-radius: 50%; font-size: 20px; color: #222; font-weight: 400;
+      border-radius: 50%; font-size: 18px; color: #222; font-weight: 400;
       border: none; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       padding: 0; margin: 0;
@@ -457,11 +458,11 @@
 
     .rx-playlist-list {
       flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
-      display: flex; flex-direction: column; gap: 8px;
+      display: flex; flex-direction: column; gap: 6px;
       padding-right: 5px;
       min-height: 0;
-      height: 120px;
-      max-height: 260px;
+      height: 90px;
+      max-height: 200px;
       overscroll-behavior: contain;
     }
     .rx-playlist-list::-webkit-scrollbar { width: 6px; }
@@ -470,9 +471,9 @@
 
     .rx-track-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 12px; height: 46px;
+      padding: 7px 9px; height: 40px;
       background: rgba(255,255,255,0.3); border-radius: 10px; cursor: pointer;
-      font-size: 13px; color: #222; font-weight: 500; transition: 0.2s; border: 1px solid transparent;
+      font-size: 12px; color: #222; font-weight: 500; transition: 0.2s; border: 1px solid transparent;
       flex-shrink: 0; box-sizing: border-box;
     }
     .rx-track-item:hover { background: rgba(255,255,255,0.6); }
@@ -483,9 +484,9 @@
       color: #00cc66 !important;
     }
 
-    .rx-track-item-left { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; overflow: hidden; }
-    .rx-track-item-title { font-size: 13px; font-weight: inherit; white-space: nowrap; overflow: hidden; }
-    .rx-track-item-singer { font-size: 10px; color: #ff3333; font-weight: 600; }
+    .rx-track-item-left { display: flex; flex-direction: column; gap: 1px; min-width: 0; flex: 1; overflow: hidden; }
+    .rx-track-item-title { font-size: 12px; font-weight: inherit; white-space: nowrap; overflow: hidden; }
+    .rx-track-item-singer { font-size: 9px; color: #ff3333; font-weight: 600; }
 
     .rx-track-item-title-wrap { overflow: hidden; white-space: nowrap; position: relative; width: 100%; }
     .rx-track-item-title.rx-pl-scroll {
@@ -508,17 +509,17 @@
     }
 
     .rx-track-item span:last-child {
-      font-size: 12px; color: #555; font-weight: 600; font-family: monospace;
-      flex-shrink: 0; margin-left: 8px;
+      font-size: 11px; color: #555; font-weight: 600; font-family: monospace;
+      flex-shrink: 0; margin-left: 6px;
     }
     .rx-track-item.selected span:last-child { color: #00cc66; }
 
     .rx-no-result {
       text-align: center;
       color: #ff3333;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
-      padding: 20px 10px;
+      padding: 18px 10px;
       font-style: italic;
       text-shadow: 0 1px 2px rgba(255,255,255,0.7);
       letter-spacing: 0.3px;
@@ -538,46 +539,58 @@
     .rx-fallback-btn svg { width: 24px; height: 24px; fill: #222; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(255,255,255,0.8)); }
 
     @media (max-width: 400px) {
-      .rx-player-ui { width: 94vw; padding: 12px 12px 8px 12px; gap: 10px; border-radius: 16px; }
-      .rx-play-btn { width: 42px; height: 42px; min-width: 42px; min-height: 42px; }
-      .rx-play-btn svg { width: 18px; height: 18px; }
-      .rx-nav-btn svg { width: 18px; height: 18px; }
-      .rx-track-name { font-size: 12px; }
-      .rx-singer-name { font-size: 9px; }
-      .rx-close-btn { width: 26px; height: 26px; min-width: 26px; min-height: 26px; font-size: 18px; }
-      .rx-time { font-size: 11px; width: 38px; }
-      .rx-bottom { gap: 5px; padding: 2px 2px; }
-      .rx-bottom .rx-btn svg { width: 15px; height: 15px; }
-      .rx-vol-label { font-size: 8px; top: -12px; }
-      .rx-playlist-ui { width: 94vw; padding: 12px 12px 8px 12px; gap: 10px; border-radius: 16px; }
-      .rx-playlist-header { font-size: 14px; padding-bottom: 6px; height: 26px; }
-      .rx-playlist-close { width: 26px; height: 26px; min-width: 26px; min-height: 26px; font-size: 17px; padding-bottom: 2px; }
-      .rx-playlist-search.open { width: 110px; }
-      .rx-playlist-search-wrap { gap: 4px; }
-      .rx-playlist-list { height: 100px; max-height: 200px; }
-      .rx-track-item { padding: 8px 10px; height: 42px; font-size: 12px; }
-      .rx-track-item-title { font-size: 12px; }
-      .rx-track-item-singer { font-size: 9px; }
-      .rx-track-item span:last-child { font-size: 11px; margin-left: 6px; }
+      .rx-player-ui { width: 86vw; padding: 9px 10px 7px 10px; gap: 8px; border-radius: 14px; }
+      .rx-play-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
+      .rx-play-btn svg { width: 16px; height: 16px; }
+      .rx-nav-btn svg { width: 16px; height: 16px; }
+      .rx-track-name { font-size: 11px; }
+      .rx-singer-name { font-size: 8px; }
+      .rx-close-btn { width: 24px; height: 24px; min-width: 24px; min-height: 24px; font-size: 17px; }
+      .rx-time { font-size: 10px; width: 34px; }
+      .rx-bottom { gap: 4px; padding: 2px 1px; }
+      .rx-bottom .rx-btn svg { width: 14px; height: 14px; }
+      .rx-slider-wrap { margin: 0 1px; height: 18px; }
+      .rx-vol-label { font-size: 7px; top: -11px; }
+      .rx-playlist-ui { width: 82vw; padding: 9px 10px 7px 10px; gap: 7px; border-radius: 14px; }
+      .rx-playlist-header { font-size: 13px; padding-bottom: 5px; height: 24px; }
+      .rx-playlist-close { width: 24px; height: 24px; min-width: 24px; min-height: 24px; font-size: 16px; padding-bottom: 2px; }
+      .rx-playlist-search.open { width: 85px; }
+      .rx-playlist-search-wrap { gap: 3px; }
+      .rx-playlist-list { height: 85px; max-height: 170px; gap: 5px; }
+      .rx-track-item { padding: 6px 8px; height: 38px; font-size: 11px; }
+      .rx-track-item-title { font-size: 11px; }
+      .rx-track-item-singer { font-size: 8px; }
+      .rx-track-item span:last-child { font-size: 10px; margin-left: 5px; }
       .rx-fallback-btn { width: 46px; height: 46px; }
       .rx-fallback-btn svg { width: 22px; height: 22px; }
     }
 
     @media (max-width: 340px) {
-      .rx-player-ui { padding: 10px 10px 6px 10px; gap: 8px; }
-      .rx-play-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
-      .rx-play-btn svg { width: 16px; height: 16px; }
-      .rx-nav-btn svg { width: 16px; height: 16px; }
-      .rx-track-name { font-size: 11px; }
-      .rx-time { font-size: 10px; width: 34px; }
-      .rx-bottom { gap: 4px; }
-      .rx-bottom .rx-btn svg { width: 14px; height: 14px; }
+      .rx-player-ui { width: 84vw; padding: 8px 8px 5px 8px; gap: 7px; }
+      .rx-playlist-ui { width: 80vw; padding: 8px 8px 6px 8px; gap: 6px; }
+      .rx-play-btn { width: 34px; height: 34px; min-width: 34px; min-height: 34px; }
+      .rx-play-btn svg { width: 15px; height: 15px; }
+      .rx-nav-btn svg { width: 14px; height: 14px; }
+      .rx-track-name { font-size: 10px; }
+      .rx-singer-name { font-size: 8px; }
+      .rx-close-btn { width: 22px; height: 22px; min-width: 22px; min-height: 22px; font-size: 16px; }
+      .rx-time { font-size: 9px; width: 32px; }
+      .rx-bottom { gap: 3px; }
+      .rx-bottom .rx-btn svg { width: 13px; height: 13px; }
+      .rx-slider-wrap { height: 16px; margin: 0 1px; }
+      .rx-playlist-search.open { width: 70px; }
+      .rx-playlist-list { height: 80px; max-height: 150px; gap: 4px; }
+      .rx-track-item { padding: 5px 7px; height: 36px; font-size: 10px; }
+      .rx-track-item-title { font-size: 10px; }
+      .rx-track-item-singer { font-size: 7px; }
     }
 
     @media (max-height: 500px) and (orientation: landscape) {
       .rx-playlist-list { height: 80px; max-height: 160px; }
-      .rx-player-ui { padding: 8px 14px 6px 14px; gap: 8px; }
-      .rx-play-btn { width: 40px; height: 40px; min-width: 40px; min-height: 40px; }
+      .rx-player-ui { width: 72vw; padding: 7px 10px 5px 10px; gap: 6px; }
+      .rx-playlist-ui { width: 68vw; padding: 7px 10px 5px 10px; gap: 6px; }
+      .rx-play-btn { width: 36px; height: 36px; min-width: 36px; min-height: 36px; }
+      .rx-play-btn svg { width: 16px; height: 16px; }
     }
   `;
   document.head.appendChild(style);
@@ -1114,7 +1127,6 @@
   // ============================================================
   function openSearch() {
     if (searchActive) {
-      // पहिले नै खुला छ भने focus मात्र
       try { searchInput.focus(); } catch (e) {}
       return;
     }
@@ -1309,7 +1321,6 @@
   const openPlaylist = () => {
     if (wasDragged) return;
 
-    // ⚠️ हरेक पटक playlist खोल्दा search UI state सफा गर्ने (render बिना)
     closeSearchSilently();
 
     const pRect = player.getBoundingClientRect();
@@ -1344,7 +1355,6 @@
     }
   };
 
-  // search UI reset गर्ने तर render नगर्ने (silent)
   function closeSearchSilently() {
     searchActive = false;
     searchQuery = '';
@@ -1355,7 +1365,6 @@
   }
 
   const closePlaylist = () => {
-    // ⚠️ wasDragged check छैन — keyboard बाट पनि safe
     closeSearchSilently();
 
     const plRect = playlistUI.getBoundingClientRect();
