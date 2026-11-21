@@ -18,9 +18,7 @@
     body.rx-dragging * { user-select: none !important; -webkit-user-select: none !important; }
     body.rx-dragging { overflow: hidden !important; touch-action: none !important; }
 
-    /* ============================================================
-       PLAYER UI
-       ============================================================ */
+    /* PLAYER UI */
     .rx-player-ui {
       position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
       width: min(360px, 92vw);
@@ -48,9 +46,6 @@
     }
     .rx-btn:active { transform: scale(0.85); }
 
-    /* ============================================================
-       PLAY BUTTON — double ring
-       ============================================================ */
     .rx-play-btn {
       width: 48px; height: 48px; min-width: 48px; min-height: 48px;
       background: rgba(0, 0, 0, 0.6);
@@ -99,9 +94,6 @@
       font-weight: bold;
     }
 
-    /* ============================================================
-       AUTO-SPEED ANIMATION
-       ============================================================ */
     @keyframes scrollLoopSmart {
       0%   { transform: translate3d(0, 0, 0); opacity: 1; }
       12%  { transform: translate3d(0, 0, 0); opacity: 1; }
@@ -184,9 +176,6 @@
       text-shadow: 0 0 6px rgba(255,51,51,0.3);
     }
 
-    /* ============================================================
-       SLIDER WRAP
-       ============================================================ */
     .rx-slider-wrap {
       position: relative;
       flex-grow: 1;
@@ -321,9 +310,6 @@
       stroke: #00cc66; filter: drop-shadow(0 0 5px rgba(0, 204, 102, 0.5));
     }
 
-    /* ============================================================
-       TOOLTIP — PC/mouse only
-       ============================================================ */
     .rx-tooltip {
       position: fixed;
       z-index: 2000000;
@@ -366,9 +352,6 @@
       .rx-tooltip { display: none !important; }
     }
 
-    /* ============================================================
-       PLAYLIST UI
-       ============================================================ */
     .rx-playlist-ui {
       position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
       width: min(360px, 92vw);
@@ -393,8 +376,65 @@
       border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 8px;
       flex-shrink: 0; cursor: grab; user-select: none;
       height: 30px;
+      gap: 8px;
     }
     .rx-playlist-header:active { cursor: grabbing; }
+
+    .rx-playlist-search-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-grow: 1;
+      gap: 6px;
+      min-width: 0;
+    }
+    .rx-playlist-search {
+      width: 0;
+      min-width: 0;
+      height: 26px;
+      padding: 0;
+      border: none;
+      background: rgba(255,255,255,0.55);
+      border-radius: 13px;
+      font-size: 12px;
+      color: #222;
+      outline: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: width 0.25s ease, opacity 0.2s ease, padding 0.25s ease;
+      cursor: text;
+      font-family: 'Segoe UI', sans-serif;
+      box-sizing: border-box;
+    }
+    .rx-playlist-search.open {
+      width: 150px;
+      padding: 0 10px;
+      opacity: 1;
+      pointer-events: auto;
+      cursor: text;
+    }
+    .rx-playlist-search::placeholder {
+      color: #888;
+      font-size: 11px;
+    }
+    .rx-search-icon-btn {
+      width: 26px; height: 26px; min-width: 26px; min-height: 26px;
+      background: rgba(255,255,255,0.55);
+      border: none;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: #222;
+      transition: background 0.2s ease, transform 0.1s ease;
+      padding: 0;
+    }
+    .rx-search-icon-btn:active { transform: scale(0.9); }
+    .rx-search-icon-btn.active { background: rgba(0, 204, 102, 0.35); }
+    .rx-search-icon-btn svg {
+      width: 14px; height: 14px;
+      stroke: #222; stroke-width: 2.5; fill: none;
+      stroke-linecap: round; stroke-linejoin: round;
+      pointer-events: none;
+    }
 
     .rx-playlist-close {
       width: 30px; height: 30px; min-width: 30px; min-height: 30px;
@@ -411,6 +451,7 @@
       text-align: center;
       overflow: hidden;
       padding-bottom: 2px;
+      flex-shrink: 0;
     }
     .rx-playlist-close:active { transform: scale(0.9); }
 
@@ -472,9 +513,17 @@
     }
     .rx-track-item.selected span:last-child { color: #00cc66; }
 
-    /* ============================================================
-       FALLBACK BUTTON
-       ============================================================ */
+    .rx-no-result {
+      text-align: center;
+      color: #ff3333;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 20px 10px;
+      font-style: italic;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.7);
+      letter-spacing: 0.3px;
+    }
+
     .rx-fallback-btn {
       position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
       background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
@@ -488,16 +537,8 @@
     .rx-fallback-btn:active { cursor: grabbing; transform: scale(0.9); }
     .rx-fallback-btn svg { width: 24px; height: 24px; fill: #222; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(255,255,255,0.8)); }
 
-    /* ============================================================
-       RESPONSIVE
-       ============================================================ */
     @media (max-width: 400px) {
-      .rx-player-ui {
-        width: 94vw;
-        padding: 12px 12px 8px 12px;
-        gap: 10px;
-        border-radius: 16px;
-      }
+      .rx-player-ui { width: 94vw; padding: 12px 12px 8px 12px; gap: 10px; border-radius: 16px; }
       .rx-play-btn { width: 42px; height: 42px; min-width: 42px; min-height: 42px; }
       .rx-play-btn svg { width: 18px; height: 18px; }
       .rx-nav-btn svg { width: 18px; height: 18px; }
@@ -508,24 +549,16 @@
       .rx-bottom { gap: 5px; padding: 2px 2px; }
       .rx-bottom .rx-btn svg { width: 15px; height: 15px; }
       .rx-vol-label { font-size: 8px; top: -12px; }
-
-      .rx-playlist-ui {
-        width: 94vw;
-        padding: 12px 12px 8px 12px;
-        gap: 10px;
-        border-radius: 16px;
-      }
+      .rx-playlist-ui { width: 94vw; padding: 12px 12px 8px 12px; gap: 10px; border-radius: 16px; }
       .rx-playlist-header { font-size: 14px; padding-bottom: 6px; height: 26px; }
-      .rx-playlist-close {
-        width: 26px; height: 26px; min-width: 26px; min-height: 26px;
-        font-size: 17px; padding-bottom: 2px;
-      }
+      .rx-playlist-close { width: 26px; height: 26px; min-width: 26px; min-height: 26px; font-size: 17px; padding-bottom: 2px; }
+      .rx-playlist-search.open { width: 110px; }
+      .rx-playlist-search-wrap { gap: 4px; }
       .rx-playlist-list { height: 100px; max-height: 200px; }
       .rx-track-item { padding: 8px 10px; height: 42px; font-size: 12px; }
       .rx-track-item-title { font-size: 12px; }
       .rx-track-item-singer { font-size: 9px; }
       .rx-track-item span:last-child { font-size: 11px; margin-left: 6px; }
-
       .rx-fallback-btn { width: 46px; height: 46px; }
       .rx-fallback-btn svg { width: 22px; height: 22px; }
     }
@@ -569,7 +602,7 @@
           <div class="rx-singer-name" id="rx-singer-text">—</div>
         </div>
 
-         <button class="rx-btn rx-close-btn" id="rx-close" data-tip="Close Player"><span>×</span></button>
+        <button class="rx-btn rx-close-btn" id="rx-close" data-tip="Close Player"><span>×</span></button>
       </div>
 
       <div class="rx-bottom" id="rx-bottom-row">
@@ -603,6 +636,15 @@
     <div class="rx-playlist-ui" id="rx-playlist-ui">
       <div class="rx-playlist-header" id="rx-playlist-header">
         <span>Select Music</span>
+        <div class="rx-playlist-search-wrap">
+          <input type="text" class="rx-playlist-search" id="rx-playlist-search" placeholder="Search music..." autocomplete="off" spellcheck="false">
+          <button class="rx-search-icon-btn" id="rx-search-icon-btn" data-tip="Search Music" aria-label="Search Music">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"/>
+              <line x1="16" y1="16" x2="21" y2="21"/>
+            </svg>
+          </button>
+        </div>
         <button class="rx-playlist-close" id="rx-playlist-close">×</button>
       </div>
       <div class="rx-playlist-list" id="rx-playlist-list"></div>
@@ -643,6 +685,9 @@
   const sliderWrap = document.getElementById('rx-slider-wrap');
   const volSlider = document.getElementById('rx-vol-slider');
 
+  const searchInput = document.getElementById('rx-playlist-search');
+  const searchIconBtn = document.getElementById('rx-search-icon-btn');
+
   const audio = new Audio();
   audio.preload = 'metadata';
 
@@ -658,9 +703,12 @@
   let hasUserInteracted = false;
   let hasPlayedOnce = false;
   let lastEscPress = 0;
+  let searchActive = false;
+  let searchQuery = '';
+  let searchFocusTimer = null;
 
   // ============================================================
-  // 5. PERSISTENCE KEYS
+  // 5. PERSISTENCE
   // ============================================================
   const K = {
     VOLUME: 'rx-state-volume',
@@ -752,9 +800,6 @@
     });
   }
 
-  // ============================================================
-  // 6a. SMART AUTO-SPEED CALCULATOR
-  // ============================================================
   function calcScrollDuration(scrollDist, containerWidth) {
     const approxChars = Math.abs(scrollDist) / 7.5;
     const readPause = Math.max(2, Math.min(6, approxChars / 3));
@@ -767,7 +812,7 @@
   }
 
   // ============================================================
-  // 6b. TOOLTIP — PC/mouse only
+  // 6a. TOOLTIP
   // ============================================================
   const HOLD_DELAY = 1000;
   let tooltipEl = null;
@@ -1065,11 +1110,106 @@
   });
 
   // ============================================================
-  // 11. PLAYLIST
+  // 11. SEARCH — STATE MACHINE
+  // ============================================================
+  function openSearch() {
+    if (searchActive) {
+      // पहिले नै खुला छ भने focus मात्र
+      try { searchInput.focus(); } catch (e) {}
+      return;
+    }
+    searchActive = true;
+    searchQuery = '';
+    searchInput.value = '';
+    searchInput.classList.add('open');
+    searchIconBtn.classList.add('active');
+    renderPlaylist();
+
+    if (searchFocusTimer) { clearTimeout(searchFocusTimer); searchFocusTimer = null; }
+    searchFocusTimer = setTimeout(() => {
+      searchFocusTimer = null;
+      if (searchActive) {
+        try { searchInput.focus(); } catch (e) {}
+      }
+    }, 260);
+  }
+
+  function closeSearch() {
+    if (!searchActive) return;
+    searchActive = false;
+    searchQuery = '';
+    searchInput.value = '';
+    searchInput.classList.remove('open');
+    searchIconBtn.classList.remove('active');
+    if (searchFocusTimer) { clearTimeout(searchFocusTimer); searchFocusTimer = null; }
+    try { searchInput.blur(); } catch (e) {}
+    renderPlaylist();
+  }
+
+  searchIconBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (searchActive) closeSearch();
+    else openSearch();
+  });
+
+  searchInput.addEventListener('input', (e) => {
+    searchQuery = e.target.value.trim().toLowerCase();
+    renderPlaylist();
+  });
+
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+      closeSearch();
+      try { searchInput.blur(); } catch (err) {}
+      return;
+    }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
+      const results = getFilteredTracks();
+      if (results.length > 0) {
+        const idx = results[0].index;
+        closeSearch();
+        playTrack(idx);
+        closePlaylist();
+      }
+    }
+  });
+
+  function getFilteredTracks() {
+    if (!searchQuery) return [];
+    const results = [];
+    trackList.forEach((t, i) => {
+      const inTitle = (t.title || '').toLowerCase().includes(searchQuery);
+      const inSinger = (t.singer || '').toLowerCase().includes(searchQuery);
+      if (inTitle || inSinger) results.push({ track: t, index: i });
+    });
+    return results;
+  }
+
+  // ============================================================
+  // 11a. RENDER PLAYLIST
   // ============================================================
   function renderPlaylist() {
     playlistList.innerHTML = '';
-    trackList.forEach((track, index) => {
+
+    let itemsToRender = [];
+    if (searchActive && searchQuery) {
+      itemsToRender = getFilteredTracks();
+      if (itemsToRender.length === 0) {
+        const noRes = document.createElement('div');
+        noRes.className = 'rx-no-result';
+        noRes.textContent = 'SONG NOT FOUND !';
+        playlistList.appendChild(noRes);
+        return;
+      }
+    } else {
+      itemsToRender = trackList.map((t, i) => ({ track: t, index: i }));
+    }
+
+    itemsToRender.forEach(({ track, index }) => {
       const div = document.createElement('div');
       let itemClass = 'rx-track-item';
       if (index === currentTrackIndex) itemClass += ' selected';
@@ -1088,8 +1228,8 @@
       div.addEventListener('click', (e) => {
         if (wasDragged) return;
         e.stopPropagation();
+        closeSearch();
         playTrack(index);
-        renderPlaylist();
         closePlaylist();
       });
       playlistList.appendChild(div);
@@ -1119,6 +1259,7 @@
   }
 
   function scrollPlaylistToSelected() {
+    if (searchActive && searchQuery) return;
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         const selectedItem = playlistList.querySelector('.rx-track-item.selected');
@@ -1144,7 +1285,7 @@
   }
 
   // ============================================================
-  // 11a. POSITION CLAMP
+  // 11b. POSITION CLAMP
   // ============================================================
   function clampAndApplyPosition(el, left, top) {
     const w = el.offsetWidth;
@@ -1163,10 +1304,14 @@
   }
 
   // ============================================================
-  // 11b. OPEN / CLOSE PLAYLIST
+  // 11c. OPEN / CLOSE PLAYLIST
   // ============================================================
   const openPlaylist = () => {
     if (wasDragged) return;
+
+    // ⚠️ हरेक पटक playlist खोल्दा search UI state सफा गर्ने (render बिना)
+    closeSearchSilently();
+
     const pRect = player.getBoundingClientRect();
     const wasShowing = player.classList.contains('show');
 
@@ -1199,8 +1344,20 @@
     }
   };
 
+  // search UI reset गर्ने तर render नगर्ने (silent)
+  function closeSearchSilently() {
+    searchActive = false;
+    searchQuery = '';
+    searchInput.value = '';
+    searchInput.classList.remove('open');
+    searchIconBtn.classList.remove('active');
+    if (searchFocusTimer) { clearTimeout(searchFocusTimer); searchFocusTimer = null; }
+  }
+
   const closePlaylist = () => {
-    if (wasDragged) return;
+    // ⚠️ wasDragged check छैन — keyboard बाट पनि safe
+    closeSearchSilently();
+
     const plRect = playlistUI.getBoundingClientRect();
     const wasShowing = playlistUI.classList.contains('show');
 
@@ -1318,6 +1475,7 @@
 
     function onDown(e) {
       if (e.target.closest('input[type="range"]')) return;
+      if (e.target.closest('input[type="text"]')) return;
       if (e.target.closest('button') && e.target.closest('button') !== handle) {
         if (!handle.classList.contains('rx-fallback-btn')) return;
       }
@@ -1447,6 +1605,8 @@
     applyPlayBtnRing();
     saveRingState();
 
+    closeSearchSilently();
+
     player.classList.remove('show');
     playlistUI.classList.remove('show');
     saveOpen(false);
@@ -1488,35 +1648,61 @@
   });
 
   // ============================================================
-  // 17. KEYBOARD SHORTCUTS (PC only)
+  // 17. KEYBOARD SHORTCUTS
   // ============================================================
   document.addEventListener('keydown', (e) => {
-    // Input/textarea मा focus छ भने shortcut नचल्ने
     const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+    const isSearchInput = (e.target === searchInput);
+
+    // GUARD 1: Search input focus → Esc मात्र
+    if (isSearchInput) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
+        closeSearch();
+      }
+      return;
+    }
+
+    // GUARD 2: अन्य input/textarea
     if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
     if (e.target && e.target.isContentEditable) return;
 
-    // Tab (Ctrl बिना) → playlist खोल्ने
+    const playerVisible = player.classList.contains('show');
+    const playlistVisible = playlistUI.classList.contains('show');
+    const fallbackVisible = (fallbackBtn.style.display === 'flex');
+
+    // 1. TAB
     if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
-      if (player.classList.contains('show') || playlistUI.classList.contains('show')) {
+      if (playerVisible || playlistVisible) {
         e.preventDefault();
-        if (player.classList.contains('show')) {
-          openPlaylist();
-        }
+        e.stopPropagation();
+        if (playerVisible) openPlaylist();
         return;
       }
+      return;
     }
 
-    // Esc → playlist खुला छ भने single click ले player खोल्ने
-    //        player खुला छ भने double click (छिटो दुई पटक) ले बन्द गर्ने
+    // 2. ESC — priority chain
     if (e.key === 'Escape') {
-      if (playlistUI.classList.contains('show')) {
+      // a) Search खुला → search बन्द (playlist खुलै)
+      if (searchActive) {
         e.preventDefault();
+        e.stopPropagation();
+        closeSearch();
+        return;
+      }
+      // b) Playlist खुला → playlist बन्द (player फर्क)
+      if (playlistVisible) {
+        e.preventDefault();
+        e.stopPropagation();
         closePlaylist();
         return;
       }
-      if (player.classList.contains('show')) {
+      // c) Player खुला → double Esc
+      if (playerVisible) {
         e.preventDefault();
+        e.stopPropagation();
         const now = Date.now();
         if (now - lastEscPress < 400) {
           lastEscPress = 0;
@@ -1529,20 +1715,47 @@
       return;
     }
 
-    // R → repeat mode toggle (enable / disable)
-    if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.altKey && !e.metaKey) {
-      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+    if (fallbackVisible && !playerVisible && !playlistVisible) return;
+    if (!playerVisible && !playlistVisible) return;
+
+     // 3. S — Search open only (close is via Esc only)
+    if ((e.key === 's' || e.key === 'S') && !e.ctrlKey && !e.altKey && !e.metaKey) {
       e.preventDefault();
+      e.stopPropagation();
+
+      // ⚠️ Playlist खुला छैन भने S ले केही पनि गर्दैन
+      if (!playlistVisible) {
+        return;
+      }
+
+      // Playlist खुला छ भने search खोल्ने मात्र (बन्द गर्ने होइन)
+      if (!searchActive) {
+        openSearch();
+      }
+      return;
+    }
+
+    // 4. R — Repeat toggle (ONLY when player is open, NOT playlist)
+    if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      // ⚠️ Playlist खुला छ भने R ले काम गर्दैन
+      if (playlistVisible) {
+        return;
+      }
+
+      // Player खुला छ भने मात्र repeat toggle
       isRepeatMode = !isRepeatMode;
       repeatBtn.classList.toggle('active', isRepeatMode);
       saveRepeat();
       return;
     }
 
-    // Space → play/pause
-    if (e.code === 'Space' || e.key === ' ') {
-      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+    // 5. SPACE
+    if ((e.code === 'Space' || e.key === ' ') && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
       e.preventDefault();
+      e.stopPropagation();
       if (!audio.src) { playTrack(0); return; }
       if (isPlaying) {
         audio.pause();
@@ -1569,32 +1782,32 @@
       return;
     }
 
-    // Ctrl + Left → previous
-    if (e.ctrlKey && e.key === 'ArrowLeft') {
-      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+    // 6. CTRL + ←
+    if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowLeft') {
       e.preventDefault();
+      e.stopPropagation();
       let prevIdx = currentTrackIndex - 1;
       if (prevIdx < 0) prevIdx = trackList.length - 1;
       playTrack(prevIdx);
-      if (playlistUI.classList.contains('show')) { renderPlaylist(); scrollPlaylistToSelected(); }
+      if (playlistVisible) { renderPlaylist(); scrollPlaylistToSelected(); }
       return;
     }
 
-    // Ctrl + Right → next
-    if (e.ctrlKey && e.key === 'ArrowRight') {
-      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+    // 7. CTRL + →
+    if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowRight') {
       e.preventDefault();
+      e.stopPropagation();
       let nextIdx = currentTrackIndex + 1;
       if (nextIdx >= trackList.length) nextIdx = 0;
       playTrack(nextIdx);
-      if (playlistUI.classList.contains('show')) { renderPlaylist(); scrollPlaylistToSelected(); }
+      if (playlistVisible) { renderPlaylist(); scrollPlaylistToSelected(); }
       return;
     }
 
-    // Ctrl + Up → volume +10%
-    if (e.ctrlKey && e.key === 'ArrowUp') {
-      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+    // 8. CTRL + ↑
+    if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowUp') {
       e.preventDefault();
+      e.stopPropagation();
       if (!volumeModeActive) enterVolumeMode();
       let newVol = Math.min(1, audio.volume + 0.10);
       audio.volume = newVol;
@@ -1606,10 +1819,10 @@
       return;
     }
 
-    // Ctrl + Down → volume -10%
-    if (e.ctrlKey && e.key === 'ArrowDown') {
-      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+    // 9. CTRL + ↓
+    if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowDown') {
       e.preventDefault();
+      e.stopPropagation();
       if (!volumeModeActive) enterVolumeMode();
       let newVol = Math.max(0, audio.volume - 0.10);
       audio.volume = newVol;
@@ -1660,7 +1873,7 @@
   });
 
   // ============================================================
-  // 19. INIT — Restore saved state
+  // 19. INIT
   // ============================================================
   setTimeout(() => {
     loadDurations();
