@@ -1,5 +1,4 @@
 // RX-MUSIC-PLAYER
-// ⚠️ यो file ले tracks.js पहिले load भएको अपेक्षा गर्छ (trackList global variable चाहिन्छ)
 (function () {
   'use strict';
 
@@ -17,10 +16,14 @@
   const style = document.createElement('style');
   style.innerHTML = `
     body.rx-dragging * { user-select: none !important; -webkit-user-select: none !important; }
+    body.rx-dragging { overflow: hidden !important; touch-action: none !important; }
 
+    /* ============================================================
+       PLAYER UI
+       ============================================================ */
     .rx-player-ui {
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 360px; max-width: 92vw;
+      position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
+      width: min(360px, 92vw);
       background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.12));
       backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%);
       border: 2px solid rgba(255, 255, 255, 0.5);
@@ -30,7 +33,8 @@
       border-radius: 18px; padding: 14px 18px 10px 18px;
       display: none; flex-direction: column; gap: 12px;
       z-index: 1000000; cursor: grab; user-select: none; font-family: sans-serif;
-      touch-action: none; will-change: transform, opacity;
+      touch-action: none; will-change: transform;
+      box-sizing: border-box;
     }
     .rx-player-ui:active { cursor: grabbing; }
     .rx-player-ui.show { display: flex; }
@@ -299,7 +303,7 @@
     }
 
     /* ============================================================
-       TOOLTIP — PC/mouse only (mobile मा देखिँदैन)
+       TOOLTIP — PC/mouse only
        ============================================================ */
     .rx-tooltip {
       position: fixed;
@@ -323,10 +327,7 @@
       transition: opacity 0.18s ease, transform 0.18s ease;
       user-select: none;
     }
-    .rx-tooltip.show {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
+    .rx-tooltip.show { opacity: 1; transform: translateY(0) scale(1); }
     .rx-tooltip::after {
       content: '';
       position: absolute;
@@ -342,15 +343,17 @@
       border-top: none;
       border-bottom: 5px solid rgba(20, 20, 20, 0.88);
     }
-
-    /* Touch/mobile devices मा tooltip लुकाउने */
     @media (hover: none) and (pointer: coarse) {
       .rx-tooltip { display: none !important; }
     }
 
+    /* ============================================================
+       PLAYLIST UI — Responsive height
+       ============================================================ */
     .rx-playlist-ui {
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      width: 360px; max-width: 92vw; height: 380px;
+      position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
+      width: min(360px, 92vw);
+      height: min(380px, 75vh);
       background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
       backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%);
       border: 1px solid rgba(255, 255, 255, 0.6);
@@ -359,6 +362,8 @@
       display: none; flex-direction: column; gap: 10px;
       z-index: 1000001; font-family: sans-serif;
       touch-action: none; cursor: grab;
+      will-change: transform;
+      box-sizing: border-box;
     }
     .rx-playlist-ui:active { cursor: grabbing; }
     .rx-playlist-ui.show { display: flex; }
@@ -373,8 +378,11 @@
     .rx-playlist-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #222; }
 
     .rx-playlist-list {
-      flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
-      padding-right: 5px; height: 260px; min-height: 260px; max-height: 260px;
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      display: flex; flex-direction: column; gap: 8px;
+      padding-right: 5px;
+      min-height: 0;
+      overscroll-behavior: contain;
     }
     .rx-playlist-list::-webkit-scrollbar { width: 6px; }
     .rx-playlist-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.3); border-radius: 3px; }
@@ -399,7 +407,6 @@
     .rx-track-item-title { font-size: 13px; font-weight: inherit; white-space: nowrap; overflow: hidden; }
     .rx-track-item-singer { font-size: 10px; color: #ff3333; font-weight: 600; }
 
-    /* Playlist long name scroll — same auto-speed smart animation */
     .rx-track-item-title-wrap { overflow: hidden; white-space: nowrap; position: relative; width: 100%; }
     .rx-track-item-title.rx-pl-scroll {
       display: inline-block;
@@ -426,6 +433,9 @@
     }
     .rx-track-item.selected span:last-child { color: #00cc66; }
 
+    /* ============================================================
+       FALLBACK BUTTON
+       ============================================================ */
     .rx-fallback-btn {
       position: fixed; bottom: 20px; right: 20px; width: 50px; height: 50px;
       background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1));
@@ -434,9 +444,73 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 0 10px rgba(255,255,255,0.3);
       border-radius: 50%; color: #222; display: flex; align-items: center; justify-content: center;
       cursor: grab; z-index: 999999; touch-action: none; transition: transform 0.1s; display: none; user-select: none;
+      will-change: transform, left, top;
     }
     .rx-fallback-btn:active { cursor: grabbing; transform: scale(0.9); }
     .rx-fallback-btn svg { width: 24px; height: 24px; fill: #222; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(255,255,255,0.8)); }
+
+    /* ============================================================
+       RESPONSIVE — Small screens
+       ============================================================ */
+    @media (max-width: 400px) {
+      .rx-player-ui {
+        width: 94vw;
+        padding: 12px 12px 8px 12px;
+        gap: 10px;
+        border-radius: 16px;
+      }
+      .rx-play-btn {
+        width: 42px; height: 42px; min-width: 42px; min-height: 42px;
+      }
+      .rx-play-btn svg { width: 18px; height: 18px; }
+      .rx-nav-btn svg { width: 18px; height: 18px; }
+      .rx-track-name { font-size: 12px; }
+      .rx-singer-name { font-size: 9px; }
+      .rx-close-btn { width: 26px; height: 26px; min-width: 26px; min-height: 26px; font-size: 18px; }
+      .rx-time { font-size: 11px; width: 38px; }
+      .rx-bottom { gap: 5px; padding: 2px 2px; }
+      .rx-bottom .rx-btn svg { width: 15px; height: 15px; }
+      .rx-vol-label { font-size: 8px; top: -12px; }
+
+      .rx-playlist-ui {
+        width: 94vw;
+        height: min(380px, 78vh);
+        padding: 12px;
+        gap: 8px;
+        border-radius: 16px;
+      }
+      .rx-playlist-header { font-size: 14px; padding-bottom: 6px; }
+      .rx-track-item { padding: 8px 10px; height: 42px; font-size: 12px; }
+      .rx-track-item-title { font-size: 12px; }
+      .rx-track-item-singer { font-size: 9px; }
+      .rx-track-item span:last-child { font-size: 11px; margin-left: 6px; }
+
+      .rx-fallback-btn { width: 46px; height: 46px; }
+      .rx-fallback-btn svg { width: 22px; height: 22px; }
+    }
+
+    @media (max-width: 340px) {
+      .rx-player-ui { padding: 10px 10px 6px 10px; gap: 8px; }
+      .rx-play-btn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
+      .rx-play-btn svg { width: 16px; height: 16px; }
+      .rx-nav-btn svg { width: 16px; height: 16px; }
+      .rx-track-name { font-size: 11px; }
+      .rx-time { font-size: 10px; width: 34px; }
+      .rx-bottom { gap: 4px; }
+      .rx-bottom .rx-btn svg { width: 14px; height: 14px; }
+    }
+
+    /* Landscape mobile — कम height भएको बेला */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .rx-playlist-ui {
+        height: 90vh;
+      }
+      .rx-player-ui {
+        padding: 8px 14px 6px 14px;
+        gap: 8px;
+      }
+      .rx-play-btn { width: 40px; height: 40px; min-width: 40px; min-height: 40px; }
+    }
   `;
   document.head.appendChild(style);
 
@@ -645,7 +719,7 @@
   }
 
   // ============================================================
-  // 6b. TOOLTIP — PC/mouse only (mobile मा disable)
+  // 6b. TOOLTIP — PC/mouse only
   // ============================================================
   const HOLD_DELAY = 1000;
   let tooltipEl = null;
@@ -984,23 +1058,17 @@
   }
 
   // ============================================================
-  // 11a. PLAYLIST SCROLL LOGIC (NEW)
+  // 11a. PLAYLIST SCROLL LOGIC
   // ============================================================
-  // जब music playing छ → selected track मा auto-scroll
-  // जब music playing छैन → top मा scroll
   function scrollPlaylistToSelected() {
-    // पहिले rendering सकियोस् भनेर एक frame पर्खने
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         const selectedItem = playlistList.querySelector('.rx-track-item.selected');
 
         if (isPlaying && selectedItem) {
-          // Music playing छ → selected track मा smooth scroll
           const listRect = playlistList.getBoundingClientRect();
           const itemRect = selectedItem.getBoundingClientRect();
           const offset = itemRect.top - listRect.top + playlistList.scrollTop;
-
-          // item लाई list को बीचमा ल्याउने (वा top बाट अलिकति तल)
           const targetScroll = offset - (playlistList.clientHeight / 2) + (selectedItem.offsetHeight / 2);
 
           playlistList.scrollTo({
@@ -1008,7 +1076,6 @@
             behavior: 'smooth'
           });
         } else {
-          // Music playing छैन → top मा scroll
           playlistList.scrollTo({
             top: 0,
             behavior: 'smooth'
@@ -1024,7 +1091,7 @@
     playlistUI.classList.add('show');
     renderPlaylist();
     loadPosition('rx-playlist-ui', playlistUI);
-    scrollPlaylistToSelected();  // ⬅️ NEW: playlist open हुँदा auto-scroll logic
+    scrollPlaylistToSelected();
   };
 
   const closePlaylist = () => {
@@ -1102,79 +1169,152 @@
   const loadOpen = () => localStorage.getItem(K.OPEN) === 'true';
 
   // ============================================================
-  // 15. DRAGGABLE
+  // 15. DRAGGABLE — SMOOTH REWRITE (mobile-friendly)
   // ============================================================
+  // • transform based drag (left/top मा बारम्बार लेख्दैन → smooth)
+  // • pointer events + rAF throttling → glitch-free
+  // • initial jump fix: element को current position बाट offset गणना
   function makeDraggable(el, handle, onClickCallback) {
     let isDragging = false;
-    let startX, startY, initialX, initialY, hasMovedEnough = false;
-    const DRAG_THRESHOLD = 15;
+    let hasMovedEnough = false;
+    let startPointerX = 0, startPointerY = 0;
+    let startLeft = 0, startTop = 0;
+    let pendingX = 0, pendingY = 0;
+    let rafId = null;
+    const DRAG_THRESHOLD = 6; // px — mobile मा सानो threshold राम्रो
 
-    const startDrag = (e) => {
-      if (e.target.closest('input[type="range"]') || e.target.closest('button')) return;
+    function applyPendingMove() {
+      rafId = null;
+      if (!isDragging) return;
+      el.style.transform = `translate3d(${pendingX}px, ${pendingY}px, 0)`;
+    }
+
+    function getPoint(e) {
+      if (e.touches && e.touches.length) {
+        return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+      }
+      if (e.changedTouches && e.changedTouches.length) {
+        return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+      }
+      return { x: e.clientX, y: e.clientY };
+    }
+
+    function onDown(e) {
+      // Slider / button / close बाट drag सुरु नगर्ने
+      if (e.target.closest('input[type="range"]')) return;
+      if (e.target.closest('button') && e.target.closest('button') !== handle) {
+        // button भित्र drag सुरु नगर्ने (तर fallback btn खुदै handle हो भने allow)
+        if (!handle.classList.contains('rx-fallback-btn')) return;
+      }
+
+      const pt = getPoint(e);
+      startPointerX = pt.x;
+      startPointerY = pt.y;
+
+      // element को current visual position (transform सहित) बाट left/top reset
+      const rect = el.getBoundingClientRect();
+
+      // transform reset गरेर left/top मा fix गर्ने — यसले glitch हटाउँछ
+      el.style.transform = 'none';
+      if (el.id === 'rx-fallback-btn') {
+        el.style.right = 'auto';
+        el.style.bottom = 'auto';
+      }
+      el.style.left = rect.left + 'px';
+      el.style.top = rect.top + 'px';
+
+      startLeft = rect.left;
+      startTop = rect.top;
+
+      pendingX = 0;
+      pendingY = 0;
+      hasMovedEnough = false;
+      isDragging = true;
+      wasDragged = false;
 
       document.body.classList.add('rx-dragging');
 
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      // touch event मा scroll रोक्न
+      if (e.cancelable) e.preventDefault();
+    }
 
-      initialX = clientX; initialY = clientY;
-      const rect = el.getBoundingClientRect();
-      startX = clientX - rect.left; startY = clientY - rect.top;
-
-      isDragging = true; hasMovedEnough = false; wasDragged = false;
-
-      if (el.id === 'rx-fallback-btn') {
-        el.style.right = 'auto'; el.style.bottom = 'auto';
-        el.style.left = rect.left + 'px'; el.style.top = rect.top + 'px';
-      } else { el.style.transform = 'none'; }
-    };
-
-    const doDrag = (e) => {
+    function onMove(e) {
       if (!isDragging) return;
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-      const dx = Math.abs(clientX - initialX);
-      const dy = Math.abs(clientY - initialY);
+      const pt = getPoint(e);
+      const dx = pt.x - startPointerX;
+      const dy = pt.y - startPointerY;
 
-      if (dx > DRAG_THRESHOLD || dy > DRAG_THRESHOLD) {
-        hasMovedEnough = true;
-        wasDragged = true;
+      if (!hasMovedEnough) {
+        if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+          hasMovedEnough = true;
+          wasDragged = true;
+        } else {
+          return;
+        }
       }
 
-      if (hasMovedEnough) {
-        if (e.cancelable) e.preventDefault();
-        let newLeft = clientX - startX;
-        let newTop = clientY - startY;
-        newLeft = Math.max(5, Math.min(window.innerWidth - el.offsetWidth - 5, newLeft));
-        newTop = Math.max(5, Math.min(window.innerHeight - el.offsetHeight - 5, newTop));
-        el.style.left = newLeft + 'px';
-        el.style.top = newTop + 'px';
-      }
-    };
+      if (e.cancelable) e.preventDefault();
 
-    const stopDrag = (e) => {
-      document.body.classList.remove('rx-dragging');
-      if (!isDragging) return;
+      // clamp गर्ने — element सधैं screen भित्र
+      const maxX = window.innerWidth - el.offsetWidth - 4;
+      const maxY = window.innerHeight - el.offsetHeight - 4;
+
+      let newLeft = startLeft + dx;
+      let newTop = startTop + dy;
+      newLeft = Math.max(4, Math.min(maxX, newLeft));
+      newTop = Math.max(4, Math.min(maxY, newTop));
+
+      pendingX = newLeft - startLeft;
+      pendingY = newTop - startTop;
+
+      if (!rafId) rafId = requestAnimationFrame(applyPendingMove);
+    }
+
+    function onUp(e) {
+      if (!isDragging) {
+        document.body.classList.remove('rx-dragging');
+        return;
+      }
       isDragging = false;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
 
+      // अन्तिम position apply
       const rect = el.getBoundingClientRect();
+      el.style.transform = 'none';
+      el.style.left = rect.left + 'px';
+      el.style.top = rect.top + 'px';
+
       savePosition(el.id, rect.left, rect.top);
 
+      document.body.classList.remove('rx-dragging');
+
+      // fallback button को click handler
       if (!wasDragged && onClickCallback) {
-        if (el.id === 'rx-fallback-btn' && e.target.closest('.rx-fallback-btn')) {
+        if (el.id === 'rx-fallback-btn') {
           onClickCallback();
         }
       }
-      setTimeout(() => { wasDragged = false; }, 250);
-    };
 
-    handle.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', doDrag);
-    document.addEventListener('mouseup', stopDrag);
-    handle.addEventListener('touchstart', startDrag, { passive: false });
-    document.addEventListener('touchmove', doDrag, { passive: false });
-    document.addEventListener('touchend', stopDrag);
+      setTimeout(() => { wasDragged = false; }, 250);
+    }
+
+    // Pointer events ले mouse + touch दुवै handle गर्छ (modern browsers)
+    if (window.PointerEvent) {
+      handle.addEventListener('pointerdown', onDown);
+      document.addEventListener('pointermove', onMove, { passive: false });
+      document.addEventListener('pointerup', onUp);
+      document.addEventListener('pointercancel', onUp);
+    } else {
+      // Fallback: mouse + touch अलग
+      handle.addEventListener('mousedown', onDown);
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+      handle.addEventListener('touchstart', onDown, { passive: false });
+      document.addEventListener('touchmove', onMove, { passive: false });
+      document.addEventListener('touchend', onUp);
+      document.addEventListener('touchcancel', onUp);
+    }
   }
 
   // ============================================================
