@@ -6,7 +6,7 @@
   // 0. TRACK LIST CHECK
   // ============================================================
   if (typeof trackList === 'undefined' || !Array.isArray(trackList)) {
-    console.error('[RX-MUSIC-PLAYER] trackList फेला परेन! tracks.js पहिले load गर्नुहोस्।');
+    console.error('[RX-MUSIC-PLAYER] not found.');
     return;
   }
 
@@ -48,12 +48,25 @@
     }
     .rx-btn:active { transform: scale(0.85); }
 
+    /* ============================================================
+       PLAY BUTTON — double ring
+       ============================================================ */
     .rx-play-btn {
       width: 48px; height: 48px; min-width: 48px; min-height: 48px;
-      background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(5px);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(255,255,255,0.1);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
       border-radius: 50%;
+      --rx-ring-color: #ffffff;
+      box-shadow:
+        0 0 0 2px #000000,
+        0 0 0 4px var(--rx-ring-color),
+        0 4px 15px rgba(0,0,0,0.3),
+        inset 0 0 10px rgba(255,255,255,0.1);
+      transition: box-shadow 0.35s ease;
     }
+    .rx-play-btn.ring-green { --rx-ring-color: #00cc66; }
+    .rx-play-btn.ring-red   { --rx-ring-color: #ff3333; }
+
     .rx-play-btn svg { width: 20px; height: 20px; fill: white; margin-left: 2px; }
     .rx-play-btn .pause-icon { margin-left: 0; }
     .rx-nav-btn svg { width: 20px; height: 20px; fill: #222; filter: drop-shadow(0 2px 2px rgba(255,255,255,0.5)); }
@@ -130,7 +143,13 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1), inset 0 0 5px rgba(255,255,255,0.5);
       border-radius: 50%; font-size: 22px; color: #222; font-weight: 300;
       flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0; margin: 0; line-height: 1;
+      box-sizing: border-box;
+      -webkit-appearance: none; appearance: none;
+      overflow: hidden;
     }
+    .rx-close-btn span { display: block; line-height: 1; transform: translateY(-1px); }
 
     .rx-bottom {
       display: flex; align-items: center; gap: 8px;
@@ -348,18 +367,18 @@
     }
 
     /* ============================================================
-       PLAYLIST UI — Responsive height
+       PLAYLIST UI
        ============================================================ */
     .rx-playlist-ui {
       position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
       width: min(360px, 92vw);
-      height: min(380px, 75vh);
+      height: auto;
       background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
       backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%);
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25), inset 0 0 15px rgba(255,255,255,0.3);
-      border-radius: 18px; padding: 15px;
-      display: none; flex-direction: column; gap: 10px;
+      border-radius: 18px; padding: 14px 18px 10px 18px;
+      display: none; flex-direction: column; gap: 12px;
       z-index: 1000001; font-family: sans-serif;
       touch-action: none; cursor: grab;
       will-change: transform;
@@ -373,15 +392,35 @@
       font-weight: bold; color: #222; font-size: 15px;
       border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 8px;
       flex-shrink: 0; cursor: grab; user-select: none;
+      height: 30px;
     }
     .rx-playlist-header:active { cursor: grabbing; }
-    .rx-playlist-close { background: none; border: none; font-size: 20px; cursor: pointer; color: #222; }
+
+    .rx-playlist-close {
+      width: 30px; height: 30px; min-width: 30px; min-height: 30px;
+      background: rgba(230, 213, 213, 0.6); backdrop-filter: blur(5px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1), inset 0 0 5px rgba(255,255,255,0.5);
+      border-radius: 50%; font-size: 20px; color: #222; font-weight: 400;
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0; margin: 0;
+      line-height: 1;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      appearance: none;
+      text-align: center;
+      overflow: hidden;
+      padding-bottom: 2px;
+    }
+    .rx-playlist-close:active { transform: scale(0.9); }
 
     .rx-playlist-list {
       flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
       display: flex; flex-direction: column; gap: 8px;
       padding-right: 5px;
       min-height: 0;
+      height: 120px;
+      max-height: 260px;
       overscroll-behavior: contain;
     }
     .rx-playlist-list::-webkit-scrollbar { width: 6px; }
@@ -450,7 +489,7 @@
     .rx-fallback-btn svg { width: 24px; height: 24px; fill: #222; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(255,255,255,0.8)); }
 
     /* ============================================================
-       RESPONSIVE — Small screens
+       RESPONSIVE
        ============================================================ */
     @media (max-width: 400px) {
       .rx-player-ui {
@@ -459,9 +498,7 @@
         gap: 10px;
         border-radius: 16px;
       }
-      .rx-play-btn {
-        width: 42px; height: 42px; min-width: 42px; min-height: 42px;
-      }
+      .rx-play-btn { width: 42px; height: 42px; min-width: 42px; min-height: 42px; }
       .rx-play-btn svg { width: 18px; height: 18px; }
       .rx-nav-btn svg { width: 18px; height: 18px; }
       .rx-track-name { font-size: 12px; }
@@ -474,12 +511,16 @@
 
       .rx-playlist-ui {
         width: 94vw;
-        height: min(380px, 78vh);
-        padding: 12px;
-        gap: 8px;
+        padding: 12px 12px 8px 12px;
+        gap: 10px;
         border-radius: 16px;
       }
-      .rx-playlist-header { font-size: 14px; padding-bottom: 6px; }
+      .rx-playlist-header { font-size: 14px; padding-bottom: 6px; height: 26px; }
+      .rx-playlist-close {
+        width: 26px; height: 26px; min-width: 26px; min-height: 26px;
+        font-size: 17px; padding-bottom: 2px;
+      }
+      .rx-playlist-list { height: 100px; max-height: 200px; }
       .rx-track-item { padding: 8px 10px; height: 42px; font-size: 12px; }
       .rx-track-item-title { font-size: 12px; }
       .rx-track-item-singer { font-size: 9px; }
@@ -500,15 +541,9 @@
       .rx-bottom .rx-btn svg { width: 14px; height: 14px; }
     }
 
-    /* Landscape mobile — कम height भएको बेला */
     @media (max-height: 500px) and (orientation: landscape) {
-      .rx-playlist-ui {
-        height: 90vh;
-      }
-      .rx-player-ui {
-        padding: 8px 14px 6px 14px;
-        gap: 8px;
-      }
+      .rx-playlist-list { height: 80px; max-height: 160px; }
+      .rx-player-ui { padding: 8px 14px 6px 14px; gap: 8px; }
       .rx-play-btn { width: 40px; height: 40px; min-width: 40px; min-height: 40px; }
     }
   `;
@@ -534,7 +569,7 @@
           <div class="rx-singer-name" id="rx-singer-text">—</div>
         </div>
 
-         <button class="rx-btn rx-close-btn" id="rx-close" data-tip="Close Player"><span style="display:block;line-height:1;transform:translateY(-1px);">×</span></button>
+         <button class="rx-btn rx-close-btn" id="rx-close" data-tip="Close Player"><span>×</span></button>
       </div>
 
       <div class="rx-bottom" id="rx-bottom-row">
@@ -621,6 +656,8 @@
   let volumeModeActive = false;
   let volumeAutoTimer = null;
   let hasUserInteracted = false;
+  let hasPlayedOnce = false;
+  let lastEscPress = 0;
 
   // ============================================================
   // 5. PERSISTENCE KEYS
@@ -632,6 +669,8 @@
     PLAYING: 'rx-state-playing',
     REPEAT: 'rx-state-repeat',
     OPEN: 'rx-player-open',
+    RING: 'rx-state-ring',
+    HAS_PLAYED: 'rx-state-hasplayed',
   };
 
   function saveVolume() { localStorage.setItem(K.VOLUME, String(audio.volume)); }
@@ -639,6 +678,8 @@
   function savePos() { localStorage.setItem(K.POS, String(audio.currentTime || 0)); }
   function savePlaying() { localStorage.setItem(K.PLAYING, isPlaying ? '1' : '0'); }
   function saveRepeat() { localStorage.setItem(K.REPEAT, isRepeatMode ? '1' : '0'); }
+  function saveRingState() { localStorage.setItem(K.RING, isPlaying ? 'green' : (hasPlayedOnce ? 'red' : 'white')); }
+  function saveHasPlayed() { localStorage.setItem(K.HAS_PLAYED, hasPlayedOnce ? '1' : '0'); }
 
   let lastPosSave = 0;
   function savePosThrottled() {
@@ -685,6 +726,13 @@
     } else {
       currTime.classList.add('c-red');
     }
+  }
+
+  function applyPlayBtnRing() {
+    playBtn.classList.remove('ring-green', 'ring-red');
+    if (!hasPlayedOnce) return;
+    if (isPlaying) playBtn.classList.add('ring-green');
+    else playBtn.classList.add('ring-red');
   }
 
   function loadDurations() {
@@ -900,26 +948,39 @@
       if (autoPlay) {
         audio.play().then(() => {
           isPlaying = true;
+          hasPlayedOnce = true;
           iconPlay.style.display = 'none';
           iconPause.style.display = 'block';
+          applyPlayBtnRing();
           savePlaying();
+          saveRingState();
+          saveHasPlayed();
         }).catch(() => {
           isPlaying = false;
           iconPlay.style.display = 'block';
           iconPause.style.display = 'none';
+          applyPlayBtnRing();
           savePlaying();
+          saveRingState();
+          saveHasPlayed();
         });
       } else {
         isPlaying = false;
         iconPlay.style.display = 'block';
         iconPause.style.display = 'none';
+        applyPlayBtnRing();
         savePlaying();
+        saveRingState();
+        saveHasPlayed();
       }
     } else {
       isPlaying = false;
       iconPlay.style.display = 'block';
       iconPause.style.display = 'none';
+      applyPlayBtnRing();
       savePlaying();
+      saveRingState();
+      saveHasPlayed();
     }
   }
 
@@ -1057,9 +1118,6 @@
     });
   }
 
-  // ============================================================
-  // 11a. PLAYLIST SCROLL LOGIC
-  // ============================================================
   function scrollPlaylistToSelected() {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -1085,19 +1143,77 @@
     });
   }
 
+  // ============================================================
+  // 11a. POSITION CLAMP
+  // ============================================================
+  function clampAndApplyPosition(el, left, top) {
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    const margin = 5;
+    const maxX = window.innerWidth - w - margin;
+    const maxY = window.innerHeight - h - margin;
+    const finalLeft = Math.max(margin, Math.min(maxX, left));
+    const finalTop = Math.max(margin, Math.min(maxY, top));
+    el.style.left = finalLeft + 'px';
+    el.style.top = finalTop + 'px';
+    el.style.transform = 'none';
+    el.style.right = 'auto';
+    el.style.bottom = 'auto';
+    return { x: finalLeft, y: finalTop };
+  }
+
+  // ============================================================
+  // 11b. OPEN / CLOSE PLAYLIST
+  // ============================================================
   const openPlaylist = () => {
     if (wasDragged) return;
+    const pRect = player.getBoundingClientRect();
+    const wasShowing = player.classList.contains('show');
+
     player.classList.remove('show');
     playlistUI.classList.add('show');
+
     renderPlaylist();
-    loadPosition('rx-playlist-ui', playlistUI);
-    scrollPlaylistToSelected();
+
+    if (wasShowing && pRect.width > 0) {
+      requestAnimationFrame(() => {
+        const pos = clampAndApplyPosition(playlistUI, pRect.left, pRect.top);
+        savePosition('rx-playlist-ui', pos.x, pos.y);
+        scrollPlaylistToSelected();
+      });
+    } else {
+      const saved = localStorage.getItem('rx-pos-rx-playlist-ui');
+      if (saved) {
+        try {
+          const { x, y } = JSON.parse(saved);
+          requestAnimationFrame(() => {
+            clampAndApplyPosition(playlistUI, x, y);
+            scrollPlaylistToSelected();
+          });
+        } catch (e) {
+          requestAnimationFrame(() => scrollPlaylistToSelected());
+        }
+      } else {
+        requestAnimationFrame(() => scrollPlaylistToSelected());
+      }
+    }
   };
 
   const closePlaylist = () => {
     if (wasDragged) return;
+    const plRect = playlistUI.getBoundingClientRect();
+    const wasShowing = playlistUI.classList.contains('show');
+
     playlistUI.classList.remove('show');
     player.classList.add('show');
+
+    if (wasShowing && plRect.width > 0) {
+      requestAnimationFrame(() => {
+        const pos = clampAndApplyPosition(player, plRect.left, plRect.top);
+        savePosition('rx-player-ui', pos.x, pos.y);
+        savePosition('rx-playlist-ui', pos.x, pos.y);
+      });
+    }
   };
 
   trackNameBtn.addEventListener('click', (e) => {
@@ -1124,13 +1240,21 @@
     if (isPlaying) {
       audio.pause();
       isPlaying = false;
+      hasPlayedOnce = true;
       iconPlay.style.display = 'block';
       iconPause.style.display = 'none';
+      applyPlayBtnRing();
+      saveRingState();
+      saveHasPlayed();
     } else {
       audio.play().then(() => {
         isPlaying = true;
+        hasPlayedOnce = true;
         iconPlay.style.display = 'none';
         iconPause.style.display = 'block';
+        applyPlayBtnRing();
+        saveRingState();
+        saveHasPlayed();
       }).catch(() => {});
     }
     savePlaying();
@@ -1156,11 +1280,7 @@
     if (saved) {
       try {
         const { x, y } = JSON.parse(saved);
-        const maxX = window.innerWidth - el.offsetWidth - 5;
-        const maxY = window.innerHeight - el.offsetHeight - 5;
-        el.style.left = Math.max(5, Math.min(maxX, x)) + 'px';
-        el.style.top = Math.max(5, Math.min(maxY, y)) + 'px';
-        el.style.transform = 'none'; el.style.right = 'auto'; el.style.bottom = 'auto';
+        clampAndApplyPosition(el, x, y);
       } catch (e) {}
     }
   };
@@ -1169,11 +1289,8 @@
   const loadOpen = () => localStorage.getItem(K.OPEN) === 'true';
 
   // ============================================================
-  // 15. DRAGGABLE — SMOOTH REWRITE (mobile-friendly)
+  // 15. DRAGGABLE
   // ============================================================
-  // • transform based drag (left/top मा बारम्बार लेख्दैन → smooth)
-  // • pointer events + rAF throttling → glitch-free
-  // • initial jump fix: element को current position बाट offset गणना
   function makeDraggable(el, handle, onClickCallback) {
     let isDragging = false;
     let hasMovedEnough = false;
@@ -1181,7 +1298,7 @@
     let startLeft = 0, startTop = 0;
     let pendingX = 0, pendingY = 0;
     let rafId = null;
-    const DRAG_THRESHOLD = 6; // px — mobile मा सानो threshold राम्रो
+    const DRAG_THRESHOLD = 6;
 
     function applyPendingMove() {
       rafId = null;
@@ -1200,10 +1317,8 @@
     }
 
     function onDown(e) {
-      // Slider / button / close बाट drag सुरु नगर्ने
       if (e.target.closest('input[type="range"]')) return;
       if (e.target.closest('button') && e.target.closest('button') !== handle) {
-        // button भित्र drag सुरु नगर्ने (तर fallback btn खुदै handle हो भने allow)
         if (!handle.classList.contains('rx-fallback-btn')) return;
       }
 
@@ -1211,10 +1326,8 @@
       startPointerX = pt.x;
       startPointerY = pt.y;
 
-      // element को current visual position (transform सहित) बाट left/top reset
       const rect = el.getBoundingClientRect();
 
-      // transform reset गरेर left/top मा fix गर्ने — यसले glitch हटाउँछ
       el.style.transform = 'none';
       if (el.id === 'rx-fallback-btn') {
         el.style.right = 'auto';
@@ -1234,7 +1347,6 @@
 
       document.body.classList.add('rx-dragging');
 
-      // touch event मा scroll रोक्न
       if (e.cancelable) e.preventDefault();
     }
 
@@ -1256,7 +1368,6 @@
 
       if (e.cancelable) e.preventDefault();
 
-      // clamp गर्ने — element सधैं screen भित्र
       const maxX = window.innerWidth - el.offsetWidth - 4;
       const maxY = window.innerHeight - el.offsetHeight - 4;
 
@@ -1279,17 +1390,17 @@
       isDragging = false;
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
 
-      // अन्तिम position apply
       const rect = el.getBoundingClientRect();
       el.style.transform = 'none';
       el.style.left = rect.left + 'px';
       el.style.top = rect.top + 'px';
 
       savePosition(el.id, rect.left, rect.top);
+      if (el.id === 'rx-player-ui') savePosition('rx-playlist-ui', rect.left, rect.top);
+      if (el.id === 'rx-playlist-ui') savePosition('rx-player-ui', rect.left, rect.top);
 
       document.body.classList.remove('rx-dragging');
 
-      // fallback button को click handler
       if (!wasDragged && onClickCallback) {
         if (el.id === 'rx-fallback-btn') {
           onClickCallback();
@@ -1299,14 +1410,12 @@
       setTimeout(() => { wasDragged = false; }, 250);
     }
 
-    // Pointer events ले mouse + touch दुवै handle गर्छ (modern browsers)
     if (window.PointerEvent) {
       handle.addEventListener('pointerdown', onDown);
       document.addEventListener('pointermove', onMove, { passive: false });
       document.addEventListener('pointerup', onUp);
       document.addEventListener('pointercancel', onUp);
     } else {
-      // Fallback: mouse + touch अलग
       handle.addEventListener('mousedown', onDown);
       document.addEventListener('mousemove', onMove);
       document.addEventListener('mouseup', onUp);
@@ -1335,6 +1444,8 @@
     savePos();
     iconPlay.style.display = 'block';
     iconPause.style.display = 'none';
+    applyPlayBtnRing();
+    saveRingState();
 
     player.classList.remove('show');
     playlistUI.classList.remove('show');
@@ -1362,6 +1473,8 @@
     saveVolume();
     saveTrack();
     saveRepeat();
+    saveRingState();
+    saveHasPlayed();
   });
 
   window.addEventListener('pagehide', () => {
@@ -1370,10 +1483,147 @@
     saveVolume();
     saveTrack();
     saveRepeat();
+    saveRingState();
+    saveHasPlayed();
   });
 
   // ============================================================
-  // 17. TRIGGER LOGIC
+  // 17. KEYBOARD SHORTCUTS (PC only)
+  // ============================================================
+  document.addEventListener('keydown', (e) => {
+    // Input/textarea मा focus छ भने shortcut नचल्ने
+    const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    if (e.target && e.target.isContentEditable) return;
+
+    // Tab (Ctrl बिना) → playlist खोल्ने
+    if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
+      if (player.classList.contains('show') || playlistUI.classList.contains('show')) {
+        e.preventDefault();
+        if (player.classList.contains('show')) {
+          openPlaylist();
+        }
+        return;
+      }
+    }
+
+    // Esc → playlist खुला छ भने single click ले player खोल्ने
+    //        player खुला छ भने double click (छिटो दुई पटक) ले बन्द गर्ने
+    if (e.key === 'Escape') {
+      if (playlistUI.classList.contains('show')) {
+        e.preventDefault();
+        closePlaylist();
+        return;
+      }
+      if (player.classList.contains('show')) {
+        e.preventDefault();
+        const now = Date.now();
+        if (now - lastEscPress < 400) {
+          lastEscPress = 0;
+          closePlayer();
+        } else {
+          lastEscPress = now;
+        }
+        return;
+      }
+      return;
+    }
+
+    // R → repeat mode toggle (enable / disable)
+    if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.altKey && !e.metaKey) {
+      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+      e.preventDefault();
+      isRepeatMode = !isRepeatMode;
+      repeatBtn.classList.toggle('active', isRepeatMode);
+      saveRepeat();
+      return;
+    }
+
+    // Space → play/pause
+    if (e.code === 'Space' || e.key === ' ') {
+      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+      e.preventDefault();
+      if (!audio.src) { playTrack(0); return; }
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        hasPlayedOnce = true;
+        iconPlay.style.display = 'block';
+        iconPause.style.display = 'none';
+        applyPlayBtnRing();
+        saveRingState();
+        saveHasPlayed();
+        savePlaying();
+      } else {
+        audio.play().then(() => {
+          isPlaying = true;
+          hasPlayedOnce = true;
+          iconPlay.style.display = 'none';
+          iconPause.style.display = 'block';
+          applyPlayBtnRing();
+          saveRingState();
+          saveHasPlayed();
+          savePlaying();
+        }).catch(() => {});
+      }
+      return;
+    }
+
+    // Ctrl + Left → previous
+    if (e.ctrlKey && e.key === 'ArrowLeft') {
+      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+      e.preventDefault();
+      let prevIdx = currentTrackIndex - 1;
+      if (prevIdx < 0) prevIdx = trackList.length - 1;
+      playTrack(prevIdx);
+      if (playlistUI.classList.contains('show')) { renderPlaylist(); scrollPlaylistToSelected(); }
+      return;
+    }
+
+    // Ctrl + Right → next
+    if (e.ctrlKey && e.key === 'ArrowRight') {
+      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+      e.preventDefault();
+      let nextIdx = currentTrackIndex + 1;
+      if (nextIdx >= trackList.length) nextIdx = 0;
+      playTrack(nextIdx);
+      if (playlistUI.classList.contains('show')) { renderPlaylist(); scrollPlaylistToSelected(); }
+      return;
+    }
+
+    // Ctrl + Up → volume +10%
+    if (e.ctrlKey && e.key === 'ArrowUp') {
+      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+      e.preventDefault();
+      if (!volumeModeActive) enterVolumeMode();
+      let newVol = Math.min(1, audio.volume + 0.10);
+      audio.volume = newVol;
+      volSlider.value = newVol * 100;
+      volSlider.style.backgroundSize = (newVol * 100) + '% 100%';
+      updateVolumeColor(newVol * 100);
+      saveVolume();
+      resetVolumeAutoTimer();
+      return;
+    }
+
+    // Ctrl + Down → volume -10%
+    if (e.ctrlKey && e.key === 'ArrowDown') {
+      if (!player.classList.contains('show') && !playlistUI.classList.contains('show')) return;
+      e.preventDefault();
+      if (!volumeModeActive) enterVolumeMode();
+      let newVol = Math.max(0, audio.volume - 0.10);
+      audio.volume = newVol;
+      volSlider.value = newVol * 100;
+      volSlider.style.backgroundSize = (newVol * 100) + '% 100%';
+      updateVolumeColor(newVol * 100);
+      saveVolume();
+      resetVolumeAutoTimer();
+      return;
+    }
+  });
+
+  // ============================================================
+  // 18. TRIGGER LOGIC
   // ============================================================
   const triggerSelector = '.RX-SMART-BUTTON-menu-item.RX-item-7[data-link=""]';
 
@@ -1410,7 +1660,7 @@
   });
 
   // ============================================================
-  // 18. INIT — Restore saved state
+  // 19. INIT — Restore saved state
   // ============================================================
   setTimeout(() => {
     loadDurations();
@@ -1426,6 +1676,9 @@
     updateVolumeColor(audio.volume * 100);
     updateTimelineColor(0);
 
+    hasPlayedOnce = localStorage.getItem(K.HAS_PLAYED) === '1';
+    const savedRing = localStorage.getItem(K.RING);
+
     isRepeatMode = localStorage.getItem(K.REPEAT) === '1';
     repeatBtn.classList.toggle('active', isRepeatMode);
 
@@ -1438,6 +1691,16 @@
 
     if (localStorage.getItem(K.TRACK) !== null) {
       playTrack(trackIdx, startPos, savedPlaying);
+    }
+
+    if (savedRing === 'green') {
+      playBtn.classList.add('ring-green');
+      playBtn.classList.remove('ring-red');
+    } else if (savedRing === 'red') {
+      playBtn.classList.add('ring-red');
+      playBtn.classList.remove('ring-green');
+    } else {
+      playBtn.classList.remove('ring-green', 'ring-red');
     }
 
     const triggerFound = attachToTrigger();
@@ -1471,8 +1734,12 @@
         if (!isPlaying && audio.src && audio.paused) {
           audio.play().then(() => {
             isPlaying = true;
+            hasPlayedOnce = true;
             iconPlay.style.display = 'none';
             iconPause.style.display = 'block';
+            applyPlayBtnRing();
+            saveRingState();
+            saveHasPlayed();
             savePlaying();
           }).catch(() => {});
         }
