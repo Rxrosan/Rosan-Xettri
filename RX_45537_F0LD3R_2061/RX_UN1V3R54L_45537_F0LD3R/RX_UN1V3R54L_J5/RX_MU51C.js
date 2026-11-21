@@ -21,7 +21,7 @@
     /* PLAYER UI */
     .rx-player-ui {
       position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
-      width: 300px; /* Fixed width for all devices */
+      width: 300px;
       background: linear-gradient(135deg, rgba(255,255,255,0.45), rgba(255,255,255,0.12));
       backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%);
       border: 2px solid rgba(255, 255, 255, 0.5);
@@ -355,7 +355,7 @@
     /* PLAYLIST UI */
     .rx-playlist-ui {
       position: fixed; top: 50%; left: 50%; transform: translate3d(-50%, -50%, 0);
-      width: 280px; /* Fixed width for all devices */
+      width: 280px;
       height: auto;
       background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.2));
       backdrop-filter: blur(25px) saturate(150%); -webkit-backdrop-filter: blur(25px) saturate(150%);
@@ -538,7 +538,6 @@
     .rx-fallback-btn:active { cursor: grabbing; transform: scale(0.9); }
     .rx-fallback-btn svg { width: 24px; height: 24px; fill: #222; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(255,255,255,0.8)); }
 
-    /* Mobile मा animation को लागि GPU acceleration */
     .rx-track-name.slide-anim,
     .rx-track-item-title.rx-pl-anim {
       -webkit-backface-visibility: hidden;
@@ -673,6 +672,8 @@
   let searchActive = false;
   let searchQuery = '';
   let searchFocusTimer = null;
+  let durationsLoaded = false;       // NEW: lazy duration load flag
+  let durationsLoading = false;      // NEW: prevent double
 
   // ============================================================
   // 5. PERSISTENCE
@@ -750,21 +751,55 @@
     else playBtn.classList.add('ring-red');
   }
 
+  // ============================================================
+  // NEW: LAZY + SEQUENTIAL DURATION LOADER
+  // ============================================================
   function loadDurations() {
-    trackList.forEach((track, idx) => {
-      if (!track.url) return;
+    if (durationsLoaded || durationsLoading) return;
+    durationsLoading = true;
+
+    let i = 0;
+    const total = trackList.length;
+
+    function next() {
+      if (i >= total) {
+        durationsLoaded = true;
+        durationsLoading = false;
+        return;
+      }
+      const track = trackList[i++];
+      if (!track.url) { next(); return; }
+
       const probe = new Audio();
       probe.preload = 'metadata';
       probe.src = track.url;
-      probe.addEventListener('loadedmetadata', () => {
+
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        probe.src = '';
+        probe.removeEventListener('loadedmetadata', onMeta);
+        probe.removeEventListener('error', onErr);
+        next();
+      };
+      const onMeta = () => {
         if (probe.duration && isFinite(probe.duration)) {
-          trackList[idx].duration = fmtTime(probe.duration);
+          track.duration = fmtTime(probe.duration);
           if (playlistUI.classList.contains('show')) renderPlaylist();
         }
-        probe.src = '';
-      }, { once: true });
-      probe.addEventListener('error', () => { probe.src = ''; }, { once: true });
-    });
+        finish();
+      };
+      const onErr = () => finish();
+
+      probe.addEventListener('loadedmetadata', onMeta, { once: true });
+      probe.addEventListener('error', onErr, { once: true });
+
+      // safety timeout — network stall भए अघि बढ्ने
+      setTimeout(finish, 8000);
+    }
+
+    next();
   }
 
   function calcScrollDuration(scrollDist, containerWidth) {
@@ -782,19 +817,15 @@
   // 6-NEW. TRACK TITLE SCROLL (MOBILE SAFE)
   // ============================================================
   function updateTrackScroll() {
-    // element visible छैन भने measure नगर्ने
     if (!trackTitleText || !trackNameBtn) return;
 
     const containerWidth = trackNameBtn.clientWidth;
-    // hidden वा width 0 भए skip गर्ने
     if (!containerWidth || containerWidth <= 0) return;
 
-    // reset
     trackTitleText.classList.remove('slide-anim');
     trackTitleText.style.removeProperty('--rx-dur');
     trackTitleText.style.removeProperty('--rx-scroll');
 
-    // reflow force
     void trackTitleText.offsetWidth;
 
     requestAnimationFrame(() => {
@@ -809,7 +840,6 @@
     });
   }
 
-  // font load पछि re-measure (mobile को लागि महत्त्वपूर्ण)
   function setupFontReadyScroll() {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => {
@@ -826,6 +856,7 @@
   let tooltipTimer = null;
   let tooltipTarget = null;
   let tooltipVisible = false;
+  let tooltipsAttached = false;      // NEW: duplicate रोक्न
 
   function isHoverDevice() {
     return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
@@ -901,6 +932,8 @@
   }
 
   function attachTooltips() {
+    if (tooltipsAttached) return;   // duplicate रोक्न
+    tooltipsAttached = true;
     const nodes = document.querySelectorAll('[data-tip]');
     nodes.forEach(bindLongPressTooltip);
   }
@@ -964,11 +997,9 @@
     singerText.textContent = track.singer || '—';
     singerText.classList.add('active-singer');
 
-    // player visible छ भने मात्र scroll animation गणना
     if (player.classList.contains('show')) {
       updateTrackScroll();
     } else {
-      // hidden छ भने पुरानो animation हटाउने मात्र
       trackTitleText.classList.remove('slide-anim');
       trackTitleText.style.removeProperty('--rx-dur');
       trackTitleText.style.removeProperty('--rx-scroll');
@@ -1305,6 +1336,9 @@
   const openPlaylist = () => {
     if (wasDragged) return;
 
+    // NEW: playlist पहिलो पटक खोल्दा duration load सुरु
+    loadDurations();
+
     closeSearchSilently();
 
     const pRect = player.getBoundingClientRect();
@@ -1362,11 +1396,9 @@
         const pos = clampAndApplyPosition(player, plRect.left, plRect.top);
         savePosition('rx-player-ui', pos.x, pos.y);
         savePosition('rx-playlist-ui', pos.x, pos.y);
-        // player visible भएपछि animation re-measure
         requestAnimationFrame(() => updateTrackScroll());
       });
     } else {
-      // fallback: player visible भएपछि animation re-measure
       requestAnimationFrame(() => updateTrackScroll());
     }
   };
@@ -1591,7 +1623,6 @@
     saveOpen(true);
     loadPosition('rx-player-ui', player);
     attachTooltips();
-    // player visible भएपछि animation re-measure
     requestAnimationFrame(() => {
       requestAnimationFrame(() => updateTrackScroll());
     });
@@ -1656,9 +1687,6 @@
     const tag = (e.target && e.target.tagName) ? e.target.tagName.toLowerCase() : '';
     const isSearchInput = (e.target === searchInput);
 
-    // ----------------------------------------------------------
-    // GUARD 1: Search input focus → Esc मात्र काम गर्छ
-    // ----------------------------------------------------------
     if (isSearchInput) {
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -1668,9 +1696,6 @@
       return;
     }
 
-    // ----------------------------------------------------------
-    // GUARD 2: अन्य input / textarea / select / contentEditable
-    // ----------------------------------------------------------
     if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
     if (e.target && e.target.isContentEditable) return;
 
@@ -1678,9 +1703,6 @@
     const playlistVisible = playlistUI.classList.contains('show');
     const fallbackVisible = (fallbackBtn.style.display === 'flex');
 
-    // ----------------------------------------------------------
-    // 1. TAB — player → playlist
-    // ----------------------------------------------------------
     if (e.key === 'Tab' && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
       if (playerVisible) {
         e.preventDefault();
@@ -1696,9 +1718,6 @@
       return;
     }
 
-    // ----------------------------------------------------------
-    // 2. ESC — priority chain
-    // ----------------------------------------------------------
     if (e.key === 'Escape') {
       if (searchActive) {
         e.preventDefault();
@@ -1727,14 +1746,8 @@
       return;
     }
 
-    // ----------------------------------------------------------
-    // यदि player वा playlist कुनै पनि खुला छैन → बाँकी सबै बन्द
-    // ----------------------------------------------------------
     if (!playerVisible && !playlistVisible) return;
 
-    // ----------------------------------------------------------
-    // 3. S — Search open ONLY
-    // ----------------------------------------------------------
     if ((e.key === 's' || e.key === 'S') && !e.ctrlKey && !e.altKey && !e.metaKey) {
       e.preventDefault();
       e.stopPropagation();
@@ -1749,14 +1762,8 @@
       return;
     }
 
-    // ----------------------------------------------------------
-    // ⚠️ यहाँबाट तलका सबै shortcut — player खुला छ भने मात्र
-    // ----------------------------------------------------------
     if (playlistVisible) return;
 
-    // ----------------------------------------------------------
-    // 4. R — Repeat toggle (player खुला भए मात्र)
-    // ----------------------------------------------------------
     if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.altKey && !e.metaKey) {
       e.preventDefault();
       e.stopPropagation();
@@ -1766,9 +1773,6 @@
       return;
     }
 
-    // ----------------------------------------------------------
-    // 5. SPACE — Play / Pause (player खुला भए मात्र)
-    // ----------------------------------------------------------
     if ((e.code === 'Space' || e.key === ' ') && !e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey) {
       e.preventDefault();
       e.stopPropagation();
@@ -1800,9 +1804,6 @@
       return;
     }
 
-    // ----------------------------------------------------------
-    // 6. CTRL + ← — Previous Track (player खुला भए मात्र)
-    // ----------------------------------------------------------
     if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowLeft') {
       e.preventDefault();
       e.stopPropagation();
@@ -1812,9 +1813,6 @@
       return;
     }
 
-    // ----------------------------------------------------------
-    // 7. CTRL + → — Next Track (player खुला भए मात्र)
-    // ----------------------------------------------------------
     if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowRight') {
       e.preventDefault();
       e.stopPropagation();
@@ -1824,9 +1822,6 @@
       return;
     }
 
-    // ----------------------------------------------------------
-    // 8. CTRL + ↑ — Volume Up (player खुला भए मात्र)
-    // ----------------------------------------------------------
     if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowUp') {
       e.preventDefault();
       e.stopPropagation();
@@ -1841,9 +1836,6 @@
       return;
     }
 
-    // ----------------------------------------------------------
-    // 9. CTRL + ↓ — Volume Down (player खुला भए मात्र)
-    // ----------------------------------------------------------
     if (e.ctrlKey && !e.altKey && !e.metaKey && !e.shiftKey && e.key === 'ArrowDown') {
       e.preventDefault();
       e.stopPropagation();
@@ -1900,11 +1892,12 @@
   });
 
   // ============================================================
-  // 19. INIT
+  // 19. INIT  (setTimeout हटाइयो — छिटो load)
   // ============================================================
-  setTimeout(() => {
-    loadDurations();
-
+  (function init() {
+    // ---------------------------------------------------------
+    // 1. Volume सबैभन्दा पहिले (audio.play() भन्दा अघि चाहिन्छ)
+    // ---------------------------------------------------------
     const savedVol = parseFloat(localStorage.getItem(K.VOLUME));
     if (!isNaN(savedVol) && savedVol >= 0 && savedVol <= 1) {
       audio.volume = savedVol;
@@ -1916,6 +1909,9 @@
     updateVolumeColor(audio.volume * 100);
     updateTimelineColor(0);
 
+    // ---------------------------------------------------------
+    // 2. State read
+    // ---------------------------------------------------------
     hasPlayedOnce = localStorage.getItem(K.HAS_PLAYED) === '1';
     const savedRing = localStorage.getItem(K.RING);
 
@@ -1929,10 +1925,16 @@
     const trackIdx = (!isNaN(savedTrack) && savedTrack >= 0 && savedTrack < trackList.length) ? savedTrack : 0;
     const startPos = (!isNaN(savedPos) && savedPos > 0) ? savedPos : 0;
 
+    // ---------------------------------------------------------
+    // 3. playTrack सबैभन्दा पहिले — UI छिटो तयार
+    // ---------------------------------------------------------
     if (localStorage.getItem(K.TRACK) !== null) {
       playTrack(trackIdx, startPos, savedPlaying);
     }
 
+    // ---------------------------------------------------------
+    // 4. Ring state
+    // ---------------------------------------------------------
     if (savedRing === 'green') {
       playBtn.classList.add('ring-green');
       playBtn.classList.remove('ring-red');
@@ -1943,12 +1945,14 @@
       playBtn.classList.remove('ring-green', 'ring-red');
     }
 
+    // ---------------------------------------------------------
+    // 5. Trigger + fallback
+    // ---------------------------------------------------------
     const triggerFound = attachToTrigger();
     if (loadOpen()) {
       player.classList.add('show');
       fallbackBtn.style.display = 'none';
       loadPosition('rx-player-ui', player);
-      // init मा player visible भएपछि animation गणना
       requestAnimationFrame(() => {
         requestAnimationFrame(() => updateTrackScroll());
       });
@@ -1969,11 +1973,15 @@
       observer.observe(document.body, { childList: true, subtree: true });
     }
 
+    // ---------------------------------------------------------
+    // 6. Tooltips + font ready (playlist खोल्दा duration load)
+    // ---------------------------------------------------------
     attachTooltips();
-
-    // font load पछि animation re-measure (mobile fix)
     setupFontReadyScroll();
 
+    // ---------------------------------------------------------
+    // 7. Resume on interaction
+    // ---------------------------------------------------------
     if (savedPlaying) {
       const resumeOnInteraction = () => {
         if (hasUserInteracted) return;
@@ -1998,5 +2006,5 @@
       document.addEventListener('touchstart', resumeOnInteraction, { once: true });
       document.addEventListener('keydown', resumeOnInteraction, { once: true });
     }
-  }, 50);
+  })();
 })();
